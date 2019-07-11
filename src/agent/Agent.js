@@ -1,3 +1,5 @@
+import Selector from "./util/Selector";
+
 var _ = require('lodash');
 var sendMessage = require('./util/sendMessage');
 var serializeEntity = require('./util/serializeEntity');
@@ -163,7 +165,6 @@ Agent.prototype.handlers = {
   }
 };
 
-
 Agent.prototype.attachSelectClickHandler = function() {
   if (this._findTargetCb) {
     // already enabled
@@ -173,7 +174,10 @@ Agent.prototype.attachSelectClickHandler = function() {
   this._findTargetCb = (e) => {
     e.stopPropagation();
 
-    var x = e.pageX - e.target.offsetLeft;
+    var target = e.target;
+    const selector = new Selector;
+    selector.getSelector(target);
+    var x = e.pageX - e.target;
     var y = e.pageY - e.target.offsetTop;
 
     var matching = _.find(this.c.entities.all(), (obj) => {
@@ -205,6 +209,7 @@ Agent.prototype.removeSelectClickHandler = function() {
 };
 
 Agent.prototype.handleMessage = function(message) {
+
   var handler = this.handlers[message.name];
   if (!handler) {
     console.warn('No handler found for event ' + name);

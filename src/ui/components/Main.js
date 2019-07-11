@@ -25,7 +25,7 @@ var Main = React.createClass({
         <div className="panel-heading">
           <GameControls />
           <h3 className="panel-title">
-            Entities
+            Create tour
           </h3>
         </div>
         <div className="panel-body">
