@@ -89,13 +89,12 @@ Agent.prototype.serializeSubscribedEntity = function(id, entities) {
     return;
   }
 
-  var entity = entities.filter((entity) => id === entity.__inspect_uuid__)[0];
-
-  if (!entity) {
-    this.subscribedEntityId = null;
-    return;
-  }
-
+  //var entity = entities.filter((entity) => id === entity.__inspect_uuid__)[0];
+    var entity = id;
+    if (!entity) {
+        this.subscribedEntityId = null;
+        return;
+    }
   return serializeEntity(entity, entities);
 };
 
@@ -177,6 +176,7 @@ Agent.prototype.attachSelectClickHandler = function() {
     var target = e.target;
     const selector = new Selector;
     selector.getSelector(target);
+
     var x = e.pageX - e.target;
     var y = e.pageY - e.target.offsetTop;
 
@@ -188,7 +188,8 @@ Agent.prototype.attachSelectClickHandler = function() {
     });
 
     if (matching) {
-      this.subscribedEntityId = matching.__inspect_uuid__;
+    //  this.subscribedEntityId = matching.__inspect_uuid__;
+        this.subscribedEntityId = target;
     }
 
     this.removeSelectClickHandler();
