@@ -5,7 +5,7 @@ var path = require("path");
 module.exports = {
   mode: "development",
   entry: {
-    ui: './src/ui/index.js',
+    ui: './src/ui/index.tsx',
     agent: './src/agent/index.js',
   },
 

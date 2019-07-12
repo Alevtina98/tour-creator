@@ -1,5 +1,6 @@
 import sendMessage from "./util/sendMessage";
 import Selector from "./Selector";
+//import unique from 'unique-selector'
 import serializeEntity from "./util/serializeEntity";
 
 import deepUpdate from "../common/deepUpdate";
@@ -177,24 +178,15 @@ Agent.prototype.attachSelectClickHandler = function() {
 
   this._findTargetCb = (e) => {
     e.stopPropagation();
+    e.preventDefault();
 
     const target = e.target;
-    const selector = new Selector;
-    const str = selector.getSelector(target);
+   // const selector = new Selector;
+    const str = Selector(target);
     console.log("str >> ", str);
-    const x = e.pageX - e.target.offsetLeft;
-    const y = e.pageY - e.target.offsetTop;
 
-    /*var matching = _.find(this.c.entities.all(), (obj) => {
-      if (!obj.center || !obj.size) {
-        return false;
-      }
-      return this.Coquette.Collider.Maths.pointInsideObj({x, y}, obj);
-    });
+    this.subscribedEntityId = str;//matching.__inspect_uuid__;
 
-    if (matching) {*/
-      this.subscribedEntityId = str;//matching.__inspect_uuid__;
-    //}
 
     this.removeSelectClickHandler();
   };

@@ -3,7 +3,7 @@ export const connectSuccess = () => ({
     type: "CONNECTION_SUCCESS"
 });
 
-export const setCurrentSelector = (selector) => ({
+export const setCurrentSelector = (selector: string) => ({
     type: "SET_CURRENT_SELECTOR",
     payload: {
         selector

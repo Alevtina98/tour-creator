@@ -1,10 +1,10 @@
-export const initialState = {
+export const initialMainState = {
     connected: false,
     selector: "",
     isInspectEnabled: false
 };
 
-const MainReducer = (state = initialState, action) => {
+const MainReducer = (state = initialMainState, action) => {
     switch (action.type) {
         case "CONNECTION_SUCCESS": {
             return {
@@ -13,7 +13,6 @@ const MainReducer = (state = initialState, action) => {
             }
         }
         case "SET_CURRENT_SELECTOR":
-            console.log(action);
             return {
                 ...state,
                 selector: action.payload.selector
