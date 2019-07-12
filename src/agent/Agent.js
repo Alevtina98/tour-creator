@@ -29,7 +29,7 @@ const Agent = function (c) {
   // this.game.__inspect_uuid__ = GAME_OBJECT_ID;
 
   // Kick off debug loop and message handler
-  this.initDebugLoop();
+  // this.initDebugLoop();
   this.initDevtoolsMessageListener();
 };
 
@@ -68,22 +68,12 @@ Agent.prototype.initDevtoolsMessageListener = function() {
 };
 
 Agent.prototype.reportEntities = function() {
-  // var entities = this.c.entities.all().concat(this.game);
-  //
-  // var entitiesList = entities.map((entity) => {
-  //   return {
-  //     displayName: entity.displayName || entity.constructor.name,
-  //     entityId: entity.__inspect_uuid__
-  //   };
-  // });
 
   const id = this.subscribedEntityId;
 
 
   sendMessage('tick', {
     id
-    //entities: entitiesList,
-    //subscribedEntity: this.serializeSubscribedEntity(id, entities)
   });
 };
 
@@ -189,6 +179,7 @@ Agent.prototype.attachSelectClickHandler = function() {
 
 
     this.removeSelectClickHandler();
+    this.reportEntities();
   };
 
   this.c.addEventListener('click', this._findTargetCb);
