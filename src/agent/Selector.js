@@ -307,6 +307,7 @@ class CssSelectorGenerator {
                 return selector;
             }
         }
+
         return '*';
     }
 

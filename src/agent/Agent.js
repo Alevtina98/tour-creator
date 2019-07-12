@@ -13,7 +13,6 @@ const GAME_OBJECT_ID = 'game_object';
  */
 // c = window
 const Agent = function (c) {
-  debugger;
   this.c = c;
   // this.game = c.entities.game;
   // this.Coquette = c.constructor;

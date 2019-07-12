@@ -9,6 +9,10 @@ module.exports = {
     agent: './src/agent/index.js',
   },
 
+  resolve: {
+    extensions: [".ts", ".tsx", ".js", ".jsx", ".less"]
+  },
+
   devtool: 'source-map',
 
   output: {
@@ -39,7 +43,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(ts|js|tsx|jsx)$/,
+        test: /\.(ts|js|tsx|jsx)?$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
       },

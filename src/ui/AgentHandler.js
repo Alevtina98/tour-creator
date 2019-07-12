@@ -4,7 +4,7 @@ import port from "./port";
 
 const AgentHandler = function (dispatch) {
   this.dispatch = dispatch;
-  this.currentSelected = "";
+  this.currentSelected = null;
 
   port.onMessage.addListener((msg) => {
     this.handleMessage(msg);
@@ -16,17 +16,15 @@ const AgentHandler = function (dispatch) {
     reloaded: () => injectDebugger(),
 
     tick: (data) => {
-      if (typeof data === "object") {
-        return;
-      }
+      const { id } = data;
       // this.flux.actions.entities.didGetEntities({
       //   entities: data.entities,
       //   subscribedEntity: data.subscribedEntity
       // });
-      if (this.currentSelected !== data) {
-        console.log("selector >>", data);
-        this.dispatch(setCurrentSelector(data));
-        this.currentSelected = data;
+      if (this.currentSelected !== id) {
+        console.log("selector >>", id);
+        this.dispatch(setCurrentSelector(id));
+        this.currentSelected = id;
       }
       // this.selector = data;
       // this.flux.actions.game.didTick();

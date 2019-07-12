@@ -13,6 +13,7 @@ const MainReducer = (state = initialState, action) => {
             }
         }
         case "SET_CURRENT_SELECTOR":
+            console.log(action);
             return {
                 ...state,
                 selector: action.payload.selector
