@@ -1,67 +1,50 @@
-var React = require('react');
-var FluxMixin = require('fluxxor').FluxMixin(React);
-var StoreWatchMixin = require('fluxxor').StoreWatchMixin;
-var EntityList = require('./EntityList');
-var GameControls = require('./GameControls');
+import React, { useEffect } from "react";
+import {useDispatch, useSelector} from "react-redux";
+import AgentHandler from "../AgentHandler";
+import agentActions from "../actions/GameActions";
 
-var Main = React.createClass({
-  mixins: [
-    FluxMixin,
-    StoreWatchMixin('ConnectionStore')
-  ],
+const MainComponent = () => {
+    const dispatch = useDispatch();
 
+    /**
+     *
+     * @type {typeof initialState}
+     */
+    const data = useSelector(({MainState}) => MainState);
+    useEffect(() => {
+        new AgentHandler(dispatch);
+    }, []);
 
-    getStateFromFlux: function() {
-    var store = this.getFlux().store('ConnectionStore');
-
-    return {
-      isConnected: store.isConnected
+    const onInspectClickHandler = () => {
+        if (data.isInspectEnabled) {
+            agentActions.disableSelectMode();
+        } else {
+            agentActions.enableSelectMode();
+        }
     };
-  },
 
-  renderLoaded: function() {
-    return (
-      <div className="panel panel-default">
+    /*
 
+                Functions:
+                <li>dark({this.selector});</li>
+                <li>Descriptor({this.selector}, "This is your Selector"); </li>
+     */
+
+    console.log(data);
+    return <div className="panel panel-default">
         <div className="panel-heading">
-          <GameControls />
-         <h3 className="panel-title" >
-            {/*Create Tour*/}
-          </h3>
+            <h3 className="panel-title" >
+                Create Tour
+            </h3>
         </div>
         <div className="panel-body">
-          <ul>
-            <h4>{this.selector}</h4>
-            Functions:
-            <li>dark({this.selector});</li>
-            <li>Descriptor({this.selector}, "This is your Selector"); </li>
-          </ul>
+            <button onClick={onInspectClickHandler}>Start inspect</button>
+            <ul>
+                <h4>{JSON.stringify(data)}</h4>
+            </ul>
         </div>
 
-      </div>
-    );
-  },
+    </div>;
+};
 
-  renderNoConnection: function() {
-    return (
-        <div className="panel panel-default">
-
-          <div className="panel-heading">
-            <GameControls />
-          </div >
-            Sorry, not connection :(
-        </div>
-    );
-  },
-
-  render: function() {
-    //this.state.isConnected = false;
-    return (
-      <div className="main-container">
-        { this.state.isConnected ? this.renderLoaded() : this.renderNoConnection() }
-      </div>
-    );
-  }
-});
-
-module.exports = Main;
+export default MainComponent;

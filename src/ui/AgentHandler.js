@@ -1,31 +1,39 @@
-var port = require('./port');
-var injectDebugger = require('./injectDebugger');
+import {connectSuccess, setCurrentSelector, setInspectDisabled, setInspectEnabled} from "./actions/mainAction";
+import injectDebugger from "./injectDebugger";
+import port from "./port";
 
-var AgentHandler = function(flux) {
-  this.flux = flux;
+const AgentHandler = function (dispatch) {
+  this.dispatch = dispatch;
+  this.currentSelected = "";
 
-  port.onMessage.addListener((msg) => { this.handleMessage(msg); });
+  port.onMessage.addListener((msg) => {
+    this.handleMessage(msg);
+  });
 
   this.handlers = {
-    connected: () => this.flux.actions.didConnect(),
+    connected: () => this.dispatch(connectSuccess()),
 
     reloaded: () => injectDebugger(),
 
     tick: (data) => {
+      if (typeof data === "object") {
+        return;
+      }
       // this.flux.actions.entities.didGetEntities({
       //   entities: data.entities,
       //   subscribedEntity: data.subscribedEntity
       // });
-     console.log("selector >>", data);
-      this.selector = data;
-      this.flux.actions.game.didTick();
+      if (this.currentSelected !== data) {
+        console.log("selector >>", data);
+        this.dispatch(setCurrentSelector(data));
+        this.currentSelected = data;
+      }
+      // this.selector = data;
+      // this.flux.actions.game.didTick();
     },
 
-    paused: () => this.flux.actions.game.didPauseGame(),
-    unpaused: () => this.flux.actions.game.didUnpauseGame(),
-
-    enabledSelectMode: () => this.flux.actions.game.didEnableSelectMode(),
-    disabledSelectMode: () => this.flux.actions.game.didDisableSelectMode()
+    enabledSelectMode: () => this.dispatch(setInspectEnabled()),
+    disabledSelectMode: () => this.dispatch(setInspectDisabled())
   };
 };
 
@@ -39,4 +47,4 @@ AgentHandler.prototype.handleMessage = function(message) {
   handler(message.data);
 };
 
-module.exports = AgentHandler;
+export default AgentHandler;

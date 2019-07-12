@@ -1,16 +1,19 @@
-var Selector = require('./Selector');
-var _ = require('lodash');
-var sendMessage = require('./util/sendMessage');
-var serializeEntity = require('./util/serializeEntity');
-var deepUpdate = require('../common/deepUpdate');
+import sendMessage from "./util/sendMessage";
+import Selector from "./Selector";
+import serializeEntity from "./util/serializeEntity";
 
-var GAME_OBJECT_ID = 'game_object';
+import deepUpdate from "../common/deepUpdate";
+
+const _ = require('lodash');
+const GAME_OBJECT_ID = 'game_object';
 
 /**
  * TODO: why is this even a Class? doesn't really do anything particularly ~object-oriented~
  * not sure what to refactor it into, tho
  */
-var Agent = function(c) {
+// c = window
+const Agent = function (c) {
+  debugger;
   this.c = c;
   // this.game = c.entities.game;
   // this.Coquette = c.constructor;
@@ -31,7 +34,7 @@ var Agent = function(c) {
 };
 
 Agent.prototype.initDebugLoop = function() {
-  var debugLoop = () => {
+  const debugLoop = () => {
     this.reportEntities();
 
     // Ensure that this isn't re-enqueued on the same frame, or the runner gets stuck in an endless
@@ -52,7 +55,7 @@ Agent.prototype.initDevtoolsMessageListener = function() {
       return;
     }
 
-    var message = event.data;
+    const message = event.data;
 
     // Only accept messages of correct format (our messages)
     if (typeof message !== 'object' || message === null ||
@@ -74,7 +77,7 @@ Agent.prototype.reportEntities = function() {
   //   };
   // });
 
-  var id = this.subscribedEntityId;
+  const id = this.subscribedEntityId;
 
 
   sendMessage('tick', {
@@ -89,7 +92,7 @@ Agent.prototype.serializeSubscribedEntity = function(id, entities) {
     return;
   }
 
-  var entity = entities.filter((entity) => id === entity.__inspect_uuid__)[0];
+  const entity = entities.filter((entity) => id === entity.__inspect_uuid__)[0];
 
   if (!entity) {
     this.subscribedEntityId = null;
@@ -103,29 +106,30 @@ Agent.prototype.handlers = {
 
   // Broadcast when the dev tools are opened
   connect: function() {
+    console.log("Browser connect handler -> connected")
     sendMessage('connected');
   },
 
   pause: function() {
-    this.c.ticker.stop();
+    // this.c.ticker.stop();
     sendMessage('paused');
   },
 
   unpause: function() {
-    this.c.ticker.start();
+    // this.c.ticker.start();
     sendMessage('unpaused');
   },
 
   step: function() {
-    this.c.ticker.start();  // this sets a cb for the requestAnimationFrame() loop..
-    this.c.ticker.stop();   // ...and this unsets it, so that only one frame is run
+    // this.c.ticker.start();  // this sets a cb for the requestAnimationFrame() loop..
+    // this.c.ticker.stop();   // ...and this unsets it, so that only one frame is run
   },
 
   updateProperty: function(data) {
     /* jshint evil: true */
 
     // find entity by UUID
-    var entity;
+    let entity;
     if (data.entityId === GAME_OBJECT_ID) {
       entity = this.game;
     } else {
@@ -137,7 +141,7 @@ Agent.prototype.handlers = {
       throw new Error('No entity found with id ' + data.entityId);
     }
 
-    var val;
+    let val;
     try {
       val = eval(data.value);
     } catch(e) {
@@ -175,12 +179,12 @@ Agent.prototype.attachSelectClickHandler = function() {
   this._findTargetCb = (e) => {
     e.stopPropagation();
 
-    var target = e.target;
+    const target = e.target;
     const selector = new Selector;
-    var str = selector.getSelector(target);
+    const str = selector.getSelector(target);
     console.log("str >> ", str);
-    var x = e.pageX - e.target.offsetLeft;
-    var y = e.pageY - e.target.offsetTop;
+    const x = e.pageX - e.target.offsetLeft;
+    const y = e.pageY - e.target.offsetTop;
 
     /*var matching = _.find(this.c.entities.all(), (obj) => {
       if (!obj.center || !obj.size) {
@@ -211,7 +215,7 @@ Agent.prototype.removeSelectClickHandler = function() {
 };
 
 Agent.prototype.handleMessage = function(message) {
-  var handler = this.handlers[message.name];
+  const handler = this.handlers[message.name];
   if (!handler) {
     console.warn('No handler found for event ' + name);
     return;
@@ -220,4 +224,4 @@ Agent.prototype.handleMessage = function(message) {
   handler.call(this, message.data);
 };
 
-module.exports = Agent;
+export default Agent;

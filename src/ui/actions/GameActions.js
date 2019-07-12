@@ -1,6 +1,6 @@
-var sendMessage = require('../util/sendMessage');
+import sendMessage from "../util/sendMessage";
 
-module.exports = {
+const agentActions = {
   pauseGame: function() {
     sendMessage('pause');
   },
@@ -41,3 +41,5 @@ module.exports = {
     this.dispatch('disabledSelectMode');
   }
 };
+
+export default agentActions;

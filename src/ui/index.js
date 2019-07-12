@@ -1,27 +1,19 @@
-require('../../style/main.less');
-
 import React from "react";
-var ReactDOM = require('react-dom');
-var Main = require('./components/Main');
-
-var injectDebugger = require('./injectDebugger');
-var AgentHandler = require('./AgentHandler');
-
-var Flux = require('fluxxor').Flux;
-var actions = require('./actions');
-var stores = require('./stores');
-
-var flux = new Flux(stores, actions);
-
-var agentHandler = new AgentHandler(flux);
+import ReactDOM from "react-dom";
+import {Provider} from "react-redux";
+import '../../style/main.less';
+import Main from "./components/Main";
+import injectDebugger from "./injectDebugger";
+import configureStore from "./store/configureStore";
 
 injectDebugger();
-class MainContainer extends Component {
 
-}
+const MainContainer = () => {
+  return <Provider store={configureStore()}>
+    <Main />
+  </Provider>
+};
 
 window.addEventListener('load', function() {
-  console.log(agentHandler.selector);
-  ReactDOM.render(<Main flux={flux} selector = {agentHandler.selector}/>, document.getElementById('container'));
-
+  ReactDOM.render(<MainContainer />, document.getElementById('container'));
 });

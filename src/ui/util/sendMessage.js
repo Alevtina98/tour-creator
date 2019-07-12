@@ -1,6 +1,6 @@
-var port = require('../port');
+import port from "../port";
 
-var sendMessage = function(name, data) {
+const sendMessage = function (name, data) {
   port.postMessage({
     name: name,
     tabId: chrome.devtools.inspectedWindow.tabId,
@@ -8,4 +8,5 @@ var sendMessage = function(name, data) {
   });
 };
 
-module.exports = sendMessage;
+export default sendMessage;
+

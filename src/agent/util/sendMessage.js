@@ -1,4 +1,4 @@
-var sendMessage = function(name, data) {
+const sendMessage = function (name, data) {
   window.postMessage({
     source: 'coquette-inspect-agent',
     name: name,
@@ -6,4 +6,5 @@ var sendMessage = function(name, data) {
   }, '*');
 };
 
-module.exports = sendMessage;
+export default sendMessage;
+

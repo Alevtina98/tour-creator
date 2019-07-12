@@ -23,18 +23,18 @@ module.exports = {
   //     chunks: ['ui'],
   //   }),
   // ],
-  optimization: {
-    splitChunks: {
-      cacheGroups: {
-        vendor: {
-          test: /node_modules/,
-          chunks: "initial",
-          name: 'vendor',
-          enforce: true
-        },
-      }
-    }
-  },
+  // optimization: {
+  //   splitChunks: {
+  //     cacheGroups: {
+  //       vendor: {
+  //         test: /node_modules/,
+  //         chunks: "initial",
+  //         name: 'vendor',
+  //         enforce: true
+  //       },
+  //     }
+  //   }
+  // },
 
   module: {
     rules: [

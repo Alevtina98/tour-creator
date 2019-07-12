@@ -1,4 +1,4 @@
-var sendMessage = require('../util/sendMessage');
+import sendMessage from "../util/sendMessage";
 
 module.exports = {
   didGetEntities: function(entities, subscribedDetail) {
