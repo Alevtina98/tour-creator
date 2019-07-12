@@ -1,4 +1,4 @@
-export default class CssSelectorGenerator {
+class CssSelectorGenerator {
     default_options = {
         // choose from 'tag', 'id', 'class', 'nthchild', 'attribute'
         selectors: ['id', 'class', 'tag', 'nthchild'],
@@ -353,3 +353,4 @@ export default class CssSelectorGenerator {
 };
 
 
+module.exports = CssSelectorGenerator;

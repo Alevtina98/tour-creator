@@ -1,2 +1,4 @@
 node_modules/
 chrome-extension/build/
+lib
+.idea

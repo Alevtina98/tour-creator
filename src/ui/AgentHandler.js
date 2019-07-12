@@ -12,11 +12,12 @@ var AgentHandler = function(flux) {
     reloaded: () => injectDebugger(),
 
     tick: (data) => {
-      this.flux.actions.entities.didGetEntities({
-        entities: data.entities,
-        subscribedEntity: data.subscribedEntity
-      });
-
+      // this.flux.actions.entities.didGetEntities({
+      //   entities: data.entities,
+      //   subscribedEntity: data.subscribedEntity
+      // });
+     console.log("selector >>", data);
+      this.selector = data;
       this.flux.actions.game.didTick();
     },
 

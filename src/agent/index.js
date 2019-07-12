@@ -4,11 +4,12 @@ var Agent = require('./Agent');
 var patchEntities = require('./patchEntities');
 var sendMessage = require('./util/sendMessage');
 
-if (window.__coquette__) {
-  sendMessage('locatedCoquette');
-  patchEntities(window.__coquette__);
-  new Agent(window.__coquette__);
 
-} else {
-  sendMessage('noCoquetteFound');
-}
+sendMessage('locatedCoquette');
+// patchEntities(window.__coquette__);
+new Agent(window);
+// if (window.__coquette__) {
+//
+// } else {
+//   sendMessage('noCoquetteFound');
+// }

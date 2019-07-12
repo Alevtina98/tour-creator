@@ -1,7 +1,9 @@
 var createVendorChunk = require('webpack-create-vendor-chunk');
 var webpack = require('webpack');
+var path = require("path");
 
 module.exports = {
+  mode: "development",
   entry: {
     ui: './src/ui/index.js',
     agent: './src/agent/index.js',
@@ -10,22 +12,34 @@ module.exports = {
   devtool: 'source-map',
 
   output: {
-    path: 'chrome-extension/build/',
+    path: path.resolve(__dirname, "chrome-extension/build/"),
     publicPath: 'build',
     filename: '[name].bundle.js'
   },
 
-  plugins: [
-    createVendorChunk({
-      name: 'vendor',
-      chunks: ['ui'],
-    }),
-  ],
+  // plugins: [
+  //   createVendorChunk({
+  //     name: 'vendor',
+  //     chunks: ['ui'],
+  //   }),
+  // ],
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /node_modules/,
+          chunks: "initial",
+          name: 'vendor',
+          enforce: true
+        },
+      }
+    }
+  },
 
   module: {
-    loaders: [
+    rules: [
       {
-        test: /\.(ts|js)x?$/,
+        test: /\.(ts|js|tsx|jsx)$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
       },

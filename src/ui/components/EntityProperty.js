@@ -92,7 +92,7 @@ var EntityProperty = React.createClass({
     }
 
     return (
-      <li key={prop} className="entity-property-item">
+      <li key="FFFFFFFFFFF" className="entity-property-item">
         <code>{prop}</code>: {valueDisplay}
       </li>
     );

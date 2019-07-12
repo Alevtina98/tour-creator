@@ -60,18 +60,18 @@ var cloneObject = function(obj, seen, blacklist) {
 };
 
 var serializeEntity = function(entity, entities) {
-  /*var entitiesMap = new WeakMap();
+  var entitiesMap = new WeakMap();
   // Chrome doesn't support WeakMap(iterable) yet :(
-  /!*entities.forEach((entity) => {
+  entities.forEach((entity) => {
     entitiesMap.set(entity, null);
-  });*!/
+  });
 
   var seenMap = new WeakMap();
 
   var clone = cloneObject(entity, seenMap, entitiesMap);
 
-  clone.displayName = entity.displayName || entity.constructor.name;*/
-  var clone = entity;
+  clone.displayName = entity.displayName || entity.constructor.name;
+
   return clone;
 };
 

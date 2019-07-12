@@ -1,6 +1,14 @@
 {
   "presets": [
-    "@babel/env",
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "chrome": "30",
+          "ie": "9"
+        }
+      }
+    ],
     "@babel/typescript",
     "@babel/react"
   ],

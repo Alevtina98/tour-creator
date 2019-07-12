@@ -45,12 +45,12 @@ var GameState = React.createClass({
   renderPaused: function() {
     return (
       <span>
-        <button onClick={this.handleTogglePause} className="activated" title="Play">
+        {/*<button onClick={this.handleTogglePause} className="activated" title="Play">
           <span className="glyphicon glyphicon-play" />
         </button>
         <button onClick={this.handleStep} title="Step forward">
           <span className="glyphicon glyphicon-step-forward" />
-        </button>
+        </button>*/}
       </span>
     );
   },
@@ -60,13 +60,13 @@ var GameState = React.createClass({
 
     return (
       <span>
-        <span className={fpsClass}>{this.state.fps} FPS</span>&nbsp;
+        {/*<span className={fpsClass}>{this.state.fps} FPS</span>&nbsp;
         <button onClick={this.handleTogglePause} title="Pause">
           <span className="glyphicon glyphicon-pause" />
         </button>
         <button disabled title="Step forward">
           <span className="glyphicon glyphicon-step-forward" />
-        </button>
+        </button>*/}
       </span>
     );
   },
@@ -78,7 +78,7 @@ var GameState = React.createClass({
       <div className="controls">
         {this.state.isPaused ? this.renderPaused() : this.renderPlaying()}
 
-        <button onClick={this.handleToggleSelectEntity} className={selectClass} title="Click an entity to inspect it.">
+        <button onClick={this.handleToggleSelectEntity} className={selectClass} title="Select an element to get its selector">
           <span className="glyphicon glyphicon-zoom-in" />
         </button>
       </div>

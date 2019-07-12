@@ -1,5 +1,4 @@
-import Selector from "./util/Selector";
-
+var Selector = require('./Selector');
 var _ = require('lodash');
 var sendMessage = require('./util/sendMessage');
 var serializeEntity = require('./util/serializeEntity');
@@ -13,18 +12,18 @@ var GAME_OBJECT_ID = 'game_object';
  */
 var Agent = function(c) {
   this.c = c;
-  this.game = c.entities.game;
-  this.Coquette = c.constructor;
-  this.canvas = c.renderer._ctx.canvas;
+  // this.game = c.entities.game;
+  // this.Coquette = c.constructor;
+  // this.canvas = c.renderer._ctx.canvas;
 
   // Agent state
   this.subscribedEntityId = null;
 
   // Register a displayName and ID on the game object
-  if (!this.game.displayName) {
-    this.game.displayName = '<Game object>';
-  }
-  this.game.__inspect_uuid__ = GAME_OBJECT_ID;
+  // if (!this.game.displayName) {
+  //   this.game.displayName = '<Game object>';
+  // }
+  // this.game.__inspect_uuid__ = GAME_OBJECT_ID;
 
   // Kick off debug loop and message handler
   this.initDebugLoop();
@@ -39,12 +38,11 @@ Agent.prototype.initDebugLoop = function() {
     // loop.
     // TODO: setTimeout() seems like a non-optimal way to do this, could end up missing frames
     // or hurting perf? :C
-    setTimeout(() => {
-      this.c.runner.add(undefined, debugLoop);
-    });
+    setTimeout(debugLoop);
   };
+  debugLoop();
 
-  this.c.runner.add(undefined, debugLoop);
+  // this.c.runner.add(undefined, debugLoop);
 };
 
 Agent.prototype.initDevtoolsMessageListener = function() {
@@ -67,20 +65,22 @@ Agent.prototype.initDevtoolsMessageListener = function() {
 };
 
 Agent.prototype.reportEntities = function() {
-  var entities = this.c.entities.all().concat(this.game);
-
-  var entitiesList = entities.map((entity) => {
-    return {
-      displayName: entity.displayName || entity.constructor.name,
-      entityId: entity.__inspect_uuid__
-    };
-  });
+  // var entities = this.c.entities.all().concat(this.game);
+  //
+  // var entitiesList = entities.map((entity) => {
+  //   return {
+  //     displayName: entity.displayName || entity.constructor.name,
+  //     entityId: entity.__inspect_uuid__
+  //   };
+  // });
 
   var id = this.subscribedEntityId;
 
+
   sendMessage('tick', {
-    entities: entitiesList,
-    subscribedEntity: this.serializeSubscribedEntity(id, entities)
+    id
+    //entities: entitiesList,
+    //subscribedEntity: this.serializeSubscribedEntity(id, entities)
   });
 };
 
@@ -89,12 +89,13 @@ Agent.prototype.serializeSubscribedEntity = function(id, entities) {
     return;
   }
 
-  //var entity = entities.filter((entity) => id === entity.__inspect_uuid__)[0];
-    var entity = id;
-    if (!entity) {
-        this.subscribedEntityId = null;
-        return;
-    }
+  var entity = entities.filter((entity) => id === entity.__inspect_uuid__)[0];
+
+  if (!entity) {
+    this.subscribedEntityId = null;
+    return;
+  }
+
   return serializeEntity(entity, entities);
 };
 
@@ -164,6 +165,7 @@ Agent.prototype.handlers = {
   }
 };
 
+
 Agent.prototype.attachSelectClickHandler = function() {
   if (this._findTargetCb) {
     // already enabled
@@ -175,42 +177,40 @@ Agent.prototype.attachSelectClickHandler = function() {
 
     var target = e.target;
     const selector = new Selector;
-    selector.getSelector(target);
-
-    var x = e.pageX - e.target;
+    var str = selector.getSelector(target);
+    console.log("str >> ", str);
+    var x = e.pageX - e.target.offsetLeft;
     var y = e.pageY - e.target.offsetTop;
 
-    var matching = _.find(this.c.entities.all(), (obj) => {
+    /*var matching = _.find(this.c.entities.all(), (obj) => {
       if (!obj.center || !obj.size) {
         return false;
       }
       return this.Coquette.Collider.Maths.pointInsideObj({x, y}, obj);
     });
 
-    if (matching) {
-    //  this.subscribedEntityId = matching.__inspect_uuid__;
-        this.subscribedEntityId = target;
-    }
+    if (matching) {*/
+      this.subscribedEntityId = str;//matching.__inspect_uuid__;
+    //}
 
     this.removeSelectClickHandler();
   };
 
-  this.canvas.addEventListener('click', this._findTargetCb);
-  this.canvas.style.cursor = 'pointer';
+  this.c.addEventListener('click', this._findTargetCb);
+  // this.canvas.style.cursor = 'pointer';
 
   sendMessage('enabledSelectMode');
 };
 
 Agent.prototype.removeSelectClickHandler = function() {
-  this.canvas.removeEventListener('click', this._findTargetCb);
+  this.c.removeEventListener('click', this._findTargetCb);
   delete this._findTargetCb;
-  this.canvas.style.cursor = 'default';
+  // this.canvas.style.cursor = 'default';
 
   sendMessage('disabledSelectMode');
 };
 
 Agent.prototype.handleMessage = function(message) {
-
   var handler = this.handlers[message.name];
   if (!handler) {
     console.warn('No handler found for event ' + name);

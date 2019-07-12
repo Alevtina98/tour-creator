@@ -1,6 +1,6 @@
 require('../../style/main.less');
 
-var React = require('react');
+import React from "react";
 var ReactDOM = require('react-dom');
 var Main = require('./components/Main');
 
@@ -16,7 +16,12 @@ var flux = new Flux(stores, actions);
 var agentHandler = new AgentHandler(flux);
 
 injectDebugger();
+class MainContainer extends Component {
+
+}
 
 window.addEventListener('load', function() {
-  ReactDOM.render(<Main flux={flux}/>, document.getElementById('container'));
+  console.log(agentHandler.selector);
+  ReactDOM.render(<Main flux={flux} selector = {agentHandler.selector}/>, document.getElementById('container'));
+
 });

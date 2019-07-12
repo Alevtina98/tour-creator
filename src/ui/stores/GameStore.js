@@ -24,8 +24,6 @@ var mkAvgTick = function(maxSamples) {
 
 var GameStore = Fluxxor.createStore({
   actions: {
-    'pausedGame': 'onPausedGame',
-    'unpausedGame': 'onUnpausedGame',
     'ticked': 'onTicked',
     'enabledSelectMode': 'onEnabledSelectMode',
     'disabledSelectMode': 'onDisabledSelectMode'
