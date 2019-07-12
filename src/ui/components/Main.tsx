@@ -1,25 +1,30 @@
 import React, { useEffect } from "react";
+
 import {useDispatch, useSelector} from "react-redux";
 import AgentHandler from "../AgentHandler";
 import agentActions from "../actions/agentActions";
 import ConnectionStatus from "./ConnectionStatus";
 import {setInspectDisabled, setInspectEnabled} from "../actions/mainAction";
 import {StoreType} from "../reducers";
+import Blockly from "react-blockly-component";
 
 export interface MainComponentSelector {
     connected: boolean;
     isInspectEnabled: boolean;
     selector: string;
+
 }
 
 const MainComponent = () => {
     const dispatch = useDispatch();
 
-    const { isInspectEnabled, selector, connected } = useSelector<StoreType, MainComponentSelector>(({ MainState }) => (MainState));
+    const { isInspectEnabled, selector, connected} = useSelector<StoreType, MainComponentSelector>(({ MainState }) => (MainState));
     // Инициализация агента общения со страницей
     useEffect(() => {
         new AgentHandler(dispatch);
     }, []);
+
+
 
     const onInspectClickHandler = () => {
         if (isInspectEnabled) {
@@ -29,9 +34,14 @@ const MainComponent = () => {
             dispatch(setInspectEnabled());
             agentActions.enableSelectMode();
         }
+
     };
 
+    /*const onClick = () => {
+        onInspectClickHandler();
 
+    };*/
+   // console.log("selector");
     return <div className="panel panel-default">
         <div className="panel-heading">
             <h3 className="panel-title">
@@ -39,7 +49,7 @@ const MainComponent = () => {
                 <button onClick={onInspectClickHandler} title="Select an element to get its selector">
                     <span className="glyphicon glyphicon-zoom-in" />
                 </button>
-               {/*<button onClick={onTestHandler}>Start inspect2</button>*/}
+                <button onClick={onInspectClickHandler}>Затемнение</button>
             </h3>
         </div>
         <div className="panel-body">
@@ -47,7 +57,7 @@ const MainComponent = () => {
                 Selector: {selector}
             </ul>
         </div>
-
+        <Blockly.BlocklyEditor />
     </div>;
 };
 
