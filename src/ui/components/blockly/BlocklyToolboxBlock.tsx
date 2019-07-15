@@ -3,8 +3,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // import ImmutablePropTypes from 'react-immutable-proptypes';
-
-class BlocklyToolboxBlock extends React.PureComponent {
+export interface  BlocklyToolboxBlockProps {
+  shadow: any,
+  fields: any,
+  values: any,
+  statements: any,
+  next: any,
+  mutation: any,
+}
+class BlocklyToolboxBlock extends React.PureComponent <BlocklyToolboxBlockProps>{
   // static propTypes = {
   //   type: PropTypes.string.isRequired,
   //   shadow: PropTypes.bool,
@@ -18,7 +25,7 @@ class BlocklyToolboxBlock extends React.PureComponent {
   //   }),
   // };
 
-  static defaultProps = {
+  static defaultProps: BlocklyToolboxBlockProps = {
     shadow: false,
     fields: null,
     values: null,
@@ -42,7 +49,7 @@ class BlocklyToolboxBlock extends React.PureComponent {
 
   componentDidMount = () => {
     if (this.props.mutation) {
-      this.props.mutation.get('attributes').forEach((value, attributeName) => {
+      this.props.mutation.get('attributes').forEach((value: any, attributeName: any) => {
         this.mutationElement.setAttribute(attributeName, value);
         return true;
       });
