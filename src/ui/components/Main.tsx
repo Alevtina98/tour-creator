@@ -6,7 +6,7 @@ import agentActions from "../actions/agentActions";
 import ConnectionStatus from "./ConnectionStatus";
 import {setInspectDisabled, setInspectEnabled} from "../actions/mainAction";
 import {StoreType} from "../reducers";
-import Blockly from "react-blockly-component";
+import BlocklyComponent from "./BlocklyComponent";
 
 export interface MainComponentSelector {
     connected: boolean;
@@ -57,7 +57,7 @@ const MainComponent = () => {
                 Selector: {selector}
             </ul>
         </div>
-        <Blockly.BlocklyEditor />
+        <BlocklyComponent  />
     </div>;
 };
 
