@@ -9,7 +9,7 @@ import configureStore from "./store/configureStore";
 injectDebugger();
 
 const MainContainer = () => {
-  return <Provider store={configureStore()}>
+  return <Provider store={configureStore("")}>
     <Main />
   </Provider>
 };
