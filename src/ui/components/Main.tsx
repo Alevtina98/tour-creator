@@ -7,6 +7,7 @@ import ConnectionStatus from "./ConnectionStatus";
 import {setInspectDisabled, setInspectEnabled} from "../actions/mainAction";
 import {StoreType} from "../reducers";
 import BlocklyComponent from "./BlocklyComponent";
+// import ReactBlocklyComponent from "react-blockly-component";
 
 export interface MainComponentSelector {
     connected: boolean;
@@ -57,7 +58,7 @@ const MainComponent = () => {
                 Selector: {selector}
             </ul>
         </div>
-        <BlocklyComponent  />
+        <BlocklyComponent  selector = {selector} />
     </div>;
 };
 

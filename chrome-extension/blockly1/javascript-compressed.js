@@ -17,8 +17,10 @@ Blockly.JavaScript.ORDER_LOGICAL_NOT = 4.4;
 Blockly.JavaScript.ORDER_TYPEOF = 4.5;
 Blockly.JavaScript.ORDER_VOID = 4.6;
 Blockly.JavaScript.ORDER_DELETE = 4.7;
-Blockly.JavaScript.ORDER_DIVISION = 5.1;
-Blockly.JavaScript.ORDER_MULTIPLICATION = 5.2;
+Blockly.JavaScript.ORDER_AWAIT = 4.8;
+Blockly.JavaScript.ORDER_EXPONENTIATION = 5;
+Blockly.JavaScript.ORDER_MULTIPLICATION = 5.1;
+Blockly.JavaScript.ORDER_DIVISION = 5.2;
 Blockly.JavaScript.ORDER_MODULUS = 5.3;
 Blockly.JavaScript.ORDER_SUBTRACTION = 6.1;
 Blockly.JavaScript.ORDER_ADDITION = 6.2;
@@ -34,7 +36,8 @@ Blockly.JavaScript.ORDER_LOGICAL_AND = 13;
 Blockly.JavaScript.ORDER_LOGICAL_OR = 14;
 Blockly.JavaScript.ORDER_CONDITIONAL = 15;
 Blockly.JavaScript.ORDER_ASSIGNMENT = 16;
-Blockly.JavaScript.ORDER_COMMA = 17;
+Blockly.JavaScript.ORDER_YIELD = 17;
+Blockly.JavaScript.ORDER_COMMA = 18;
 Blockly.JavaScript.ORDER_NONE = 99;
 Blockly.JavaScript.ORDER_OVERRIDES = [[Blockly.JavaScript.ORDER_FUNCTION_CALL, Blockly.JavaScript.ORDER_MEMBER], [Blockly.JavaScript.ORDER_FUNCTION_CALL, Blockly.JavaScript.ORDER_FUNCTION_CALL], [Blockly.JavaScript.ORDER_MEMBER, Blockly.JavaScript.ORDER_MEMBER], [Blockly.JavaScript.ORDER_MEMBER, Blockly.JavaScript.ORDER_FUNCTION_CALL], [Blockly.JavaScript.ORDER_LOGICAL_NOT, Blockly.JavaScript.ORDER_LOGICAL_NOT], [Blockly.JavaScript.ORDER_MULTIPLICATION, Blockly.JavaScript.ORDER_MULTIPLICATION], [Blockly.JavaScript.ORDER_ADDITION,
     Blockly.JavaScript.ORDER_ADDITION], [Blockly.JavaScript.ORDER_LOGICAL_AND, Blockly.JavaScript.ORDER_LOGICAL_AND], [Blockly.JavaScript.ORDER_LOGICAL_OR, Blockly.JavaScript.ORDER_LOGICAL_OR]];
@@ -42,13 +45,11 @@ Blockly.JavaScript.init = function (a) {
     Blockly.JavaScript.definitions_ = Object.create(null);
     Blockly.JavaScript.functionNames_ = Object.create(null);
     Blockly.JavaScript.variableDB_ ? Blockly.JavaScript.variableDB_.reset() : Blockly.JavaScript.variableDB_ = new Blockly.Names(Blockly.JavaScript.RESERVED_WORDS_);
-    var b = [];
-    a = a.getAllVariables();
-    if (a.length) {
-        for (var c = 0; c < a.length; c++) b[c] = Blockly.JavaScript.variableDB_.getName(a[c].name, Blockly.Variables.NAME_TYPE);
-        Blockly.JavaScript.definitions_.variables = "var " + b.join(", ") +
-            ";"
-    }
+    Blockly.JavaScript.variableDB_.setVariableMap(a.getVariableMap());
+    for (var b = [], c = Blockly.Variables.allDeveloperVariables(a), d = 0; d < c.length; d++) b.push(Blockly.JavaScript.variableDB_.getName(c[d], Blockly.Names.DEVELOPER_VARIABLE_TYPE));
+    a = Blockly.Variables.allUsedVarModels(a);
+    for (d = 0; d < a.length; d++) b.push(Blockly.JavaScript.variableDB_.getName(a[d].getId(), Blockly.Variables.NAME_TYPE));
+    b.length && (Blockly.JavaScript.definitions_.variables = "var " + b.join(", ") + ";")
 };
 Blockly.JavaScript.finish = function (a) {
     var b = [], c;
@@ -65,17 +66,17 @@ Blockly.JavaScript.quote_ = function (a) {
     a = a.replace(/\\/g, "\\\\").replace(/\n/g, "\\\n").replace(/'/g, "\\'");
     return "'" + a + "'"
 };
-Blockly.JavaScript.scrub_ = function (a, b) {
-    var c = "";
+Blockly.JavaScript.scrub_ = function (a, b, c) {
+    var d = "";
     if (!a.outputConnection || !a.outputConnection.targetConnection) {
-        var d = a.getCommentText();
-        (d = Blockly.utils.wrap(d, Blockly.JavaScript.COMMENT_WRAP - 3)) && (c = a.getProcedureDef ? c + ("/**\n" + Blockly.JavaScript.prefixLines(d + "\n", " * ") + " */\n") : c + Blockly.JavaScript.prefixLines(d + "\n", "// "));
-        for (var e = 0; e < a.inputList.length; e++) a.inputList[e].type == Blockly.INPUT_VALUE && (d = a.inputList[e].connection.targetBlock()) && (d = Blockly.JavaScript.allNestedComments(d)) && (c +=
-            Blockly.JavaScript.prefixLines(d, "// "))
+        var e = a.getCommentText();
+        (e = Blockly.utils.wrap(e, Blockly.JavaScript.COMMENT_WRAP - 3)) && (d = a.getProcedureDef ? d + ("/**\n" + Blockly.JavaScript.prefixLines(e + "\n", " * ") + " */\n") : d + Blockly.JavaScript.prefixLines(e + "\n", "// "));
+        for (var f = 0; f < a.inputList.length; f++) a.inputList[f].type == Blockly.INPUT_VALUE && (e = a.inputList[f].connection.targetBlock()) && (e = Blockly.JavaScript.allNestedComments(e)) &&
+        (d += Blockly.JavaScript.prefixLines(e, "// "))
     }
-    e = a.nextConnection && a.nextConnection.targetBlock();
-    e = Blockly.JavaScript.blockToCode(e);
-    return c + b + e
+    a = a.nextConnection && a.nextConnection.targetBlock();
+    c = c ? "" : Blockly.JavaScript.blockToCode(a);
+    return d + b + c
 };
 Blockly.JavaScript.getAdjusted = function (a, b, c, d, e) {
     c = c || 0;
@@ -176,7 +177,7 @@ Blockly.JavaScript.lists_getIndex = function (a) {
                 Blockly.JavaScript.ORDER_FUNCTION_CALL];
             if ("REMOVE" == b) return d + ";\n"
     }
-    throw"Unhandled combination (lists_getIndex).";
+    throw Error("Unhandled combination (lists_getIndex).");
 };
 Blockly.JavaScript.lists_setIndex = function (a) {
     function b() {
@@ -219,7 +220,7 @@ Blockly.JavaScript.lists_setIndex = function (a) {
             if ("SET" == d) return a + (c + "[" + e + "] = " + f + ";\n");
             if ("INSERT" == d) return a + (c + ".splice(" + e + ", 0, " + f + ");\n")
     }
-    throw"Unhandled combination (lists_setIndex).";
+    throw Error("Unhandled combination (lists_setIndex).");
 };
 Blockly.JavaScript.lists.getIndex_ = function (a, b, c) {
     return "FIRST" == b ? "0" : "FROM_END" == b ? a + ".length - 1 - " + c : "LAST" == b ? a + ".length - 1" : c
@@ -241,7 +242,7 @@ Blockly.JavaScript.lists_getSublist = function (a) {
                     "0";
                 break;
             default:
-                throw"Unhandled option (lists_getSublist).";
+                throw Error("Unhandled option (lists_getSublist).");
         }
         switch (d) {
             case "FROM_START":
@@ -255,7 +256,7 @@ Blockly.JavaScript.lists_getSublist = function (a) {
                 a = b + ".length";
                 break;
             default:
-                throw"Unhandled option (lists_getSublist).";
+                throw Error("Unhandled option (lists_getSublist).");
         }
         b = b + ".slice(" + e + ", " + a + ")"
     } else {
@@ -280,7 +281,7 @@ Blockly.JavaScript.lists_split = function (a) {
     var b = Blockly.JavaScript.valueToCode(a, "INPUT", Blockly.JavaScript.ORDER_MEMBER),
         c = Blockly.JavaScript.valueToCode(a, "DELIM", Blockly.JavaScript.ORDER_NONE) || "''";
     a = a.getFieldValue("MODE");
-    if ("SPLIT" == a) b || (b = "''"), a = "split"; else if ("JOIN" == a) b || (b = "[]"), a = "join"; else throw"Unknown mode: " + a;
+    if ("SPLIT" == a) b || (b = "''"), a = "split"; else if ("JOIN" == a) b || (b = "[]"), a = "join"; else throw Error("Unknown mode: " + a);
     return [b + "." + a + "(" + c + ")", Blockly.JavaScript.ORDER_FUNCTION_CALL]
 };
 Blockly.JavaScript.lists_reverse = function (a) {
@@ -391,11 +392,12 @@ Blockly.JavaScript.controls_flow_statements = function (a) {
         case "CONTINUE":
             return "continue;\n"
     }
-    throw"Unknown flow statement.";
+    throw Error("Unknown flow statement.");
 };
 Blockly.JavaScript.math = {};
 Blockly.JavaScript.math_number = function (a) {
-    return [parseFloat(a.getFieldValue("NUM")), Blockly.JavaScript.ORDER_ATOMIC]
+    a = parseFloat(a.getFieldValue("NUM"));
+    return [a, 0 <= a ? Blockly.JavaScript.ORDER_ATOMIC : Blockly.JavaScript.ORDER_UNARY_NEGATION]
 };
 Blockly.JavaScript.math_arithmetic = function (a) {
     var b = {
@@ -465,7 +467,7 @@ Blockly.JavaScript.math_single = function (a) {
             c = "Math.atan(" + a + ") / Math.PI * 180";
             break;
         default:
-            throw"Unknown math operator: " + b;
+            throw Error("Unknown math operator: " + b);
     }
     return [c, Blockly.JavaScript.ORDER_DIVISION]
 };
@@ -560,7 +562,7 @@ Blockly.JavaScript.math_on_list = function (a) {
             a = b + "(" + a + ")";
             break;
         default:
-            throw"Unknown operator: " + b;
+            throw Error("Unknown operator: " + b);
     }
     return [a, Blockly.JavaScript.ORDER_FUNCTION_CALL]
 };
@@ -583,6 +585,10 @@ Blockly.JavaScript.math_random_int = function (a) {
 };
 Blockly.JavaScript.math_random_float = function (a) {
     return ["Math.random()", Blockly.JavaScript.ORDER_FUNCTION_CALL]
+};
+Blockly.JavaScript.math_atan2 = function (a) {
+    var b = Blockly.JavaScript.valueToCode(a, "X", Blockly.JavaScript.ORDER_COMMA) || "0";
+    return ["Math.atan2(" + (Blockly.JavaScript.valueToCode(a, "Y", Blockly.JavaScript.ORDER_COMMA) || "0") + ", " + b + ") / Math.PI * 180", Blockly.JavaScript.ORDER_DIVISION]
 };
 Blockly.JavaScript.procedures = {};
 Blockly.JavaScript.procedures_defreturn = function (a) {
@@ -619,16 +625,22 @@ Blockly.JavaScript.texts = {};
 Blockly.JavaScript.text = function (a) {
     return [Blockly.JavaScript.quote_(a.getFieldValue("TEXT")), Blockly.JavaScript.ORDER_ATOMIC]
 };
+Blockly.JavaScript.text.forceString_ = function (a) {
+    return Blockly.JavaScript.text.forceString_.strRegExp.test(a) ? a : "String(" + a + ")"
+};
+Blockly.JavaScript.text.forceString_.strRegExp = /^\s*'([^']|\\')*'\s*$/;
 Blockly.JavaScript.text_join = function (a) {
     switch (a.itemCount_) {
         case 0:
             return ["''", Blockly.JavaScript.ORDER_ATOMIC];
         case 1:
-            return ["String(" + (Blockly.JavaScript.valueToCode(a, "ADD0", Blockly.JavaScript.ORDER_NONE) || "''") + ")", Blockly.JavaScript.ORDER_FUNCTION_CALL];
+            return a = Blockly.JavaScript.valueToCode(a, "ADD0", Blockly.JavaScript.ORDER_NONE) || "''", a = Blockly.JavaScript.text.forceString_(a), [a, Blockly.JavaScript.ORDER_FUNCTION_CALL];
         case 2:
             var b = Blockly.JavaScript.valueToCode(a, "ADD0", Blockly.JavaScript.ORDER_NONE) || "''";
             a = Blockly.JavaScript.valueToCode(a, "ADD1", Blockly.JavaScript.ORDER_NONE) || "''";
-            return ["String(" + b + ") + String(" + a + ")", Blockly.JavaScript.ORDER_ADDITION];
+            a = Blockly.JavaScript.text.forceString_(b) +
+                " + " + Blockly.JavaScript.text.forceString_(a);
+            return [a, Blockly.JavaScript.ORDER_ADDITION];
         default:
             b = Array(a.itemCount_);
             for (var c = 0; c < a.itemCount_; c++) b[c] = Blockly.JavaScript.valueToCode(a, "ADD" + c, Blockly.JavaScript.ORDER_COMMA) || "''";
@@ -639,7 +651,7 @@ Blockly.JavaScript.text_join = function (a) {
 Blockly.JavaScript.text_append = function (a) {
     var b = Blockly.JavaScript.variableDB_.getName(a.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE);
     a = Blockly.JavaScript.valueToCode(a, "TEXT", Blockly.JavaScript.ORDER_NONE) || "''";
-    return b + " = String(" + b + ") + String(" + a + ");\n"
+    return b + " += " + Blockly.JavaScript.text.forceString_(a) + ";\n"
 };
 Blockly.JavaScript.text_length = function (a) {
     return [(Blockly.JavaScript.valueToCode(a, "VALUE", Blockly.JavaScript.ORDER_FUNCTION_CALL) || "''") + ".length", Blockly.JavaScript.ORDER_MEMBER]
@@ -669,7 +681,7 @@ Blockly.JavaScript.text_charAt = function (a) {
         case "RANDOM":
             return [Blockly.JavaScript.provideFunction_("textRandomLetter", ["function " + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + "(text) {", "  var x = Math.floor(Math.random() * text.length);", "  return text[x];", "}"]) + "(" + c + ")", Blockly.JavaScript.ORDER_FUNCTION_CALL]
     }
-    throw"Unhandled option (text_charAt).";
+    throw Error("Unhandled option (text_charAt).");
 };
 Blockly.JavaScript.text.getIndex_ = function (a, b, c) {
     return "FIRST" == b ? "0" : "FROM_END" == b ? a + ".length - 1 - " + c : "LAST" == b ? a + ".length - 1" : c
@@ -690,7 +702,7 @@ Blockly.JavaScript.text_getSubstring = function (a) {
                 e = "0";
                 break;
             default:
-                throw"Unhandled option (text_getSubstring).";
+                throw Error("Unhandled option (text_getSubstring).");
         }
         switch (d) {
             case "FROM_START":
@@ -704,24 +716,25 @@ Blockly.JavaScript.text_getSubstring = function (a) {
                 a = b + ".length";
                 break;
             default:
-                throw"Unhandled option (text_getSubstring).";
+                throw Error("Unhandled option (text_getSubstring).");
         }
         b = b + ".slice(" + e + ", " + a + ")"
     } else {
         e = Blockly.JavaScript.getAdjusted(a, "AT1");
         a = Blockly.JavaScript.getAdjusted(a, "AT2");
-        var f = Blockly.JavaScript.text.getIndex_,
+        var f =
+                Blockly.JavaScript.text.getIndex_,
             g = {FIRST: "First", LAST: "Last", FROM_START: "FromStart", FROM_END: "FromEnd"};
-        b = Blockly.JavaScript.provideFunction_("subsequence" + g[c] + g[d], ["function " + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + "(sequence" + ("FROM_END" == c || "FROM_START" == c ? ", at1" : "") + ("FROM_END" == d || "FROM_START" == d ? ", at2" : "") + ") {", "  var start = " + f("sequence", c, "at1") + ";", "  var end = " + f("sequence", d, "at2") + " + 1;", "  return sequence.slice(start, end);", "}"]) + "(" + b + ("FROM_END" == c || "FROM_START" == c ? ", " + e : "") + ("FROM_END" == d || "FROM_START" ==
-        d ? ", " + a : "") + ")"
+        b = Blockly.JavaScript.provideFunction_("subsequence" + g[c] + g[d], ["function " + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + "(sequence" + ("FROM_END" == c || "FROM_START" == c ? ", at1" : "") + ("FROM_END" == d || "FROM_START" == d ? ", at2" : "") + ") {", "  var start = " + f("sequence", c, "at1") + ";", "  var end = " + f("sequence", d, "at2") + " + 1;", "  return sequence.slice(start, end);", "}"]) + "(" + b + ("FROM_END" == c || "FROM_START" ==
+        c ? ", " + e : "") + ("FROM_END" == d || "FROM_START" == d ? ", " + a : "") + ")"
     }
     return [b, Blockly.JavaScript.ORDER_FUNCTION_CALL]
 };
 Blockly.JavaScript.text_changeCase = function (a) {
     var b = {UPPERCASE: ".toUpperCase()", LOWERCASE: ".toLowerCase()", TITLECASE: null}[a.getFieldValue("CASE")];
     a = Blockly.JavaScript.valueToCode(a, "TEXT", b ? Blockly.JavaScript.ORDER_MEMBER : Blockly.JavaScript.ORDER_NONE) || "''";
-    return [b ? a + b : Blockly.JavaScript.provideFunction_("textToTitleCase", ["function " + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + "(str) {", "  return str.replace(/\\S+/g,", "      function(txt) {return txt[0].toUpperCase() + txt.substring(1).toLowerCase();});", "}"]) +
-        "(" + a + ")", Blockly.JavaScript.ORDER_FUNCTION_CALL]
+    return [b ? a + b : Blockly.JavaScript.provideFunction_("textToTitleCase", ["function " + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + "(str) {", "  return str.replace(/\\S+/g,", "      function(txt) {return txt[0].toUpperCase() + txt.substring(1).toLowerCase();});",
+        "}"]) + "(" + a + ")", Blockly.JavaScript.ORDER_FUNCTION_CALL]
 };
 Blockly.JavaScript.text_trim = function (a) {
     var b = {
@@ -763,3 +776,6 @@ Blockly.JavaScript.variables_set = function (a) {
     var b = Blockly.JavaScript.valueToCode(a, "VALUE", Blockly.JavaScript.ORDER_ASSIGNMENT) || "0";
     return Blockly.JavaScript.variableDB_.getName(a.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE) + " = " + b + ";\n"
 };
+Blockly.JavaScript.variablesDynamic = {};
+Blockly.JavaScript.variables_get_dynamic = Blockly.JavaScript.variables_get;
+Blockly.JavaScript.variables_set_dynamic = Blockly.JavaScript.variables_set;

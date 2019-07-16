@@ -15,7 +15,7 @@ interface Block {
   mutation:{
     attributes: object,
     innerContent: string,
-  },
+  }
 }
 export interface CategoryNonRecursive {
   type: string,
@@ -35,7 +35,10 @@ export interface BlocklyEditorProps extends Block, Category{
   wrapperDivClassName: string,
   processToolboxCategory: any,
   onImportXmlError: any
+  xmlDidChange: any,
+  workspaceDidChange: any
 }
+
 class BlocklyEditor extends React.Component <BlocklyEditorProps>{
 
   toolbox = React.createRef<BlocklyToolbox>();
@@ -62,7 +65,9 @@ class BlocklyEditor extends React.Component <BlocklyEditorProps>{
     toolboxBlocks: [],
     toolboxCategories: [],
     processToolboxCategory: null,
-    onImportXmlError: null
+    onImportXmlError: null,
+    xmlDidChange: null,
+    workspaceDidChange: null
   };
   componentDidMount = () => {
     this.toolboxDidUpdate();
@@ -97,15 +102,15 @@ class BlocklyEditor extends React.Component <BlocklyEditorProps>{
     }
   };
 
-  xmlDidChange = (newXml) => {
+  xmlDidChange = (newXml: any) => {
     if (this.props.xmlDidChange) {
       this.props.xmlDidChange(newXml);
     }
-  }
+  };
 
   workspaceDidChange = (workspace: any) => {
-    if (this.workspaceDidChange) {
-      this.workspaceDidChange(workspace);
+    if (this.props.workspaceDidChange) {
+      this.props.workspaceDidChange(workspace);
     }
   };
 
