@@ -2015,7 +2015,7 @@ Blockly.Constants.VariablesDynamic.DELETE_OPTION_CALLBACK_FACTORY = function (a)
     }
 };
 Blockly.Extensions.registerMixin("contextMenu_variableDynamicSetterGetter", Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN);
-Blockly.Blocks['dark'] = {
+/*Blockly.Blocks['dark'] = {
     init: function() {
         this.appendValueInput("NAME")
             .setCheck(null)
@@ -2028,26 +2028,47 @@ Blockly.Blocks['dark'] = {
         this.setHelpUrl("");
     }
 };
-
 Blockly.Blocks['desc'] = {
     init: function() {
         this.appendValueInput("selector")
             .setCheck(null)
             .appendField("Описание");
+
+        this.appendDummyInput()
+            .appendField("field dropdown box")
+            .appendField(new Blockly.FieldDropdown([["value1", "key1"],["value2", "key2"]], function(key) {
+                //TODO Action
+            }), "dropdownkey");
+
         this.appendValueInput("text")
             .setCheck("String");
+
+
+
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(230);
         this.setTooltip("");
         this.setHelpUrl("");
-        //this.setButtonEnabled(true);
-    }
-};
 
-var demoWorkspace = Blockly.inject('blocklyDiv', {media: '../../media/', toolbox: document.getElementById('toolbox')});
-console.log(demoWorkspace);
-demoWorkspace.registerButtonCallback("Inspector", function (button) {
-    console.log("HELLO FROM FUNCTION")
-});
+
+    }
+};*/
+//
+// window.onload = function() {
+//     var container = document.getElementById('blocklyDiv');
+//     console.log("container:",container );
+//     console.log("toolbox:",document.getElementById('toolbox') );
+//     var demoWorkspace = Blockly.inject(blocklyDiv, {toolbox: document.getElementById('toolbox')});
+//
+//     console.log(demoWorkspace);
+//
+//     demoWorkspace.registerButtonCallback("Inspector", function () {
+//         console.log("HELLO FROM FUNCTI  ON")
+//     });
+//     console.log("demoWorkspace.registerButtonCallback");
+//
+// };
+//
+//

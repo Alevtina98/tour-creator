@@ -337,7 +337,7 @@ const INITIAL_TOOLBOX_XML = '<xml xmlns="http://www.w3.org/1999/xhtml" id="toolb
   '        </shadow>\n' +
   '      </value>\n' +
   '    </block>\n' +
-  '    <block type="colour_blend">\n' +
+  '        <block type="colour_blend">\n' +
   '      <value name="COLOUR1">\n' +
   '        <shadow type="colour_picker">\n' +
   '          <field name="COLOUR">#ff0000</field>\n' +
@@ -358,10 +358,9 @@ const INITIAL_TOOLBOX_XML = '<xml xmlns="http://www.w3.org/1999/xhtml" id="toolb
   '  <sep></sep>\n' +
   '  <category name="Variables" colour="#A65C81" custom="VARIABLE"></category>\n' +
   '  <category name="Functions" colour="#9A5CA6" custom="PROCEDURE"></category>\n' +
-  '  <category name="Tour">\n' +
-  '    <block type="dark"></block>\n' +
-  '    <block type="desc"></block>\n' +
-    ' <button text="Inspect" callbackKey="Inspector"></button>\n' +
+
+    '<button text="Inspect" callbackKey="Inspector"></button>\n' +
+    ' <label text="Another label"></label>\n' +
   '  </category>\n' +
   '</xml>';
 

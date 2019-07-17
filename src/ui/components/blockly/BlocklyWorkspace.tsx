@@ -65,6 +65,10 @@ class BlocklyWorkspace extends React.Component <BlocklyWorkspaceProps, BlocklyWo
             },
         );
 
+
+        this.state.workspace.registerButtonCallback("Inspector", () => {
+            console.log("HELLO FROM CALLBACK")
+        });
         if (this.state.xml) {
             if (this.importFromXml(this.state.xml)) {
                 this.xmlDidChange();

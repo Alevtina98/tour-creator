@@ -18,38 +18,37 @@ class BlocklyComponent extends React.Component<{}, BlocklyState, BlocklyProps> {
     props: BlocklyProps = {
         selector: "selector"
     };
+    blocklyRef: any | null = null;
+
     state: BlocklyState = {
         toolboxCategories: parseWorkspaceXml(ConfigFiles.INITIAL_TOOLBOX_XML)
     };
     componentDidMount(): void {
         window.setTimeout(() => {
             this.setState({
-                toolboxCategories: parseWorkspaceXml(ConfigFiles.INITIAL_TOOLBOX_XML)/*.concat([
+                toolboxCategories: parseWorkspaceXml(ConfigFiles.INITIAL_TOOLBOX_XML).concat([
                     {
                         name: 'Затемнение',
                         blocks: [
-                            { type: 'controls_if' },
-                            { type: 'text' },
-                            {
-                                type: 'text_print',
-                                values: {
-                                    TEXT: {
-                                        type: 'text',
-                                        shadow: true,
-                                        fields: {
-                                            TEXT: 'selector',
-                                        },
-                                    },
-                                },
-                            },
+                            { type: 'desc' , onChange: () => { console.log("HELLO WORLD")}},
+                            { type: 'dark' }
+
                         ],
                     }
                     ]
 
-                )*/
+                )
             });
-        }, 2000);
+        }, 1);
 
+    };
+
+    setBlocklyRef = (ref: any) => {
+        this.blocklyRef = ref;
+    };
+
+    onChangeCheckbox = (key: string) => {
+        console.log("from FN", key);
     };
 
     workspaceDidChange = (workspace: any) => {
@@ -58,12 +57,23 @@ class BlocklyComponent extends React.Component<{}, BlocklyState, BlocklyProps> {
         //
         // const code = Blockly.JavaScript.workspaceToCode(workspace);
         // document.getElementById('code').value = code;
-        console.log(workspace);
-    }
+        //console.log(workspace);
+    };
+
     render = () => {
+
+        //console.log(this.blocklyRef);
+        if (this.blocklyRef && this.blocklyRef.workspace &&this.blocklyRef.workspace.state&&this.blocklyRef.workspace.state.workspace&&this.blocklyRef.workspace.state.workspace.topBlocks_[0]) {
+            console.log(">>",this.blocklyRef.workspace.state.workspace.topBlocks_[0].changeKey);
+            // this.blocklyRef.workspace.state.workspace.registerButtonCallback("dropdownkey", () => {
+            //
+            //     console.log("Change!!!!!!!!!!!!!")
+            // })
+        }
         return (
             <ReactBlocklyComponent.BlocklyEditor
                 toolboxCategories={this.state.toolboxCategories}
+                ref={this.setBlocklyRef}
                 workspaceConfiguration={{
                     sounds: false,
                     grid: {
