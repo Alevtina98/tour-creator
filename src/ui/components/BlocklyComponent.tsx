@@ -24,7 +24,7 @@ class BlocklyComponent extends React.Component<{}, BlocklyState, BlocklyProps> {
     componentDidMount(): void {
         window.setTimeout(() => {
             this.setState({
-                toolboxCategories: parseWorkspaceXml(ConfigFiles.INITIAL_TOOLBOX_XML).concat([
+                toolboxCategories: parseWorkspaceXml(ConfigFiles.INITIAL_TOOLBOX_XML)/*.concat([
                     {
                         name: 'Затемнение',
                         blocks: [
@@ -46,11 +46,11 @@ class BlocklyComponent extends React.Component<{}, BlocklyState, BlocklyProps> {
                     }
                     ]
 
-                )
+                )*/
             });
         }, 2000);
 
-    }
+    };
 
     workspaceDidChange = (workspace: any) => {
         // const newXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));

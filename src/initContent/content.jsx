@@ -1,3 +1,4 @@
+
 const INITIAL_XML = '<xml xmlns="http://www.w3.org/1999/xhtml"><block type="text" x="70" y="30"><field name="TEXT"></field></block></xml>';
 
 const INITIAL_TOOLBOX_XML = '<xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">\n' +
@@ -357,6 +358,11 @@ const INITIAL_TOOLBOX_XML = '<xml xmlns="http://www.w3.org/1999/xhtml" id="toolb
   '  <sep></sep>\n' +
   '  <category name="Variables" colour="#A65C81" custom="VARIABLE"></category>\n' +
   '  <category name="Functions" colour="#9A5CA6" custom="PROCEDURE"></category>\n' +
+  '  <category name="Tour">\n' +
+  '    <block type="dark"></block>\n' +
+  '    <block type="desc"></block>\n' +
+    ' <button text="Inspect" callbackKey="Inspector"></button>\n' +
+  '  </category>\n' +
   '</xml>';
 
 const INITIAL_TOOLBOX_CATEGORIES = [
