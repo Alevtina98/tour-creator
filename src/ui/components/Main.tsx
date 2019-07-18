@@ -58,7 +58,7 @@ const MainComponent = () => {
                 Selector: {selector}
             </ul>
         </div>
-        <BlocklyComponent  selector = {selector} />
+        <BlocklyComponent selector={selector} inspect={onInspectClickHandler} />
     </div>;
 };
 

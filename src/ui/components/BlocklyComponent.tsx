@@ -24,11 +24,14 @@ export interface WorkspaceEventType {
 
 export interface BlocklyProps {
     selector: string;
+    inspect: any
 }
-class BlocklyComponent extends React.Component <{}, BlocklyState, BlocklyProps> {
+class BlocklyComponent extends React.Component<BlocklyProps, BlocklyState> {
     props: BlocklyProps = {
-        selector: "selector"
+        selector: "selector",
+        inspect: null
     };
+
     blocklyRef: any | null = null;
 
     state: BlocklyState = {
@@ -44,31 +47,7 @@ class BlocklyComponent extends React.Component <{}, BlocklyState, BlocklyProps> 
                         blocks: [
                             { type: 'desc' , onChange: () => { console.log("HELLO WORLD")}},
                             { type: 'dark' },
-                            {
-                                type: 'text',
-                                message0: "%1 %2",
-                                args0: [
-                                    {
-                                        "type": "inspector",
-                                        "src": "https://www.gstatic.com/codesite/ph/images/star_on.gif",
-                                        "width": 15,
-                                        "height": 15,
-                                        "alt": "*",
-                                        "flipRtl": false
-                                    },
-                                    {
-                                        "type": "field_input",
-                                        "name": "NAME",
-                                        "text": "default"
-                                    }
-                                ],
-                                inputsInline: true,
-                                output: null,
-                                colour: 230,
-                                tooltip: "",
-                                helpUrl: "",
-                                extensions: [ "my_button_extension" ]
-                            }
+                            { type: 'selector'}
                         ],
                     }
                     ]
@@ -76,82 +55,72 @@ class BlocklyComponent extends React.Component <{}, BlocklyState, BlocklyProps> 
                 )
             });
         }, 1);
-
     };
+
+    componentDidUpdate({ selector }: BlocklyProps): void {
+        if (this.props.selector !== selector && this.state.blockId) {
+            const workspaceSvg = this.blocklyRef.workspace.state.workspace;
+            const block = workspaceSvg.getBlockById(this.state.blockId);
+            const field =  block.getField("NAME");
+            console.log("field >> ",field);
+            if (field != "") {
+                field.setText(this.props.selector);
+                this.setState({
+                    blockId: ""
+                });
+            }
+            console.log("selector >> ",this.props.selector);
+        }
+    }
 
     setBlocklyRef = (ref: any) => {
         this.blocklyRef = ref;
     };
 
-    onChangeCheckbox = (key: string) => {
+    /*onChangeCheckbox = (key: string) => {
         console.log("from FN", key);
-    };
+    };*/
 
-    onClickSVGEl = () => {
+    /*onClickSVGEl = () => {
         console.log("CLICK ON ELEMENT", this);
-    }
+    }*/
 
     workspaceDidChange = (workspace: any) => {
-        // if (this.blocklyRef&&this.blocklyRef.workspace) {
-        //     console.log(this.blocklyRef.workspace);
-        //     const workspaceSVG = this.blocklyRef.workspace.state.workspace;
-        //     function onFirstComment(event) {
-        //         console.log("IN FUNCTION CALLBACK");
-        //         if (event.type == Blockly.Events.CHANGE || event.type === Blockly.Events.UI) {
-        //             console.log("IN EVENT CONDITION");
-        //             workspace.removeChangeListener(onFirstComment);
-        //         }
-        //     }
-        //     workspaceSVG.addChangeListener(onFirstComment);
-            //
-            // workspaceSVG.topBlocks_.forEach(el => {
-            //     const svgEl = el.svgGroup_;
-            //     console.log(">", svgEl);
-            //     svgEl.removeEventListener("mousedown", this.onClickSVGEl);
-            //     svgEl.addEventListener("mousedown", this.onClickSVGEl)
-            // })
-        // }
 
-        // const newXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
-        // document.getElementById('generated-xml').innerText = newXml;
-        //
-        // const code = Blockly.JavaScript.workspaceToCode(workspace);
-        // document.getElementById('code').value = code;
-        //console.log(workspace);
     };
     isCreated = false;
 
     onClickOnBlock = () => {
+        const workspaceSvg = this.blocklyRef.workspace.state.workspace;
+        const block= workspaceSvg.getBlockById(this.state.blockId);
+        console.log("Block >> ",block);
+        if (block) {
+            this.props.inspect();
+        }
 
     };
 
     render = () => {
-    /*    if (this.blocklyRef && this.blocklyRef.workspace &&this.blocklyRef.workspace.state&&this.blocklyRef.workspace.state.workspace&&this.blocklyRef.workspace.state.workspace.topBlocks_[0]) {
-            console.log(">>",this.blocklyRef.workspace.state.workspace.topBlocks_[0].changeKey);
-        }
-        console.log("this.blocklyRef",this.blocklyRef);
-        */
-
-        // Blockly.Extensions.register('my_button_extension', function () {
-        //     this.getField('inspector').clickHandler_ = (() => {
-        //         console.log(this.type + ' button clicked');
-        //     });
-        // });
 
         if (this.blocklyRef&&this.blocklyRef.workspace && !this.isCreated) {
-            console.log(this.blocklyRef.workspace);
+            //console.log(this.blocklyRef.workspace);
             const self = this;
             const workspaceSVG = this.blocklyRef.workspace.state.workspace;
 
             function onFirstComment(event: WorkspaceEventType) {
                 if (event.type == Blockly.Events.CHANGE || event.type === Blockly.Events.UI) {
+                    const blockId = event.blockId || event.newValue || "";
                     self.setState({
-                        blockId: event.blockId
+                        blockId
                     });
-                    console.log("IN EVENT CONDITION", workspaceSVG, self);
-
-                    self.onClickOnBlock();
-                    // workspaceSVG.removeChangeListener(onFirstComment);
+                    if (blockId) {
+                        const block= workspaceSVG.getBlockById(blockId);
+                        console.log("block", block);
+                        //console.log("IN EVENT CONDITION", workspaceSVG, self);
+                        if (block.type === "selector") {
+                            self.onClickOnBlock();
+                        }
+                    }
                 }
             }
             this.isCreated = true;

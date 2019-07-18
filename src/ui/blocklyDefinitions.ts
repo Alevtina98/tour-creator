@@ -57,53 +57,25 @@ Blockly.Blocks['desc'] = {
 };
 Blockly.Blocks['selector'] = {
     init: function() {
-        this.jsonInit({
-            "type": "selector",
-            "message0": "%1 %2",
-            "args0": [
-                {
-                    "type": "field_image",
-                    "src": "https://www.gstatic.com/codesite/ph/images/star_on.gif",
-                    "width": 15,
-                    "height": 15,
-                    "alt": "*",
-                    "flipRtl": false
-                },
-                {
-                    "type": "field_input",
-                    "name": "NAME",
-                    "text": "default"
-                }
-            ],
-            "inputsInline": true,
-            "output": null,
-            "colour": 230,
-            "tooltip": "",
-            "helpUrl": ""
-        })
-        /*this.appendDummyInput()
-            //.appendField("Inspect")
-            .appendField(new Blockly.FieldImage("https://www.gstatic.com/codesite/ph/images/star_on.gif", 15, 15, "*"), undefined, "myIconButton");
         this.appendDummyInput()
-            .appendField(new Blockly.FieldTextInput("selector"), "selector");
-        this.setOutput(true, null);
+            .appendField(new Blockly.FieldImage("https://www.gstatic.com/codesite/ph/images/star_on.gif", 15, 15, "*"))
+            .appendField(new Blockly.FieldTextInput("TEXT"), "NAME");
+        this.setInputsInline(true);
+        this.setOutput(true);
         this.setColour(230);
         this.setTooltip("");
-        this.setHelpUrl("");*/
+        this.setHelpUrl("");
     }
 };
-
 /*export const onClick = ()=> {
     console.log("Clicked");
     return 0;
 };*/
 
 /*
-
 Blockly.Extensions.register('myIconButton', function () {
     debugger;
     this.getField('myIconButton').clickHandler_ = (() => {
         console.log(this.type + ' button clicked');
     });
-});
-*/
+});*/
