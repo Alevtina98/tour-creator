@@ -58,8 +58,8 @@ Blockly.Blocks['desc'] = {
 Blockly.Blocks['selector'] = {
     init: function() {
         this.appendDummyInput()
-            .appendField(new Blockly.FieldImage("https://www.gstatic.com/codesite/ph/images/star_on.gif", 15, 15, "*"))
-            .appendField(new Blockly.FieldTextInput("TEXT"), "NAME");
+            .appendField(new Blockly.FieldImage("https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Magnifying_glass_icon.svg/735px-Magnifying_glass_icon.svg.png", 15, 15, "*"))
+            .appendField(new Blockly.FieldTextInput("selector"), "NAME");
         this.setInputsInline(true);
         this.setOutput(true);
         this.setColour(230);
