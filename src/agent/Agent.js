@@ -8,202 +8,129 @@ import deepUpdate from "../common/deepUpdate";
 const _ = require('lodash');
 const GAME_OBJECT_ID = 'game_object';
 
-/**
- * TODO: why is this even a Class? doesn't really do anything particularly ~object-oriented~
- * not sure what to refactor it into, tho
- */
-// c = window
-const Agent = function (c) {
-  this.c = c;
-  // this.game = c.entities.game;
-  // this.Coquette = c.constructor;
-  // this.canvas = c.renderer._ctx.canvas;
+class Agent {
+  /**
+   * TODO: why is this even a Class? doesn't really do anything particularly ~object-oriented~
+   * not sure what to refactor it into, tho
+   */
+  constructor(c) {
+    this.c = c;
+    // this.game = c.entities.game;
+    // this.Coquette = c.constructor;
+    // this.canvas = c.renderer._ctx.canvas;
 
-  // Agent state
-  this.subscribedEntityId = null;
-
-  // Register a displayName and ID on the game object
-  // if (!this.game.displayName) {
-  //   this.game.displayName = '<Game object>';
-  // }
-  // this.game.__inspect_uuid__ = GAME_OBJECT_ID;
-
-  // Kick off debug loop and message handler
-  // this.initDebugLoop();
-  this.initDevtoolsMessageListener();
-};
-
-Agent.prototype.initDebugLoop = function() {
-  const debugLoop = () => {
-    this.reportEntities();
-
-    // Ensure that this isn't re-enqueued on the same frame, or the runner gets stuck in an endless
-    // loop.
-    // TODO: setTimeout() seems like a non-optimal way to do this, could end up missing frames
-    // or hurting perf? :C
-    setTimeout(debugLoop);
-  };
-  debugLoop();
-
-  // this.c.runner.add(undefined, debugLoop);
-};
-
-Agent.prototype.initDevtoolsMessageListener = function() {
-  window.addEventListener('message', function(event) {
-    // Only accept messages from same frame
-    if (event.source !== window) {
-      return;
-    }
-
-    const message = event.data;
-
-    // Only accept messages of correct format (our messages)
-    if (typeof message !== 'object' || message === null ||
-        message.source !== 'coquette-inspect-devtools') {
-      return;
-    }
-
-    this.handleMessage(message);
-  }.bind(this));
-};
-
-Agent.prototype.reportEntities = function() {
-
-  const id = this.subscribedEntityId;
-
-
-  sendMessage('tick', {
-    id
-  });
-};
-
-Agent.prototype.serializeSubscribedEntity = function(id, entities) {
-  if (this.subscribedEntityId === null) {
-    return;
-  }
-
-  const entity = entities.filter((entity) => id === entity.__inspect_uuid__)[0];
-
-  if (!entity) {
+    // Agent state
     this.subscribedEntityId = null;
-    return;
+
+    // Register a displayName and ID on the game object
+    // if (!this.game.displayName) {
+    //   this.game.displayName = '<Game object>';
+    // }
+    // this.game.__inspect_uuid__ = GAME_OBJECT_ID;
+
+    // Kick off debug loop and message handler
+    this.initDevtoolsMessageListener();
+    this.handlers = {
+      // Broadcast when the dev tools are opened
+      connect: function () {
+        console.log("Browser connect handler -> connected")
+        sendMessage('connected');
+      },
+
+      subscribeToEntity: function (data) {
+        this.subscribedEntityId = data.entityId;
+      },
+
+      unsubscribeFromEntity: function (/*data*/) {
+        this.subscribedEntityId = null;
+      },
+
+      enableSelectMode: () => {
+        this.attachSelectClickHandler();
+      },
+
+      disableSelectMode: () => {
+        this.removeSelectClickHandler();
+      }
+    };
   }
 
-  return serializeEntity(entity, entities);
-};
+  initDevtoolsMessageListener() {
+    window.addEventListener('message', (event) => {
+      // Only accept messages from same frame
+      if (event.source !== window) {
+        return;
+      }
 
-Agent.prototype.handlers = {
+      const message = event.data;
 
-  // Broadcast when the dev tools are opened
-  connect: function() {
-    console.log("Browser connect handler -> connected")
-    sendMessage('connected');
-  },
+      // Only accept messages of correct format (our messages)
+      if (typeof message !== 'object' || message === null ||
+          message.source !== 'coquette-inspect-devtools') {
+        return;
+      }
 
-  pause: function() {
-    // this.c.ticker.stop();
-    sendMessage('paused');
-  },
+      this.handleMessage(message);
+    });
+  }
 
-  unpause: function() {
-    // this.c.ticker.start();
-    sendMessage('unpaused');
-  },
+  reportEntities() {
 
-  step: function() {
-    // this.c.ticker.start();  // this sets a cb for the requestAnimationFrame() loop..
-    // this.c.ticker.stop();   // ...and this unsets it, so that only one frame is run
-  },
+    const id = this.subscribedEntityId;
 
-  updateProperty: function(data) {
-    /* jshint evil: true */
 
-    // find entity by UUID
-    let entity;
-    if (data.entityId === GAME_OBJECT_ID) {
-      entity = this.game;
-    } else {
-      entity = this.c.entities.all()
-        .filter((entity) => entity.__inspect_uuid__ === data.entityId)[0];
-    }
+    sendMessage('tick', {
+      id
+    });
+  }
 
-    if (!entity) {
-      throw new Error('No entity found with id ' + data.entityId);
-    }
 
-    let val;
-    try {
-      val = eval(data.value);
-    } catch(e) {
-      // Don't update anything if the passed expression is invalid
+  attachSelectClickHandler() {
+    if (this._findTargetCb) {
+      // already enabled
       return;
     }
 
-    deepUpdate(entity, data.path, val);
-  },
+    this._findTargetCb = (e) => {
+      e.stopPropagation();
+      e.preventDefault();
 
-  subscribeToEntity: function(data) {
-    this.subscribedEntityId = data.entityId;
-  },
+      const target = e.target;
+      // const selector = new Selector;
+      const str = Selector(target);
+      console.log("str >> ", str);
 
-  unsubscribeFromEntity: function(/*data*/) {
-    this.subscribedEntityId = null;
-  },
-
-  enableSelectMode: function() {
-    this.attachSelectClickHandler();
-  },
-
-  disableSelectMode: function() {
-    this.removeSelectClickHandler();
-  }
-};
+      this.subscribedEntityId = str;//matching.__inspect_uuid__;
 
 
-Agent.prototype.attachSelectClickHandler = function() {
-  if (this._findTargetCb) {
-    // already enabled
-    return;
+      this.removeSelectClickHandler();
+      this.reportEntities();
+    };
+
+    this.c.addEventListener('click', this._findTargetCb);
+    // this.canvas.style.cursor = 'pointer';
+
+    sendMessage('enabledSelectMode');
   }
 
-  this._findTargetCb = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
+  removeSelectClickHandler() {
+    this.c.removeEventListener('click', this._findTargetCb);
+    delete this._findTargetCb;
+    // this.canvas.style.cursor = 'default';
 
-    const target = e.target;
-   // const selector = new Selector;
-    const str = Selector(target);
-    console.log("str >> ", str);
-
-    this.subscribedEntityId = str;//matching.__inspect_uuid__;
-
-
-    this.removeSelectClickHandler();
-    this.reportEntities();
-  };
-
-  this.c.addEventListener('click', this._findTargetCb);
-  // this.canvas.style.cursor = 'pointer';
-
-  sendMessage('enabledSelectMode');
-};
-
-Agent.prototype.removeSelectClickHandler = function() {
-  this.c.removeEventListener('click', this._findTargetCb);
-  delete this._findTargetCb;
-  // this.canvas.style.cursor = 'default';
-
-  sendMessage('disabledSelectMode');
-};
-
-Agent.prototype.handleMessage = function(message) {
-  const handler = this.handlers[message.name];
-  if (!handler) {
-    console.warn('No handler found for event ' + name);
-    return;
+    sendMessage('disabledSelectMode');
   }
 
-  handler.call(this, message.data);
-};
+  handleMessage(message) {
+    const handler = this.handlers[message.name];
+    if (!handler) {
+      console.warn('No handler found for event ' + name);
+      return;
+    }
+
+    handler.call(this, message.data);
+  }
+}
+
 
 export default Agent;

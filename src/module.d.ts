@@ -1,6 +1,6 @@
 declare module "react-blockly-component";
 declare var Blockly: any;
-
+declare module "react-overlay";
 declare module "node-blockly";
 declare module "google-blockly";
 declare module "react-immutable-proptypes" {

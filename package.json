@@ -1,5 +1,5 @@
 {
-  "name": "coquette-inspect",
+  "name": "tour-creator",
   "version": "0.1.0",
   "description": "",
   "scripts": {
@@ -47,6 +47,7 @@
     "react": "^16.8.6",
     "react-blockly-component": "^3.3.0",
     "react-dom": "^16.8.6",
+    "react-overlay": "^0.1.7",
     "react-redux": "^7.1.0",
     "redux": "^4.0.4",
     "redux-logger": "^3.0.6",

@@ -15,6 +15,7 @@ const MainReducer = (state = initialMainState, action: any) => {
         case "SET_CURRENT_SELECTOR":
             return {
                 ...state,
+                isInspectEnabled: false,
                 selector: action.payload.selector
 
             };

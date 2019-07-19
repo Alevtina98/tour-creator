@@ -2,8 +2,8 @@ import {any} from "prop-types";
 
 Blockly.Blocks['dark'] = {
     init: function() {
-        this.appendValueInput("NAME")
-            .setCheck(null)
+        this.appendValueInput("selector")
+            .setCheck("selector")
             .appendField("Затемнение");
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
@@ -36,7 +36,7 @@ Blockly.Blocks['desc'] = {
 
 
         this.appendValueInput("selector")
-            .setCheck(null)
+            .setCheck("selector")
             .appendField("Описание");
 
 
@@ -57,9 +57,9 @@ Blockly.Blocks['desc'] = {
 };
 Blockly.Blocks['selector'] = {
     init: function() {
-        this.appendDummyInput()
+        this.appendDummyInput("selector")
             .appendField(new Blockly.FieldImage("https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Magnifying_glass_icon.svg/735px-Magnifying_glass_icon.svg.png", 15, 15, "*"))
-            .appendField(new Blockly.FieldTextInput("selector"), "NAME");
+            .appendField(new Blockly.FieldTextInput(""), "NAME");
         this.setInputsInline(true);
         this.setOutput(true);
         this.setColour(230);

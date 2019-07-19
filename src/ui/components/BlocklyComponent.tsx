@@ -43,7 +43,7 @@ class BlocklyComponent extends React.Component<BlocklyProps, BlocklyState> {
             this.setState({
                 toolboxCategories: parseWorkspaceXml(ConfigFiles.INITIAL_TOOLBOX_XML).concat([
                     {
-                        name: 'Затемнение',
+                        name: 'Tour',
                         blocks: [
                             { type: 'desc' , onChange: () => { console.log("HELLO WORLD")}},
                             { type: 'dark' },
@@ -108,7 +108,9 @@ class BlocklyComponent extends React.Component<BlocklyProps, BlocklyState> {
             const workspaceSVG = this.blocklyRef.workspace.state.workspace;
 
             function onFirstComment(event: WorkspaceEventType) {
-                if (event.type == Blockly.Events.CHANGE || event.type === Blockly.Events.UI) {
+                if (/*event.type == Blockly.Events.CHANGE ||*/ event.type === Blockly.Events.UI) {
+                    console.log("event", event);
+                    if (event.element !== "click") return;
                     const blockId = event.blockId || event.newValue || "";
                     self.setState({
                         blockId
