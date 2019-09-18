@@ -6,9 +6,11 @@ const injectDebugger = function () {
   const injectedGlobal = 'window.__coquette_inspect_agent_injected__';
 
   chrome.devtools.inspectedWindow.eval(injectedGlobal, function (result) {
-    if (!result) {
-      // script hasn't been injected yet
 
+    //Функция, вызываемая по завершении оценки
+    if (!result) {
+
+      // script hasn't been injected yet
       const xhr = new XMLHttpRequest();
       xhr.open('GET', chrome.extension.getURL('/build/agent.bundle.js'), false);
       xhr.send();
@@ -25,6 +27,7 @@ const injectDebugger = function () {
       // we're already injected, so just connect
       sendMessage('connect');
     }
+
   });
 };
 
