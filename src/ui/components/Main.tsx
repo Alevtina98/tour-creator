@@ -33,7 +33,7 @@ const MainComponent = () => {
     const onInspectClickHandler = () => {
         if (isInspectEnabled) {
             dispatch(setInspectDisabled()); //Отправка экшена
-            agentActions.disableSelectMode();
+            agentActions.disableSelectMode();//отправляем сообщение 'disableSelectMode'
         } else {
             dispatch(setInspectEnabled());
             agentActions.enableSelectMode();

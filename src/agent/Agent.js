@@ -15,18 +15,9 @@ class Agent {
    */
   constructor(c) {
     this.c = c;
-    // this.game = c.entities.game;
-    // this.Coquette = c.constructor;
-    // this.canvas = c.renderer._ctx.canvas;
 
     // Agent state
-    this.subscribedEntityId = null;
-
-    // Register a displayName and ID on the game object
-    // if (!this.game.displayName) {
-    //   this.game.displayName = '<Game object>';
-    // }
-    // this.game.__inspect_uuid__ = GAME_OBJECT_ID;
+    this.subscribedEntityId = null; //идентификатор события
 
     // Kick off debug loop and message handler
     this.initDevtoolsMessageListener();
@@ -46,7 +37,7 @@ class Agent {
       },
 
       enableSelectMode: () => {
-        this.attachSelectClickHandler();
+          this.attachSelectClickHandler();
       },
 
       disableSelectMode: () => {
@@ -58,6 +49,7 @@ class Agent {
   initDevtoolsMessageListener() {
     window.addEventListener('message', (event) => {
       // Only accept messages from same frame
+        // event.source - источник события
       if (event.source !== window) {
         return;
       }
@@ -77,26 +69,23 @@ class Agent {
   reportEntities() {
 
     const id = this.subscribedEntityId;
-
-
     sendMessage('tick', {
       id
     });
   }
 
-
+  //включен режим инспектора
   attachSelectClickHandler() {
     if (this._findTargetCb) {
       // already enabled
       return;
     }
+    //обрабатываем КЛИК
+    this._findTargetCb = (e) => { //event
+      e.stopPropagation(); //Прекращает дальнейшую передачу текущего события
+      e.preventDefault(); //запрещает исполнение метода по умолчанию, предназначенного для данного события
 
-    this._findTargetCb = (e) => {
-      e.stopPropagation();
-      e.preventDefault();
-
-      const target = e.target;
-      // const selector = new Selector;
+      const target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
       const str = Selector(target);
       console.log("str >> ", str);
 
@@ -112,7 +101,6 @@ class Agent {
 
     sendMessage('enabledSelectMode');
   }
-
   removeSelectClickHandler() {
     this.c.removeEventListener('click', this._findTargetCb);
     delete this._findTargetCb;
