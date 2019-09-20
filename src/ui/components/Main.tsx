@@ -22,11 +22,11 @@ const MainComponent = () => {
     //маппинг значений из store
     const {isInspectEnabled, selector, connected} = useSelector<StoreType, MainComponentSelector>(({MainState}) => (MainState));
 
-    //Инициализация агента общения со страницей
+
     //Так как содержимое пустого массива всегда остаётся неизменным, эффект выполнится лишь один раз
     //аналогично componentDidMount()
     useEffect(() => {
-        new AgentHandler(dispatch);
+        new AgentHandler(dispatch); //Инициализация агента общения со страницей
     }, []);
 
 
@@ -34,6 +34,7 @@ const MainComponent = () => {
         if (isInspectEnabled) {
             dispatch(setInspectDisabled()); //Отправка экшена
             agentActions.disableSelectMode();//отправляем сообщение 'disableSelectMode'
+           // chrome.devtools.inspectedWindow;
         } else {
             dispatch(setInspectEnabled());
             agentActions.enableSelectMode();

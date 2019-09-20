@@ -9,13 +9,11 @@ const injectDebugger = function () {
 
     //Функция, вызываемая по завершении оценки
     if (!result) {
-
       // script hasn't been injected yet
       const xhr = new XMLHttpRequest();
       xhr.open('GET', chrome.extension.getURL('/build/agent.bundle.js'), false);
       xhr.send();
       const script = xhr.responseText;
-
       chrome.devtools.inspectedWindow.eval(script, function (result, err) {
         if (err) {
           console.error(err.value);

@@ -16,7 +16,7 @@ module.exports = {
     },
 
     resolve: {
-        extensions: [".ts", ".tsx", ".js", ".jsx", ".less"]
+        extensions: [".ts", ".tsx", ".js", ".jsx", ".less", ".cur"]
     },
 
     devtool: 'source-map',
@@ -56,16 +56,28 @@ module.exports = {
 
             {
                 test: /\.less$/,
-                loader: "style-loader!css-loader!less-loader"
+                loaders: [
+                    {
+                        loader: "style-loader"
+                    },
+                    {
+                        loader: "css-loader",
+                        options: {
+                            url: false
+                        }
+                    },
+                    {
+                        loader: "less-loader"
+                    },
+                ],
             },
-
             {
                 test: /(?:\.woff2?$|\.ttf$|\.svg$|\.eot$)/,
                 loader: 'file-loader',
                 query: {
                     name: '/build/font/[hash].[ext]'
                 }
-            },
+            }
         ]
     }
 };

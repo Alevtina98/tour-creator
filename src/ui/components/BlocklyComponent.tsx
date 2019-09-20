@@ -10,7 +10,6 @@ export interface BlocklyState {
     toolboxCategories: any[];
     blockId: string
 }
-
 export interface WorkspaceEventType {
     blockId: string;
     type: string;
@@ -21,11 +20,11 @@ export interface WorkspaceEventType {
     recordUndo: false;
     workspaceId: string;
 }
-
 export interface BlocklyProps {
     selector: string;
     inspect: any
 }
+
 class BlocklyComponent extends React.Component<BlocklyProps, BlocklyState> {
     props: BlocklyProps = {
         selector: "selector",
@@ -61,7 +60,7 @@ class BlocklyComponent extends React.Component<BlocklyProps, BlocklyState> {
         if (this.props.selector !== selector && this.state.blockId) {
             const workspaceSvg = this.blocklyRef.workspace.state.workspace;
             const block = workspaceSvg.getBlockById(this.state.blockId);
-            const field =  block.getField("NAME");
+            const field = block.getField("NAME");
             console.log("field >> ",field);
             if (field != "") {
                 field.setText(this.props.selector);
@@ -76,14 +75,6 @@ class BlocklyComponent extends React.Component<BlocklyProps, BlocklyState> {
     setBlocklyRef = (ref: any) => {
         this.blocklyRef = ref;
     };
-
-    /*onChangeCheckbox = (key: string) => {
-        console.log("from FN", key);
-    };*/
-
-    /*onClickSVGEl = () => {
-        console.log("CLICK ON ELEMENT", this);
-    }*/
 
     workspaceDidChange = (workspace: any) => {
 
