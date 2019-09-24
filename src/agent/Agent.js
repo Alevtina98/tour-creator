@@ -148,6 +148,7 @@ class Agent {
     const handler = this.handlers[message.name];
     if (!handler) {
       console.warn('No handler found for event ' + name);
+      this.removeSelectClickHandler();
       return;
     }
 

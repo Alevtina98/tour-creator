@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {MutableRefObject} from 'react';
 import ReactDOM from 'react-dom';
 // import ReactBlocklyComponent from './blockly/index';
 import ReactBlocklyComponent from "react-blockly-component";
@@ -22,14 +22,11 @@ export interface WorkspaceEventType {
 }
 export interface BlocklyProps {
     selector: string;
-    inspect: any
+    inspect: any;
+    code: MutableRefObject<HTMLTextAreaElement | undefined>;
 }
 
 class BlocklyComponent extends React.Component<BlocklyProps, BlocklyState> {
-    props: BlocklyProps = {
-        selector: "selector",
-        inspect: null
-    };
 
     blocklyRef: any | null = null;
 
@@ -55,7 +52,14 @@ class BlocklyComponent extends React.Component<BlocklyProps, BlocklyState> {
             });
         }, 1);
     };
+    workspaceDidChange = (workspace: any) => {
+        const code: string = Blockly.JavaScript.workspaceToCode(workspace);
+        console.log("code >> ",code);
+       if (this.props.code && this.props.code.current){
+           this.props.code.current.value = code;
+       }
 
+    };
     componentDidUpdate({ selector }: BlocklyProps): void {
         if (this.props.selector !== selector && this.state.blockId) {
             const workspaceSvg = this.blocklyRef.workspace.state.workspace;
@@ -76,9 +80,6 @@ class BlocklyComponent extends React.Component<BlocklyProps, BlocklyState> {
         this.blocklyRef = ref;
     };
 
-    workspaceDidChange = (workspace: any) => {
-
-    };
     isCreated = false;
 
     onClickOnBlock = () => {
