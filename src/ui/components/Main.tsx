@@ -66,13 +66,60 @@ const MainComponent = () => {
                 <div>
                     <textarea className="code-block" ref={codeBlock as any} />
                 </div>
+
                 <div>
-                    <ul className="menu">
-                        <li>Сценарии</li>
-                        <li><span>"Сценарий 1"</span><em>инфо</em></li>
-                        <li><span>"Сценарий 2"</span><em>инфо</em></li>
-                        <li><span>"Сценарий 3"</span><em>инфо</em></li>
-                    </ul>
+                    <div className="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" className="btn btn-secondary">Загрузить</button>
+                        <button type="button" className="btn btn-secondary">Сохранить</button>
+                        <button type="button" className="btn btn-secondary">Редактировать</button>
+                        <button type="button" className="btn btn-secondary">Удалить</button>
+                    </div>
+                    {/*
+                    <div className="list-group">
+                       <a href="#" className="list-group-item list-group-item-action active">
+                            Сценарий 1
+                        </a>
+                        <a href="#" className="list-group-item list-group-item-action">Сценарий 2</a>
+                        <a href="#" className="list-group-item list-group-item-action">Сценарий 3</a>
+                        <a href="#" className="list-group-item list-group-item-action">Сценарий 4</a>
+                        <a href="#" className="list-group-item list-group-item-action">Сценарий 5</a>
+
+                    </div>*/}
+                    <div className="list-group">
+                        <a href="#"
+                           className="list-group-item list-group-item-action flex-column align-items-start ">
+                            <div className="d-flex w-200 justify-content-between">
+                                <h5 className="mb-1">Сценарий 1</h5>
+                                <small className="text-muted">1 days ago</small>
+                            </div>
+                            <p className="mb-1">Это очень крутой сценарий для очень крутого обновления</p>
+                            <small className="text-muted">В разработке</small>
+                        </a>
+                        <a href="#" className="list-group-item list-group-item-action flex-column align-items-start">
+                            <div className="d-flex w-100 justify-content-between">
+                                <h5 className="mb-1">Сценарий 2</h5>
+                                <small className="text-muted">3 days ago</small>
+                            </div>
+                            <p className="mb-1">Это маленький сценарий для одной функции</p>
+                            <small className="text-muted">Нужно закончить уже вчера</small>
+                        </a>
+                        <a href="#" className="list-group-item list-group-item-action flex-column align-items-start active">
+                            <div className="d-flex w-100 justify-content-between">
+                                <h5 className="mb-1">Сценарий 3</h5>
+                                <small>26 days ago</small>
+                            </div>
+                            <p className="mb-1">Демонстрационный сценарий 1</p>
+                            <small >Только для просмотра</small>
+                        </a>
+                        <a href="#" className="list-group-item list-group-item-action flex-column align-items-start disabled">
+                            <div className="d-flex w-100 justify-content-between">
+                                <h5 className="mb-1">Сценарий 4</h5>
+                                <small className="text-muted">30 days ago</small>
+                            </div>
+                            <p className="mb-1">Демонстрационный сценарий 2</p>
+                            <small className="text-muted">Только для просмотра</small>
+                        </a>
+                    </div>
                 </div>
             </div>
 

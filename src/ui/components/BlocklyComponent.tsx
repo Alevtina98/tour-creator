@@ -58,7 +58,6 @@ class BlocklyComponent extends React.Component<BlocklyProps, BlocklyState> {
        if (this.props.code && this.props.code.current){
            this.props.code.current.value = code;
        }
-
     };
     componentDidUpdate({ selector }: BlocklyProps): void {
         if (this.props.selector !== selector && this.state.blockId) {
