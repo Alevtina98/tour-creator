@@ -4,56 +4,32 @@ Blockly.Blocks['dark'] = {
     init: function() {
         this.appendValueInput("selector")
             .setCheck("selector")
-            .appendField("Затемнение");
+            .appendField("blackout");
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
-        this.setColour(230);
+       // this.setColour(230);
+        this.setStyle('procedure_blocks');
         this.setTooltip("");
         this.setHelpUrl("");
     }
 };
-
-   /* console.log("container:",document.getElementById('blocklyDiv'));
-    console.log("toolbox:",document.getElementById('toolbox') );
-    const workspace: any = Blockly.inject(document.getElementById('blocklyDiv'), {toolbox: document.getElementById('toolbox')});
-
-    console.log(workspace);
-
-    workspace.registerButtonCallback("Inspector", function () {
-        console.log("HELLO FROM FUNCTION")
-    });
-    console.log("workspace.registerButtonCallback");*/
-
 Blockly.Blocks['desc'] = {
     init: function() {
-        const t = this;
-        /*this.appendDummyInput("Ins")
-            .appendField("Inspector")
-                .appendField(new Blockly.FieldCheckbox("TRUE", function(key: string){
-                    t.changeKey(key);
-                }), "dropdownkey");*/
-
 
         this.appendValueInput("selector")
             .setCheck("selector")
-            .appendField("Описание");
-
-
+            .appendField("description");
         this.appendValueInput("text")
             .setCheck("String");
-
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
-        this.setColour(230);
+       // this.setColour(230);
+        this.setStyle('procedure_blocks');
         this.setTooltip("");
         this.setHelpUrl("");
     },
-    changeKey: function (key: string) {
-        console.log("key:", key);
-        return key;
-    }
 };
 Blockly.Blocks['selector'] = {
     init: function() {
@@ -62,20 +38,39 @@ Blockly.Blocks['selector'] = {
             .appendField(new Blockly.FieldTextInput(""), "NAME");
         this.setInputsInline(true);
         this.setOutput(true);
-        this.setColour(230);
+        //this.setColour(230);
+        this.setStyle('text_blocks');
         this.setTooltip("");
         this.setHelpUrl("");
     }
 };
-/*export const onClick = ()=> {
-    console.log("Clicked");
-    return 0;
-};*/
+Blockly.JavaScript['selector'] = function(block: any) {
+    /*// Generate JavaScript for setting the width.
+    var width = Blockly.JavaScript.valueToCode(block, 'WIDTH',
+        Blockly.JavaScript.ORDER_NONE) || '1';*/
+    var code = Blockly.JavaScript.quote_(block.getFieldValue('NAME'));
+    return [code, Blockly.JavaScript.ORDER_ATOMIC];
 
-/*
-Blockly.Extensions.register('myIconButton', function () {
-    debugger;
-    this.getField('myIconButton').clickHandler_ = (() => {
-        console.log(this.type + ' button clicked');
-    });
-});*/
+};
+Blockly.JavaScript['desc'] = function(block: any) {
+    // Define a procedure with a return value.
+    const funcName:string = "description";
+    const args1: string = Blockly.JavaScript.valueToCode(block, 'selector',
+        Blockly.JavaScript.ORDER_NONE);
+    const args2: string = Blockly.JavaScript.valueToCode(block, 'text',
+        Blockly.JavaScript.ORDER_NONE);
+    const code: string = funcName + '(' + args1 + ', '+ args2+');\n';
+    // Add % so as not to collide with helper functions in definitions list.
+    //Blockly.JavaScript.definitions_['%' + funcName] = code;
+    return code;
+
+};
+Blockly.JavaScript['dark'] = function(block: any) {
+    const funcName:string = "blackout";
+    const args1: string = Blockly.JavaScript.valueToCode(block, 'selector',
+        Blockly.JavaScript.ORDER_NONE);
+    const code: string = funcName + '(' + args1 + ');\n';
+    // Add % so as not to collide with helper functions in definitions list.
+    //Blockly.JavaScript.definitions_['%' + funcName] = code;
+    return code;
+};
