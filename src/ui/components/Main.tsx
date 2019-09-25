@@ -39,9 +39,9 @@ const MainComponent = () => {
             dispatch(setInspectEnabled());
             agentActions.enableSelectMode();
         }
-
+        //console.log("inspectEnabled > ", isInspectEnabled)
     };
-    // console.log("> inspectEnabled", isInspectEnabled)
+
     return (
         <div className="panel panel-default">
             <div className="main-container">
