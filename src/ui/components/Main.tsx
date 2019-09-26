@@ -7,8 +7,6 @@ import ConnectionStatus from "./ConnectionStatus";
 import {setInspectDisabled, setInspectEnabled} from "../actions/mainAction";
 import {StoreType} from "../reducers";
 import BlocklyComponent from "./BlocklyComponent";
-//import Overlay from "react-overlay";
-// import ReactBlocklyComponent from "react-blockly-component";
 
 export interface MainComponentSelector {
 
@@ -64,7 +62,8 @@ const MainComponent = () => {
                         </div>  || null}
                 </div>
                 <div>
-                    <textarea className="code-block" ref={codeBlock as any} />
+                    <textarea readOnly className="code-block" ref={codeBlock as any} />
+                    {/*<CodeMirror className="code-block" ref={codeBlock as any}/>*/}
                 </div>
 
                 <div>
@@ -92,32 +91,32 @@ const MainComponent = () => {
                                 <h5 className="mb-1">Сценарий 1</h5>
                                 <small className="text-muted">1 days ago</small>
                             </div>
-                            <p className="mb-1">Это очень крутой сценарий для очень крутого обновления</p>
-                            <small className="text-muted">В разработке</small>
+                           {/* <p className="mb-1">Это очень крутой сценарий для очень крутого обновления</p>
+                            <small className="text-muted">В разработке</small>*/}
                         </a>
                         <a href="#" className="list-group-item list-group-item-action flex-column align-items-start">
                             <div className="d-flex w-100 justify-content-between">
                                 <h5 className="mb-1">Сценарий 2</h5>
                                 <small className="text-muted">3 days ago</small>
                             </div>
-                            <p className="mb-1">Это маленький сценарий для одной функции</p>
-                            <small className="text-muted">Нужно закончить уже вчера</small>
+                          {/*  <p className="mb-1">Это маленький сценарий для одной функции</p>
+                            <small className="text-muted">Нужно закончить уже вчера</small>*/}
                         </a>
                         <a href="#" className="list-group-item list-group-item-action flex-column align-items-start active">
                             <div className="d-flex w-100 justify-content-between">
                                 <h5 className="mb-1">Сценарий 3</h5>
                                 <small>26 days ago</small>
                             </div>
-                            <p className="mb-1">Демонстрационный сценарий 1</p>
-                            <small >Только для просмотра</small>
+                            {/*<p className="mb-1">Демонстрационный сценарий 1</p>
+                            <small >Только для просмотра</small>*/}
                         </a>
                         <a href="#" className="list-group-item list-group-item-action flex-column align-items-start disabled">
                             <div className="d-flex w-100 justify-content-between">
                                 <h5 className="mb-1">Сценарий 4</h5>
                                 <small className="text-muted">30 days ago</small>
                             </div>
-                            <p className="mb-1">Демонстрационный сценарий 2</p>
-                            <small className="text-muted">Только для просмотра</small>
+                           {/* <p className="mb-1">Демонстрационный сценарий 2</p>
+                            <small className="text-muted">Только для просмотра</small>*/}
                         </a>
                     </div>
                 </div>

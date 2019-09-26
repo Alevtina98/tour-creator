@@ -24,7 +24,7 @@
     "@types/react-redux": "^7.1.1",
     "@types/redux-logger": "^3.0.7",
     "babel-loader": "^8.0.6",
-    "bootstrap": "^3.4.1",
+    "bootstrap": "^4.3.1",
     "closure-webpack-plugin": "^2.0.1",
     "css-loader": "^3.0.0",
     "exports-loader": "^0.7.0",
