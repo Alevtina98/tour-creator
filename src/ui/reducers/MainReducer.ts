@@ -1,7 +1,14 @@
+import {ScriptValue} from "../util/indexedDB";
 export const initialMainState = {
     connected: false,
     selector: "",
     isInspectEnabled: false,
+    script: {
+        name: "name",
+        date: "date",
+        desc: "desc",
+        code: "code",
+    },
 };
 
 const MainReducer = (state = initialMainState, action: any) => {

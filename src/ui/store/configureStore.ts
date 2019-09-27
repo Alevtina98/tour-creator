@@ -3,7 +3,7 @@ import thunk from "redux-thunk";
 import { createLogger } from "redux-logger";
 import reducer from "../reducers/index";
 
-export default (initialState: any) => {
+export default (initialState?: any) => {
     const middleWare = [thunk];
 
     if (process.env.NODE_ENV === "development") {

@@ -10,7 +10,7 @@ import "./blocklyDefinitions";
 injectDebugger();
 
 const MainContainer = () => {
-  return <Provider store={configureStore("")}>
+  return <Provider store={configureStore()}>
     <Main />
   </Provider>
 };

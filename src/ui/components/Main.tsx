@@ -7,24 +7,29 @@ import ConnectionStatus from "./ConnectionStatus";
 import {setInspectDisabled, setInspectEnabled} from "../actions/mainAction";
 import {StoreType} from "../reducers";
 import BlocklyComponent from "./BlocklyComponent";
+import {ScriptValue}  from "C:/workspace/tour-creator/src/ui/util/indexedDB";
+import ScriptsList from "./ScriptsList";
+
 
 export interface MainComponentSelector {
-
     isInspectEnabled: boolean;
     selector: string;
     connected: boolean;
+    script: ScriptValue;
 }
 
 const MainComponent = () => {
     const dispatch = useDispatch();
     //маппинг значений из store
-    const {isInspectEnabled, selector, connected} = useSelector<StoreType, MainComponentSelector>(({MainState}) => (MainState));
+    const {isInspectEnabled, selector, connected, script} = useSelector<StoreType, MainComponentSelector>(({MainState}) => (MainState));
     const codeBlock = useRef<HTMLTextAreaElement>();
 
     //Так как содержимое пустого массива всегда остаётся неизменным, эффект выполнится лишь один раз
     //аналогично componentDidMount()
     useEffect(() => {
         new AgentHandler(dispatch); //Инициализация агента общения со страницей
+       // this.props.script = demo();
+       // console.log("Script -> ",demo());
     }, []);
 
 
@@ -84,41 +89,7 @@ const MainComponent = () => {
                         <a href="#" className="list-group-item list-group-item-action">Сценарий 5</a>
 
                     </div>*/}
-                    <div className="list-group">
-                        <a href="#"
-                           className="list-group-item list-group-item-action flex-column align-items-start ">
-                            <div className="d-flex w-200 justify-content-between">
-                                <h5 className="mb-1">Сценарий 1</h5>
-                                <small className="text-muted">1 days ago</small>
-                            </div>
-                           {/* <p className="mb-1">Это очень крутой сценарий для очень крутого обновления</p>
-                            <small className="text-muted">В разработке</small>*/}
-                        </a>
-                        <a href="#" className="list-group-item list-group-item-action flex-column align-items-start">
-                            <div className="d-flex w-100 justify-content-between">
-                                <h5 className="mb-1">Сценарий 2</h5>
-                                <small className="text-muted">3 days ago</small>
-                            </div>
-                          {/*  <p className="mb-1">Это маленький сценарий для одной функции</p>
-                            <small className="text-muted">Нужно закончить уже вчера</small>*/}
-                        </a>
-                        <a href="#" className="list-group-item list-group-item-action flex-column align-items-start active">
-                            <div className="d-flex w-100 justify-content-between">
-                                <h5 className="mb-1">Сценарий 3</h5>
-                                <small>26 days ago</small>
-                            </div>
-                            {/*<p className="mb-1">Демонстрационный сценарий 1</p>
-                            <small >Только для просмотра</small>*/}
-                        </a>
-                        <a href="#" className="list-group-item list-group-item-action flex-column align-items-start disabled">
-                            <div className="d-flex w-100 justify-content-between">
-                                <h5 className="mb-1">Сценарий 4</h5>
-                                <small className="text-muted">30 days ago</small>
-                            </div>
-                           {/* <p className="mb-1">Демонстрационный сценарий 2</p>
-                            <small className="text-muted">Только для просмотра</small>*/}
-                        </a>
-                    </div>
+                    <ScriptsList />
                 </div>
             </div>
 
