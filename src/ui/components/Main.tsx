@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import AgentHandler from "../AgentHandler";
 import agentActions from "../actions/agentActions";
 import ConnectionStatus from "./ConnectionStatus";
-import { setInspectDisabled, setInspectEnabled, setCode } from "../actions/mainAction";
+import { setInspectDisabled, setInspectEnabled, setCode } from "../actions/InspectAction";
 import { StoreType } from "../reducers";
 import BlocklyComponent from "./BlocklyComponent";
 import { ScriptValue } from "C:/workspace/tour-creator/src/ui/util/indexedDB";

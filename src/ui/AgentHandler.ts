@@ -1,4 +1,5 @@
-import { connectSuccess, setCurrentSelector, setInspectDisabled, setInspectEnabled } from "./actions/mainAction";
+import { connectSuccess } from "./actions/mainAction";
+import { setCurrentSelector, setInspectDisabled, setInspectEnabled } from "./actions/InspectAction";
 import injectDebugger from "./injectDebugger";
 import port from "./port";
 import { Dispatch } from "redux";
