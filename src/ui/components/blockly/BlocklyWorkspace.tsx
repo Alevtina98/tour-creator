@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import BlocklyToolbox from "./BlocklyToolbox";
 
 //import Blockly from "google-blockly";
@@ -18,24 +18,23 @@ function debounce(func: any, wait: any) {
 }
 
 export interface BlocklyWorkspaceProps {
-    initialXml: any,
-    workspaceConfiguration: any,
-    wrapperDivClassName: any,
-    xmlDidChange: any,
-    workspaceDidChange: any,
-    onImportXmlError: any,
-    toolboxMode: string,
+    initialXml: any;
+    workspaceConfiguration: any;
+    wrapperDivClassName: any;
+    xmlDidChange: any;
+    workspaceDidChange: any;
+    onImportXmlError: any;
+    toolboxMode: string;
 }
 
 export interface BlocklyWorkspaceState {
-    workspace: any,
-    xml: any,
+    workspace: any;
+    xml: any;
 }
 
-declare var Blockly: any;
+declare let Blockly: any;
 
-class BlocklyWorkspace extends React.Component <BlocklyWorkspaceProps, BlocklyWorkspaceState> {
-
+class BlocklyWorkspace extends React.Component<BlocklyWorkspaceProps, BlocklyWorkspaceState> {
     defaultProps: BlocklyWorkspaceProps = {
         initialXml: null,
         workspaceConfiguration: null,
@@ -43,13 +42,12 @@ class BlocklyWorkspace extends React.Component <BlocklyWorkspaceProps, BlocklyWo
         xmlDidChange: null,
         workspaceDidChange: null,
         onImportXmlError: null,
-        toolboxMode: 'BLOCKS',
+        toolboxMode: "BLOCKS",
     };
     state: BlocklyWorkspaceState = {
         workspace: null,
         xml: this.props.initialXml,
     };
-
 
     editorDiv = React.createRef();
     dummyToolbox = React.createRef();
@@ -57,39 +55,37 @@ class BlocklyWorkspace extends React.Component <BlocklyWorkspaceProps, BlocklyWo
     componentDidMount = () => {
         debugger;
         // TODO figure out how to use setState here without breaking the toolbox when switching tabs
-        this.state.workspace = Blockly.inject(
-            this.editorDiv.current,
-            {
-                ...this.props.workspaceConfiguration,
-                toolbox: this.dummyToolbox.current,
-            },
-        );
-
+        this.state.workspace = Blockly.inject(this.editorDiv.current, {
+            ...this.props.workspaceConfiguration,
+            toolbox: this.dummyToolbox.current,
+        });
 
         this.state.workspace.registerButtonCallback("Inspector", () => {
-            console.log("HELLO FROM CALLBACK")
+            console.log("HELLO FROM CALLBACK");
         });
         if (this.state.xml) {
             if (this.importFromXml(this.state.xml)) {
                 this.xmlDidChange();
             } else {
-                this.setState({xml: null}, this.xmlDidChange);
+                this.setState({ xml: null }, this.xmlDidChange);
             }
         }
         this.state.workspace.addChangeListener(this.workspaceDidChange);
-        this.state.workspace.addChangeListener(debounce(() => {
-            const newXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(this.state.workspace));
-            if (newXml === this.state.xml) {
-                return;
-            }
+        this.state.workspace.addChangeListener(
+            debounce(() => {
+                const newXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(this.state.workspace));
+                if (newXml === this.state.xml) {
+                    return;
+                }
 
-            this.setState({xml: newXml}, this.xmlDidChange);
-        }, 200));
+                this.setState({ xml: newXml }, this.xmlDidChange);
+            }, 200),
+        );
     };
 
     componentWillReceiveProps = (newProps: any) => {
         if (this.props.initialXml !== newProps.initialXml) {
-            this.setState({xml: newProps.initialXml});
+            this.setState({ xml: newProps.initialXml });
         }
     };
 
@@ -139,24 +135,19 @@ class BlocklyWorkspace extends React.Component <BlocklyWorkspaceProps, BlocklyWo
         // We have to fool Blockly into setting up a toolbox with categories initially;
         // otherwise it will refuse to do so after we inject the real categories into it.
         let dummyToolboxContent;
-        if (this.props.toolboxMode === 'CATEGORIES') {
-            dummyToolboxContent = (
-                <category name="Dummy toolbox"/>
-            );
+        if (this.props.toolboxMode === "CATEGORIES") {
+            dummyToolboxContent = <category name="Dummy toolbox" />;
         }
 
         return (
             <div className={this.props.wrapperDivClassName}>
-                <xml style={{display: 'none'}} ref={this.dummyToolbox}>
+                <xml style={{ display: "none" }} ref={this.dummyToolbox}>
                     {dummyToolboxContent}
                 </xml>
-                <div
-                    className={this.props.wrapperDivClassName}
-                    ref={this.editorDiv}
-                />
+                <div className={this.props.wrapperDivClassName} ref={this.editorDiv} />
             </div>
         );
-    }
+    };
 }
 
 export default BlocklyWorkspace;

@@ -1,5 +1,5 @@
 declare module "react-blockly-component";
-declare var Blockly: any;
+declare let Blockly: any;
 declare module "react-overlay";
 declare module "node-blockly";
 declare module "google-blockly";
@@ -28,7 +28,7 @@ declare module "react-immutable-proptypes" {
         iterable: any;
     }
 
-    export default ImmutablePropTypes
+    export default ImmutablePropTypes;
 }
 
 //declare module "xmldom";

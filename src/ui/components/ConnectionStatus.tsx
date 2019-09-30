@@ -1,4 +1,4 @@
-import React, {FC, memo} from 'react';
+import React, { FC, memo } from "react";
 
 export interface ConnectionStatusProps {
     connection: boolean;
@@ -11,14 +11,16 @@ const connectionStatusStyle = {
     display: "inline-block",
 };
 
-const ConnectionStatus: FC<ConnectionStatusProps> = ({connection}) => {
+const ConnectionStatus: FC<ConnectionStatusProps> = ({ connection }) => {
     const color = connection ? "green" : "red";
 
     return (
-        <div style={{
-            ...connectionStatusStyle,
-            background: color
-        }} />
+        <div
+            style={{
+                ...connectionStatusStyle,
+                background: color,
+            }}
+        />
     );
 };
 

@@ -1,4 +1,6 @@
 {
+  "sourceType": "unambiguous",
+
   "presets": [
     [
       "@babel/preset-env",
@@ -18,5 +20,4 @@
     "@babel/proposal-object-rest-spread",
     "@babel/plugin-transform-runtime"
   ]
-
 }

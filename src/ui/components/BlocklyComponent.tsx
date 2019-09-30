@@ -1,20 +1,20 @@
-import React, {MutableRefObject} from 'react';
-import ReactDOM from 'react-dom';
+import React, { MutableRefObject } from "react";
+import ReactDOM from "react-dom";
 // import ReactBlocklyComponent from './blockly/index';
 import ReactBlocklyComponent from "react-blockly-component";
-import ConfigFiles from '../../initContent/content.jsx';
-import parseWorkspaceXml from './blockly/BlocklyHelper';
+import ConfigFiles from "../../initContent/content.jsx";
+import parseWorkspaceXml from "./blockly/BlocklyHelper";
 // import Blockly from "node-blockly";
 
 export interface BlocklyState {
     toolboxCategories: any[];
-    blockId: string
+    blockId: string;
 }
 export interface WorkspaceEventType {
     blockId: string;
     type: string;
-    element: string
-    group: string
+    element: string;
+    group: string;
     newValue: undefined;
     oldValue: undefined;
     recordUndo: false;
@@ -27,51 +27,53 @@ export interface BlocklyProps {
 }
 
 class BlocklyComponent extends React.Component<BlocklyProps, BlocklyState> {
-
     blocklyRef: any | null = null;
 
     state: BlocklyState = {
         toolboxCategories: parseWorkspaceXml(ConfigFiles.INITIAL_TOOLBOX_XML),
-        blockId: ""
+        blockId: "",
     };
     componentDidMount(): void {
         window.setTimeout(() => {
             this.setState({
                 toolboxCategories: parseWorkspaceXml(ConfigFiles.INITIAL_TOOLBOX_XML).concat([
                     {
-                        name: 'Tour',
+                        name: "Tour",
                         blocks: [
-                            { type: 'desc' , onChange: () => { console.log("HELLO WORLD")}},
-                            { type: 'dark' },
-                            { type: 'selector'}
+                            {
+                                type: "desc",
+                                onChange: () => {
+                                    console.log("HELLO WORLD");
+                                },
+                            },
+                            { type: "dark" },
+                            { type: "selector" },
                         ],
-                    }
-                    ]
-
-                )
+                    },
+                ]),
             });
         }, 1);
-    };
+    }
     workspaceDidChange = (workspace: any) => {
         const code: string = Blockly.JavaScript.workspaceToCode(workspace);
-        console.log("code >> ",code);
-       if (this.props.code && this.props.code.current){
-           this.props.code.current.value = code;
-       }
+        console.log("code >> ", code);
+        if (this.props.code && this.props.code.current) {
+            this.props.code.current.value = code;
+        }
     };
     componentDidUpdate({ selector }: BlocklyProps): void {
         if (this.props.selector !== selector && this.state.blockId) {
             const workspaceSvg = this.blocklyRef.workspace.state.workspace;
             const block = workspaceSvg.getBlockById(this.state.blockId);
             const field = block.getField("NAME");
-            console.log("field >> ",field);
+            console.log("field >> ", field);
             if (field != "") {
                 field.setText(this.props.selector);
                 this.setState({
-                    blockId: ""
+                    blockId: "",
                 });
             }
-            console.log("selector >> ",this.props.selector);
+            console.log("selector >> ", this.props.selector);
         }
     }
 
@@ -83,39 +85,35 @@ class BlocklyComponent extends React.Component<BlocklyProps, BlocklyState> {
 
     onClickOnBlock = () => {
         const workspaceSvg = this.blocklyRef.workspace.state.workspace;
-        const block= workspaceSvg.getBlockById(this.state.blockId);
-        console.log("Block >> ",block);
+        const block = workspaceSvg.getBlockById(this.state.blockId);
+        console.log("Block >> ", block);
         if (block) {
             this.props.inspect();
         }
-
     };
 
     render = () => {
-
-        if (this.blocklyRef&&this.blocklyRef.workspace && !this.isCreated) {
-            //console.log(this.blocklyRef.workspace);
-            const self = this;
+        if (this.blocklyRef && this.blocklyRef.workspace && !this.isCreated) {
             const workspaceSVG = this.blocklyRef.workspace.state.workspace;
 
-            function onFirstComment(event: WorkspaceEventType) {
+            const onFirstComment = (event: WorkspaceEventType) => {
                 if (/*event.type == Blockly.Events.CHANGE ||*/ event.type === Blockly.Events.UI) {
                     console.log("event", event);
                     if (event.element !== "click") return;
                     const blockId = event.blockId || event.newValue || "";
-                    self.setState({
-                        blockId
+                    this.setState({
+                        blockId,
                     });
                     if (blockId) {
-                        const block= workspaceSVG.getBlockById(blockId);
+                        const block = workspaceSVG.getBlockById(blockId);
                         console.log("block", block);
                         //console.log("IN EVENT CONDITION", workspaceSVG, self);
                         if (block.type === "selector") {
-                            self.onClickOnBlock();
+                            this.onClickOnBlock();
                         }
                     }
                 }
-            }
+            };
             this.isCreated = true;
             workspaceSVG.addChangeListener(onFirstComment);
         }
@@ -128,8 +126,8 @@ class BlocklyComponent extends React.Component<BlocklyProps, BlocklyState> {
                     grid: {
                         spacing: 20,
                         length: 3,
-                        colour: '#ccc',
-                        snap: true
+                        colour: "#ccc",
+                        snap: true,
                     },
                 }}
                 initialXml="ConfigFiles.INITIAL_XML"
@@ -137,9 +135,7 @@ class BlocklyComponent extends React.Component<BlocklyProps, BlocklyState> {
                 workspaceDidChange={this.workspaceDidChange}
             />
         );
-    }
-
+    };
 }
 
 export default BlocklyComponent;
-

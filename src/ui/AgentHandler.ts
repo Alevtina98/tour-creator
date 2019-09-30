@@ -1,52 +1,51 @@
-import {connectSuccess, setCurrentSelector, setInspectDisabled, setInspectEnabled} from "./actions/mainAction";
+import { connectSuccess, setCurrentSelector, setInspectDisabled, setInspectEnabled } from "./actions/mainAction";
 import injectDebugger from "./injectDebugger";
 import port from "./port";
-import {Dispatch} from "redux";
+import { Dispatch } from "redux";
 
 /*
  * agent -> content-script.js -> background.js -> **dev tools**
  */
 class AgentHandler {
-  dispatch: Dispatch;
-  currentSelected: string | null = null;
+    dispatch: Dispatch;
+    currentSelected: string | null = null;
 
-  //варианты обработчиков в зависимости от msg
-  handlers: any = {
-    connected: () => this.dispatch(connectSuccess()),
+    //варианты обработчиков в зависимости от msg
+    handlers: any = {
+        connected: () => this.dispatch(connectSuccess()),
 
-    reloaded: () => injectDebugger(),
+        reloaded: () => injectDebugger(),
 
-    tick: (data: { id: string }) => {
-      const { id } = data;
-      if (this.currentSelected !== id) {
-        this.dispatch(setCurrentSelector(id));
-        this.currentSelected = id;
-      }
-      console.log("Selector",data);
-    },
+        tick: (data: { id: string }) => {
+            const { id } = data;
+            if (this.currentSelected !== id) {
+                this.dispatch(setCurrentSelector(id));
+                this.currentSelected = id;
+            }
+            console.log("Selector", data);
+        },
 
-    enabledSelectMode: () => this.dispatch(setInspectEnabled()),
-    disabledSelectMode: () => this.dispatch(setInspectDisabled())
-  };
+        enabledSelectMode: () => this.dispatch(setInspectEnabled()),
+        disabledSelectMode: () => this.dispatch(setInspectDisabled()),
+    };
 
-  constructor(dispatch: Dispatch) {
-    this.dispatch = dispatch;
+    constructor(dispatch: Dispatch) {
+        this.dispatch = dispatch;
 
-    port.onMessage.addListener((msg) => {
-      this.handleMessage(msg);
-    });
-  }
-  handleMessage = (message: any) => {
-    //выбираем обработчик по принятому сообщению
-    const handler = this.handlers[message.name];
-    if (!handler) {
-      console.warn('No handler found for event ' + message.name);
-      return;
+        port.onMessage.addListener(msg => {
+            this.handleMessage(msg);
+        });
     }
+    handleMessage = (message: any) => {
+        //выбираем обработчик по принятому сообщению
+        const handler = this.handlers[message.name];
+        if (!handler) {
+            console.warn("No handler found for event " + message.name);
+            return;
+        }
 
-    handler(message.data);
-  }
-
+        handler(message.data);
+    };
 }
 
 export default AgentHandler;

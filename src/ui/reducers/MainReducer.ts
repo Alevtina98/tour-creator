@@ -1,43 +1,39 @@
-import {ScriptValue} from "../util/indexedDB";
-export const initialMainState = {
+import { ScriptValue } from "../util/indexedDB";
+import { createReducer } from "typesafe-actions";
+import { combineReducers } from "redux";
+import {
+    connectSuccess,
+    CurrentSelectorAction,
+    setCurrentSelector,
+    SetInspectActions,
+    setInspectDisabled,
+    setInspectEnabled,
+} from "../actions/mainAction";
+
+export interface MainReducerState {
+    connected: boolean;
+    selector: string;
+    isInspectEnabled: boolean;
+}
+
+/*export const initialMainState = {
     connected: false,
     selector: "",
     isInspectEnabled: false,
-    script: {
-        name: "name",
-        date: "date",
-        desc: "desc",
-        code: "code",
-    },
-};
+};*/
+const connectedReducer = createReducer<boolean>(false).handleAction(connectSuccess, () => true);
+const selectorReducer = createReducer<string, CurrentSelectorAction>("").handleAction(
+    setCurrentSelector,
+    (state, action) => action.payload,
+);
+const inspectReducer = createReducer<boolean, SetInspectActions>(false)
+    .handleAction(setInspectEnabled, () => true)
+    .handleAction(setInspectDisabled, () => false)
+    .handleAction(setCurrentSelector, () => false);
+const mainReducer = combineReducers<MainReducerState>({
+    connected: connectedReducer,
+    selector: selectorReducer,
+    isInspectEnabled: inspectReducer,
+});
 
-const MainReducer = (state = initialMainState, action: any) => {
-    switch (action.type) {
-        case "CONNECTION_SUCCESS": {
-            return {
-                ...state,
-                connected: true
-            }
-        }
-        case "SET_CURRENT_SELECTOR":
-            return {
-                ...state,
-                isInspectEnabled: false,
-                selector: action.payload.selector
-
-            };
-        case "SET_INSPECT_ENABLED":
-            return {
-                ...state,
-                isInspectEnabled: true
-            };
-        case "SET_INSPECT_DISABLED":
-            return {
-                ...state,
-                isInspectEnabled: false
-            }
-    }
-    return state;
-};
-
-export default MainReducer;
+export default mainReducer;

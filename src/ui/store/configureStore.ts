@@ -8,7 +8,7 @@ export default (initialState?: any) => {
 
     if (process.env.NODE_ENV === "development") {
         const logger = createLogger({
-            collapsed: true
+            collapsed: true,
         });
 
         middleWare.push(logger as any);

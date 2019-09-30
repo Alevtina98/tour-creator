@@ -5,6 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
+    "lint": "eslint src/**/*.{js,ts,tsx}",
+    "lint:fix": "npm run lint -- --fix",
     "dev": "webpack --watch"
   },
   "author": "Thomas Boyt <me@thomasboyt.com>",
@@ -24,17 +26,25 @@
     "@types/react-dom": "^16.8.4",
     "@types/react-redux": "^7.1.1",
     "@types/redux-logger": "^3.0.7",
+    "@typescript-eslint/eslint-plugin": "^2.3.1",
+    "@typescript-eslint/parser": "^2.3.1",
     "babel-loader": "^8.0.6",
     "bootstrap": "^4.3.1",
     "closure-webpack-plugin": "^2.0.1",
     "css-loader": "^3.0.0",
+    "eslint": "^6.5.0",
+    "eslint-config-prettier": "^6.3.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.14.3",
     "exports-loader": "^0.7.0",
     "expose-loader": "^0.7.5",
     "file-loader": "^4.0.0",
     "google-closure-library": "^20190618.0.0",
     "less": "^2.7.1",
     "less-loader": "^5.0.0",
+    "prettier": "^1.18.2",
     "style-loader": "^0.13.1",
+    "typescript": "^3.6.3",
     "webpack": "^4.35.3",
     "webpack-cli": "^3.3.5",
     "webpack-create-vendor-chunk": "^0.1.1"
@@ -55,6 +65,7 @@
     "redux": "^4.0.4",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
+    "typesafe-actions": "^4.4.2",
     "unique-selector": "^0.4.1",
     "uuid": "~2.0.1"
   }

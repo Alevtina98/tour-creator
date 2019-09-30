@@ -1,42 +1,42 @@
-import React, {CSSProperties, useEffect, useRef} from "react";
+import React, { CSSProperties, useEffect, useRef } from "react";
 
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AgentHandler from "../AgentHandler";
 import agentActions from "../actions/agentActions";
 import ConnectionStatus from "./ConnectionStatus";
-import {setInspectDisabled, setInspectEnabled} from "../actions/mainAction";
-import {StoreType} from "../reducers";
+import { setInspectDisabled, setInspectEnabled, setCode } from "../actions/mainAction";
+import { StoreType } from "../reducers";
 import BlocklyComponent from "./BlocklyComponent";
-import {ScriptValue}  from "C:/workspace/tour-creator/src/ui/util/indexedDB";
+import { ScriptValue } from "C:/workspace/tour-creator/src/ui/util/indexedDB";
 import ScriptsList from "./ScriptsList";
-
 
 export interface MainComponentSelector {
     isInspectEnabled: boolean;
     selector: string;
     connected: boolean;
-    script: ScriptValue;
+    //script: ScriptValue;
 }
 
 const MainComponent = () => {
     const dispatch = useDispatch();
     //маппинг значений из store
-    const {isInspectEnabled, selector, connected, script} = useSelector<StoreType, MainComponentSelector>(({MainState}) => (MainState));
+    const { isInspectEnabled, selector, connected } = useSelector<StoreType, MainComponentSelector>(
+        ({ MainState }) => MainState,
+    );
     const codeBlock = useRef<HTMLTextAreaElement>();
 
     //Так как содержимое пустого массива всегда остаётся неизменным, эффект выполнится лишь один раз
     //аналогично componentDidMount()
     useEffect(() => {
         new AgentHandler(dispatch); //Инициализация агента общения со страницей
-       // this.props.script = demo();
-       // console.log("Script -> ",demo());
+        // this.props.script = demo();
+        // console.log("Script -> ",demo());
     }, []);
-
 
     const onInspectClickHandler = () => {
         if (isInspectEnabled) {
             dispatch(setInspectDisabled()); //Отправка экшена
-            agentActions.disableSelectMode();//отправляем сообщение 'disableSelectMode'
+            agentActions.disableSelectMode(); //отправляем сообщение 'disableSelectMode'
             // chrome.devtools.inspectedWindow;
         } else {
             dispatch(setInspectEnabled());
@@ -44,27 +44,41 @@ const MainComponent = () => {
         }
         //console.log("inspectEnabled > ", isInspectEnabled)
     };
-
+    const saveCode = () => {
+        /*dispatch(
+            setCode({
+                ...script,
+                date: Date(),
+                name: "Test",
+            }),
+        ); //Отправка экшена*/
+    };
     return (
         <div className="panel panel-default">
             <div className="main-container">
                 <div className="relative">
-                    <BlocklyComponent selector={selector} inspect={onInspectClickHandler} code={codeBlock}/>
-                    {isInspectEnabled &&
-
+                    <ConnectionStatus connection={connected} />
+                    <BlocklyComponent selector={selector} inspect={onInspectClickHandler} code={codeBlock} />
+                    {(isInspectEnabled && (
                         <div className="back-drop">
-                            <div className="alert alert-light" role="alert" style={{
-                                align: "center",
-                                background: "rgb(255,255,255)",
-                                width: "500px",
-                                margin: "auto"
-                            }}>
+                            <div
+                                className="alert alert-light"
+                                role="alert"
+                                style={{
+                                    align: "center",
+                                    background: "rgb(255,255,255)",
+                                    width: "500px",
+                                    margin: "auto",
+                                }}
+                            >
                                 Выберите элемент на основной странице или нажмите
                                 <button onClick={onInspectClickHandler} type="button" className="btn btn-light">
                                     Отмена
                                 </button>
                             </div>
-                        </div>  || null}
+                        </div>
+                    )) ||
+                        null}
                 </div>
                 <div>
                     <textarea readOnly className="code-block" ref={codeBlock as any} />
@@ -73,10 +87,19 @@ const MainComponent = () => {
 
                 <div>
                     <div className="btn-group" role="group" aria-label="Basic example">
-                        <button type="button" className="btn btn-secondary">Загрузить</button>
-                        <button type="button" className="btn btn-secondary">Сохранить</button>
-                        <button type="button" className="btn btn-secondary">Редактировать</button>
-                        <button type="button" className="btn btn-secondary">Удалить</button>
+                        <button type="button" className="btn btn-secondary">
+                            Загрузить
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={saveCode}>
+                            Сохранить
+                        </button>
+
+                        <button type="button" className="btn btn-secondary">
+                            Редактировать
+                        </button>
+                        <button type="button" className="btn btn-secondary">
+                            Удалить
+                        </button>
                     </div>
                     {/*
                     <div className="list-group">
@@ -92,9 +115,8 @@ const MainComponent = () => {
                     <ScriptsList />
                 </div>
             </div>
-
-
-        </div>);
+        </div>
+    );
 };
 
 export default MainComponent;

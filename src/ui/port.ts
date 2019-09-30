@@ -1,11 +1,10 @@
 const backgroundPageConnection = chrome.runtime.connect({
-  name: 'panel'
+    name: "panel",
 });
 
 backgroundPageConnection.postMessage({
-  name: 'init',
-  tabId: chrome.devtools.inspectedWindow.tabId
+    name: "init",
+    tabId: chrome.devtools.inspectedWindow.tabId,
 });
 
 export default backgroundPageConnection;
-
