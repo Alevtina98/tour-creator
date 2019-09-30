@@ -8,6 +8,7 @@ import { StoreType } from "../reducers";
 import BlocklyComponent from "./BlocklyComponent";
 import { ScriptValue } from "C:/workspace/tour-creator/src/ui/util/indexedDB";
 import ScriptsList from "./ScriptsList";
+import ScriptsButtons from "./ScriptsButtons";
 
 export interface MainComponent {
     connected: boolean;
@@ -46,15 +47,6 @@ const MainComponent = () => {
         }
         //console.log("inspectEnabled > ", isInspectEnabled)
     };
-    const saveCode = () => {
-        /*dispatch(
-            setCode({
-                ...script,
-                date: Date(),
-                name: "Test",
-            }),
-        ); //Отправка экшена*/
-    };
     return (
         <div className="panel panel-default">
             <div className="main-container">
@@ -88,32 +80,7 @@ const MainComponent = () => {
                 </div>
 
                 <div>
-                    <div className="btn-group" role="group" aria-label="Basic example">
-                        <button type="button" className="btn btn-secondary">
-                            Загрузить
-                        </button>
-                        <button type="button" className="btn btn-secondary" onClick={saveCode}>
-                            Сохранить
-                        </button>
-
-                        <button type="button" className="btn btn-secondary">
-                            Редактировать
-                        </button>
-                        <button type="button" className="btn btn-secondary">
-                            Удалить
-                        </button>
-                    </div>
-                    {/*
-                    <div className="list-group">
-                       <a href="#" className="list-group-item list-group-item-action active">
-                            Сценарий 1
-                        </a>
-                        <a href="#" className="list-group-item list-group-item-action">Сценарий 2</a>
-                        <a href="#" className="list-group-item list-group-item-action">Сценарий 3</a>
-                        <a href="#" className="list-group-item list-group-item-action">Сценарий 4</a>
-                        <a href="#" className="list-group-item list-group-item-action">Сценарий 5</a>
-
-                    </div>*/}
+                    <ScriptsButtons />
                     <ScriptsList />
                 </div>
             </div>

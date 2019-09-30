@@ -9,12 +9,17 @@ export interface SelectedTourReducerState {
     desc: string;
     code: string;
 }
-
+const nameReducer = createReducer<string, SelectedTourAction>("");
+const dateReducer = createReducer<string, SelectedTourAction>("");
+const deskReducer = createReducer<string, SelectedTourAction>("");
 const codeReducer = createReducer<string, SelectedTourAction>("").handleAction(
     setCode,
     (state, action) => action.payload,
 );
 const SelectedTourReducer = combineReducers<SelectedTourReducerState>({
+    name: nameReducer,
+    date: dateReducer,
+    desc: deskReducer,
     code: codeReducer,
 });
 
