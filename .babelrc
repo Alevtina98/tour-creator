@@ -1,6 +1,8 @@
 {
   "sourceType": "unambiguous",
-
+  "ignore": [
+    ",/\/core-js/"
+  ],
   "presets": [
     [
       "@babel/preset-env",
