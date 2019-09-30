@@ -10,18 +10,21 @@ import BlocklyComponent from "./BlocklyComponent";
 import { ScriptValue } from "C:/workspace/tour-creator/src/ui/util/indexedDB";
 import ScriptsList from "./ScriptsList";
 
+export interface MainComponent {
+    connected: boolean;
+}
 export interface MainComponentSelector {
     isInspectEnabled: boolean;
     selector: string;
-    connected: boolean;
-    //script: ScriptValue;
 }
-
 const MainComponent = () => {
     const dispatch = useDispatch();
     //маппинг значений из store
-    const { isInspectEnabled, selector, connected } = useSelector<StoreType, MainComponentSelector>(
+    const { connected } = useSelector<StoreType, MainComponent>(
         ({ MainState }) => MainState,
+    );
+    const { isInspectEnabled, selector } = useSelector<StoreType, MainComponentSelector>(
+        ({ InspectState }) => InspectState,
     );
     const codeBlock = useRef<HTMLTextAreaElement>();
 
