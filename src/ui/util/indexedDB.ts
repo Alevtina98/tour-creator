@@ -14,7 +14,7 @@ export interface ScriptValue {
     desc: string;
     code: string;
 }
-async function IDB(script: ScriptValue): Promise<IDBPDatabase<MyDB>> {
+async function IDB(): Promise<IDBPDatabase<MyDB>> {
     const db = await openDB<MyDB>("tours", 1, {
         upgrade(db) {
             const scriptStore = db.createObjectStore("script");
@@ -29,7 +29,7 @@ async function IDB(script: ScriptValue): Promise<IDBPDatabase<MyDB>> {
     };
     // console.log("InitScript -> ",NewScript);
     // This works
-    await db.put("script", script, "0");
+    // await db.put("script", script, "0");
     await db.put("script", NewScript, "1");
     /*await db.put('script', NewScript,  '2');*/
 

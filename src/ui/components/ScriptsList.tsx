@@ -4,15 +4,15 @@ import IDB, { ScriptValue } from "../util/indexedDB";
 const ScriptsList = () => {
     const [list, setList] = useState<ScriptValue[]>([]);
 
-    /* /!*const loadItems = async () => {
+    const loadItems = async () => {
         const result = await (await IDB()).getAll("script");
         setList(result);
-    };*!/
+    };
 
     useEffect(() => {
         loadItems();
     }, []);
-    console.log("LIST", list);*/
+    console.log("LIST", list);
 
     return (
         <div className="list-group">
