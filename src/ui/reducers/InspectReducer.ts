@@ -1,4 +1,3 @@
-import { ScriptValue } from "../util/indexedDB";
 import { createReducer } from "typesafe-actions";
 import { combineReducers } from "redux";
 import {
