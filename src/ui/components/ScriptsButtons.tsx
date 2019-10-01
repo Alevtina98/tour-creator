@@ -1,15 +1,32 @@
 import React, { useEffect, useState } from "react";
 import IDB, { ScriptValue } from "../util/indexedDB";
+import { useDispatch, useSelector } from "react-redux";
+import { StoreType } from "../reducers";
+import { MainComponent } from "./Main";
+import SelectedTourState from "../reducers/SelectedTourReducer";
+import { setTourDB } from "../actions/selectedTourAction";
 
+export interface ScriptsButtons {
+    tourDB: ScriptValue;
+    tourXML: string;
+}
 const ScriptsButtons = () => {
+    const dispatch = useDispatch();
+    //маппинг значений из store
+    const { tourDB, tourXML } = useSelector<StoreType, ScriptsButtons>(({ SelectedTourState }) => SelectedTourState);
+    const putItem = async () => {
+        (await IDB()).put("script", tourDB, "0");
+    };
     const saveCode = () => {
-        /*dispatch(
-            setTour({
-                ...script,
+        dispatch(
+            setTourDB({
+                name: "Новый тур",
                 date: Date(),
-                name: "Test",
+                desc: "newTour сохранен по нажатию кнопки",
+                code: tourXML,
             }),
-        ); //Отправка экшена*/
+        ); //Отправка экшена
+        putItem();
     };
     return (
         <div className="btn-group" role="group" aria-label="Basic example">

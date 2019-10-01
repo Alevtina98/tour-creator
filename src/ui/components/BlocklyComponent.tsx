@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { StoreType } from "../reducers";
 import { SelectedTourReducerState } from "../reducers/SelectedTourReducer";
 import { Dispatch } from "redux";
-import { setTour } from "../actions/selectedTourAction";
+import { setTourBlockly } from "../actions/selectedTourAction";
 import { ScriptValue } from "../util/indexedDB";
 
 export interface BlocklyState {
@@ -70,9 +70,7 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
         if (this.props.code && this.props.code.current) {
             this.props.code.current.value = code;
         }
-        this.state.selectedTour.name = ;
-        this.props.dispatch(setTour(this.state.selectedTour)); //Отправка экшена
-
+        this.props.dispatch(setTourBlockly(Blockly.toString())); //Отправка экшена
     };
     componentDidUpdate({ selector }: BlocklyProps): void {
         if (this.props.selector !== selector && this.state.blockId) {

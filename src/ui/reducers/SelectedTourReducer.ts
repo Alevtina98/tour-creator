@@ -1,23 +1,29 @@
 import { ScriptValue } from "../util/indexedDB";
 import { createReducer } from "typesafe-actions";
 import { combineReducers } from "redux";
-import { setTour, SelectedTourAction } from "../actions/selectedTourAction";
+import { setTourDB, SelectedTourAction, setTourBlockly } from "../actions/selectedTourAction";
 
 export interface SelectedTourReducerState {
-    selectedTour: ScriptValue;
+    tourDB: ScriptValue;
+    tourXML: string;
 }
-const initState = {
+const initScriptValue = {
     name: "",
     date: Date(),
     desc: "newTour",
     code: "",
 };
-const TourReducer = createReducer<ScriptValue, SelectedTourAction>(initState).handleAction(
-    setTour,
+const TourDBReducer = createReducer<ScriptValue, SelectedTourAction>(initScriptValue).handleAction(
+    setTourDB,
+    (state, action) => action.payload,
+);
+const TourBlocklyReducer = createReducer<string>("").handleAction(
+    setTourBlockly,
     (state, action) => action.payload,
 );
 const SelectedTourReducer = combineReducers<SelectedTourReducerState>({
-    selectedTour: TourReducer,
+    tourDB: TourDBReducer,
+    tourXML: TourBlocklyReducer,
 });
 
 export default SelectedTourReducer;
