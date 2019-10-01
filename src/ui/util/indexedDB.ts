@@ -21,19 +21,13 @@ async function IDB(): Promise<IDBPDatabase<MyDB>> {
             //scriptStore.createIndex('by-price', 'price');
         },
     });
-    const NewScript: ScriptValue = {
-        name: "",
-        date: Date(),
-        desc: "newTour",
-        code: "",
-    };
     // console.log("InitScript -> ",NewScript);
     // This works
     // await db.put("script", script, "0");
-    await db.put("script", NewScript, "1");
+    // await db.put("script", Script, Script.name);
     /*await db.put('script', NewScript,  '2');*/
 
-    console.log(">>>", await db.getAll("script"));
+    // console.log(">>>", await db.getAll("script"));
 
     // This fails at compile time, as the 'favourite-number' store expects a number.
     // await db.put('script', 'Twelve', 'Jake');

@@ -7,4 +7,4 @@ export const setInspectDisabled = createStandardAction("SET_INSPECT_DISABLED")()
 export type CurrentSelectorAction = ActionType<typeof setCurrentSelector>;
 export type SetInspectActions = ActionType<
     typeof setInspectDisabled | typeof setInspectEnabled | typeof setCurrentSelector
-    >;
+>;

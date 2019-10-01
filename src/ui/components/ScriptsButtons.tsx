@@ -4,7 +4,7 @@ import IDB, { ScriptValue } from "../util/indexedDB";
 const ScriptsButtons = () => {
     const saveCode = () => {
         /*dispatch(
-            setCode({
+            setTour({
                 ...script,
                 date: Date(),
                 name: "Test",
@@ -19,7 +19,6 @@ const ScriptsButtons = () => {
             <button type="button" className="btn btn-secondary" onClick={saveCode}>
                 Сохранить
             </button>
-
             <button type="button" className="btn btn-secondary">
                 Редактировать
             </button>

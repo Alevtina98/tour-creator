@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useRef } from "react";
+import React, {memo, useEffect, useRef} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AgentHandler from "../AgentHandler";
 import agentActions from "../actions/agentActions";
@@ -6,7 +6,6 @@ import ConnectionStatus from "./ConnectionStatus";
 import { setInspectDisabled, setInspectEnabled } from "../actions/InspectAction";
 import { StoreType } from "../reducers";
 import BlocklyComponent from "./BlocklyComponent";
-import { ScriptValue } from "C:/workspace/tour-creator/src/ui/util/indexedDB";
 import ScriptsList from "./ScriptsList";
 import ScriptsButtons from "./ScriptsButtons";
 
@@ -20,9 +19,7 @@ export interface MainComponentSelector {
 const MainComponent = () => {
     const dispatch = useDispatch();
     //маппинг значений из store
-    const { connected } = useSelector<StoreType, MainComponent>(
-        ({ MainState }) => MainState,
-    );
+    const { connected } = useSelector<StoreType, MainComponent>(({ MainState }) => MainState);
     const { isInspectEnabled, selector } = useSelector<StoreType, MainComponentSelector>(
         ({ InspectState }) => InspectState,
     );
@@ -47,6 +44,7 @@ const MainComponent = () => {
         }
         //console.log("inspectEnabled > ", isInspectEnabled)
     };
+
     return (
         <div className="panel panel-default">
             <div className="main-container">
@@ -59,7 +57,7 @@ const MainComponent = () => {
                                 className="alert alert-light"
                                 role="alert"
                                 style={{
-                                    align: "center",
+                                    textAlign: "center",
                                     background: "rgb(255,255,255)",
                                     width: "500px",
                                     margin: "auto",
@@ -88,4 +86,4 @@ const MainComponent = () => {
     );
 };
 
-export default MainComponent;
+export default memo(MainComponent);

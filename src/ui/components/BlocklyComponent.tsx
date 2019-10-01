@@ -1,15 +1,20 @@
 import React, { MutableRefObject } from "react";
-import ReactDOM from "react-dom";
-// import ReactBlocklyComponent from './blockly/index';
 import ReactBlocklyComponent from "react-blockly-component";
 import ConfigFiles from "../../initContent/content.jsx";
 import parseWorkspaceXml from "./blockly/BlocklyHelper";
-// import Blockly from "node-blockly";
+import { connect } from "react-redux";
+import { StoreType } from "../reducers";
+import { SelectedTourReducerState } from "../reducers/SelectedTourReducer";
+import { Dispatch } from "redux";
+import { setTour } from "../actions/selectedTourAction";
+import { ScriptValue } from "../util/indexedDB";
 
 export interface BlocklyState {
     toolboxCategories: any[];
     blockId: string;
+    selectedTour: ScriptValue;
 }
+
 export interface WorkspaceEventType {
     blockId: string;
     type: string;
@@ -20,20 +25,28 @@ export interface WorkspaceEventType {
     recordUndo: false;
     workspaceId: string;
 }
-export interface BlocklyProps {
+export interface BlocklyExternalProps {
     selector: string;
     inspect: any;
     code: MutableRefObject<HTMLTextAreaElement | undefined>;
 }
 
-class BlocklyComponent extends React.Component<BlocklyProps, BlocklyState> {
-    blocklyRef: any | null = null;
+export type BlocklyProps = BlocklyExternalProps & BlocklyComponentConnectedActions;
 
+class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
+    blocklyRef: any | null = null;
     state: BlocklyState = {
         toolboxCategories: parseWorkspaceXml(ConfigFiles.INITIAL_TOOLBOX_XML),
         blockId: "",
+        selectedTour: {
+            name: "",
+            date: Date(),
+            desc: "newTour",
+            code: "",
+        },
     };
     componentDidMount(): void {
+        //маппинг значений из store
         window.setTimeout(() => {
             this.setState({
                 toolboxCategories: parseWorkspaceXml(ConfigFiles.INITIAL_TOOLBOX_XML).concat([
@@ -42,9 +55,6 @@ class BlocklyComponent extends React.Component<BlocklyProps, BlocklyState> {
                         blocks: [
                             {
                                 type: "desc",
-                                onChange: () => {
-                                    console.log("HELLO WORLD");
-                                },
                             },
                             { type: "dark" },
                             { type: "selector" },
@@ -60,6 +70,9 @@ class BlocklyComponent extends React.Component<BlocklyProps, BlocklyState> {
         if (this.props.code && this.props.code.current) {
             this.props.code.current.value = code;
         }
+        this.state.selectedTour.name = ;
+        this.props.dispatch(setTour(this.state.selectedTour)); //Отправка экшена
+
     };
     componentDidUpdate({ selector }: BlocklyProps): void {
         if (this.props.selector !== selector && this.state.blockId) {
@@ -138,4 +151,13 @@ class BlocklyComponent extends React.Component<BlocklyProps, BlocklyState> {
     };
 }
 
-export default BlocklyComponent;
+export interface BlocklyComponentConnectedActions {
+    dispatch: Dispatch;
+}
+
+export default connect<undefined, BlocklyComponentConnectedActions, BlocklyExternalProps, StoreType>(
+    undefined,
+    dispatch => ({
+        dispatch,
+    }),
+)(BlocklyComponent) as any;
