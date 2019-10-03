@@ -12,6 +12,7 @@ const initScriptValue = {
     date: Date(),
     desc: "newTour",
     code: "",
+    dateLastSave: "",
 };
 const TourDBReducer = createReducer<ScriptValue, SelectedTourAction>(initScriptValue).handleAction(
     setTourDB,

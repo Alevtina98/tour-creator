@@ -81,6 +81,7 @@ const MainComponent = () => {
                     <ScriptsButtons />
                     <ScriptsList />
                 </div>
+
             </div>
         </div>
     );

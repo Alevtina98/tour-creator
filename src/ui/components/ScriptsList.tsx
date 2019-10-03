@@ -19,8 +19,8 @@ const ScriptsList = () => {
             {list.map(el => (
                 <a href="#" className="list-group-item list-group-item-action flex-column align-items-start ">
                     <div className="d-flex w-200 justify-content-between">
-                        <small className="mb-1">{el.date}</small>
-                        <small className="text-muted">1 days ago</small>
+                        <small className="mb-1">{el.name}</small>
+                        <small className="text-muted">{el.date}</small>
                     </div>
                 </a>
             ))}

@@ -31,7 +31,7 @@ export interface BlocklyExternalProps {
     code: MutableRefObject<HTMLTextAreaElement | undefined>;
 }
 
-export type BlocklyProps = BlocklyExternalProps & BlocklyComponentConnectedActions;
+export type BlocklyProps = BlocklyExternalProps & BlocklyComponentConnectedDispatch & BlocklyComponentConnectedProps;
 
 class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
     blocklyRef: any | null = null;
@@ -143,7 +143,7 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
                         snap: true,
                     },
                 }}
-                initialXml={ConfigFiles.INITIAL_XML}
+                initialXml={this.props.tourXML}
                 wrapperDivClassName="fill-height"
                 workspaceDidChange={this.workspaceDidChange}
             />
@@ -151,12 +151,24 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
     };
 }
 
-export interface BlocklyComponentConnectedActions {
+//ConfigFiles.INITIAL_XML
+
+export interface BlocklyComponentConnectedDispatch {
     dispatch: Dispatch;
 }
+export interface BlocklyComponentConnectedProps {
+    tourXML: string;
+}
 
-export default connect<undefined, BlocklyComponentConnectedActions, BlocklyExternalProps, StoreType>(
-    undefined,
+export default connect<
+    BlocklyComponentConnectedProps,
+    BlocklyComponentConnectedDispatch,
+    BlocklyExternalProps,
+    StoreType
+>(
+    ({ SelectedTourState }) => ({
+        tourXML: SelectedTourState.tourXML,
+    }),
     dispatch => ({
         dispatch,
     }),
