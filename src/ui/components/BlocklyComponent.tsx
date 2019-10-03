@@ -70,7 +70,9 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
         if (this.props.code && this.props.code.current) {
             this.props.code.current.value = code;
         }
-        this.props.dispatch(setTourBlockly(Blockly.toString())); //Отправка экшена
+        const s = new XMLSerializer();
+        const newXmlStr = s.serializeToString(Blockly.Xml.workspaceToDom(workspace));
+        this.props.dispatch(setTourBlockly(newXmlStr)); //Отправка экшена
     };
     componentDidUpdate({ selector }: BlocklyProps): void {
         if (this.props.selector !== selector && this.state.blockId) {
@@ -141,7 +143,7 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
                         snap: true,
                     },
                 }}
-                initialXml="ConfigFiles.INITIAL_XML"
+                initialXml={ConfigFiles.INITIAL_XML}
                 wrapperDivClassName="fill-height"
                 workspaceDidChange={this.workspaceDidChange}
             />
