@@ -1,0 +1,17 @@
+{
+  "name": "@krista/blockly-packages",
+  "version": "0.1.0",
+  "description": "",
+  "scripts": {
+  },
+  "files": [
+    "blockly_compressed.js",
+    "blocks-compressed.js",
+    "en.js",
+    "javascript-compressed.js",
+    "msg-en.js",
+    "underscore.js"
+  ],
+  "author": "alevtina",
+  "license": "MIT"
+}

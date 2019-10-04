@@ -60,6 +60,7 @@
     "webpack-create-vendor-chunk": "^0.1.1"
   },
   "dependencies": {
+    "@krista/blockly-packages": "./krista-blockly-packages-0.1.0.tgz",
     "classnames": "^2.2.6",
     "closure-library": "^1.43629075.2",
     "dayjs": "^1.8.16",

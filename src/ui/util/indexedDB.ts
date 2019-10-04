@@ -1,5 +1,4 @@
 import { openDB, DBSchema } from "idb";
-import MainComponent from "../components/Main";
 import { IDBPDatabase } from "idb/lib/entry";
 
 interface MyDB extends DBSchema {

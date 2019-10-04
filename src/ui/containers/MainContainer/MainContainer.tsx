@@ -1,13 +1,13 @@
-import React, {memo, useEffect, useRef} from "react";
+import React, { memo, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import AgentHandler from "../AgentHandler";
-import agentActions from "../actions/agentActions";
-import ConnectionStatus from "./ConnectionStatus/ConnectionStatus";
-import { setInspectDisabled, setInspectEnabled } from "../actions/InspectAction";
-import { StoreType } from "../reducers";
-import BlocklyComponent from "./BlocklyComponent";
-import ScriptsList from "./ScriptsList";
-import ScriptsButtons from "./ScriptsButtons";
+import AgentHandler from "../../AgentHandler";
+import agentActions from "../../actions/agentActions";
+import ConnectionStatus from "../../components/ConnectionStatus/ConnectionStatus";
+import { setInspectDisabled, setInspectEnabled } from "../../actions/inspectAction";
+import { StoreType } from "../../reducers";
+import BlocklyComponent from "../../components/BlocklyComponent";
+import ScriptsList from "../../components/ScriptsList";
+import ScriptsButtons from "../../components/ScriptsButtons";
 
 export interface MainComponent {
     connected: boolean;
@@ -45,6 +45,8 @@ const MainComponent = () => {
         //console.log("inspectEnabled > ", isInspectEnabled)
     };
 
+    console.log("HELLO");
+
     return (
         <div className="panel panel-default">
             <div className="main-container">
@@ -81,7 +83,6 @@ const MainComponent = () => {
                     <ScriptsButtons />
                     <ScriptsList />
                 </div>
-
             </div>
         </div>
     );

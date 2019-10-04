@@ -6,7 +6,7 @@ import {
     SetInspectActions,
     setInspectDisabled,
     setInspectEnabled,
-} from "../actions/InspectAction";
+} from "../actions/inspectAction";
 
 export interface InspectReducerState {
     selector: string;
