@@ -59,6 +59,7 @@
     "lodash": "^3.10.1",
     "react": "^16.8.6",
     "react-blockly-component": "^3.3.0",
+    "react-bootstrap": "^1.0.0-beta.12",
     "react-dom": "^16.8.6",
     "react-overlay": "^0.1.7",
     "react-redux": "^7.1.0",

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
+//import Modal from "react-bootstrap";
 import IDB, { ScriptValue } from "../util/indexedDB";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../reducers";
-import ModalSave from "./ModalSave";
-import SelectedTourState from "../reducers/SelectedTourReducer";
 import { saveToDb } from "../actions/selectedTourAction";
+import { Button, Modal } from "react-bootstrap";
 
 export interface ScriptsButtons {
     tourDB: ScriptValue;
@@ -14,6 +14,11 @@ export interface ScriptsButtons {
     dayNumber: number;
 }*/
 const ScriptsButtons = () => {
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
     const dispatch = useDispatch();
     //маппинг значений из store
     const { tourDB, tourXML } = useSelector<StoreType, ScriptsButtons>(({ SelectedTourState }) => SelectedTourState);
@@ -27,6 +32,7 @@ const ScriptsButtons = () => {
             }),
         ); //Отправка экшена
         //Как перерисовать BlocklyComponent???
+        handleClose();
     };
     const loadCode = () => {
         //Как перерисовать ScriptList???
@@ -34,6 +40,7 @@ const ScriptsButtons = () => {
     const deleteCode = () => {
         //Как перерисовать ScriptList???
     };
+
     return (
         <div>
             <div className="btn-group" role="group" aria-label="Basic example">
@@ -41,7 +48,7 @@ const ScriptsButtons = () => {
                     Загрузить
                 </button>
 
-                <button type="button" className="btn btn-secondary" data-target="#myModal" data-toggle="modal">
+                <button type="button" className="btn btn-secondary" onClick={handleShow}>
                     Сохранить
                 </button>
                 <button type="button" className="btn btn-secondary">
@@ -51,25 +58,21 @@ const ScriptsButtons = () => {
                     Удалить
                 </button>
             </div>
-            <div className="modal fade" id="myModal" tabIndex={-1} role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div className="modal-dialog" role="document">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <h4 className="modal-title" id="myModalLabel"> Modal title </h4>
-                        </div>
-                        <div className="modal-body">
-                            ...
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" className="btn btn-primary" onClick={saveCode}>Save</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Modal heading</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={saveCode}>
+                        Save Changes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };
