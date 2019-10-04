@@ -12,15 +12,13 @@ module.exports = {
             "google-blockly/msg/js/ru",
         ],
         ui: "./src/ui/index.tsx",
-        agent: "./src/agent/index.js",
+        agent: "./src/agent/index.js"
     },
-
     resolve: {
         extensions: [".ts", ".tsx", ".js", ".jsx", ".less", ".cur"],
     },
 
     devtool: "source-map",
-
     output: {
         path: path.resolve(__dirname, "chrome-extension/build/"),
         publicPath: "build",

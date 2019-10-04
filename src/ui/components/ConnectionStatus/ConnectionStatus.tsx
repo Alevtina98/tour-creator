@@ -13,7 +13,6 @@ const connectionStatusStyle = {
 
 const ConnectionStatus: FC<ConnectionStatusProps> = ({ connection }) => {
     const color = connection ? "green" : "red";
-
     return (
         <div
             style={{

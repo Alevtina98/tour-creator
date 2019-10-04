@@ -45,8 +45,6 @@ const MainComponent = () => {
         //console.log("inspectEnabled > ", isInspectEnabled)
     };
 
-    console.log("HELLO");
-
     return (
         <div className="panel panel-default">
             <div className="main-container">
