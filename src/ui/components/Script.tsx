@@ -1,5 +1,5 @@
-import React, {FC} from "react";
-import {ScriptValue} from "../util/indexedDB";
+import React, { FC } from "react";
+import { ScriptValue } from "../util/indexedDB";
 
 export interface ScriptProps {
     onClick: any;
