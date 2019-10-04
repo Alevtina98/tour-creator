@@ -11,6 +11,16 @@ export const saveToDb = (tourDB: ScriptValue) => async (dispatch: Dispatch, getS
     dispatch(setTourDB(tourDB));
     (await IDB()).put("script", tourDB, tourDB.name + tourDB.date);
 };
+export const loadToDb = () => async (dispatch: Dispatch, getState: () => StoreType) => {
+    //const store = getState();
+
+    const store = getState();
+    const tour: ScriptValue | undefined = await (await IDB()).get("script", store.SelectedTourState.selectedIndex);
+    if (tour) {
+        dispatch(setTourDB(tour));
+        dispatch(setTourBlockly(tour.code));
+    }
+};
 export const delToDb = () => async (dispatch: Dispatch, getState: () => StoreType) => {
     //console.log("DelKey >> ",getState().SelectedTourState.selectedIndex);
     const store = getState();

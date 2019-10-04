@@ -3,7 +3,7 @@ import React, { DOMElement, useEffect, useState } from "react";
 import IDB, { ScriptValue } from "../util/indexedDB";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../reducers";
-import {delToDb, saveToDb} from "../actions/selectedTourAction";
+import {delToDb, loadToDb, saveToDb} from "../actions/selectedTourAction";
 import { Button, FormControl, InputGroup, Modal } from "react-bootstrap";
 import { useInputValue } from "../hooks/useInputValue";
 
@@ -40,6 +40,7 @@ const ScriptsButtons = () => {
     };
     const loadCode = () => {
         //Как перерисовать ScriptList???
+        dispatch(loadToDb());
     };
     const deleteCode = () => {
         //Как перерисовать ScriptList???
