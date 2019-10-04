@@ -12,5 +12,5 @@ export interface StoreType {
 export default combineReducers<StoreType>({
     MainState,
     InspectState,
-    SelectedTourState,
+    SelectedTourState
 });

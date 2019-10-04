@@ -6,6 +6,7 @@ import ImmutablePropTypes from "react-immutable-proptypes";
 
 import BlocklyToolboxCategory from "./BlocklyToolboxCategory";
 import BlocklyToolboxBlock from "./BlocklyToolboxBlock";
+
 export interface BlocklyToolboxProps {
     categories: ImmutablePropTypes["list"];
     blocks: ImmutablePropTypes["list"];
@@ -20,7 +21,7 @@ class BlocklyToolbox extends React.Component<BlocklyToolboxProps> {
         categories: null,
         blocks: null,
         processCategory: null,
-        didUpdate: null,
+        didUpdate: null
     };
 
     componentDidMount = () => {
@@ -41,7 +42,7 @@ class BlocklyToolbox extends React.Component<BlocklyToolboxProps> {
 
         if (processedCategory.has("categories")) {
             processedCategory = category.update("categories", (subcategories: any) =>
-                subcategories.map(this.processCategory),
+                subcategories.map(this.processCategory)
             );
         }
 

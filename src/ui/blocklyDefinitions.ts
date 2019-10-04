@@ -12,7 +12,7 @@ Blockly.Blocks["dark"] = {
         this.setStyle("procedure_blocks");
         this.setTooltip("");
         this.setHelpUrl("");
-    },
+    }
 };
 Blockly.Blocks["desc"] = {
     init: function() {
@@ -27,7 +27,7 @@ Blockly.Blocks["desc"] = {
         this.setStyle("procedure_blocks");
         this.setTooltip("");
         this.setHelpUrl("");
-    },
+    }
 };
 Blockly.Blocks["selector"] = {
     init: function() {
@@ -37,8 +37,8 @@ Blockly.Blocks["selector"] = {
                     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Magnifying_glass_icon.svg/735px-Magnifying_glass_icon.svg.png",
                     15,
                     15,
-                    "*",
-                ),
+                    "*"
+                )
             )
             .appendField(new Blockly.FieldTextInput(""), "NAME");
         this.setInputsInline(true);
@@ -47,7 +47,7 @@ Blockly.Blocks["selector"] = {
         this.setStyle("text_blocks");
         this.setTooltip("");
         this.setHelpUrl("");
-    },
+    }
 };
 Blockly.JavaScript["selector"] = function(block: any) {
     /*// Generate JavaScript for setting the width.

@@ -42,11 +42,11 @@ class BlocklyWorkspace extends React.Component<BlocklyWorkspaceProps, BlocklyWor
         xmlDidChange: null,
         workspaceDidChange: null,
         onImportXmlError: null,
-        toolboxMode: "BLOCKS",
+        toolboxMode: "BLOCKS"
     };
     state: BlocklyWorkspaceState = {
         workspace: null,
-        xml: this.props.initialXml,
+        xml: this.props.initialXml
     };
 
     editorDiv = React.createRef();
@@ -57,7 +57,7 @@ class BlocklyWorkspace extends React.Component<BlocklyWorkspaceProps, BlocklyWor
         // TODO figure out how to use setState here without breaking the toolbox when switching tabs
         this.state.workspace = Blockly.inject(this.editorDiv.current, {
             ...this.props.workspaceConfiguration,
-            toolbox: this.dummyToolbox.current,
+            toolbox: this.dummyToolbox.current
         });
 
         this.state.workspace.registerButtonCallback("Inspector", () => {
@@ -79,7 +79,7 @@ class BlocklyWorkspace extends React.Component<BlocklyWorkspaceProps, BlocklyWor
                 }
 
                 this.setState({ xml: newXml }, this.xmlDidChange);
-            }, 200),
+            }, 200)
         );
     };
 

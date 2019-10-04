@@ -7,7 +7,7 @@ const agentActions = {
 
     disableSelectMode: function() {
         sendMessage("disableSelectMode");
-    },
+    }
 };
 
 export default agentActions;

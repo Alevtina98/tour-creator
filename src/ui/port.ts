@@ -1,3 +1,4 @@
+// Сделано для отключения обрбаотки extension
 if (!chrome.runtime) {
     chrome.runtime = {
         // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
@@ -6,10 +7,10 @@ if (!chrome.runtime) {
             return {
                 postMessage: () => {},
                 onMessage: {
-                    addListener: () => {},
-                },
+                    addListener: () => {}
+                }
             };
-        },
+        }
     };
 }
 if (!chrome.devtools) {
@@ -17,18 +18,18 @@ if (!chrome.devtools) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         inspectedWindow: {
-            tabId: 1,
-        },
+            tabId: 1
+        }
     };
 }
 
 const backgroundPageConnection = chrome.runtime.connect({
-    name: "panel",
+    name: "panel"
 });
 
 backgroundPageConnection.postMessage({
     name: "init",
-    tabId: chrome.devtools.inspectedWindow.tabId,
+    tabId: chrome.devtools.inspectedWindow.tabId
 });
 
 export default backgroundPageConnection;

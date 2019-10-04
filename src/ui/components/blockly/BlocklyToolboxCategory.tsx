@@ -14,7 +14,7 @@ class BlocklyToolboxCategory extends React.PureComponent<BlocklyToolboxCategoryP
         colour: null,
         expanded: null,
         categories: null,
-        blocks: null,
+        blocks: null
     };
 
     static renderCategory = (category: any, key: any) => {

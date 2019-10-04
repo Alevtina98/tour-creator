@@ -42,8 +42,8 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
             name: "",
             date: Date(),
             desc: "newTour",
-            code: "",
-        },
+            code: ""
+        }
     };
     componentDidMount(): void {
         //маппинг значений из store
@@ -54,13 +54,13 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
                         name: "Tour",
                         blocks: [
                             {
-                                type: "desc",
+                                type: "desc"
                             },
                             { type: "dark" },
-                            { type: "selector" },
-                        ],
-                    },
-                ]),
+                            { type: "selector" }
+                        ]
+                    }
+                ])
             });
         }, 1);
     }
@@ -83,7 +83,7 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
             if (field != "") {
                 field.setText(this.props.selector);
                 this.setState({
-                    blockId: "",
+                    blockId: ""
                 });
             }
             console.log("selector >> ", this.props.selector);
@@ -115,7 +115,7 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
                     if (event.element !== "click") return;
                     const blockId = event.blockId || event.newValue || "";
                     this.setState({
-                        blockId,
+                        blockId
                     });
                     if (blockId) {
                         const block = workspaceSVG.getBlockById(blockId);
@@ -140,8 +140,8 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
                         spacing: 20,
                         length: 3,
                         colour: "#ccc",
-                        snap: true,
-                    },
+                        snap: true
+                    }
                 }}
                 initialXml={this.props.tourXML}
                 wrapperDivClassName="fill-height"
@@ -167,9 +167,9 @@ export default connect<
     StoreType
 >(
     ({ SelectedTourState }) => ({
-        tourXML: SelectedTourState.tourXML,
+        tourXML: SelectedTourState.tourXML
     }),
     dispatch => ({
-        dispatch,
-    }),
+        dispatch
+    })
 )(BlocklyComponent) as any;

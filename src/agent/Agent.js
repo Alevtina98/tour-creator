@@ -6,6 +6,7 @@ import serializeEntity from "./util/serializeEntity";
 import deepUpdate from "../common/deepUpdate";
 
 const _ = require("lodash");
+
 const GAME_OBJECT_ID = "game_object";
 
 class Agent {
@@ -42,7 +43,7 @@ class Agent {
 
             disableSelectMode: () => {
                 this.removeSelectClickHandler();
-            },
+            }
         };
     }
 
@@ -68,7 +69,7 @@ class Agent {
     reportEntities() {
         const id = this.subscribedEntityId;
         sendMessage("tick", {
-            id,
+            id
         });
     }
     getClickElements() {

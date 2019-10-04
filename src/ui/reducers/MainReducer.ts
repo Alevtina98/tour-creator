@@ -10,7 +10,7 @@ export interface MainReducerState {
 const connectedReducer = createReducer<boolean>(false).handleAction(connectSuccess, () => true);
 
 const mainReducer = combineReducers<MainReducerState>({
-    connected: connectedReducer,
+    connected: connectedReducer
 });
 
 export default mainReducer;

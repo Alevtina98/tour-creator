@@ -18,7 +18,7 @@ async function IDB(): Promise<IDBPDatabase<MyDB>> {
         upgrade(db) {
             const scriptStore = db.createObjectStore("script");
             //scriptStore.createIndex('by-price', 'price');
-        },
+        }
     });
     // console.log("InitScript -> ",NewScript);
     // This works

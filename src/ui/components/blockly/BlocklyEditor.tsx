@@ -51,7 +51,7 @@ class BlocklyEditor extends React.Component<BlocklyEditorProps> {
         next: {},
         mutation: {
             attributes: {},
-            innerContent: "",
+            innerContent: ""
         },
         name: "",
         custom: "",
@@ -66,7 +66,7 @@ class BlocklyEditor extends React.Component<BlocklyEditorProps> {
         processToolboxCategory: null,
         onImportXmlError: null,
         xmlDidChange: null,
-        workspaceDidChange: null,
+        workspaceDidChange: null
     };
     componentDidMount = () => {
         this.toolboxDidUpdate();
@@ -75,7 +75,7 @@ class BlocklyEditor extends React.Component<BlocklyEditorProps> {
             if (typeof console !== "undefined") {
                 // eslint-disable-next-line no-console
                 console.error(
-                    "Warning: xmlDidChange is deprecated and will be removed in future versions! Please use workspaceDidChange instead.",
+                    "Warning: xmlDidChange is deprecated and will be removed in future versions! Please use workspaceDidChange instead."
                 );
             }
         }

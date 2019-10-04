@@ -31,7 +31,7 @@ class BlocklyToolboxBlock extends React.PureComponent<BlocklyToolboxBlockProps> 
         values: null,
         statements: null,
         next: null,
-        mutation: null,
+        mutation: null
     };
 
     static renderBlock = (block: any, key: any) => (

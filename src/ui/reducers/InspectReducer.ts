@@ -5,7 +5,7 @@ import {
     setCurrentSelector,
     SetInspectActions,
     setInspectDisabled,
-    setInspectEnabled,
+    setInspectEnabled
 } from "../actions/inspectAction";
 
 export interface InspectReducerState {
@@ -15,7 +15,7 @@ export interface InspectReducerState {
 
 const selectorReducer = createReducer<string, CurrentSelectorAction>("").handleAction(
     setCurrentSelector,
-    (state, action) => action.payload,
+    (state, action) => action.payload
 );
 const inspectReducer = createReducer<boolean, SetInspectActions>(false)
     .handleAction(setInspectEnabled, () => true)
@@ -24,7 +24,7 @@ const inspectReducer = createReducer<boolean, SetInspectActions>(false)
 
 const InspectReducer = combineReducers<InspectReducerState>({
     selector: selectorReducer,
-    isInspectEnabled: inspectReducer,
+    isInspectEnabled: inspectReducer
 });
 
 export default InspectReducer;

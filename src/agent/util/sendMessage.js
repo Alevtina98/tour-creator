@@ -3,9 +3,9 @@ const sendMessage = function(name, data) {
         {
             source: "coquette-inspect-agent",
             name: name,
-            data: data || {},
+            data: data || {}
         },
-        "*",
+        "*"
     );
 };
 

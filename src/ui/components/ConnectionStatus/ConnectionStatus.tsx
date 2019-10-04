@@ -8,7 +8,7 @@ const connectionStatusStyle = {
     width: 6,
     height: 6,
     marginRight: 6,
-    display: "inline-block",
+    display: "inline-block"
 };
 
 const ConnectionStatus: FC<ConnectionStatusProps> = ({ connection }) => {
@@ -18,7 +18,7 @@ const ConnectionStatus: FC<ConnectionStatusProps> = ({ connection }) => {
         <div
             style={{
                 ...connectionStatusStyle,
-                background: color,
+                background: color
             }}
         />
     );

@@ -1,11 +1,10 @@
-import {ActionType, createAsyncAction, createStandardAction} from "typesafe-actions";
+import { ActionType, createAsyncAction, createStandardAction } from "typesafe-actions";
 import IDB, { ScriptValue } from "../util/indexedDB";
-import {Dispatch} from "redux";
-import {StoreType} from "../reducers";
+import { Dispatch } from "redux";
+import { StoreType } from "../reducers";
 
 export const setTourDB = createStandardAction("SET_TOUR")<ScriptValue>();
 export const setTourBlockly = createStandardAction("SET_TOUR_XML")<string>();
-
 
 export const saveToDb = (tourDB: ScriptValue) => async (dispatch: Dispatch, getState: () => StoreType) => {
     //const store = getState();

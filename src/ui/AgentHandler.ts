@@ -27,7 +27,7 @@ class AgentHandler {
         },
 
         enabledSelectMode: () => this.dispatch(setInspectEnabled()),
-        disabledSelectMode: () => this.dispatch(setInspectDisabled()),
+        disabledSelectMode: () => this.dispatch(setInspectDisabled())
     };
 
     constructor(dispatch: Dispatch) {

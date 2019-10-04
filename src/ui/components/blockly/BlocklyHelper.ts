@@ -39,7 +39,7 @@ export default function parseWorkspaceXml(xml: any) {
             } else {
                 result[xmlNode.nodeName].push(jsonNode);
             }
-        } else if (arrayTags && arrayTags.indexOf(xmlNode.nodeName) !== -1) {
+        } else if (arrayTags && arrayTags.includes(xmlNode.nodeName)) {
             result[xmlNode.nodeName] = [jsonNode];
         } else {
             result[xmlNode.nodeName] = jsonNode;
@@ -142,7 +142,7 @@ function parseObject(obj: any) {
     if (obj.mutation) {
         res.mutation = {
             attributes: obj.mutation,
-            innerContent: obj.mutation.value,
+            innerContent: obj.mutation.value
         };
     }
     if (obj.field) {
@@ -156,7 +156,7 @@ function parseObject(obj: any) {
     }
     if (obj.statement) {
         res.statements = {
-            [obj.statement.name]: parseObject(obj.statement),
+            [obj.statement.name]: parseObject(obj.statement)
         };
     }
 

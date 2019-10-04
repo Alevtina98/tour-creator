@@ -12,19 +12,16 @@ const initScriptValue = {
     date: Date(),
     desc: "newTour",
     code: "",
-    dateLastSave: "",
+    dateLastSave: ""
 };
 const TourDBReducer = createReducer<ScriptValue, SelectedTourAction>(initScriptValue).handleAction(
     setTourDB,
-    (state, action) => action.payload,
+    (state, action) => action.payload
 );
-const TourBlocklyReducer = createReducer<string>("").handleAction(
-    setTourBlockly,
-    (state, action) => action.payload,
-);
+const TourBlocklyReducer = createReducer<string>("").handleAction(setTourBlockly, (state, action) => action.payload);
 const SelectedTourReducer = combineReducers<SelectedTourReducerState>({
     tourDB: TourDBReducer,
-    tourXML: TourBlocklyReducer,
+    tourXML: TourBlocklyReducer
 });
 
 export default SelectedTourReducer;

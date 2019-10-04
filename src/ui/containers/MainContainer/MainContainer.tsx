@@ -21,7 +21,7 @@ const MainComponent = () => {
     //маппинг значений из store
     const { connected } = useSelector<StoreType, MainComponent>(({ MainState }) => MainState);
     const { isInspectEnabled, selector } = useSelector<StoreType, MainComponentSelector>(
-        ({ InspectState }) => InspectState,
+        ({ InspectState }) => InspectState
     );
     const codeBlock = useRef<HTMLTextAreaElement>();
 
@@ -31,7 +31,7 @@ const MainComponent = () => {
         new AgentHandler(dispatch); //Инициализация агента общения со страницей
         // this.props.script = demo();
         // console.log("Script -> ",demo());
-    }, []);
+    }, [dispatch]);
 
     const onInspectClickHandler = () => {
         if (isInspectEnabled) {
@@ -62,7 +62,7 @@ const MainComponent = () => {
                                     textAlign: "center",
                                     background: "rgb(255,255,255)",
                                     width: "500px",
-                                    margin: "auto",
+                                    margin: "auto"
                                 }}
                             >
                                 Выберите элемент на основной странице или нажмите

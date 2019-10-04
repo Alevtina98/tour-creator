@@ -28,8 +28,8 @@ const ScriptsButtons = () => {
                 name: "Новый тур",
                 date: Date().toLocaleLowerCase(),
                 desc: "newTour сохранен по нажатию кнопки",
-                code: tourXML,
-            }),
+                code: tourXML
+            })
         ); //Отправка экшена
         //Как перерисовать BlocklyComponent???
         handleClose();

@@ -374,9 +374,9 @@ const INITIAL_TOOLBOX_CATEGORIES = [
                         type: "math_number",
                         shadow: true,
                         fields: {
-                            NUM: 10,
-                        },
-                    },
+                            NUM: 10
+                        }
+                    }
                 },
                 statements: {
                     DO: {
@@ -387,14 +387,14 @@ const INITIAL_TOOLBOX_CATEGORIES = [
                                 type: "text",
                                 shadow: true,
                                 fields: {
-                                    TEXT: "abc",
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-        ],
+                                    TEXT: "abc"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        ]
     },
     {
         name: "Text",
@@ -407,19 +407,19 @@ const INITIAL_TOOLBOX_CATEGORIES = [
                         type: "text",
                         shadow: true,
                         fields: {
-                            TEXT: "abc",
-                        },
-                    },
-                },
-            },
-        ],
-    },
+                            TEXT: "abc"
+                        }
+                    }
+                }
+            }
+        ]
+    }
 ];
 
 const ConfigFiles = {
     INITIAL_XML,
     INITIAL_TOOLBOX_XML,
-    INITIAL_TOOLBOX_CATEGORIES,
+    INITIAL_TOOLBOX_CATEGORIES
 };
 
 export default ConfigFiles;
