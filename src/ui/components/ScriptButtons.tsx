@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { DOMElement, useEffect, useState } from "react";
 //import Modal from "react-bootstrap";
 import IDB, { ScriptValue } from "../util/indexedDB";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../reducers";
-import { saveToDb } from "../actions/selectedTourAction";
-import { Button, Modal } from "react-bootstrap";
+import {delToDb, saveToDb} from "../actions/selectedTourAction";
+import { Button, FormControl, InputGroup, Modal } from "react-bootstrap";
+import { useInputValue } from "../hooks/useInputValue";
 
-export interface ScriptsButtons {
+export interface ScriptButtons {
     tourDB: ScriptValue;
     tourXML: string;
 }
@@ -15,19 +16,22 @@ export interface ScriptsButtons {
 }*/
 const ScriptsButtons = () => {
     const [show, setShow] = useState(false);
+    const name = useInputValue("");
+    const desc = useInputValue("");
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
     const dispatch = useDispatch();
     //маппинг значений из store
-    const { tourDB, tourXML } = useSelector<StoreType, ScriptsButtons>(({ SelectedTourState }) => SelectedTourState);
+    const { tourDB, tourXML } = useSelector<StoreType, ScriptButtons>(({ SelectedTourState }) => SelectedTourState);
+
     const saveCode = () => {
         dispatch(
             saveToDb({
-                name: "Новый тур",
+                name: name.value,
                 date: Date().toLocaleLowerCase(),
-                desc: "newTour сохранен по нажатию кнопки",
+                desc: desc.value,
                 code: tourXML
             })
         ); //Отправка экшена
@@ -39,6 +43,7 @@ const ScriptsButtons = () => {
     };
     const deleteCode = () => {
         //Как перерисовать ScriptList???
+        dispatch(delToDb());
     };
 
     return (
@@ -60,16 +65,25 @@ const ScriptsButtons = () => {
             </div>
 
             <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+                <Modal.Header closeButton></Modal.Header>
+                <InputGroup className="mb-3">
+                    <InputGroup.Prepend>
+                        <InputGroup.Text>Название</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl placeholder="" aria-label="Tourname" aria-describedby="basic-addon1" {...name} />
+                </InputGroup>
+                <InputGroup>
+                    <InputGroup.Prepend>
+                        <InputGroup.Text>Описание</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl as="textarea" aria-label="With textarea" {...desc} />
+                </InputGroup>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
-                        Close
+                        Отмена
                     </Button>
                     <Button variant="primary" onClick={saveCode}>
-                        Save Changes
+                        Сохранить
                     </Button>
                 </Modal.Footer>
             </Modal>

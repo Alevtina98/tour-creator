@@ -6,8 +6,9 @@ import ConnectionStatus from "../../components/ConnectionStatus/ConnectionStatus
 import { setInspectDisabled, setInspectEnabled } from "../../actions/inspectAction";
 import { StoreType } from "../../reducers";
 import BlocklyComponent from "../../components/BlocklyComponent";
-import ScriptsList from "../../components/ScriptsList";
-import ScriptsButtons from "../../components/ScriptsButtons";
+import ScriptList from "../../components/ScriptList";
+import ScriptsButtons from "../../components/ScriptButtons";
+import TourContainer from "../ToursContainer/TourContainer";
 
 export interface MainComponent {
     connected: boolean;
@@ -78,8 +79,7 @@ const MainComponent = () => {
                 </div>
 
                 <div>
-                    <ScriptsButtons />
-                    <ScriptsList />
+                    <TourContainer/>
                 </div>
             </div>
         </div>
