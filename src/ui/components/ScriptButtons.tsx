@@ -3,18 +3,26 @@ import React, { DOMElement, useEffect, useState } from "react";
 import IDB, { ScriptValue } from "../util/indexedDB";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../reducers";
-import {delToDb, loadToDb, saveToDb} from "../actions/selectedTourAction";
+import { delToDb, loadToDb, saveToDb } from "../actions/selectedTourAction";
 import { Button, FormControl, InputGroup, Modal } from "react-bootstrap";
 import { useInputValue } from "../hooks/useInputValue";
+import { setLoadBocklyDisabled, setLoadBocklyEnabled} from "../actions/mainAction";
+import { FC, memo } from "react";
+import parseWorkspaceXml from "./blockly/BlocklyHelper";
+import ConfigFiles from "../../initContent/content";
+
 
 export interface ScriptButtons {
     tourDB: ScriptValue;
     tourXML: string;
 }
+export interface LoadStatusProps {
+    load: any;
+}
 /*export interface DateFormat {
     dayNumber: number;
 }*/
-const ScriptsButtons = () => {
+const ScriptsButtons: FC<LoadStatusProps> = ({ load }) => {
     const [show, setShow] = useState(false);
     const name = useInputValue("");
     const desc = useInputValue("");
@@ -35,12 +43,16 @@ const ScriptsButtons = () => {
                 code: tourXML
             })
         ); //Отправка экшена
-        //Как перерисовать BlocklyComponent???
+        //Как перерисовать ScriptList???
         handleClose();
     };
     const loadCode = () => {
-        //Как перерисовать ScriptList???
+        //Как перерисовать BlocklyComponent???
         dispatch(loadToDb());
+        window.setTimeout(() => {
+            load();
+        }, 10);
+
     };
     const deleteCode = () => {
         //Как перерисовать ScriptList???
@@ -53,7 +65,6 @@ const ScriptsButtons = () => {
                 <button type="button" className="btn btn-secondary" onClick={loadCode}>
                     Загрузить
                 </button>
-
                 <button type="button" className="btn btn-secondary" onClick={handleShow}>
                     Сохранить
                 </button>

@@ -9,9 +9,11 @@ import BlocklyComponent from "../../components/BlocklyComponent";
 import ScriptList from "../../components/ScriptList";
 import ScriptsButtons from "../../components/ScriptButtons";
 import TourContainer from "../ToursContainer/TourContainer";
+import {setLoadBocklyDisabled, setLoadBocklyEnabled} from "../../actions/mainAction";
 
 export interface MainComponent {
     connected: boolean;
+    blocklyReloadEnabled: boolean;
 }
 export interface MainComponentSelector {
     isInspectEnabled: boolean;
@@ -20,7 +22,7 @@ export interface MainComponentSelector {
 const MainComponent = () => {
     const dispatch = useDispatch();
     //маппинг значений из store
-    const { connected } = useSelector<StoreType, MainComponent>(({ MainState }) => MainState);
+    const { connected, blocklyReloadEnabled } = useSelector<StoreType, MainComponent>(({ MainState }) => MainState);
     const { isInspectEnabled, selector } = useSelector<StoreType, MainComponentSelector>(
         ({ InspectState }) => InspectState
     );
@@ -45,13 +47,21 @@ const MainComponent = () => {
         }
         //console.log("inspectEnabled > ", isInspectEnabled)
     };
-
+    const onLoadTourClickHandler = () => {
+       dispatch(setLoadBocklyDisabled());
+        window.setTimeout(() => {
+            dispatch(setLoadBocklyEnabled());
+        }, 10);
+    };
     return (
         <div className="panel panel-default">
             <div className="main-container">
                 <div className="relative">
                     <ConnectionStatus connection={connected} />
-                    <BlocklyComponent selector={selector} inspect={onInspectClickHandler} code={codeBlock} />
+                    {(blocklyReloadEnabled && (
+                        <BlocklyComponent selector={selector} inspect={onInspectClickHandler} code={codeBlock} />
+                    )) ||
+                        null}
                     {(isInspectEnabled && (
                         <div className="back-drop">
                             <div
@@ -79,7 +89,7 @@ const MainComponent = () => {
                 </div>
 
                 <div>
-                    <TourContainer/>
+                    <TourContainer load={onLoadTourClickHandler} />
                 </div>
             </div>
         </div>

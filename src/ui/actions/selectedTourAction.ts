@@ -4,7 +4,7 @@ import { Dispatch } from "redux";
 import { StoreType } from "../reducers";
 
 export const setTourDB = createStandardAction("SET_TOUR")<ScriptValue>();
-export const setTourBlockly = createStandardAction("SET_TOUR_XML")<string>();
+export const setTourXML = createStandardAction("SET_TOUR_XML")<string>();
 export const setKey = createStandardAction("SET_KEY")<string>();
 export const saveToDb = (tourDB: ScriptValue) => async (dispatch: Dispatch, getState: () => StoreType) => {
     //const store = getState();
@@ -18,7 +18,7 @@ export const loadToDb = () => async (dispatch: Dispatch, getState: () => StoreTy
     const tour: ScriptValue | undefined = await (await IDB()).get("script", store.SelectedTourState.selectedIndex);
     if (tour) {
         dispatch(setTourDB(tour));
-        dispatch(setTourBlockly(tour.code));
+        dispatch(setTourXML(tour.code));
     }
 };
 export const delToDb = () => async (dispatch: Dispatch, getState: () => StoreType) => {
