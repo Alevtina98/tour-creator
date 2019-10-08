@@ -11,6 +11,10 @@ export const saveToDb = (tourDB: ScriptValue) => async (dispatch: Dispatch, getS
     dispatch(setTourDB(tourDB));
     (await IDB()).put("script", tourDB, tourDB.name + tourDB.date);
 };
+export const changeToDb = () => async (dispatch: Dispatch, getState: () => StoreType) => {
+    loadToDb();
+
+};
 export const loadToDb = () => async (dispatch: Dispatch, getState: () => StoreType) => {
     //const store = getState();
 

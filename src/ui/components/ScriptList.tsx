@@ -1,8 +1,8 @@
-import React, {Dispatch, useEffect, useState} from "react";
+import React, { Dispatch, useEffect, useState } from "react";
 import IDB, { ScriptValue } from "../util/indexedDB";
 import Script from "./Script";
-import {useDispatch} from "react-redux";
-import {setKey} from "../actions/selectedTourAction";
+import { useDispatch } from "react-redux";
+import { setKey } from "../actions/selectedTourAction";
 
 const ScriptList = () => {
     const dispatch = useDispatch();
@@ -15,7 +15,8 @@ const ScriptList = () => {
 
     const SelectedTour = (key: string) => {
         dispatch(setKey(key));
-       // setColor("#808080 !important")
+        // setColor("#808080 !important")
+        // eslint-disable-next-line no-console
         console.log("key >> ", key);
     };
     useEffect(() => {
@@ -24,7 +25,12 @@ const ScriptList = () => {
     return (
         <div className="list-group">
             {list.map(el => (
-                <Script onClick={() => {SelectedTour(el.name+el.date)}} tour={el}/>
+                <Script
+                    onClick={() => {
+                        SelectedTour(el.name + el.date);
+                    }}
+                    tour={el}
+                />
             ))}
         </div>
     );

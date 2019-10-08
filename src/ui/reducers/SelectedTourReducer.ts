@@ -2,7 +2,6 @@ import { ScriptValue } from "../util/indexedDB";
 import { createReducer } from "typesafe-actions";
 import { combineReducers } from "redux";
 import { setTourDB, SelectedTourAction, setTourXML, setKey} from "../actions/selectedTourAction";
-import { format } from 'date-fns'
 
 export interface SelectedTourReducerState {
     tourDB: ScriptValue;
@@ -10,7 +9,7 @@ export interface SelectedTourReducerState {
     selectedIndex: string;
 }
 const initScriptValue = {
-    name: "newTour",
+    name: "",
     date: "",
     desc: "",
     code: ""
