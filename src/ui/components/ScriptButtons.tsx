@@ -38,7 +38,7 @@ const ScriptsButtons: FC<LoadStatusProps> = ({ load }) => {
         dispatch(
             saveToDb({
                 name: name.value,
-                date: format(new Date(), "yyyy-MM-dd"),
+                date: format(new Date(), "yyyy-MM-dd HH:mm"),
                 desc: desc.value,
                 code: tourXML
             })

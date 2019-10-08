@@ -81,16 +81,22 @@ html, body, #container {
   height: 100%;
 
 }
+
 .tour{
-  &:focus{
-    background-color: #7ee47c;
-    color: #7ee47c;
-    outline: 1px solid #dd471e;
+  &:hover, &:focus{
+    background-color: #e0e0e0;
+   // color: #b0b4b0;
+   // color: #b0b4b0;
+    //outline: 1px solid #dd471e;
+  }
+  &:active{
+    background-color: #f8fcff;
   }
   display: grid;
-  grid-template-columns: 1.5fr 0.5fr;
-  background-color: #f6f6f6;
+  grid-template-columns: 1fr 1fr;
+  background-color: #f1f1f1;
   outline: 1px solid #ddd;
+  padding: 10px 10px 15px 10px;
 }
 
 .tour-time{
