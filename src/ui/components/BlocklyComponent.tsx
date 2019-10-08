@@ -40,7 +40,7 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
         blockId: "",
         selectedTour: {
             name: "",
-            date: Date(),
+            date: "",
             desc: "newTour",
             code: ""
         }

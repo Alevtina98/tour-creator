@@ -7,9 +7,9 @@ export interface ScriptProps {
 }
 
 const Script: FC<ScriptProps> = ({ onClick, tour }) => {
-    return <div className="list-group-item list-group-item-action flex-column align-items-start" onClick={onClick}>
-        <small className="mb-1">{tour.name}</small>
-        <small className="text-muted">{tour.date}</small>
+    return <div className="tour" onClick={onClick}>
+        <small className="tour-name">{tour.name}</small>
+        <small className="tour-time">{tour.date}</small>
     </div>
 };
 

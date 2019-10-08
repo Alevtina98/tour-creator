@@ -9,7 +9,7 @@ import BlocklyComponent from "../../components/BlocklyComponent";
 import ScriptList from "../../components/ScriptList";
 import ScriptsButtons from "../../components/ScriptButtons";
 import TourContainer from "../ToursContainer/TourContainer";
-import {setLoadBocklyDisabled, setLoadBocklyEnabled} from "../../actions/mainAction";
+import { setLoadBocklyDisabled, setLoadBocklyEnabled } from "../../actions/mainAction";
 
 export interface MainComponent {
     connected: boolean;
@@ -48,10 +48,10 @@ const MainComponent = () => {
         //console.log("inspectEnabled > ", isInspectEnabled)
     };
     const onLoadTourClickHandler = () => {
-       dispatch(setLoadBocklyDisabled());
+        dispatch(setLoadBocklyDisabled());
         window.setTimeout(() => {
             dispatch(setLoadBocklyEnabled());
-        }, 10);
+        }, 5);
     };
     return (
         <div className="panel panel-default">

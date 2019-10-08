@@ -6,11 +6,11 @@ import { StoreType } from "../reducers";
 import { delToDb, loadToDb, saveToDb } from "../actions/selectedTourAction";
 import { Button, FormControl, InputGroup, Modal } from "react-bootstrap";
 import { useInputValue } from "../hooks/useInputValue";
-import { setLoadBocklyDisabled, setLoadBocklyEnabled} from "../actions/mainAction";
+import { setLoadBocklyDisabled, setLoadBocklyEnabled } from "../actions/mainAction";
 import { FC, memo } from "react";
 import parseWorkspaceXml from "./blockly/BlocklyHelper";
 import ConfigFiles from "../../initContent/content";
-
+import { format } from "date-fns";
 
 export interface ScriptButtons {
     tourDB: ScriptValue;
@@ -38,7 +38,7 @@ const ScriptsButtons: FC<LoadStatusProps> = ({ load }) => {
         dispatch(
             saveToDb({
                 name: name.value,
-                date: Date().toLocaleLowerCase(),
+                date: format(new Date(), "yyyy-MM-dd"),
                 desc: desc.value,
                 code: tourXML
             })
@@ -51,8 +51,7 @@ const ScriptsButtons: FC<LoadStatusProps> = ({ load }) => {
         dispatch(loadToDb());
         window.setTimeout(() => {
             load();
-        }, 10);
-
+        }, 5);
     };
     const deleteCode = () => {
         //Как перерисовать ScriptList???

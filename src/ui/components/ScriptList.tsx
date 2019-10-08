@@ -4,7 +4,6 @@ import Script from "./Script";
 import {useDispatch} from "react-redux";
 import {setKey} from "../actions/selectedTourAction";
 
-
 const ScriptList = () => {
     const dispatch = useDispatch();
     const [list, setList] = useState<ScriptValue[]>([]);
@@ -13,6 +12,7 @@ const ScriptList = () => {
         const result = await (await IDB()).getAll("script");
         setList(result);
     };
+
     const SelectedTour = (key: string) => {
         dispatch(setKey(key));
        // setColor("#808080 !important")

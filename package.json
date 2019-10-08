@@ -84,6 +84,7 @@
     "@krista/blockly-packages": "./krista-blockly-packages-0.1.0.tgz",
     "classnames": "^2.2.6",
     "closure-library": "^1.43629075.2",
+    "date-fns": "^2.4.1",
     "dayjs": "^1.8.16",
     "google-blockly": "^1.0.0",
     "idb": "^4.0.4",
