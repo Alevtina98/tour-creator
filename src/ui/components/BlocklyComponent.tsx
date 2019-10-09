@@ -9,10 +9,10 @@ import { setTourXML } from "../actions/selectedTourAction";
 import { ScriptValue } from "../util/indexedDB";
 import {setLoadBocklyDisabled} from "../actions/mainAction";
 
-export interface BlocklyState {
+export interface Blockly {
     toolboxCategories: any[];
     blockId: string;
-    selectedTour: ScriptValue;
+    reload: boolean;
 }
 
 export interface WorkspaceEventType {
@@ -32,7 +32,7 @@ export interface BlocklyExternalProps {
 }
 
 export type BlocklyProps = BlocklyExternalProps & BlocklyComponentConnectedDispatch & BlocklyComponentConnectedProps;
-
+export type BlocklyState = Blockly & BlocklyComponentConnectedProps;
 class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
     blocklyRef: any | null = null;
     state: BlocklyState = {
@@ -43,7 +43,9 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
             date: "",
             desc: "newTour",
             code: ""
-        }
+        },
+        //tourXML: "",
+        reload: false
     };
     componentDidMount(): void {
         //маппинг значений из store
@@ -77,7 +79,6 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
         const newXmlStr = s.serializeToString(Blockly.Xml.workspaceToDom(workspace));
         this.props.dispatch(setTourXML(newXmlStr)); //Отправка экшена
     };
-
     componentDidUpdate({ selector }: BlocklyProps): void {
         if (this.props.selector !== selector && this.state.blockId) {
             const workspaceSvg = this.blocklyRef.workspace.state.workspace;
@@ -132,7 +133,7 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
             };
             this.isCreated = true;
             workspaceSVG.addChangeListener(onFirstComment);
-            console.log(" initialXml >> ", this.props.tourXML);
+            //console.log(" initialXml >> ", this.props.tourXML);
         }
         return (
             <ReactBlocklyComponent.BlocklyEditor
@@ -147,7 +148,7 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
                         snap: true
                     }
                 }}
-                initialXml={this.props.tourXML}
+                initialXml={this.props.selectedTour.code}
                 wrapperDivClassName="fill-height"
                 workspaceDidChange={this.workspaceDidChange}
             />
@@ -159,7 +160,8 @@ export interface BlocklyComponentConnectedDispatch {
     dispatch: Dispatch;
 }
 export interface BlocklyComponentConnectedProps {
-    tourXML: string;
+    //tourXML: string;
+    selectedTour: ScriptValue;
 }
 export default connect<
     BlocklyComponentConnectedProps,
@@ -168,7 +170,8 @@ export default connect<
     StoreType
 >(
     ({ SelectedTourState }) => ({
-        tourXML: SelectedTourState.tourXML
+       // tourXML: SelectedTourState.tourXML,
+        selectedTour: SelectedTourState.tourDB
     }),
     dispatch => ({
         dispatch

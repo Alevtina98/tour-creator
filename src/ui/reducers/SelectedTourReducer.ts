@@ -6,7 +6,7 @@ import { setTourDB, SelectedTourAction, setTourXML, setKey} from "../actions/sel
 export interface SelectedTourReducerState {
     tourDB: ScriptValue;
     tourXML: string;
-    selectedIndex: string;
+    //selectedIndex: string;
 }
 const initScriptValue = {
     name: "",
@@ -19,11 +19,11 @@ const TourDBReducer = createReducer<ScriptValue, SelectedTourAction>(initScriptV
     (state, action) => action.payload
 );
 const TourBlocklyReducer = createReducer<string>("").handleAction(setTourXML, (state, action) => action.payload);
-const SelectedIndexReducer = createReducer<string>("").handleAction(setKey, (state, action) => action.payload);
+//const SelectedIndexReducer = createReducer<string>("").handleAction(setKey, (state, action) => action.payload);
 const SelectedTourReducer = combineReducers<SelectedTourReducerState>({
     tourDB: TourDBReducer,
     tourXML: TourBlocklyReducer,
-    selectedIndex: SelectedIndexReducer
+    //selectedIndex: SelectedIndexReducer
 });
 
 export default SelectedTourReducer;

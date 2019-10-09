@@ -11,23 +11,18 @@ export const saveToDb = (tourDB: ScriptValue) => async (dispatch: Dispatch, getS
     dispatch(setTourDB(tourDB));
     (await IDB()).put("script", tourDB, tourDB.name + tourDB.date);
 };
-export const changeToDb = () => async (dispatch: Dispatch, getState: () => StoreType) => {
-    loadToDb();
-
-};
-export const loadToDb = () => async (dispatch: Dispatch, getState: () => StoreType) => {
+export const loadToDb = (key: string) => async (dispatch: Dispatch, getState: () => StoreType) => {
     //const store = getState();
-
     const store = getState();
-    const tour: ScriptValue | undefined = await (await IDB()).get("script", store.SelectedTourState.selectedIndex);
+    const tour: ScriptValue | undefined = await (await IDB()).get("script", key);
     if (tour) {
         dispatch(setTourDB(tour));
-        dispatch(setTourXML(tour.code));
+        //dispatch(setTourXML(tour.code));
     }
 };
-export const delToDb = () => async (dispatch: Dispatch, getState: () => StoreType) => {
+export const delToDb = (key: string) => async (dispatch: Dispatch, getState: () => StoreType) => {
     //console.log("DelKey >> ",getState().SelectedTourState.selectedIndex);
-    const store = getState();
-    (await IDB()).delete("script", store.SelectedTourState.selectedIndex);
+   // const store = getState();
+    (await IDB()).delete("script", key);
 };
 export type SelectedTourAction = ActionType<typeof setTourDB>;

@@ -2,14 +2,11 @@ import React, { memo, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AgentHandler from "../../AgentHandler";
 import agentActions from "../../actions/agentActions";
-import ConnectionStatus from "../../components/ConnectionStatus/ConnectionStatus";
 import { setInspectDisabled, setInspectEnabled } from "../../actions/inspectAction";
 import { StoreType } from "../../reducers";
 import BlocklyComponent from "../../components/BlocklyComponent";
 import ScriptList from "../../components/ScriptList";
 import ScriptsButtons from "../../components/ScriptButtons";
-import TourContainer from "../ToursContainer/TourContainer";
-import { setLoadBocklyDisabled, setLoadBocklyEnabled } from "../../actions/mainAction";
 
 export interface MainComponent {
     connected: boolean;
@@ -47,17 +44,12 @@ const MainComponent = () => {
         }
         //console.log("inspectEnabled > ", isInspectEnabled)
     };
-    const onLoadTourClickHandler = () => {
-        dispatch(setLoadBocklyDisabled());
-        window.setTimeout(() => {
-            dispatch(setLoadBocklyEnabled());
-        }, 5);
-    };
     return (
         <div className="panel panel-default">
             <div className="main-container">
                 <div className="relative">
-                    <ConnectionStatus connection={connected} />
+                    {/*<ConnectionStatus connection={connected} />*/}
+                    <ScriptsButtons />
                     {(blocklyReloadEnabled && (
                         <BlocklyComponent selector={selector} inspect={onInspectClickHandler} code={codeBlock} />
                     )) ||
@@ -89,7 +81,8 @@ const MainComponent = () => {
                 </div>
 
                 <div>
-                    <TourContainer load={onLoadTourClickHandler} />
+                    {/*<TourContainer />*/}
+                    <ScriptList />
                 </div>
             </div>
         </div>
