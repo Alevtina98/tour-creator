@@ -5,7 +5,6 @@ import { useDispatch } from "react-redux";
 import { useInputValue } from "../hooks/useInputValue";
 import { format } from "date-fns";
 import { Button, FormControl, InputGroup, Modal } from "react-bootstrap";
-import { setLoadBocklyDisabled, setLoadBocklyEnabled } from "../actions/mainAction";
 
 export interface ScriptProps {
     tour: ScriptValue;
@@ -57,11 +56,9 @@ const Script: FC<ScriptProps> = ({ tour }) => {
     };
     //загрузка
     const loadTour = () => {
-        dispatch(setLoadBocklyDisabled());
-        dispatch(setTourDB(tour));
-        window.setTimeout(() => {
-            dispatch(setLoadBocklyEnabled());
-        }, 5);
+
+        dispatch(loadToDb(key));
+
     };
     if (del) return null;
     else

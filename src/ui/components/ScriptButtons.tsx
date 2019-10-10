@@ -8,6 +8,7 @@ import { Button, FormControl, InputGroup, Modal } from "react-bootstrap";
 import { useInputValue } from "../hooks/useInputValue";
 import { FC, memo } from "react";
 import { format } from "date-fns";
+import Script from "./Script";
 
 export interface ScriptButtons {
     tourDB: ScriptValue;
@@ -44,6 +45,7 @@ const SaveTour = () => {
         ); //Отправка экшена
         //Как перерисовать ScriptList???
         handleClose();
+
     };
 
     return (
@@ -77,6 +79,7 @@ const SaveTour = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
+
         </div>
     );
 };

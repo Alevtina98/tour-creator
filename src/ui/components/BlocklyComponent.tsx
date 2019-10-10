@@ -7,7 +7,6 @@ import { StoreType } from "../reducers";
 import { Dispatch } from "redux";
 import { setTourXML } from "../actions/selectedTourAction";
 import { ScriptValue } from "../util/indexedDB";
-import {setLoadBocklyDisabled} from "../actions/mainAction";
 
 export interface Blockly {
     toolboxCategories: any[];
@@ -64,10 +63,9 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
                     }
                 ])
             });
-           // this.props.dispatch(setLoadBocklyDisabled());
+            // this.props.dispatch(setLoadBocklyDisabled());
         }, 1);
         // this.props.dispatch(setLoadBocklyDisabled());
-
     }
     workspaceDidChange = (workspace: any) => {
         const code: string = Blockly.JavaScript.workspaceToCode(workspace);
@@ -170,7 +168,7 @@ export default connect<
     StoreType
 >(
     ({ SelectedTourState }) => ({
-       // tourXML: SelectedTourState.tourXML,
+        // tourXML: SelectedTourState.tourXML,
         selectedTour: SelectedTourState.tourDB
     }),
     dispatch => ({
