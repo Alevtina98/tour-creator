@@ -96,6 +96,7 @@
     "react-dom": "^16.8.6",
     "react-overlay": "^0.1.7",
     "react-redux": "^7.1.0",
+    "react-search-input": "^0.11.3",
     "redux": "^4.0.4",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",

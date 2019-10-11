@@ -3,6 +3,7 @@ declare let Blockly: any;
 declare module "react-overlay";
 declare module "node-blockly";
 declare module "google-blockly";
+declare module "react-search-input";
 declare module "react-immutable-proptypes" {
     interface ImmutablePropTypes {
         listOf: any;
