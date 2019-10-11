@@ -5,11 +5,8 @@ import agentActions from "../../actions/agentActions";
 import { setInspectDisabled, setInspectEnabled } from "../../actions/inspectAction";
 import { StoreType } from "../../reducers";
 import BlocklyComponent from "../../components/BlocklyComponent";
-import ScriptList from "../../components/ScriptList";
 import SaveTour from "../../components/ScriptButtons";
-import SelectedTourState from "../../reducers/SelectedTourReducer";
-import {Button, ButtonGroup} from "react-bootstrap";
-import TourBurgerMenu from "../../components/Burger-menu";
+import HamburgerButton from "../../components/HamburgerButton";
 
 export interface MainComponent {
     // connected: boolean;
@@ -50,46 +47,46 @@ const MainComponent = () => {
         //console.log("inspectEnabled > ", isInspectEnabled)
     };
     return (
-        <div className="panel panel-default">
-            <div className="main-container">
-                <div className="relative">
-                    {/*<ConnectionStatus connection={connected} />*/}
-                    <TourBurgerMenu />
-                    <SaveTour />
-                    {(blocklyReloadEnabled && (
-                        <BlocklyComponent selector={selector} inspect={onInspectClickHandler} code={codeBlock} />
-                    )) ||
-                        null}
-                    {(isInspectEnabled && (
-                        <div className="back-drop">
-                            <div
-                                className="alert alert-light"
-                                role="alert"
-                                style={{
-                                    textAlign: "center",
-                                    background: "rgb(255,255,255)",
-                                    width: "500px",
-                                    margin: "auto"
-                                }}
-                            >
-                                Выберите элемент на основной странице или нажмите
-                                <button onClick={onInspectClickHandler} type="button" className="btn btn-light">
-                                    Отмена
-                                </button>
+        <div>
+            <div className="">
+                <HamburgerButton />
+                {/*<div className="panel panel-default">*/}
+                <div className="main-container">
+                    <div className="relative">
+                        {/*<ConnectionStatus connection={connected} />*/}
+
+                       {/* <SaveTour />*/}
+                        {(blocklyReloadEnabled && (
+                            <BlocklyComponent selector={selector} inspect={onInspectClickHandler} code={codeBlock} />
+                        )) ||
+                            null}
+                        {(isInspectEnabled && (
+                            <div className="back-drop">
+                                <div
+                                    className="alert alert-light"
+                                    role="alert"
+                                    style={{
+                                        textAlign: "center",
+                                        background: "rgb(255,255,255)",
+                                        width: "500px",
+                                        margin: "auto"
+                                    }}
+                                >
+                                    Выберите элемент на основной странице или нажмите
+                                    <button onClick={onInspectClickHandler} type="button" className="btn btn-light">
+                                        Отмена
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    )) ||
-                        null}
-                </div>
-                <div>
+                        )) ||
+                            null}
+                    </div>
+                    <div>
+                        <textarea readOnly className="code-block" ref={codeBlock as any} />
+                        {/*<CodeMirror className="code-block" ref={codeBlock as any}/>*/}
+                    </div>
 
-                    <textarea readOnly className="code-block" ref={codeBlock as any} />
-                    {/*<CodeMirror className="code-block" ref={codeBlock as any}/>*/}
-                </div>
-
-                <div>
-                    {/*<TourContainer />*/}
-
+                    <div>{/*<TourContainer />*/}</div>
                 </div>
             </div>
         </div>

@@ -36,7 +36,7 @@ const ScriptList = () => {
     };
     return (
         <div className="tour-list">
-            <SearchInput className="tour-search" onChange={searchUpdated} />
+            <SearchInput placeholder="Поиск" className="tour-search" onChange={searchUpdated} />
 
             <div className="list-group">
                 {filterList.map(el => (
