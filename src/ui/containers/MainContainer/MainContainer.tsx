@@ -6,11 +6,13 @@ import { setInspectDisabled, setInspectEnabled } from "../../actions/inspectActi
 import { StoreType } from "../../reducers";
 import BlocklyComponent from "../../components/BlocklyComponent";
 import ScriptList from "../../components/ScriptList";
-import ScriptsButtons from "../../components/ScriptButtons";
+import SaveTour from "../../components/ScriptButtons";
 import SelectedTourState from "../../reducers/SelectedTourReducer";
+import {Button, ButtonGroup} from "react-bootstrap";
+import TourBurgerMenu from "../../components/Burger-menu";
 
 export interface MainComponent {
-   // connected: boolean;
+    // connected: boolean;
     blocklyReloadEnabled: boolean;
 }
 export interface MainComponentSelector {
@@ -20,7 +22,9 @@ export interface MainComponentSelector {
 const MainComponent = () => {
     const dispatch = useDispatch();
     //маппинг значений из store
-    const { blocklyReloadEnabled } = useSelector<StoreType, MainComponent>(({ SelectedTourState }) => SelectedTourState);
+    const { blocklyReloadEnabled } = useSelector<StoreType, MainComponent>(
+        ({ SelectedTourState }) => SelectedTourState
+    );
     const { isInspectEnabled, selector } = useSelector<StoreType, MainComponentSelector>(
         ({ InspectState }) => InspectState
     );
@@ -50,7 +54,8 @@ const MainComponent = () => {
             <div className="main-container">
                 <div className="relative">
                     {/*<ConnectionStatus connection={connected} />*/}
-                    <ScriptsButtons />
+                    <TourBurgerMenu />
+                    <SaveTour />
                     {(blocklyReloadEnabled && (
                         <BlocklyComponent selector={selector} inspect={onInspectClickHandler} code={codeBlock} />
                     )) ||
@@ -77,13 +82,14 @@ const MainComponent = () => {
                         null}
                 </div>
                 <div>
+
                     <textarea readOnly className="code-block" ref={codeBlock as any} />
                     {/*<CodeMirror className="code-block" ref={codeBlock as any}/>*/}
                 </div>
 
                 <div>
                     {/*<TourContainer />*/}
-                    <ScriptList />
+
                 </div>
             </div>
         </div>

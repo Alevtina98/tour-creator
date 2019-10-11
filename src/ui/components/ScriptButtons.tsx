@@ -4,7 +4,7 @@ import IDB, { ScriptValue } from "../util/indexedDB";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../reducers";
 import { delToDb, loadToDb, saveToDb } from "../actions/selectedTourAction";
-import { Button, FormControl, InputGroup, Modal } from "react-bootstrap";
+import { Button, ButtonGroup, FormControl, InputGroup, Modal } from "react-bootstrap";
 import { useInputValue } from "../hooks/useInputValue";
 import { FC, memo } from "react";
 import { format } from "date-fns";
@@ -45,24 +45,28 @@ const SaveTour = () => {
         ); //Отправка экшена
         //Как перерисовать ScriptList???
         handleClose();
-
     };
 
     return (
         <div>
-            <div className="btn-group" role="group" aria-label="Basic example">
-                <button type="button" className="btn btn-secondary" onClick={handleShow}>
-                    Сохранить
-                </button>
-            </div>
+            {/* //<div className="btn-group" role="group" aria-label="Basic example">*/}
+            <Button variant="secondary" onClick={handleShow}>
+                Сохранить
+            </Button>
+            {/*  </div>*/}
             <Modal show={show} onHide={handleShow}>
-                <Modal.Header ></Modal.Header>
+                <Modal.Header></Modal.Header>
                 <InputGroup className="mb-3">
                     <InputGroup.Prepend>
                         <InputGroup.Text>Название</InputGroup.Text>
                     </InputGroup.Prepend>
                     {/* eslint-disable-next-line max-len */}
-                    <FormControl placeholder="" aria-label="TournewName" aria-newDescribedby="basic-addon1" {...newName} />
+                    <FormControl
+                        placeholder=""
+                        aria-label="TournewName"
+                        aria-newDescribedby="basic-addon1"
+                        {...newName}
+                    />
                 </InputGroup>
                 <InputGroup>
                     <InputGroup.Prepend>
@@ -79,7 +83,6 @@ const SaveTour = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
-
         </div>
     );
 };

@@ -82,6 +82,7 @@
   },
   "dependencies": {
     "@krista/blockly-packages": "./krista-blockly-packages-0.1.0.tgz",
+    "@types/react-burger-menu": "^2.2.5",
     "classnames": "^2.2.6",
     "closure-library": "^1.43629075.2",
     "date-fns": "^2.4.1",
@@ -93,6 +94,7 @@
     "react": "^16.8.6",
     "react-blockly-component": "^3.3.0",
     "react-bootstrap": "^1.0.0-beta.12",
+    "react-burger-menu": "^2.6.11",
     "react-dom": "^16.8.6",
     "react-overlay": "^0.1.7",
     "react-redux": "^7.1.0",

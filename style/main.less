@@ -61,7 +61,7 @@ html, body, #container {
 
 .main-container {
   display: grid;
-  grid-template-columns: 1.05fr 0.95fr 389px;
+  grid-template-columns: 50% 50%;
 }
 .relative{
   position: relative;
@@ -147,4 +147,13 @@ html, body, #container {
 
 .tour-search > input:focus {
   outline: none;
+}
+.panel-buttons{
+  float: left;
+  padding: 20px 1em 0 0;
+  margin: 2px 0 0 2px;
+}
+.button-progects{
+  @base-url: "https://www.google.com";
+  background-image: url("@{base-url}/url?sa=i&source=images&cd=&ved=2ahUKEwiMiYPIopTlAhUMy6YKHXe4BsEQjRx6BAgBEAQ&url=http%3A%2F%2Fgreenstory.ru%2F%25D0%25BE%25D1%2582%25D0%25B4%25D0%25B5%25D0%25BB%25D0%25BA%25D0%25B0%2F&psig=AOvVaw2UxuI-T7RGVxm6rG-F8yLC&ust=1570885469447096");
 }
