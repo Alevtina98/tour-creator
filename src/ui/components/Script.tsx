@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 import { ScriptValue } from "../util/indexedDB";
-import { delToDb, loadToDb, saveToDb, setTourDB } from "../actions/selectedTourAction";
+import { delToDb, loadToDb, saveToDb, settourDB } from "../actions/selectedTourAction";
 import { useDispatch } from "react-redux";
 import { useInputValue } from "../hooks/useInputValue";
 import { format } from "date-fns";
@@ -11,7 +11,6 @@ export interface ScriptProps {
 }
 
 const Script: FC<ScriptProps> = ({ tour }) => {
-    const key: string = tour.name + tour.date;
     const dispatch = useDispatch();
     const [del, setDel] = useState(false);
     //для работы с модальным окном
@@ -27,7 +26,7 @@ const Script: FC<ScriptProps> = ({ tour }) => {
         tour.date = format(new Date(), "yyyy-MM-dd HH:mm");
         tour.desc = newDesc.value; //Как позволить пользователю редактировать существующее описание??
         //старая версия удаляется
-        dispatch(delToDb(key));
+        dispatch(delToDb(tour.key));
         setDel(true);
         //создается новая версия
         dispatch(
@@ -35,7 +34,8 @@ const Script: FC<ScriptProps> = ({ tour }) => {
                 name: tour.name,
                 date: tour.date,
                 desc: tour.desc,
-                code: tour.code
+                code: tour.code,
+                key: tour.key
             })
         );
         setDel(false);
@@ -44,20 +44,20 @@ const Script: FC<ScriptProps> = ({ tour }) => {
     const changeCode = (e: any) => {
         e.stopPropagation();
         e.preventDefault();
-        //dispatch(setTourDB(tour));
+        //dispatch(settourDB(tour));
         handleShow();
     };
     //удаление
     const deleteCode = (e: any) => {
         e.stopPropagation();
         e.preventDefault();
-        dispatch(delToDb(key));
+        dispatch(delToDb(tour.key));
         setDel(true);
     };
     //загрузка
     const loadTour = () => {
 
-        dispatch(loadToDb(key));
+        dispatch(loadToDb(tour.key));
 
     };
     if (del) return null;

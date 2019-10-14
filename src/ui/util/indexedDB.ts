@@ -12,6 +12,7 @@ export interface ScriptValue {
     date: string;
     desc: string;
     code: string;
+    key: string;
 }
 async function IDB(): Promise<IDBPDatabase<MyDB>> {
     const db = await openDB<MyDB>("tours", 1, {

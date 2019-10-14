@@ -7,6 +7,7 @@ import { StoreType } from "../../reducers";
 import BlocklyComponent from "../../components/BlocklyComponent";
 import SaveTour from "../../components/ScriptButtons";
 import HamburgerButton from "../../components/HamburgerButton";
+import ScriptButtons from "../../components/ScriptButtons";
 
 export interface MainComponent {
     // connected: boolean;
@@ -50,12 +51,13 @@ const MainComponent = () => {
         <div>
             <div className="">
                 <HamburgerButton />
+                <ScriptButtons />
                 {/*<div className="panel panel-default">*/}
                 <div className="main-container">
                     <div className="relative">
                         {/*<ConnectionStatus connection={connected} />*/}
 
-                       {/* <SaveTour />*/}
+
                         {(blocklyReloadEnabled && (
                             <BlocklyComponent selector={selector} inspect={onInspectClickHandler} code={codeBlock} />
                         )) ||

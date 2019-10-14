@@ -2,10 +2,9 @@ import { ScriptValue } from "../util/indexedDB";
 import { createReducer } from "typesafe-actions";
 import { combineReducers } from "redux";
 import {
-    setTourDB,
+    settourDB,
     SelectedTourAction,
     setTourXML,
-    setKey,
     isLoadingDB,
     setLoadBocklyEnabled, setLoadBocklyDisabled
 } from "../actions/selectedTourAction";
@@ -15,16 +14,17 @@ export interface SelectedTourReducerState {
     tourXML: string;
     isLoadingDB: boolean;
     blocklyReloadEnabled: boolean;
-    //selectedIndex: string;
+    //toutDBKey: string;
 }
 const initScriptValue = {
     name: "",
     date: "",
     desc: "",
-    code: ""
+    code: "",
+    key: ""
 };
-const TourDBReducer = createReducer<ScriptValue, SelectedTourAction>(initScriptValue).handleAction(
-    setTourDB,
+const tourDBReducer = createReducer<ScriptValue, SelectedTourAction>(initScriptValue).handleAction(
+    settourDB,
     (state, action) => action.payload
 );
 const TourBlocklyReducer = createReducer<string>("").handleAction(setTourXML, (state, action) => action.payload);
@@ -35,11 +35,11 @@ const blocklyLoadReducer = createReducer<boolean>(true)
     .handleAction(setLoadBocklyDisabled, () => false);
 
 const SelectedTourReducer = combineReducers<SelectedTourReducerState>({
-    tourDB: TourDBReducer,
+    tourDB: tourDBReducer,
     tourXML: TourBlocklyReducer,
     isLoadingDB: isLoadingDBReducer,
     blocklyReloadEnabled: blocklyLoadReducer
-    //selectedIndex: SelectedIndexReducer
+    //toutDBKey: SelectedIndexReducer
 });
 
 export default SelectedTourReducer;

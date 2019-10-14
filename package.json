@@ -83,6 +83,7 @@
   "dependencies": {
     "@krista/blockly-packages": "./krista-blockly-packages-0.1.0.tgz",
     "@types/react-burger-menu": "^2.2.5",
+    "@types/uuid": "^3.4.5",
     "classnames": "^2.2.6",
     "closure-library": "^1.43629075.2",
     "date-fns": "^2.4.1",
@@ -104,7 +105,7 @@
     "redux-thunk": "^2.3.0",
     "typesafe-actions": "^4.4.2",
     "unique-selector": "^0.4.1",
-    "uuid": "~2.0.1"
+    "uuid": "^2.0.3"
   },
   "jest": {
     "preset": "@krista/tsconfigs"

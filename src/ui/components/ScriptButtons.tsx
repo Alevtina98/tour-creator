@@ -3,12 +3,13 @@ import React, { DOMElement, useEffect, useState } from "react";
 import IDB, { ScriptValue } from "../util/indexedDB";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../reducers";
-import { delToDb, loadToDb, saveToDb } from "../actions/selectedTourAction";
+import {createNewTour, delToDb, loadToDb, saveToDb} from "../actions/selectedTourAction";
 import { Button, ButtonGroup, FormControl, InputGroup, Modal } from "react-bootstrap";
 import { useInputValue } from "../hooks/useInputValue";
 import { FC, memo } from "react";
 import { format } from "date-fns";
 import Script from "./Script";
+import uuid from "uuid";
 
 export interface ScriptButtons {
     tourDB: ScriptValue;
@@ -18,7 +19,7 @@ export interface ScriptButtons {
 /*export interface DateFormat {
     dayNumber: number;
 }*/
-const SaveTour = () => {
+const ScriptButtons = () => {
     const [show, setShow] = useState(false);
     const newName = useInputValue("");
     const newDesc = useInputValue("");
@@ -33,23 +34,28 @@ const SaveTour = () => {
     const dispatch = useDispatch();
     //маппинг значений из store
     const { tourDB, tourXML } = useSelector<StoreType, ScriptButtons>(({ SelectedTourState }) => SelectedTourState);
-
     const saveCode = () => {
         dispatch(
             saveToDb({
                 name: newName.value,
                 date: format(new Date(), "yyyy-MM-dd HH:mm"),
                 desc: newDesc.value,
-                code: tourXML
+                code: tourXML,
+                key: uuid.v4()
             })
         ); //Отправка экшена
         //Как перерисовать ScriptList???
         handleClose();
     };
-
+    const newTour = () => {
+       dispatch(createNewTour());
+    };
     return (
-        <div>
+        <div className="relative">
             {/* //<div className="btn-group" role="group" aria-label="Basic example">*/}
+            <Button variant="secondary" onClick={newTour} >
+                Создать
+            </Button>
             <Button variant="secondary" onClick={handleShow}>
                 Сохранить
             </Button>
@@ -87,4 +93,4 @@ const SaveTour = () => {
     );
 };
 
-export default SaveTour;
+export default ScriptButtons;

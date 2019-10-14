@@ -41,7 +41,8 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
             name: "",
             date: "",
             desc: "newTour",
-            code: ""
+            code: "",
+            key: ""
         },
         //tourXML: "",
         reload: false

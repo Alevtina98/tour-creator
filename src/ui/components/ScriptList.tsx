@@ -2,12 +2,8 @@ import React, { FC, useEffect, useState } from "react";
 import IDB, { ScriptValue } from "../util/indexedDB";
 import Script from "./Script";
 import { useDispatch } from "react-redux";
-import ScriptsButtons from "./ScriptButtons";
-import Navbar from "react-bootstrap/es/Navbar";
-import { Button, Form, FormControl, Nav } from "react-bootstrap";
-import SearchInput, { createFilter } from "react-search-input";
+import { FormControl } from "react-bootstrap";
 
-const KEYS_TO_FILTERS = ["name", "date", "desc"];
 const ScriptList = () => {
     const dispatch = useDispatch();
     const [list, setList] = useState<ScriptValue[]>([]);
@@ -17,7 +13,7 @@ const ScriptList = () => {
         const result = await (await IDB()).getAll("script");
         setList(result);
         setFilterList(result);
-        // console.log("map >> ", list);
+        //console.log("map >> ", list);
     };
     /*const SelectedTour = (key: string) => {
         dispatch(setKey(key));
