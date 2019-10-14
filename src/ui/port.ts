@@ -1,6 +1,6 @@
 // Сделано для отключения обрбаотки extension
 let isDisabled = false;
-if (!chrome.runtime) {
+if (!chrome.runtime && !isDisabled) {
     isDisabled = true;
     chrome.runtime = {
         // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
@@ -27,7 +27,7 @@ if (!chrome.devtools) {
 
 let backgroundPageConnection;
 
-if (isDisabled) {
+if (!isDisabled) {
     backgroundPageConnection = chrome.runtime.connect({
         name: "panel"
     });

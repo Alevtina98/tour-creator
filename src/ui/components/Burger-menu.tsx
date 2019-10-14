@@ -20,14 +20,17 @@ const BurgerMenu = () => {
     return (
         <div>
             <Menu
-                  customBurgerIcon={
-                    <img src="http://pribory-spb.ru/templates/skin1/images/icon-menu.png" />
-                }
+                customBurgerIcon={<img src="http://pribory-spb.ru/templates/skin1/images/icon-menu.png" />}
                 customCrossIcon={
-                    <img src="https://v1.iconsearch.ru/uploads/icons/webdesigncreative/128x128/cross-lines.png" />}
+                    <img src="https://v1.iconsearch.ru/uploads/icons/webdesigncreative/128x128/cross-lines.png" />
+                }
                 pageWrapId={"page-wrap"}
                 outerContainerId={"outer-container"}
-
+                styles={{
+                    bmBurgerButton: {
+                        position: "relative"
+                    }
+                }}
             >
                 {/* <a id="home" className="menu-item" href="/">
                 Home

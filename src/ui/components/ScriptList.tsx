@@ -28,15 +28,16 @@ const ScriptList = () => {
     useEffect(() => {
         loadItems();
     }, []);
-    const searchUpdated = (tourName: string) => {
-        if (tourName != "") {
-            setSearchTour(tourName);
-            setFilterList(list.filter(createFilter(searchTour, KEYS_TO_FILTERS)));
-        } else setFilterList(list);
+    const searchUpdated = (event: React.ChangeEvent<any>) => {
+        setFilterList(list.filter(myFilter(event.target.value)));
     };
+    const myFilter = (searchTour: string) => ({ name, desc }: ScriptValue): boolean => {
+        return clearValue(name).includes(clearValue(searchTour)) || clearValue(desc).includes(clearValue(searchTour));
+    };
+
     return (
         <div className="tour-list">
-            <SearchInput placeholder="Поиск" className="tour-search" onChange={searchUpdated} />
+            <FormControl placeholder="Поиск" className="tour-search" onChange={searchUpdated} />
 
             <div className="list-group">
                 {filterList.map(el => (
@@ -46,5 +47,5 @@ const ScriptList = () => {
         </div>
     );
 };
-
+export const clearValue = (str: string): string => str.toLocaleLowerCase().trim();
 export default ScriptList;
