@@ -10,6 +10,8 @@ import { FC, memo } from "react";
 import { format } from "date-fns";
 import Script from "./Script";
 import uuid from "uuid";
+import HamburgerButton from "./HamburgerButton";
+import BurgerMenu from "./BurgerMenu";
 
 export interface ScriptButtons {
     tourDB: ScriptValue;
@@ -51,6 +53,14 @@ const ScriptButtons = () => {
     return (
         <div className="relative">
             {/* //<div className="btn-group" role="group" aria-label="Basic example">*/}
+            <div id="outer-container" className="burgerStyle">
+
+                <BurgerMenu />
+                {/*<main id="page-wrap">
+                Проекты
+                </main>*/}
+
+            </div>
             <Button variant="secondary" onClick={newTour}>
                 Создать
             </Button>

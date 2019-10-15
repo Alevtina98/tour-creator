@@ -8,8 +8,8 @@ import BlocklyComponent from "../../components/BlocklyComponent";
 import SaveTour from "../../components/ScriptButtons";
 import HamburgerButton from "../../components/HamburgerButton";
 import ScriptButtons from "../../components/ScriptButtons";
-import {loadListTour, saveTour} from "../../actions/selectedTourAction";
-import {format} from "date-fns";
+import { loadListTour, saveTour } from "../../actions/selectedTourAction";
+import { format } from "date-fns";
 import uuid from "uuid";
 
 export interface MainComponent {
@@ -37,7 +37,6 @@ const MainComponent = () => {
         new AgentHandler(dispatch); //Инициализация агента общения со страницей
         // this.props.script = demo();
         // console.log("Script -> ",demo());
-
     }, [dispatch]);
 
     const onInspectClickHandler = () => {
@@ -55,13 +54,12 @@ const MainComponent = () => {
     return (
         <div>
             <div className="">
-                <HamburgerButton />
+
                 <ScriptButtons />
                 {/*<div className="panel panel-default">*/}
                 <div className="main-container">
-                    <div className="relative">
+                    <div className="">
                         {/*<ConnectionStatus connection={connected} />*/}
-
 
                         {(blocklyReloadEnabled && (
                             <BlocklyComponent selector={selector} inspect={onInspectClickHandler} code={codeBlock} />
@@ -88,10 +86,13 @@ const MainComponent = () => {
                         )) ||
                             null}
                     </div>
-                    <div>
-                        <textarea readOnly className="code-block" ref={codeBlock as any} />
-                        {/*<CodeMirror className="code-block" ref={codeBlock as any}/>*/}
-                    </div>
+                    {(blocklyReloadEnabled && (
+                        <div>
+                            <textarea readOnly className="code-block" ref={codeBlock as any} />
+                            {/*<CodeMirror className="code-block" ref={codeBlock as any}/>*/}
+                        </div>
+                    )) ||
+                        null}
 
                     <div>{/*<TourContainer />*/}</div>
                 </div>

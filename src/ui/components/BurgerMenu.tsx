@@ -37,10 +37,19 @@ const BurgerMenu = () => {
                 outerContainerId={"outer-container"}
                 styles={{
                     bmBurgerButton: {
-                        position: "relative"
+                        position: "relative",
+
                     },
                     bmItemList: {
                         background: "#fefdfe"
+                    },
+                    bmOverlay: {
+                        top: 0,
+                        bottom: 0,
+                    },
+                    bmMenuWrap: {
+                        top: 0,
+                        bottom: 0,
                     }
                 }}
             >

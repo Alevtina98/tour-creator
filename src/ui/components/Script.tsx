@@ -1,17 +1,23 @@
 import React, { FC, useState } from "react";
 import { ScriptValue } from "../util/indexedDB";
 import { delToDb, loadToDb, saveTour, setTourDB } from "../actions/selectedTourAction";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useInputValue } from "../hooks/useInputValue";
 import { format } from "date-fns";
 import { Button, FormControl, InputGroup, Modal } from "react-bootstrap";
+import { StoreType } from "../reducers";
+import { ScriptListProps } from "./ScriptList";
 
 export interface ScriptProps {
     tour: ScriptValue;
 }
 
+export interface ScriptStorProps {
+    tourDB: ScriptValue;
+}
 const Script: FC<ScriptProps> = ({ tour }) => {
     const dispatch = useDispatch();
+    const { tourDB } = useSelector<StoreType, ScriptStorProps>(({ SelectedTourState }) => SelectedTourState);
     const [del, setDel] = useState(false);
     //для работы с модальным окном
     const newName = useInputValue("");
@@ -56,9 +62,9 @@ const Script: FC<ScriptProps> = ({ tour }) => {
     };
     //загрузка
     const loadTour = () => {
-
-        dispatch(loadToDb(tour.key));
-
+        if (tourDB.key != tour.key) {
+            dispatch(loadToDb(tour.key));
+        }
     };
     if (del) return null;
     else
