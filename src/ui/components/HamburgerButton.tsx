@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import BurgerMenu from "./Burger-menu";
+import BurgerMenu from "./BurgerMenu";
 import * as React from "react";
 import { Button } from "react-bootstrap";
 

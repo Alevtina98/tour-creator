@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 import { ScriptValue } from "../util/indexedDB";
-import { delToDb, loadToDb, saveTour, settourDB } from "../actions/selectedTourAction";
+import { delToDb, loadToDb, saveTour, setTourDB } from "../actions/selectedTourAction";
 import { useDispatch } from "react-redux";
 import { useInputValue } from "../hooks/useInputValue";
 import { format } from "date-fns";
@@ -44,7 +44,7 @@ const Script: FC<ScriptProps> = ({ tour }) => {
     const changeCode = (e: any) => {
         e.stopPropagation();
         e.preventDefault();
-        //dispatch(settourDB(tour));
+        //dispatch(setTourDB(tour));
         handleShow();
     };
     //удаление

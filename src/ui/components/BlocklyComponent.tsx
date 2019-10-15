@@ -34,6 +34,7 @@ export interface BlocklyExternalProps {
 
 export type BlocklyProps = BlocklyExternalProps & BlocklyComponentConnectedDispatch & BlocklyComponentConnectedProps;
 export type BlocklyState = Blockly & BlocklyComponentConnectedProps;
+
 class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
     blocklyRef: any | null = null;
     state: BlocklyState = {
@@ -49,6 +50,7 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
         //tourXML: "",
         reload: false
     };
+
     componentDidMount(): void {
         window.setTimeout(() => {
             this.setState({

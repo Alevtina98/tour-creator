@@ -1,20 +1,20 @@
 import React, { FC, useEffect, useState } from "react";
 import IDB, { ScriptValue } from "../util/indexedDB";
 import Script from "./Script";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FormControl } from "react-bootstrap";
+import { StoreType } from "../reducers";
+import { loadListTour } from "../actions/selectedTourAction";
 
+export interface ScriptListProps {
+    listTour: ScriptValue[];
+}
 const ScriptList = () => {
     const dispatch = useDispatch();
-    const [list, setList] = useState<ScriptValue[]>([]);
+    const { listTour } = useSelector<StoreType, ScriptListProps>(({ SelectedTourState }) => SelectedTourState);
+    //const [list, setList] = useState<ScriptValue[]>([]);
     const [filterList, setFilterList] = useState<ScriptValue[]>([]);
     const [searchTour, setSearchTour] = useState<string>("");
-    const loadItems = async () => {
-        const result = await (await IDB()).getAll("script");
-        setList(result);
-        setFilterList(result);
-        //console.log("map >> ", list);
-    };
     /*const SelectedTour = (key: string) => {
         dispatch(setKey(key));
         // setColor("#808080 !important")
@@ -22,10 +22,10 @@ const ScriptList = () => {
         console.log("key >> ", key);
     };*/
     useEffect(() => {
-        loadItems();
-    }, []);
+        setFilterList(listTour);
+    });
     const searchUpdated = (event: React.ChangeEvent<any>) => {
-        setFilterList(list.filter(myFilter(event.target.value)));
+        setFilterList(listTour.filter(myFilter(event.target.value)));
     };
     const myFilter = (searchTour: string) => ({ name, desc }: ScriptValue): boolean => {
         return clearValue(name).includes(clearValue(searchTour)) || clearValue(desc).includes(clearValue(searchTour));
@@ -35,7 +35,7 @@ const ScriptList = () => {
         <div className="tour-list">
             <FormControl placeholder="Поиск" className="tour-search" onChange={searchUpdated} />
 
-            <div className="list-group">
+            <div className="list-group list-tour-group">
                 {filterList.map(el => (
                     <Script tour={el} />
                 ))}

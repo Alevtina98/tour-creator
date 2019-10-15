@@ -3,16 +3,21 @@ import IDB, { ScriptValue } from "../util/indexedDB";
 import { Dispatch } from "redux";
 import { StoreType } from "../reducers";
 import ConfigFiles from "../../initContent/content";
-import {format} from "date-fns";
+import { format } from "date-fns";
 import uuid from "uuid";
 
 export const setLoadBocklyEnabled = createStandardAction("SET_RELOAD_BLOCKLY_ENABLED")();
 export const setLoadBocklyDisabled = createStandardAction("SET_RELOAD_BLOCKLY_DISABLED")();
 export const isLoadingDB = createStandardAction("IS_LOADING_DB")();
-export const settourDB = createStandardAction("SET_TOUR")<ScriptValue>();
+export const setListTour = createStandardAction("SET_LIST_TOUR")<ScriptValue[]>();
+export const setTourDB = createStandardAction("SET_TOUR")<ScriptValue>();
 export const setTourXML = createStandardAction("SET_TOUR_XML")<string>();
 export const setKey = createStandardAction("SET_KEY")<string>();
 
+export const loadListTour = () => async (dispatch: Dispatch, getState: () => StoreType) => {
+    const result = await (await IDB()).getAll("script");
+    dispatch(setListTour(result));
+};
 // eslint-disable-next-line @typescript-eslint/require-await
 export const createNewTour = () => async (dispatch: Dispatch, getState: () => StoreType) => {
     //const store = getState();
@@ -23,39 +28,44 @@ export const createNewTour = () => async (dispatch: Dispatch, getState: () => St
         name: "NewTour",
         date: "",
         desc: "",
-        code: "",//ConfigFiles.INITIAL_XML,
+        code: "",
         key: uuid.v4()
     };
-    dispatch(settourDB(tour));
+    dispatch(setTourDB(tour));
     return window.setTimeout(() => {
         dispatch(setLoadBocklyEnabled());
     }, 5);
 };
+let periodicallySaveTimer = 0;
 //фоновое сохранение тура
-export const periodicallySave = () => async (dispatch: Dispatch, getState: () => StoreType) => {
+export const periodicallySave = () => (dispatch: Dispatch, getState: () => StoreType) => {
     console.log("periodicallySave");
-    setInterval(() => {
-        dispatch(putTour(getState().SelectedTourState.tourDB));
+    clearInterval(periodicallySaveTimer);
+    periodicallySaveTimer = window.setInterval(() => {
+        putTour(getState().SelectedTourState.tourDB)(dispatch, getState);
     }, 1000);
 };
 //сохранение в IDB
 export const putTour = (tourDB: ScriptValue) => async (dispatch: Dispatch, getState: () => StoreType) => {
     const store = getState();
     console.log("saveTour");
-    tourDB.code = store.SelectedTourState.tourXML;
-    tourDB.date = format(new Date(), "yyyy-MM-dd HH:mm");
-    (await IDB()).put("script", tourDB, tourDB.key);
+    const saveTour: ScriptValue = {
+        ...tourDB,
+        code: store.SelectedTourState.tourXML,
+        date: format(new Date(), "dd-MM-yyyy в HH:mm")
+    };
+    (await IDB()).put("script", saveTour, saveTour.key);
 };
 //сохранение по кнопке - пользователь мог изменить имя и описание тура
-export const saveTour = (tourDB: ScriptValue) => async (dispatch: Dispatch, getState: () => StoreType) => {
-    dispatch(settourDB(tourDB));
-    dispatch(putTour(tourDB));
+export const saveTour = (tourDB: ScriptValue) => (dispatch: Dispatch, getState: () => StoreType) => {
+    dispatch(setTourDB(tourDB));
+    putTour(tourDB)(dispatch, getState);
 };
 //загрузка нового тура с пререзагрузкой блокли
 export const loadToDb = (key: string) => async (dispatch: Dispatch, getState: () => StoreType) => {
     dispatch(setLoadBocklyDisabled());
     const tour: ScriptValue | undefined = await (await IDB()).get("script", key);
-    if (tour) dispatch(settourDB(tour));
+    if (tour) dispatch(setTourDB(tour));
     return dispatch(setLoadBocklyEnabled());
 };
 export const delToDb = (key: string) => async (dispatch: Dispatch, getState: () => StoreType) => {
@@ -63,4 +73,4 @@ export const delToDb = (key: string) => async (dispatch: Dispatch, getState: () 
    // const store = getState();
     (await IDB()).delete("script", key);
 };
-export type SelectedTourAction = ActionType<typeof settourDB>;
+export type SelectedTourAction = ActionType<typeof setTourDB>;

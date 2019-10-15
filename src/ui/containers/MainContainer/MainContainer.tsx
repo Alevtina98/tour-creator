@@ -8,7 +8,7 @@ import BlocklyComponent from "../../components/BlocklyComponent";
 import SaveTour from "../../components/ScriptButtons";
 import HamburgerButton from "../../components/HamburgerButton";
 import ScriptButtons from "../../components/ScriptButtons";
-import {saveTour} from "../../actions/selectedTourAction";
+import {loadListTour, saveTour} from "../../actions/selectedTourAction";
 import {format} from "date-fns";
 import uuid from "uuid";
 
