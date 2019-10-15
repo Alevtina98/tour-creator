@@ -12,7 +12,7 @@ https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Hamburger_icon.svg/120
 
 */
 const BurgerMenu = () => {
-    //const [show, setShow] = useState(false);
+    const [show, setShow] = useState(false);
     /*const showSettings = (e: any) => {
         e.preventDefault();
     };*/

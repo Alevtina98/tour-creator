@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 import { ScriptValue } from "../util/indexedDB";
-import { delToDb, loadToDb, saveToDb, settourDB } from "../actions/selectedTourAction";
+import { delToDb, loadToDb, saveTour, settourDB } from "../actions/selectedTourAction";
 import { useDispatch } from "react-redux";
 import { useInputValue } from "../hooks/useInputValue";
 import { format } from "date-fns";
@@ -30,7 +30,7 @@ const Script: FC<ScriptProps> = ({ tour }) => {
         setDel(true);
         //создается новая версия
         dispatch(
-            saveToDb({
+            saveTour({
                 name: tour.name,
                 date: tour.date,
                 desc: tour.desc,

@@ -8,6 +8,7 @@ import {
     isLoadingDB,
     setLoadBocklyEnabled, setLoadBocklyDisabled
 } from "../actions/selectedTourAction";
+import uuid from "uuid";
 
 export interface SelectedTourReducerState {
     tourDB: ScriptValue;
@@ -17,11 +18,11 @@ export interface SelectedTourReducerState {
     //toutDBKey: string;
 }
 const initScriptValue = {
-    name: "",
+    name: "NewTour",
     date: "",
     desc: "",
     code: "",
-    key: ""
+    key: uuid.v4()
 };
 const tourDBReducer = createReducer<ScriptValue, SelectedTourAction>(initScriptValue).handleAction(
     settourDB,
@@ -30,7 +31,7 @@ const tourDBReducer = createReducer<ScriptValue, SelectedTourAction>(initScriptV
 const TourBlocklyReducer = createReducer<string>("").handleAction(setTourXML, (state, action) => action.payload);
 const isLoadingDBReducer = createReducer<boolean>(false).handleAction(isLoadingDB, () => true);
 //const SelectedIndexReducer = createReducer<string>("").handleAction(setKey, (state, action) => action.payload);
-const blocklyLoadReducer = createReducer<boolean>(true)
+const blocklyLoadReducer = createReducer<boolean>(false)
     .handleAction(setLoadBocklyEnabled, () => true)
     .handleAction(setLoadBocklyDisabled, () => false);
 

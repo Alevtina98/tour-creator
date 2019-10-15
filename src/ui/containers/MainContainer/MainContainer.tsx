@@ -8,6 +8,9 @@ import BlocklyComponent from "../../components/BlocklyComponent";
 import SaveTour from "../../components/ScriptButtons";
 import HamburgerButton from "../../components/HamburgerButton";
 import ScriptButtons from "../../components/ScriptButtons";
+import {saveTour} from "../../actions/selectedTourAction";
+import {format} from "date-fns";
+import uuid from "uuid";
 
 export interface MainComponent {
     // connected: boolean;
@@ -34,6 +37,7 @@ const MainComponent = () => {
         new AgentHandler(dispatch); //Инициализация агента общения со страницей
         // this.props.script = demo();
         // console.log("Script -> ",demo());
+
     }, [dispatch]);
 
     const onInspectClickHandler = () => {
@@ -47,6 +51,7 @@ const MainComponent = () => {
         }
         //console.log("inspectEnabled > ", isInspectEnabled)
     };
+
     return (
         <div>
             <div className="">

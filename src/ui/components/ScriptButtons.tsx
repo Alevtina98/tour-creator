@@ -3,7 +3,7 @@ import React, { DOMElement, useEffect, useState } from "react";
 import IDB, { ScriptValue } from "../util/indexedDB";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../reducers";
-import {createNewTour, delToDb, loadToDb, saveToDb} from "../actions/selectedTourAction";
+import {createNewTour, delToDb, loadToDb, periodicallySave, saveTour} from "../actions/selectedTourAction";
 import { Button, ButtonGroup, FormControl, InputGroup, Modal } from "react-bootstrap";
 import { useInputValue } from "../hooks/useInputValue";
 import { FC, memo } from "react";
@@ -13,7 +13,6 @@ import uuid from "uuid";
 
 export interface ScriptButtons {
     tourDB: ScriptValue;
-    tourXML: string;
 }
 
 /*export interface DateFormat {
@@ -33,27 +32,26 @@ const ScriptButtons = () => {
 
     const dispatch = useDispatch();
     //маппинг значений из store
-    const { tourDB, tourXML } = useSelector<StoreType, ScriptButtons>(({ SelectedTourState }) => SelectedTourState);
+    const { tourDB } = useSelector<StoreType, ScriptButtons>(({ SelectedTourState }) => SelectedTourState);
     const saveCode = () => {
         dispatch(
-            saveToDb({
+            saveTour({
                 name: newName.value,
-                date: format(new Date(), "yyyy-MM-dd HH:mm"),
+                date: tourDB.date,
                 desc: newDesc.value,
-                code: tourXML,
-                key: uuid.v4()
+                code: tourDB.code,
+                key: tourDB.key
             })
-        ); //Отправка экшена
-        //Как перерисовать ScriptList???
+        );
         handleClose();
     };
     const newTour = () => {
-       dispatch(createNewTour());
+        dispatch(createNewTour());
     };
     return (
         <div className="relative">
             {/* //<div className="btn-group" role="group" aria-label="Basic example">*/}
-            <Button variant="secondary" onClick={newTour} >
+            <Button variant="secondary" onClick={newTour}>
                 Создать
             </Button>
             <Button variant="secondary" onClick={handleShow}>

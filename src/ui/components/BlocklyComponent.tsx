@@ -4,9 +4,11 @@ import ConfigFiles from "../../initContent/content.jsx";
 import parseWorkspaceXml from "./blockly/BlocklyHelper";
 import { connect } from "react-redux";
 import { StoreType } from "../reducers";
-import { Dispatch } from "redux";
-import { setTourXML } from "../actions/selectedTourAction";
+import { bindActionCreators, Dispatch } from "redux";
+import { periodicallySave, saveTour, setTourXML } from "../actions/selectedTourAction";
 import { ScriptValue } from "../util/indexedDB";
+import { format } from "date-fns";
+import uuid from "uuid";
 
 export interface Blockly {
     toolboxCategories: any[];
@@ -48,7 +50,6 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
         reload: false
     };
     componentDidMount(): void {
-        //маппинг значений из store
         window.setTimeout(() => {
             this.setState({
                 toolboxCategories: parseWorkspaceXml(ConfigFiles.INITIAL_TOOLBOX_XML).concat([
@@ -64,8 +65,9 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
                     }
                 ])
             });
-            // this.props.dispatch(setLoadBocklyDisabled());
+            this.props.actions.periodicallySave();
         }, 1);
+        // this.props.dispatch(periodicallySave());
         // this.props.dispatch(setLoadBocklyDisabled());
     }
     workspaceDidChange = (workspace: any) => {
@@ -157,9 +159,12 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
 //ConfigFiles.INITIAL_XML
 export interface BlocklyComponentConnectedDispatch {
     dispatch: Dispatch;
+    actions: {
+        setTourXML: typeof setTourXML;
+        periodicallySave: typeof periodicallySave;
+    };
 }
 export interface BlocklyComponentConnectedProps {
-    //tourXML: string;
     selectedTour: ScriptValue;
 }
 export default connect<
@@ -169,10 +174,16 @@ export default connect<
     StoreType
 >(
     ({ SelectedTourState }) => ({
-        // tourXML: SelectedTourState.tourXML,
         selectedTour: SelectedTourState.tourDB
     }),
     dispatch => ({
-        dispatch
+        dispatch,
+        actions: bindActionCreators(
+            {
+                periodicallySave,
+                setTourXML
+            },
+            dispatch
+        )
     })
 )(BlocklyComponent) as any;
