@@ -56,7 +56,7 @@ const MainComponent = () => {
     };
 
     return (
-        <div>
+        <div className="mainSelector">
             <div className="relative">
                 <ScriptButtons />
                 {(blocklyReloadEnabled && <DateLastSave />) || null}

@@ -19,7 +19,7 @@ export interface ScriptButtons {
 
 const DateLastSave = () => {
     const { tourDB } = useSelector<StoreType, ScriptButtons>(({ SelectedTourState }) => SelectedTourState);
-    return <div className="dateSaveOnPanel">Последнее сохранение {tourDB.date}</div>;
+    return <div className="date-save-on-panel">Последнее сохранение {tourDB.date}</div>;
 };
 
 export default DateLastSave;

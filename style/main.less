@@ -1,7 +1,9 @@
 //@import (css) "~bootstrap/dist/css/bootstrap.css";
 @icon-font-path: '~bootstrap/fonts/';
 @import "entity-list";
-
+.mainSelector{
+  display: block;
+}
 .fps-warning {
   color: red;
 }
@@ -62,12 +64,13 @@ html, body, #container {
 .main-container {
   display: grid;
   grid-template-columns: 50% 50%;
+  grid-template-rows: 100% !important;
 }
 .relative{
   position: relative;
   display:flex;
 }
-.dateSaveOnPanel{
+.date-save-on-panel{
   color: dimgray;
   font-size: smaller;
   margin: 10px 0 0 0;
@@ -94,7 +97,7 @@ html, body, #container {
 
 .tour{
   &:hover, &:focus{
-    background-color: #e4e6e9;
+    background-color: #dadcdf;
    // color: #b0b4b0;
    // color: #b0b4b0;
     //outline: 1px solid #dd471e;
@@ -113,6 +116,9 @@ html, body, #container {
   position: absolute;
   color: #939393;
   right: 10px;
+}
+.tour--active{
+  background: #eceef1;
 }
 .tour-name{
   font-weight: 400;

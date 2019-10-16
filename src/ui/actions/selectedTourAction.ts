@@ -20,7 +20,7 @@ export const loadListTour = () => async (dispatch: Dispatch, getState: () => Sto
 };
 // eslint-disable-next-line @typescript-eslint/require-await
 export const createNewTour = () => async (dispatch: Dispatch, getState: () => StoreType) => {
-    //const store = getState();
+
     dispatch(setLoadBocklyDisabled());
     //console.log("dispatch(setLoadBocklyDisabled());");
     //const store = getState();
@@ -40,9 +40,10 @@ let periodicallySaveTimer = 0;
 //фоновое сохранение тура
 export const periodicallySave = () => (dispatch: Dispatch, getState: () => StoreType) => {
     console.log("periodicallySave");
+    const store = getState();
     clearInterval(periodicallySaveTimer);
     periodicallySaveTimer = window.setInterval(() => {
-        putThisTour(getState().SelectedTourState.tourDB)(dispatch, getState);
+            putThisTour(getState().SelectedTourState.tourDB)(dispatch, getState);
     }, 5000);
 };
 //сохранение в IDB
@@ -52,7 +53,7 @@ export const putThisTour = (tourDB: ScriptValue) => async (dispatch: Dispatch, g
     const saveTour: ScriptValue = {
         ...tourDB,
         code: store.SelectedTourState.tourXML,
-        date: format(new Date(), "dd-MM-yyyy в HH:mm")
+        date: format(new Date(), "dd-MM-yyyy в HH:mm") //Date()
     };
     dispatch(setTourDB(saveTour));
     (await IDB()).put("script", saveTour, saveTour.key);
@@ -81,7 +82,11 @@ export const loadToDb = (key: string) => async (dispatch: Dispatch, getState: ()
 };
 export const delToDb = (key: string) => async (dispatch: Dispatch, getState: () => StoreType) => {
     //console.log("DelKey >> ",getState().SelectedTourState.selectedIndex);
-   // const store = getState();
+    // const store = getState();
+    const store = getState();
+    console.log("saveTour");
+    if (key == store.SelectedTourState.tourDB.key)
+        dispatch(setLoadBocklyDisabled());
     (await IDB()).delete("script", key);
 };
 export type SelectedTourAction = ActionType<typeof setTourDB>;
