@@ -8,9 +8,11 @@ import BlocklyComponent from "../../components/BlocklyComponent";
 import SaveTour from "../../components/ScriptButtons";
 import HamburgerButton from "../../components/HamburgerButton";
 import ScriptButtons from "../../components/ScriptButtons";
-import { loadListTour, saveTour } from "../../actions/selectedTourAction";
+import { loadListTour, periodicallySave, putTour, saveTour } from "../../actions/selectedTourAction";
 import { format } from "date-fns";
 import uuid from "uuid";
+import { ScriptValue } from "../../util/indexedDB";
+import DateLastSave from "../../components/dateLlstSave";
 
 export interface MainComponent {
     // connected: boolean;
@@ -38,7 +40,9 @@ const MainComponent = () => {
         // this.props.script = demo();
         // console.log("Script -> ",demo());
     }, [dispatch]);
-
+    /* useEffect(() => {
+        window.addEventListener("beforeunload", () => dispatch(putTour()));
+    }, [dispatch]);*/
     const onInspectClickHandler = () => {
         if (isInspectEnabled) {
             dispatch(setInspectDisabled()); //Отправка экшена
@@ -53,49 +57,49 @@ const MainComponent = () => {
 
     return (
         <div>
-            <div className="">
-
+            <div className="relative">
                 <ScriptButtons />
-                {/*<div className="panel panel-default">*/}
-                <div className="main-container">
-                    <div className="">
-                        {/*<ConnectionStatus connection={connected} />*/}
+                {(blocklyReloadEnabled && <DateLastSave />) || null}
+            </div>
+            {/*<div className="panel panel-default">*/}
+            <div className="main-container">
+                <div className="">
+                    {/*<ConnectionStatus connection={connected} />*/}
 
-                        {(blocklyReloadEnabled && (
-                            <BlocklyComponent selector={selector} inspect={onInspectClickHandler} code={codeBlock} />
-                        )) ||
-                            null}
-                        {(isInspectEnabled && (
-                            <div className="back-drop">
-                                <div
-                                    className="alert alert-light"
-                                    role="alert"
-                                    style={{
-                                        textAlign: "center",
-                                        background: "rgb(255,255,255)",
-                                        width: "500px",
-                                        margin: "auto"
-                                    }}
-                                >
-                                    Выберите элемент на основной странице или нажмите
-                                    <button onClick={onInspectClickHandler} type="button" className="btn btn-light">
-                                        Отмена
-                                    </button>
-                                </div>
-                            </div>
-                        )) ||
-                            null}
-                    </div>
                     {(blocklyReloadEnabled && (
-                        <div>
-                            <textarea readOnly className="code-block" ref={codeBlock as any} />
-                            {/*<CodeMirror className="code-block" ref={codeBlock as any}/>*/}
+                        <BlocklyComponent selector={selector} inspect={onInspectClickHandler} code={codeBlock} />
+                    )) ||
+                        null}
+                    {(isInspectEnabled && (
+                        <div className="back-drop">
+                            <div
+                                className="alert alert-light"
+                                role="alert"
+                                style={{
+                                    textAlign: "center",
+                                    background: "rgb(255,255,255)",
+                                    width: "500px",
+                                    margin: "auto"
+                                }}
+                            >
+                                Выберите элемент на основной странице или нажмите
+                                <button onClick={onInspectClickHandler} type="button" className="btn btn-light">
+                                    Отмена
+                                </button>
+                            </div>
                         </div>
                     )) ||
                         null}
-
-                    <div>{/*<TourContainer />*/}</div>
                 </div>
+                {(blocklyReloadEnabled && (
+                    <div>
+                        <textarea readOnly className="code-block" ref={codeBlock as any} />
+                        {/*<CodeMirror className="code-block" ref={codeBlock as any}/>*/}
+                    </div>
+                )) ||
+                    null}
+
+                <div>{/*<TourContainer />*/}</div>
             </div>
         </div>
     );

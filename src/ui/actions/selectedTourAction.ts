@@ -42,15 +42,26 @@ export const periodicallySave = () => (dispatch: Dispatch, getState: () => Store
     console.log("periodicallySave");
     clearInterval(periodicallySaveTimer);
     periodicallySaveTimer = window.setInterval(() => {
-        putTour(getState().SelectedTourState.tourDB)(dispatch, getState);
-    }, 1000);
+        putThisTour(getState().SelectedTourState.tourDB)(dispatch, getState);
+    }, 5000);
 };
 //сохранение в IDB
-export const putTour = (tourDB: ScriptValue) => async (dispatch: Dispatch, getState: () => StoreType) => {
+export const putThisTour = (tourDB: ScriptValue) => async (dispatch: Dispatch, getState: () => StoreType) => {
     const store = getState();
     console.log("saveTour");
     const saveTour: ScriptValue = {
         ...tourDB,
+        code: store.SelectedTourState.tourXML,
+        date: format(new Date(), "dd-MM-yyyy в HH:mm")
+    };
+    dispatch(setTourDB(saveTour));
+    (await IDB()).put("script", saveTour, saveTour.key);
+};
+export const putTour = () => async (dispatch: Dispatch, getState: () => StoreType) => {
+    const store = getState();
+    console.log("saveTour");
+    const saveTour: ScriptValue = {
+        ...store.SelectedTourState.tourDB,
         code: store.SelectedTourState.tourXML,
         date: format(new Date(), "dd-MM-yyyy в HH:mm")
     };
@@ -59,7 +70,7 @@ export const putTour = (tourDB: ScriptValue) => async (dispatch: Dispatch, getSt
 //сохранение по кнопке - пользователь мог изменить имя и описание тура
 export const saveTour = (tourDB: ScriptValue) => (dispatch: Dispatch, getState: () => StoreType) => {
     dispatch(setTourDB(tourDB));
-    putTour(tourDB)(dispatch, getState);
+    putThisTour(tourDB)(dispatch, getState);
 };
 //загрузка нового тура с пререзагрузкой блокли
 export const loadToDb = (key: string) => async (dispatch: Dispatch, getState: () => StoreType) => {

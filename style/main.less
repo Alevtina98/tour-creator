@@ -1,4 +1,4 @@
-@import (css) "~bootstrap/dist/css/bootstrap.css";
+//@import (css) "~bootstrap/dist/css/bootstrap.css";
 @icon-font-path: '~bootstrap/fonts/';
 @import "entity-list";
 
@@ -67,6 +67,16 @@ html, body, #container {
   position: relative;
   display:flex;
 }
+.dateSaveOnPanel{
+  color: dimgray;
+  font-size: smaller;
+  margin: 10px 0 0 0;
+
+  flex-direction:row;
+  justify-content: space-between;
+  position: absolute;
+  right: 10px;
+}
 .back-drop{
   position: fixed;
   top: 0;
@@ -96,20 +106,23 @@ html, body, #container {
   grid-template-columns: 1fr 1fr;
   background-color: #ffffff;
   outline: 1px solid #dddbd4;
-  padding: 10px 10px 15px 10px;
+  padding: 12px 0px 35px 0px;//сверху справа снизу слева
 }
 
 .tour-time{
-  text-align: right;
+  position: absolute;
   color: #939393;
+  right: 10px;
 }
 .tour-name{
   font-weight: 400;
+  position: absolute;
+  left: 10px;
 }
 .tour-button{
   position: relative;
   left: 60%;
-  top: 10px ;
+  top: 30px ;
 }
 .tour-list{
   position: relative ;
@@ -154,9 +167,9 @@ html, body, #container {
   outline: none;
 }
 .panel-buttons{
-  float: left;
-  padding: 20px 1em 0 0;
-  margin: 2px 0 0 2px;
+  //float: left;
+  //padding: 20px 1em 0 0;
+  //margin: 2px 0 0 2px;
 }
 .button-progects{
   @base-url: "https://www.google.com";

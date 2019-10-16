@@ -4,7 +4,7 @@ import IDB, { ScriptValue } from "../util/indexedDB";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../reducers";
 import {createNewTour, delToDb, loadToDb, periodicallySave, saveTour} from "../actions/selectedTourAction";
-import { Button, ButtonGroup, FormControl, InputGroup, Modal } from "react-bootstrap";
+import {Button, ButtonGroup, ButtonToolbar, FormControl, InputGroup, Modal} from "react-bootstrap";
 import { useInputValue } from "../hooks/useInputValue";
 import { FC, memo } from "react";
 import { format } from "date-fns";
@@ -59,14 +59,15 @@ const ScriptButtons = () => {
                 {/*<main id="page-wrap">
                 Проекты
                 </main>*/}
-
             </div>
-            <Button variant="secondary" onClick={newTour}>
-                Создать
-            </Button>
-            <Button variant="secondary" onClick={handleShow}>
-                Сохранить
-            </Button>
+            <ButtonToolbar>
+                <Button variant="secondary" onClick={newTour}>
+                    Создать
+                </Button>
+                <Button size="sm" variant="secondary" onClick={handleShow}>
+                    Сохранить
+                </Button>
+            </ButtonToolbar>
             {/*  </div>*/}
             <Modal show={show} onHide={handleShow}>
                 <Modal.Header></Modal.Header>
