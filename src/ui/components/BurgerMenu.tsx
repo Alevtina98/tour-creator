@@ -1,9 +1,9 @@
-import {slide as Menu, State} from "react-burger-menu";
-import { useState } from "react";
+import { slide as Menu, State } from "react-burger-menu";
+import { useEffect, useState } from "react";
 import React from "react";
 import ScriptList from "./ScriptList";
-import {loadListTour} from "../actions/selectedTourAction";
-import {useDispatch} from "react-redux";
+import { loadListTour } from "../actions/selectedTourAction";
+import { useDispatch } from "react-redux";
 /*
 Крестики
 https://instaga.ru/images/close.png
@@ -21,26 +21,32 @@ const BurgerMenu = () => {
         e.preventDefault();
     };*/
     const onStateChange = (state: State) => {
+        setMenuIsOpen(state.isOpen);
         if (state.isOpen) {
             dispatch(loadListTour());
         }
     };
     // NOTE: You also need to provide styles, see https://github.com/negomi/react-burger-menu#styling
-    const closeAllMenusOnSelectTour = () => {
+    /*  const closeAllMenusOnSelectTour = () => {
         console.log("CLOSE");
         setMenuIsOpen(false);
+    };*/
+    const closeAllMenus = e => {
+        // if (e.key === "Escape" || e == "CLICK_ON_Tour") {
+        setMenuIsOpen(false);
+        console.log("CLOSE");
+        // }
     };
-    const closeAllMenusOnEsc = (e) => {
-        e = e || window.event;
-        if (e.key === 'Escape' ) {
-            setMenuIsOpen(false);
-        }
-    };
+    // useEffect(() => {
+    //     setInterval(() => {
+    //         setMenuIsOpen(v => !v);
+    //     }, 2000);
+    // }, []);
+    console.log("menu is open", menuIsOpen);
     return (
         <div>
             <Menu
                 isOpen={menuIsOpen}
-                customOnKeyDown={closeAllMenusOnEsc}
                 onStateChange={onStateChange}
                 customBurgerIcon={<img src="http://pribory-spb.ru/templates/skin1/images/icon-menu.png" />}
                 customCrossIcon={
@@ -51,23 +57,22 @@ const BurgerMenu = () => {
                 outerContainerId={"outer-container"}
                 styles={{
                     bmBurgerButton: {
-                        position: "relative",
-
+                        position: "relative"
                     },
                     bmItemList: {
                         background: "#fefdfe"
                     },
                     bmOverlay: {
                         top: 0,
-                        bottom: 0,
+                        bottom: 0
                     },
                     bmMenuWrap: {
                         top: 0,
-                        bottom: 0,
+                        bottom: 0
                     }
                 }}
             >
-                <ScriptList onClickScript={closeAllMenusOnSelectTour} />
+                <ScriptList onClickScript={closeAllMenus} />
             </Menu>
         </div>
     );

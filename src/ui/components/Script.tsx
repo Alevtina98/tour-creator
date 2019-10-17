@@ -65,7 +65,7 @@ const Script: FC<ScriptProps> = ({ tour, onClick }) => {
         dispatch(loadListTour());
     };
     //загрузка
-    const loadTour = () => {
+    const loadTour = (e) => {
         onClick();
         if (tourDB.key != tour.key) {
             dispatch(loadToDb(tour.key));
