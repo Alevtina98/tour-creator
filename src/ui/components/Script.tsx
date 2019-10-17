@@ -11,12 +11,13 @@ import cn from "classnames";
 
 export interface ScriptProps {
     tour: ScriptValue;
+    onClick: any;
 }
 
 export interface ScriptStorProps {
     tourDB: ScriptValue;
 }
-const Script: FC<ScriptProps> = ({ tour }) => {
+const Script: FC<ScriptProps> = ({ tour, onClick }) => {
     const dispatch = useDispatch();
     const { tourDB } = useSelector<StoreType, ScriptStorProps>(({ SelectedTourState }) => SelectedTourState);
     const [del, setDel] = useState(false);
@@ -31,7 +32,6 @@ const Script: FC<ScriptProps> = ({ tour }) => {
     const saveChangeCode = () => {
         //Если имя тура не указано, оно остается прежним
         if (newName.value != "") tour.name = newName.value;
-        tour.date = format(new Date(), "yyyy-MM-dd HH:mm");
         tour.desc = newDesc.value; //Как позволить пользователю редактировать существующее описание??
         //старая версия удаляется
         dispatch(delToDb(tour.key));
@@ -66,6 +66,7 @@ const Script: FC<ScriptProps> = ({ tour }) => {
     };
     //загрузка
     const loadTour = () => {
+        onClick();
         if (tourDB.key != tour.key) {
             dispatch(loadToDb(tour.key));
         }
@@ -81,7 +82,7 @@ const Script: FC<ScriptProps> = ({ tour }) => {
                 onClick={loadTour}
             >
                 <small className="tour-name">{tour.name}</small>
-                <small className="tour-time">{tour.date}</small>
+                <small className="tour-time">{format(new Date(tour.date), "dd-MM-yyyy в HH:mm")}</small>
                 <div className="btn-group tour-button" role="group" aria-label="Basic example">
                     <button type="button" className="btn btn-light btn-sm" onClick={changeCode}>
                         Редактировать

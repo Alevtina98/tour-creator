@@ -9,7 +9,10 @@ import { loadListTour } from "../actions/selectedTourAction";
 export interface ScriptListProps {
     listTour: ScriptValue[];
 }
-const ScriptList = () => {
+export interface MenuProps {
+    onClickScript: any;
+}
+const ScriptList: FC<MenuProps> = ({ onClickScript }) => {
     const dispatch = useDispatch();
     const { listTour } = useSelector<StoreType, ScriptListProps>(({ SelectedTourState }) => SelectedTourState);
     //const [list, setList] = useState<ScriptValue[]>([]);
@@ -37,7 +40,7 @@ const ScriptList = () => {
 
             <div className="list-group list-tour-group">
                 {filterList.map(el => (
-                    <Script tour={el} />
+                    <Script tour={el} onClick={onClickScript} />
                 ))}
             </div>
         </div>

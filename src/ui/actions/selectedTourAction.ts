@@ -20,7 +20,6 @@ export const loadListTour = () => async (dispatch: Dispatch, getState: () => Sto
 };
 // eslint-disable-next-line @typescript-eslint/require-await
 export const createNewTour = () => async (dispatch: Dispatch, getState: () => StoreType) => {
-
     dispatch(setLoadBocklyDisabled());
     //console.log("dispatch(setLoadBocklyDisabled());");
     //const store = getState();
@@ -53,7 +52,7 @@ export const putThisTour = (tourDB: ScriptValue) => async (dispatch: Dispatch, g
     const saveTour: ScriptValue = {
         ...tourDB,
         code: store.SelectedTourState.tourXML,
-        date: format(new Date(), "dd-MM-yyyy в HH:mm") //Date()
+        date: Date() //Date()
     };
     dispatch(setTourDB(saveTour));
     (await IDB()).put("script", saveTour, saveTour.key);
@@ -64,7 +63,7 @@ export const putTour = () => async (dispatch: Dispatch, getState: () => StoreTyp
     const saveTour: ScriptValue = {
         ...store.SelectedTourState.tourDB,
         code: store.SelectedTourState.tourXML,
-        date: format(new Date(), "dd-MM-yyyy в HH:mm")
+        date: Date()
     };
     (await IDB()).put("script", saveTour, saveTour.key);
 };

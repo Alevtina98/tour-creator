@@ -15,6 +15,7 @@ https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Hamburger_icon.svg/120
 */
 const BurgerMenu = () => {
     const [show, setShow] = useState(false);
+    const [menuIsOpen, setMenuIsOpen] = useState(false);
     const dispatch = useDispatch();
     /*const showSettings = (e: any) => {
         e.preventDefault();
@@ -25,14 +26,27 @@ const BurgerMenu = () => {
         }
     };
     // NOTE: You also need to provide styles, see https://github.com/negomi/react-burger-menu#styling
+    const closeAllMenusOnSelectTour = () => {
+        console.log("CLOSE");
+        setMenuIsOpen(false);
+    };
+    const closeAllMenusOnEsc = (e) => {
+        e = e || window.event;
+        if (e.key === 'Escape' ) {
+            setMenuIsOpen(false);
+        }
+    };
     return (
         <div>
             <Menu
+                isOpen={menuIsOpen}
+                customOnKeyDown={closeAllMenusOnEsc}
                 onStateChange={onStateChange}
                 customBurgerIcon={<img src="http://pribory-spb.ru/templates/skin1/images/icon-menu.png" />}
                 customCrossIcon={
                     <img src="https://v1.iconsearch.ru/uploads/icons/webdesigncreative/128x128/cross-lines.png" />
                 }
+                //customOnKeyDown={closeAllMenusOnSelectTour}
                 pageWrapId={"page-wrap"}
                 outerContainerId={"outer-container"}
                 styles={{
@@ -53,7 +67,7 @@ const BurgerMenu = () => {
                     }
                 }}
             >
-                <ScriptList />
+                <ScriptList onClickScript={closeAllMenusOnSelectTour} />
             </Menu>
         </div>
     );
