@@ -153,8 +153,9 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
                     }
                 }}
                 initialXml={this.props.selectedTour.code}
-                wrapperDivClassName="fill-height"
+                wrapperDivClassName="d-flex flex"
                 workspaceDidChange={this.workspaceDidChange}
+
             />
         );
     };

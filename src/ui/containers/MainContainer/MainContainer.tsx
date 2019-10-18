@@ -61,46 +61,34 @@ const MainComponent = () => {
                 <ScriptButtons />
                 {(blocklyReloadEnabled && <DateLastSave />) || null}
             </div>
-            {/*<div className="panel panel-default">*/}
-            <div className="main-container">
-                <div className="">
-                    {/*<ConnectionStatus connection={connected} />*/}
-
-                    {(blocklyReloadEnabled && (
-                        <BlocklyComponent selector={selector} inspect={onInspectClickHandler} code={codeBlock} />
-                    )) ||
-                        null}
-                    {(isInspectEnabled && (
-                        <div className="back-drop">
-                            <div
-                                className="alert alert-light"
-                                role="alert"
-                                style={{
-                                    textAlign: "center",
-                                    background: "rgb(255,255,255)",
-                                    width: "500px",
-                                    margin: "auto"
-                                }}
-                            >
-                                Выберите элемент на основной странице или нажмите
-                                <button onClick={onInspectClickHandler} type="button" className="btn btn-light">
-                                    Отмена
-                                </button>
-                            </div>
-                        </div>
-                    )) ||
-                        null}
+            {/*<ConnectionStatus connection={connected} />*/}
+            {(blocklyReloadEnabled && (
+                <div className="main-container">
+                    <BlocklyComponent selector={selector} inspect={onInspectClickHandler} code={codeBlock} />
+                    <textarea readOnly className="code-block" ref={codeBlock as any} />
                 </div>
-                {(blocklyReloadEnabled && (
-                    <div>
-                        <textarea readOnly className="code-block" ref={codeBlock as any} />
-                        {/*<CodeMirror className="code-block" ref={codeBlock as any}/>*/}
+            )) ||
+                null}
+            {(isInspectEnabled && (
+                <div className="back-drop">
+                    <div
+                        className="alert alert-light"
+                        role="alert"
+                        style={{
+                            textAlign: "center",
+                            background: "rgb(255,255,255)",
+                            width: "500px",
+                            margin: "auto"
+                        }}
+                    >
+                        Выберите элемент на основной странице или нажмите
+                        <button onClick={onInspectClickHandler} type="button" className="btn btn-light">
+                            Отмена
+                        </button>
                     </div>
-                )) ||
-                    null}
-
-                <div>{/*<TourContainer />*/}</div>
-            </div>
+                </div>
+            )) ||
+                null}
         </div>
     );
 };

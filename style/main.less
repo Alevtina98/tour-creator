@@ -1,8 +1,12 @@
 //@import (css) "~bootstrap/dist/css/bootstrap.css";
 @icon-font-path: '~bootstrap/fonts/';
 @import "entity-list";
+
 .mainSelector{
-  display: block;
+  //display: block;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100%;
 }
 .fps-warning {
   color: red;
@@ -14,23 +18,17 @@ html, body, #container {
   height: 100%;
 }
 
-.main-container {
-  height: 100%;
-}
-
 .panel {
   //min-height: 100%;
   border-radius: 0;
   box-shadow: 0;
   margin-bottom: 0;
 }
-
 .panel-heading {
   border-top-right-radius: 0;
   border-top-left-radius: 0;
   position: relative;
 }
-
 .controls {
   position: absolute;
   left: 10px;
@@ -56,15 +54,20 @@ html, body, #container {
     padding-right: 20px;
   }
 }
-
 .no-connection {
   margin-top: 20px;
 }
 
 .main-container {
   display: grid;
-  grid-template-columns: 50% 50%;
-  grid-template-rows: 100% !important;
+  grid-template-columns: 1fr 1fr;
+
+}
+#root{
+  height: 100vh;
+}
+.custom-height{
+  height: 100% !important;
 }
 .relative{
   position: relative;
@@ -94,7 +97,13 @@ html, body, #container {
   width: 100%;
   height: 100%;
 }
-
+.flex{
+  flex: 1;
+}
+.injectionDiv{
+  flex: 1;
+  height: unset !important;
+}
 .tour{
   &:hover, &:focus{
     background-color: #dadcdf;
@@ -111,7 +120,6 @@ html, body, #container {
   outline: 1px solid #dddbd4;
   padding: 12px 0px 35px 0px;//сверху справа снизу слева
 }
-
 .tour-time{
   position: absolute;
   color: #939393;
@@ -144,7 +152,6 @@ html, body, #container {
   position: relative;
   margin: 10px;
 }
-
 .tour-search::before {
   content: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAAXNSR0IArs4c6QAAAQJJREFUKBWVkr2uQUEUhf3ET6GRaC5aFRoJKrf1BKpb8SwqovYGXkCj00k0QnRKEYkILYobvpUYmeMMyVnJl7P3mjN7Zu9zwiGv2qRFyMMSRrAFp6JPN8XzBj+wgDkUYAg7WINTYdwpDECxrRLJHeq2accdkgm8bzTvNAg2EDOGeUYI1KNO1gkuzTA1g8T7ojbn4ONQWPuHPWgeHmnzCqoe15tkSNPgPEAn68oVcOmA2XMtGK9FoE/VhOTTVNExqLCGZnxCv2pYauEC6lF0oQxX6IOvb7yX9NPEQafan+aPXDdQC18LsO6Tip5BBY6gIQaSbnMCFRCBZRcIvFkbsvCr4AFGOCxQy+JdGQAAAABJRU5ErkJggg==');
   display: block;
@@ -158,7 +165,6 @@ html, body, #container {
   line-height: 32px;
   opacity: 0.6;
 }
-
 .tour-search > input {
   width: 100%;
   font-size: 18px;
@@ -168,7 +174,6 @@ html, body, #container {
   height: 32px;
   position: relative;
 }
-
 .tour-search > input:focus {
   outline: none;
 }
