@@ -5,17 +5,12 @@ import agentActions from "../../actions/agentActions";
 import { setInspectDisabled, setInspectEnabled } from "../../actions/inspectAction";
 import { StoreType } from "../../reducers";
 import BlocklyComponent from "../../components/BlocklyComponent";
-import SaveTour from "../../components/ScriptButtons";
-import HamburgerButton from "../../components/HamburgerButton";
 import ScriptButtons from "../../components/ScriptButtons";
-import { loadListTour, periodicallySave, putTour, saveTour } from "../../actions/selectedTourAction";
-import { format } from "date-fns";
-import uuid from "uuid";
-import { ScriptValue } from "../../util/indexedDB";
 import DateLastSave from "../../components/dateLlstSave";
+import ConnectionStatus from "../../components/ConnectionStatus/ConnectionStatus";
 
-export interface MainComponent {
-    // connected: boolean;
+export interface MainComponentProps {
+    connected: boolean;
     blocklyReloadEnabled: boolean;
 }
 export interface MainComponentSelector {
@@ -25,8 +20,11 @@ export interface MainComponentSelector {
 const MainComponent = () => {
     const dispatch = useDispatch();
     //маппинг значений из store
-    const { blocklyReloadEnabled } = useSelector<StoreType, MainComponent>(
-        ({ SelectedTourState }) => SelectedTourState
+    const { blocklyReloadEnabled, connected } = useSelector<StoreType, MainComponentProps>(
+        ({ SelectedTourState, MainState }) => ({
+            blocklyReloadEnabled: SelectedTourState.blocklyReloadEnabled,
+            connected: MainState.connected
+        })
     );
     const { isInspectEnabled, selector } = useSelector<StoreType, MainComponentSelector>(
         ({ InspectState }) => InspectState
@@ -57,11 +55,12 @@ const MainComponent = () => {
 
     return (
         <div className="mainSelector">
-            <div className="relative">
+            <div className="relative panel">
                 <ScriptButtons />
-                {(blocklyReloadEnabled && <DateLastSave />) || null}
+                {(blocklyReloadEnabled &&
+                    <><DateLastSave /><ConnectionStatus connection={connected} /></>
+                    ) || null}
             </div>
-            {/*<ConnectionStatus connection={connected} />*/}
             {(blocklyReloadEnabled && (
                 <div className="main-container">
                     <BlocklyComponent selector={selector} inspect={onInspectClickHandler} code={codeBlock} />

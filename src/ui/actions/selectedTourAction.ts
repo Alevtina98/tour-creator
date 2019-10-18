@@ -34,6 +34,7 @@ export const createNewTour = () => async (dispatch: Dispatch, getState: () => St
     return window.setTimeout(() => {
         dispatch(setLoadBocklyEnabled());
     }, 5);
+    clearInterval(periodicallySaveTimer);
 };
 let periodicallySaveTimer = 0;
 //фоновое сохранение тура
@@ -42,7 +43,7 @@ export const periodicallySave = () => (dispatch: Dispatch, getState: () => Store
     const store = getState();
     clearInterval(periodicallySaveTimer);
     periodicallySaveTimer = window.setInterval(() => {
-            putThisTour(getState().SelectedTourState.tourDB)(dispatch, getState);
+        putThisTour(getState().SelectedTourState.tourDB)(dispatch, getState);
     }, 5000);
 };
 //сохранение в IDB
@@ -84,8 +85,9 @@ export const delToDb = (key: string) => async (dispatch: Dispatch, getState: () 
     // const store = getState();
     const store = getState();
     console.log("saveTour");
-    if (key == store.SelectedTourState.tourDB.key)
-        dispatch(setLoadBocklyDisabled());
+    if (key == store.SelectedTourState.tourDB.key) dispatch(setLoadBocklyDisabled());
     (await IDB()).delete("script", key);
+    clearInterval(periodicallySaveTimer);
+
 };
 export type SelectedTourAction = ActionType<typeof setTourDB>;

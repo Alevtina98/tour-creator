@@ -1,4 +1,4 @@
-//@import (css) "~bootstrap/dist/css/bootstrap.css";
+@import (css) "~bootstrap/dist/css/bootstrap.css";
 @icon-font-path: '~bootstrap/fonts/';
 @import "entity-list";
 
@@ -6,7 +6,12 @@
   //display: block;
   display: grid;
   grid-template-rows: auto 1fr;
+
   height: 100%;
+}
+.main-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr; //repeat(2, 1fr);
 }
 .fps-warning {
   color: red;
@@ -17,12 +22,13 @@
 html, body, #container {
   height: 100%;
 }
-
 .panel {
   //min-height: 100%;
   border-radius: 0;
   box-shadow: 0;
   margin-bottom: 0;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
 }
 .panel-heading {
   border-top-right-radius: 0;
@@ -57,11 +63,8 @@ html, body, #container {
 .no-connection {
   margin-top: 20px;
 }
-
-.main-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-
+.bm-menu{
+  overflow: hidden;
 }
 #root{
   height: 100vh;

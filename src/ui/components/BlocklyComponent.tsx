@@ -52,26 +52,7 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
     };
 
     componentDidMount(): void {
-        window.setTimeout(() => {
-            this.setState({
-                toolboxCategories: parseWorkspaceXml(ConfigFiles.INITIAL_TOOLBOX_XML).concat([
-                    {
-                        name: "Tour",
-                        blocks: [
-                            {
-                                type: "desc"
-                            },
-                            { type: "dark" },
-                            { type: "selector" }
-                        ]
-                    }
-                ])
-            });
-
-        }, 1);
         this.props.actions.periodicallySave();
-        // this.props.dispatch(periodicallySave());
-        // this.props.dispatch(setLoadBocklyDisabled());
     }
     workspaceDidChange = (workspace: any) => {
         const code: string = Blockly.JavaScript.workspaceToCode(workspace);

@@ -4,7 +4,7 @@ const INITIAL_XML =
 
 const INITIAL_TOOLBOX_XML =
     '<xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">\n' +
-    '  <category name="Logic" colour="#5C81A6">\n' +
+    '  <category name="Логика" colour="#5C81A6">\n' +
     '    <block type="controls_if"></block>\n' +
     '    <block type="logic_compare">\n' +
     '      <field name="OP">EQ</field>\n' +
@@ -19,7 +19,7 @@ const INITIAL_TOOLBOX_XML =
     '    <block type="logic_null"></block>\n' +
     '    <block type="logic_ternary"></block>\n' +
     "  </category>\n" +
-    '  <category name="Loops" colour="#5CA65C">\n' +
+    '  <category name="Циклы" colour="#5CA65C">\n' +
     '    <block type="controls_repeat_ext">\n' +
     '      <value name="TIMES">\n' +
     '        <shadow type="math_number">\n' +
@@ -55,7 +55,7 @@ const INITIAL_TOOLBOX_XML =
     '      <field name="FLOW">BREAK</field>\n' +
     "    </block>\n" +
     "  </category>\n" +
-    '  <category name="Math" colour="#5C68A6">\n' +
+    '  <category name="Математика" colour="#5C68A6">\n' +
     '    <block type="math_round">\n' +
     '      <field name="OP">ROUND</field>\n' +
     '      <value name="NUM">\n' +
@@ -155,7 +155,7 @@ const INITIAL_TOOLBOX_XML =
     "    </block>\n" +
     '    <block type="math_random_float"></block>\n' +
     "  </category>\n" +
-    '  <category name="Text" colour="#5CA68D">\n' +
+    '  <category name="Текст" colour="#5CA68D">\n' +
     '    <block type="text_charAt">\n' +
     '      <mutation at="true"></mutation>\n' +
     '      <field name="WHERE">FROM_START</field>\n' +
@@ -249,7 +249,7 @@ const INITIAL_TOOLBOX_XML =
     "      </value>\n" +
     "    </block>\n" +
     "  </category>\n" +
-    '  <category name="Lists" colour="#745CA6">\n' +
+    '  <category name="Списки" colour="#745CA6">\n' +
     '    <block type="lists_indexOf">\n' +
     '      <field name="END">FIRST</field>\n' +
     '      <value name="VALUE">\n' +
@@ -317,7 +317,7 @@ const INITIAL_TOOLBOX_XML =
     '      <field name="DIRECTION">1</field>\n' +
     "    </block>\n" +
     "  </category>\n" +
-    '  <category name="Colour" colour="#A6745C">\n' +
+    '  <category name="Цвет" colour="#A6745C">\n' +
     '    <block type="colour_picker">\n' +
     '      <field name="COLOUR">#ff0000</field>\n' +
     "    </block>\n" +
@@ -358,8 +358,8 @@ const INITIAL_TOOLBOX_XML =
     "    </block>\n" +
     "  </category>\n" +
     "  <sep></sep>\n" +
-    '  <category name="Variables" colour="#A65C81" custom="VARIABLE"></category>\n' +
-    '  <category name="Functions" colour="#9A5CA6" custom="PROCEDURE"></category>\n' +
+    '  <category name="Переменные" colour="#A65C81" custom="VARIABLE"></category>\n' +
+    '  <category name="Функции" colour="#9A5CA6" custom="PROCEDURE"></category>\n' +
     "</xml>";
 
 const INITIAL_TOOLBOX_CATEGORIES = [
