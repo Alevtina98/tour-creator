@@ -54,17 +54,16 @@ const ScriptButtons = () => {
         <div className="relative">
             {/* //<div className="btn-group" role="group" aria-label="Basic example">*/}
             <div id="outer-container" className="burgerStyle">
-
                 <BurgerMenu />
                 {/*<main id="page-wrap">
                 Проекты
                 </main>*/}
             </div>
             <ButtonToolbar>
-                <Button variant="secondary" onClick={newTour}>
+                <Button variant="light" onClick={newTour}>
                     Создать
                 </Button>
-                <Button size="sm" variant="secondary" onClick={handleShow}>
+                <Button size="sm" variant="light" onClick={handleShow}>
                     Сохранить
                 </Button>
             </ButtonToolbar>

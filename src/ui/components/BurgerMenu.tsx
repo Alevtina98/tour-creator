@@ -4,6 +4,8 @@ import React from "react";
 import ScriptList from "./ScriptList";
 import { loadListTour } from "../actions/selectedTourAction";
 import { useDispatch } from "react-redux";
+import TourBurgerMenu from "./TourBurgerMenu";
+import { Button } from "react-bootstrap";
 /*
 Крестики
 https://instaga.ru/images/close.png
@@ -42,10 +44,14 @@ const BurgerMenu = () => {
     //         setMenuIsOpen(v => !v);
     //     }, 2000);
     // }, []);
+    const openBurgerMenu = () => {
+        setMenuIsOpen(true);
+    };
     console.log("menu is open", menuIsOpen);
     return (
         <div>
-            <Menu
+           {/* <Menu
+                right
                 isOpen={menuIsOpen}
                 onStateChange={onStateChange}
                 customBurgerIcon={<img src="http://pribory-spb.ru/templates/skin1/images/icon-menu.png" />}
@@ -73,7 +79,18 @@ const BurgerMenu = () => {
                 }}
             >
                 <ScriptList onClickScript={closeAllMenus} />
-            </Menu>
+            </Menu>*/}
+            <Button variant="light" onClick={openBurgerMenu} className="burger-menu-button-open">
+                <img src="http://pribory-spb.ru/templates/skin1/images/icon-menu.png" style={{ width: 22 }} />
+            </Button>
+            {(menuIsOpen && (
+                <div className="back-drop">
+
+                    <ScriptList onClickScript={closeAllMenus} onClickEsc={closeAllMenus}/>
+                </div>
+            )) ||
+                null}
+            {/*<TourBurgerMenu />*/}
         </div>
     );
 };

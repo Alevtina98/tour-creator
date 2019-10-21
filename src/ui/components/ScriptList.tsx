@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from "react";
 import IDB, { ScriptValue } from "../util/indexedDB";
 import Script from "./Script";
 import { useDispatch, useSelector } from "react-redux";
-import { FormControl } from "react-bootstrap";
+import {Button, FormControl} from "react-bootstrap";
 import { StoreType } from "../reducers";
 import { loadListTour } from "../actions/selectedTourAction";
 
@@ -11,8 +11,9 @@ export interface ScriptListProps {
 }
 export interface MenuProps {
     onClickScript: any;
+    onClickEsc: any;
 }
-const ScriptList: FC<MenuProps> = ({ onClickScript }) => {
+const ScriptList: FC<MenuProps> = ({ onClickScript, onClickEsc }) => {
     const dispatch = useDispatch();
     const { listTour } = useSelector<StoreType, ScriptListProps>(({ SelectedTourState }) => SelectedTourState);
     //const [list, setList] = useState<ScriptValue[]>([]);
@@ -26,7 +27,10 @@ const ScriptList: FC<MenuProps> = ({ onClickScript }) => {
     };*/
     useEffect(() => {
         setFilterList(listTour);
-    });
+    }, [listTour])
+    useEffect(() => {
+        dispatch(loadListTour());
+    }, []);
     const searchUpdated = (event: React.ChangeEvent<any>) => {
         setFilterList(listTour.filter(myFilter(event.target.value)));
     };
@@ -36,11 +40,13 @@ const ScriptList: FC<MenuProps> = ({ onClickScript }) => {
 
     return (
         <div className="tour-list">
+            <Button variant="light" onClick={onClickEsc} className="burger-menu-button-close" >
+                <img src="https://v1.iconsearch.ru/uploads/icons/webdesigncreative/128x128/cross-lines.png" className="img-close" />
+            </Button>
             <FormControl placeholder="Поиск" className="tour-search" onChange={searchUpdated} />
-
-            <div className="list-group list-tour-group">
+            <div className="list-tour-group">
                 {filterList.map(el => (
-                    <Script tour={el} onClick={onClickScript} />
+                    <Script tour={el} onClick={onClickScript} key={el.key} />
                 ))}
             </div>
         </div>

@@ -9,6 +9,7 @@
 
   height: 100%;
 }
+
 .main-container {
   display: grid;
   grid-template-columns: 1fr 1fr; //repeat(2, 1fr);
@@ -120,13 +121,14 @@ html, body, #container {
   display: grid;
   grid-template-columns: 1fr 1fr;
   background-color: #ffffff;
-  outline: 1px solid #dddbd4;
-  padding: 12px 0px 35px 0px;//сверху справа снизу слева
+  outline: 0.2px solid #e9ebee;
+  padding: 12px 0px 10px 0px;//сверху справа снизу слева
+  min-height: 80px;
 }
 .tour-time{
   position: absolute;
   color: #939393;
-  right: 10px;
+  left: 60%;
 }
 .tour--active{
   background: #eceef1;
@@ -139,21 +141,41 @@ html, body, #container {
 .tour-button{
   position: relative;
   left: 60%;
-  top: 30px ;
+  top:30px ;
+  height: 30px;
+}
+.burger-menu-button-open{
+
 }
 .tour-list{
-  position: relative ;
-  top: 10px ;
-  padding: 25px 0px 0px 0px;
+  position: relative;
+  width: 310px;
+  background: #f5f6f6;
+ /* -webkit-transition: top 1s ease-out 0.5s;
+  -moz-transition: top 1s ease-out 0.5s;
+  -o-transition: top 1s ease-out 0.5s;
+  transition: top 1s ease-out 5s;*/
 }
+.burger-menu-button-close{
+  position:absolute;
+  right: 1px;
+  background: none !important;
+  border: none !important;
+  height: 30px;
+  width: 30px;
 
+}
+.img-close{
+  width: 20px;
+
+}
 .tour-search {
   //padding: 10px 10px;
   position: relative;
   height: 40px;
   width: 280px;
-  position: relative;
   margin: 10px;
+  top:30px;
 }
 .tour-search::before {
   content: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAAXNSR0IArs4c6QAAAQJJREFUKBWVkr2uQUEUhf3ET6GRaC5aFRoJKrf1BKpb8SwqovYGXkCj00k0QnRKEYkILYobvpUYmeMMyVnJl7P3mjN7Zu9zwiGv2qRFyMMSRrAFp6JPN8XzBj+wgDkUYAg7WINTYdwpDECxrRLJHeq2accdkgm8bzTvNAg2EDOGeUYI1KNO1gkuzTA1g8T7ojbn4ONQWPuHPWgeHmnzCqoe15tkSNPgPEAn68oVcOmA2XMtGK9FoE/VhOTTVNExqLCGZnxCv2pYauEC6lF0oQxX6IOvb7yX9NPEQafan+aPXDdQC18LsO6Tip5BBY6gIQaSbnMCFRCBZRcIvFkbsvCr4AFGOCxQy+JdGQAAAABJRU5ErkJggg==');
@@ -180,6 +202,13 @@ html, body, #container {
 .tour-search > input:focus {
   outline: none;
 }
+.list-tour-group{
+  top:30px;
+
+  overflow-y:auto;
+  position: relative;
+}
+
 .panel-buttons{
   //float: left;
   //padding: 20px 1em 0 0;
@@ -191,9 +220,8 @@ html, body, #container {
 }
 .burgerStyle{
   position: relative;
-  width: 25px;
   font-size: 16px;
   //background: dimgray;
-  margin-right: 5px;
+
 
 }

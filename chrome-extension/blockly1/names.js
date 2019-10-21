@@ -108,15 +108,6 @@ Blockly.Names.prototype.getNameForUserVariable_ = function(id) {
   }
 };
 
-
-
-
-
-
-
-
-
-
 /**
  * Convert a Blockly entity name to a legal exportable entity name.
  * @param {string} name The Blockly entity name (no constraints).
@@ -143,8 +134,9 @@ Blockly.Names.prototype.getName = function(name, type) {
   }
   var safeName = this.getDistinctName(name, type);
   this.db_[normalized] = safeName.substr(prefix.length);
-  console.log("safeName >> ", safeName);
-  return name;
+
+  console.log("safeName ЮЮЮЮЮЮЮ>> ", safeName);
+  return safeName;
 };
 
 
@@ -201,19 +193,7 @@ Blockly.Names.prototype.getDistinctName = function(name, type) {
  * @private
  */
 Blockly.Names.prototype.safeName_ = function(name) {
-  if (!name) {
-    name = 'unnamed';
-  } else {
-    // Unfortunately names in non-latin characters will look like
-    // _E9_9F_B3_E4_B9_90 which is pretty meaningless.
-    // https://github.com/google/blockly/issues/1654
-    name = encodeURI(name.replace(/ /g, '_')).replace(/[^\w]/g, '_');
-    // Most languages don't allow names with leading numbers.
-    if ('0123456789'.indexOf(name[0]) != -1) {
-      name = 'my_' + name;
-    }
-  }
-  return name;
+    return name || "unnamed";
 };
 
 /**
