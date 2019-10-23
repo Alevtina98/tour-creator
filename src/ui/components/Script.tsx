@@ -4,10 +4,13 @@ import {delToDb, loadListTour, loadToDb, saveTour, setTourDB} from "../actions/s
 import { useDispatch, useSelector } from "react-redux";
 import { useInputValue } from "../hooks/useInputValue";
 import { format } from "date-fns";
-import { Button, FormControl, InputGroup, Modal } from "react-bootstrap";
+import {Button, ButtonToolbar, FormControl, InputGroup, Modal} from "react-bootstrap";
 import { StoreType } from "../reducers";
 import { ScriptListProps } from "./ScriptList";
 import cn from "classnames";
+// eslint-disable-next-line @typescript-eslint/camelcase
+import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export interface ScriptProps {
     tour: ScriptValue;
@@ -83,14 +86,14 @@ const Script: FC<ScriptProps> = ({ tour, onClick }) => {
             >
                 <small className="tour-name">{tour.name}</small>
                 <small className="tour-time">{format(new Date(tour.date), "dd-MM-yyyy в HH:mm")}</small>
-                <div className="btn-group tour-button" role="group" aria-label="Basic example">
-                    <button type="button" className="btn btn-light btn-sm" onClick={changeCode}>
-                        Редактировать
-                    </button>
-                    <button type="button" className="btn btn-light btn-sm" onClick={deleteCode}>
-                        Удалить
-                    </button>
-                </div>
+                <ButtonToolbar className="tour-buttons">
+                    <Button variant="light" size="sm" onClick={changeCode}>
+                        <FontAwesomeIcon icon={faEdit} className="i-close" size="2x" color="#A1A2A2" />
+                    </Button>
+                    <Button variant="light" size="sm"  onClick={deleteCode}>
+                        <FontAwesomeIcon icon={faTrashAlt} className="i-close" size="2x" color="#A1A2A2" />
+                    </Button>
+                </ButtonToolbar>
             </div>
             <Modal show={show} onHide={handleShow}>
                 <Modal.Header></Modal.Header>
