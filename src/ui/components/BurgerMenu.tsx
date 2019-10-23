@@ -50,7 +50,7 @@ const BurgerMenu = () => {
     console.log("menu is open", menuIsOpen);
     return (
         <div>
-           {/* <Menu
+            {/* <Menu
                 right
                 isOpen={menuIsOpen}
                 onStateChange={onStateChange}
@@ -83,13 +83,11 @@ const BurgerMenu = () => {
             <Button variant="light" onClick={openBurgerMenu} className="burger-menu-button-open">
                 <img src="http://pribory-spb.ru/templates/skin1/images/icon-menu.png" style={{ width: 22 }} />
             </Button>
-            {(menuIsOpen && (
-                <div className="back-drop">
+            <div>
+                {(menuIsOpen && <div className="back-drop" />) || null}
+                <ScriptList onClickScript={closeAllMenus} onClickEsc={closeAllMenus} isOpen={menuIsOpen}/>
+            </div>
 
-                    <ScriptList onClickScript={closeAllMenus} onClickEsc={closeAllMenus}/>
-                </div>
-            )) ||
-                null}
             {/*<TourBurgerMenu />*/}
         </div>
     );

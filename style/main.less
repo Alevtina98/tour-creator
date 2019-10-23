@@ -14,6 +14,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr; //repeat(2, 1fr);
 }
+
 .fps-warning {
   color: red;
 }
@@ -77,6 +78,7 @@ html, body, #container {
   position: relative;
   display:flex;
 }
+
 .date-save-on-panel{
   color: dimgray;
   font-size: smaller;
@@ -87,6 +89,7 @@ html, body, #container {
   position: absolute;
   right: 10px;
 }
+
 .back-drop{
   position: fixed;
   top: 0;
@@ -104,10 +107,12 @@ html, body, #container {
 .flex{
   flex: 1;
 }
+
 .injectionDiv{
   flex: 1;
   height: unset !important;
 }
+
 .tour{
   &:hover, &:focus{
     background-color: #dadcdf;
@@ -121,14 +126,9 @@ html, body, #container {
   display: grid;
   grid-template-columns: 1fr 1fr;
   background-color: #ffffff;
-  outline: 0.2px solid #e9ebee;
+  outline: 0.2px solid #f1f3f6;
   padding: 12px 0px 10px 0px;//сверху справа снизу слева
   min-height: 80px;
-}
-.tour-time{
-  position: absolute;
-  color: #939393;
-  left: 60%;
 }
 .tour--active{
   background: #eceef1;
@@ -137,6 +137,11 @@ html, body, #container {
   font-weight: 400;
   position: absolute;
   left: 10px;
+}
+.tour-time{
+  position: absolute;
+  color: #939393;
+  left: 58%;
 }
 .tour-button{
   position: relative;
@@ -147,10 +152,26 @@ html, body, #container {
 .burger-menu-button-open{
 
 }
+.tour-list--open{
+
+}
 .tour-list{
-  position: relative;
+  z-index: 1001;
+  position: fixed;
   width: 310px;
   background: #f5f6f6;
+
+  display: flex;
+  top:0;
+  bottom: 0;
+  flex-direction: column;
+  left: 0;
+  transform: translateX(-620px);
+  transition: .3s;
+  &--open {
+    transform: translateX(0px);
+  }
+
  /* -webkit-transition: top 1s ease-out 0.5s;
   -moz-transition: top 1s ease-out 0.5s;
   -o-transition: top 1s ease-out 0.5s;
@@ -158,24 +179,19 @@ html, body, #container {
 }
 .burger-menu-button-close{
   position:absolute;
-  right: 1px;
-  background: none !important;
+  right: -58px;
+  background: #dbdcdc;
   border: none !important;
-  height: 30px;
-  width: 30px;
 
 }
-.img-close{
-  width: 20px;
 
-}
 .tour-search {
   //padding: 10px 10px;
   position: relative;
   height: 40px;
   width: 280px;
   margin: 10px;
-  top:30px;
+  padding: 0.2em 0.5em;
 }
 .tour-search::before {
   content: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAAXNSR0IArs4c6QAAAQJJREFUKBWVkr2uQUEUhf3ET6GRaC5aFRoJKrf1BKpb8SwqovYGXkCj00k0QnRKEYkILYobvpUYmeMMyVnJl7P3mjN7Zu9zwiGv2qRFyMMSRrAFp6JPN8XzBj+wgDkUYAg7WINTYdwpDECxrRLJHeq2accdkgm8bzTvNAg2EDOGeUYI1KNO1gkuzTA1g8T7ojbn4ONQWPuHPWgeHmnzCqoe15tkSNPgPEAn68oVcOmA2XMtGK9FoE/VhOTTVNExqLCGZnxCv2pYauEC6lF0oQxX6IOvb7yX9NPEQafan+aPXDdQC18LsO6Tip5BBY6gIQaSbnMCFRCBZRcIvFkbsvCr4AFGOCxQy+JdGQAAAABJRU5ErkJggg==');
@@ -202,11 +218,11 @@ html, body, #container {
 .tour-search > input:focus {
   outline: none;
 }
-.list-tour-group{
-  top:30px;
 
-  overflow-y:auto;
+.list-tour-group{
   position: relative;
+  overflow-y:auto;
+  flex: 1;
 }
 
 .panel-buttons{
