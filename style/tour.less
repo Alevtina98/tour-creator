@@ -1,45 +1,44 @@
-.tour{
-  &:hover, &:focus{
+.tour {
+  &:hover,
+  &:focus {
     background-color: #dadcdf;
     // color: #b0b4b0;
     // color: #b0b4b0;
     //outline: 1px solid #dd471e;
   }
-  &:active{
+  &:active {
     background-color: #f8fcff;
   }
+
   display: grid;
   grid-template-columns: 1fr 0.9fr;
   grid-template-rows: 1fr auto;
   grid-template-areas:
-          "name name"
-          "time buttons";
-  //grid-template-rows: 1fr 1fr;
-  background-color: #ffffff;
+    "name name"
+    "time buttons";
+  background-color: #fff;
   outline: 0.2px solid #f1f3f6;
-  padding: 5px 10px;//сверху справа снизу слева
+  padding: 5px 10px; //сверху справа снизу слева
   min-height: 80px;
   position: relative;
 }
-.tour--active{
+.tour--active {
   background: #eceef1;
 }
-.tour-name{
+.tour-name {
   grid-area: name;
   font-weight: 400;
   font-size: large;
-  /*position: absolute;*/
-  /*left: 10px;*/
   color: #606060;
   overflow: hidden;
 }
-.tour-time{
+.tour-time {
   display: flex;
   grid-area: time;
   color: #b7b7b7;
   align-items: flex-end;
 }
-.tour-buttons{
+.tour-buttons {
   //position: absolute;
   right: 10px;
   justify-content: flex-end;

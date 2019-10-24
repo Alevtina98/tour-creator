@@ -1,37 +1,38 @@
 @import (css) "~bootstrap/dist/css/bootstrap.css";
-@icon-font-path: '~bootstrap/fonts/';
+@icon-font-path: "~bootstrap/fonts/";
 @import "code-editor";
 @import "entity-list";
 @import "panel";
 @import "tour-list";
 @import "tour";
 
-
-html, body, #container {
+html,
+body,
+#container {
   height: 100%;
 }
-.flex{
+.flex {
   flex: 1;
 }
-.relative{
+.relative {
   position: relative;
-  display:flex;
+  display: flex;
 }
 
-.mainSelector{
+.mainSelector {
   //display: block;
   display: grid;
   grid-template-rows: auto 1fr;
   height: 100%;
 }
 
-.back-drop{
+.back-drop {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
   bottom: 0;
-  background: rgba(0,0,0, .2);
+  background: rgba(0, 0, 0, 0.2);
   display: flex;
 }
