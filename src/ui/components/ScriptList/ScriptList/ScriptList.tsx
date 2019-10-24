@@ -1,10 +1,10 @@
 import React, { FC, useEffect, useState } from "react";
-import IDB, { ScriptValue } from "../util/indexedDB";
-import Script from "./Script";
+import IDB, { ScriptValue } from "../../../util/indexedDB";
+import Script from "../Script/Script";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, FormControl } from "react-bootstrap";
-import { StoreType } from "../reducers";
-import { loadListTour } from "../actions/selectedTourAction";
+import { StoreType } from "../../../reducers";
+import { loadListTour } from "../../../actions/selectedTourAction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import cn from "classnames";

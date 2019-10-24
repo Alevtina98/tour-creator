@@ -1,29 +1,24 @@
 import React, { FC, useState } from "react";
-import { ScriptValue } from "../util/indexedDB";
-import {delToDb, loadListTour, loadToDb, saveTour, setTourDB} from "../actions/selectedTourAction";
+import { ScriptValue } from "../../../util/indexedDB";
+import { delToDb, loadListTour, loadToDb, saveTour, setTourDB } from "../../../actions/selectedTourAction";
 import { useDispatch, useSelector } from "react-redux";
-import { useInputValue } from "../hooks/useInputValue";
+import { useInputValue } from "../../../hooks/useInputValue";
 import { format } from "date-fns";
-import {Button, ButtonToolbar, FormControl, InputGroup, Modal} from "react-bootstrap";
-import { StoreType } from "../reducers";
-import { ScriptListProps } from "./ScriptList";
+import { Button, ButtonToolbar, FormControl, InputGroup, Modal } from "react-bootstrap";
+import { StoreType } from "../../../reducers";
+import { ScriptListProps } from "../ScriptList/ScriptList";
 import cn from "classnames";
-// eslint-disable-next-line @typescript-eslint/camelcase
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export interface ScriptProps {
     tour: ScriptValue;
     onClick: any;
 }
 
-export interface ScriptStorProps {
-    tourDB: ScriptValue;
-}
 const Script: FC<ScriptProps> = ({ tour, onClick }) => {
     const dispatch = useDispatch();
-    const { tourDB } = useSelector<StoreType, ScriptStorProps>(({ SelectedTourState }) => SelectedTourState);
-    const [del, setDel] = useState(false);
+    const selectedTourKey: string = useSelector<StoreType, string>(({ SelectedTourState }) => SelectedTourState.tourDB.key);
 
     //для работы с модальным окном
     const newName = useInputValue("");
@@ -38,18 +33,8 @@ const Script: FC<ScriptProps> = ({ tour, onClick }) => {
         tour.desc = newDesc.value; //Как позволить пользователю редактировать существующее описание??
         //старая версия удаляется
         dispatch(delToDb(tour.key));
-        setDel(true);
         //создается новая версия
-        dispatch(
-            saveTour({
-                name: tour.name,
-                date: tour.date,
-                desc: tour.desc,
-                code: tour.code,
-                key: tour.key
-            })
-        );
-        setDel(false);
+        dispatch(saveTour(tour));
         handleClose();
     };
     const changeCode = (e: any) => {
@@ -64,44 +49,42 @@ const Script: FC<ScriptProps> = ({ tour, onClick }) => {
         e.stopPropagation();
         e.preventDefault();
         dispatch(delToDb(tour.key));
-        setDel(true);
         dispatch(loadListTour());
     };
     //загрузка
-    const loadTour = (e) => {
+    const loadTour = () => {
         onClick();
-        if (tourDB.key != tour.key) {
+        if (selectedTourKey != tour.key) {
             dispatch(loadToDb(tour.key));
         }
     };
-    //if (del) return null;
-    //
+
     return (
         <div>
             <div
                 className={cn("tour", {
-                    "tour--active": tourDB.key === tour.key
+                    "tour--active": selectedTourKey === tour.key
                 })}
                 onClick={loadTour}
             >
-                <div className="tour-name">
+                <div className="tour-name" data-testid="tour-name">
                     <small>{tour.name}</small>
                 </div>
-                <div className="tour-time">
+                <div className="tour-time" data-testid="tour-time">
                     <small>{format(new Date(tour.date), "dd-MM-yyyy в HH:mm")}</small>
                 </div>
                 <div />
                 <ButtonToolbar className="tour-buttons">
-                    <Button variant="light" size="sm" onClick={changeCode}>
-                        <FontAwesomeIcon icon={faEdit} className="i-close"  color="#A1A2A2" />
+                    <Button variant="light" size="sm" onClick={changeCode} data-testid="edit-button">
+                        <FontAwesomeIcon icon={faEdit} className="i-close" color="#A1A2A2" />
                     </Button>
-                    <Button variant="light" size="sm"  onClick={deleteCode}>
-                        <FontAwesomeIcon icon={faTrashAlt} className="i-close"  color="#A1A2A2" />
+                    <Button variant="light" size="sm" onClick={deleteCode}>
+                        <FontAwesomeIcon icon={faTrashAlt} className="i-close" color="#A1A2A2" />
                     </Button>
                 </ButtonToolbar>
             </div>
             <Modal show={show} onHide={handleShow}>
-                <Modal.Header></Modal.Header>
+                <Modal.Header>Редактирование шаблона</Modal.Header>
                 <InputGroup className="mb-3">
                     <InputGroup.Prepend>
                         <InputGroup.Text>Название</InputGroup.Text>

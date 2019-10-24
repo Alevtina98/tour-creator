@@ -1,9 +1,9 @@
 import { createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
 import { createLogger } from "redux-logger";
-import reducer from "../reducers/index";
+import reducer, { StoreType } from "../reducers/index";
 
-export default (initialState?: any) => {
+export default (initialState?: Partial<StoreType>) => {
     const middleWare = [thunk];
 
     if (process.env.NODE_ENV === "development") {

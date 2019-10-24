@@ -1,10 +1,9 @@
 import { slide as Menu, State } from "react-burger-menu";
 import { useEffect, useState } from "react";
 import React from "react";
-import ScriptList from "./ScriptList";
+import ScriptList from "./ScriptList/ScriptList/ScriptList";
 import { loadListTour } from "../actions/selectedTourAction";
 import { useDispatch } from "react-redux";
-import TourBurgerMenu from "./TourBurgerMenu";
 import { Button } from "react-bootstrap";
 /*
 Крестики

@@ -8,7 +8,7 @@ import {Button, ButtonGroup, ButtonToolbar, FormControl, InputGroup, Modal} from
 import { useInputValue } from "../hooks/useInputValue";
 import { FC, memo } from "react";
 import { format } from "date-fns";
-import Script from "./Script";
+import Script from "./ScriptList/Script/Script";
 import uuid from "uuid";
 import HamburgerButton from "./HamburgerButton";
 import BurgerMenu from "./BurgerMenu";
