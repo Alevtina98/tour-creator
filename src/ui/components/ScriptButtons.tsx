@@ -53,7 +53,7 @@ const ScriptButtons = () => {
     return (
         <div className="relative">
             {/* //<div className="btn-group" role="group" aria-label="Basic example">*/}
-            <div id="outer-container" className="burgerStyle">
+            <div id="outer-container">
                 <BurgerMenu />
                 {/*<main id="page-wrap">
                 Проекты

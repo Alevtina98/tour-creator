@@ -1,93 +1,28 @@
 @import (css) "~bootstrap/dist/css/bootstrap.css";
 @icon-font-path: '~bootstrap/fonts/';
+@import "code-editor";
 @import "entity-list";
+@import "panel";
+@import "tour-list";
+@import "tour";
 
-.mainSelector{
-  //display: block;
-  display: grid;
-  grid-template-rows: auto 1fr;
 
-  height: 100%;
-}
-
-.main-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr; //repeat(2, 1fr);
-}
-
-.fps-warning {
-  color: red;
-}
-.fill-height {
-  height: 100vh;
-}
 html, body, #container {
   height: 100%;
 }
-.panel {
-  //min-height: 100%;
-  border-radius: 0;
-  box-shadow: 0;
-  margin-bottom: 0;
-  display: grid !important;
-  grid-template-columns: 1fr 1fr;
-}
-.panel-heading {
-  border-top-right-radius: 0;
-  border-top-left-radius: 0;
-  position: relative;
-}
-.controls {
-  position: absolute;
-  left: 10px;
-  top: 0;
-  bottom: 0;
-
-  button {
-    height: 100%;
-    width: 40px;
-    font-size: 14px;
-
-    &:disabled {
-      color: #aaa;
-    }
-
-    &.activated {
-      color: rgb(66, 129, 235);
-    }
-  }
-
-  .fps {
-    display: inline-block;
-    padding-right: 20px;
-  }
-}
-.no-connection {
-  margin-top: 20px;
-}
-.bm-menu{
-  overflow: hidden;
-}
-#root{
-  height: 100vh;
-}
-.custom-height{
-  height: 100% !important;
+.flex{
+  flex: 1;
 }
 .relative{
   position: relative;
   display:flex;
 }
 
-.date-save-on-panel{
-  color: dimgray;
-  font-size: smaller;
-  margin: 10px 0 0 0;
-
-  flex-direction:row;
-  justify-content: space-between;
-  position: absolute;
-  right: 10px;
+.mainSelector{
+  //display: block;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100%;
 }
 
 .back-drop{
@@ -99,153 +34,4 @@ html, body, #container {
   bottom: 0;
   background: rgba(0,0,0, .2);
   display: flex;
-}
-.code-block{
-  width: 100%;
-  height: 100%;
-}
-.flex{
-  flex: 1;
-}
-
-.injectionDiv{
-  flex: 1;
-  height: unset !important;
-}
-
-.tour{
-  &:hover, &:focus{
-    background-color: #dadcdf;
-   // color: #b0b4b0;
-   // color: #b0b4b0;
-    //outline: 1px solid #dd471e;
-  }
-  &:active{
-    background-color: #f8fcff;
-  }
-  display: grid;
-  grid-template-columns: 1fr 0.9fr;
-  grid-template-rows: 1fr auto;
-  grid-template-areas:
-          "name name"
-          "time buttons";
-          //grid-template-rows: 1fr 1fr;
-  background-color: #ffffff;
-  outline: 0.2px solid #f1f3f6;
-  padding: 10px 10px;//сверху справа снизу слева
-  min-height: 80px;
-  position: relative;
-}
-.tour--active{
-  background: #eceef1;
-}
-.tour-name{
-  grid-area: name;
-  font-weight: 400;
-  font-size: medium;
-  /*position: absolute;*/
-  /*left: 10px;*/
-  color: dimgray;
-  overflow: hidden;
-}
-.tour-time{
-  display: flex;
-  grid-area: time;
-  color: #939393;
-  align-items: flex-end;
-}
-.tour-buttons{
-  //position: absolute;
-  right: 10px;
-  justify-content: flex-end;
-  grid-area: buttons;
-  //bottom: 3px;
-}
-.burger-menu-button-open{
-
-}
-.tour-list--open{
-
-}
-.tour-list{
-  z-index: 1001;
-  position: fixed;
-  width: 310px;
-  background: #f5f6f6;
-
-  display: flex;
-  top:0;
-  bottom: 0;
-  flex-direction: column;
-  left: 0;
-  transform: translateX(-620px);
-  transition: .3s;
-  &--open {
-    transform: translateX(0px);
-  }
-
- /* -webkit-transition: top 1s ease-out 0.5s;
-  -moz-transition: top 1s ease-out 0.5s;
-  -o-transition: top 1s ease-out 0.5s;
-  transition: top 1s ease-out 5s;*/
-}
-.burger-menu-button-close{
-  position:absolute;
-  right: -58px;
-  background: #dbdcdc;
-  border: none !important;
-
-}
-
-.tour-search {
-  //padding: 10px 10px;
-  position: relative;
-  height: 40px;
-  width: 280px;
-  margin: 10px;
-  padding: 0.2em 0.5em;
-}
-.tour-search::before {
-  content: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAAXNSR0IArs4c6QAAAQJJREFUKBWVkr2uQUEUhf3ET6GRaC5aFRoJKrf1BKpb8SwqovYGXkCj00k0QnRKEYkILYobvpUYmeMMyVnJl7P3mjN7Zu9zwiGv2qRFyMMSRrAFp6JPN8XzBj+wgDkUYAg7WINTYdwpDECxrRLJHeq2accdkgm8bzTvNAg2EDOGeUYI1KNO1gkuzTA1g8T7ojbn4ONQWPuHPWgeHmnzCqoe15tkSNPgPEAn68oVcOmA2XMtGK9FoE/VhOTTVNExqLCGZnxCv2pYauEC6lF0oQxX6IOvb7yX9NPEQafan+aPXDdQC18LsO6Tip5BBY6gIQaSbnMCFRCBZRcIvFkbsvCr4AFGOCxQy+JdGQAAAABJRU5ErkJggg==');
-  display: block;
-  position: absolute;
-  width: 15px;
-  z-index: 3;
-  height: 15px;
-  font-size: 20px;
-  top: 11px;
-  left: 16px;
-  line-height: 32px;
-  opacity: 0.6;
-}
-.tour-search > input {
-  width: 100%;
-  font-size: 18px;
-  border: none;
-  line-height: 22px;
-  padding: 5px 10px 5px 25px;
-  height: 32px;
-  position: relative;
-}
-.tour-search > input:focus {
-  outline: none;
-}
-
-.list-tour-group{
-  position: relative;
-  overflow-y:auto;
-  flex: 1;
-}
-
-
-.button-progects{
-  @base-url: "https://www.google.com";
-  background-image: url("@{base-url}/url?sa=i&source=images&cd=&ved=2ahUKEwiMiYPIopTlAhUMy6YKHXe4BsEQjRx6BAgBEAQ&url=http%3A%2F%2Fgreenstory.ru%2F%25D0%25BE%25D1%2582%25D0%25B4%25D0%25B5%25D0%25BB%25D0%25BA%25D0%25B0%2F&psig=AOvVaw2UxuI-T7RGVxm6rG-F8yLC&ust=1570885469447096");
-}
-.burgerStyle{
-  position: relative;
-  font-size: 16px;
-  //background: dimgray;
-
-
 }
