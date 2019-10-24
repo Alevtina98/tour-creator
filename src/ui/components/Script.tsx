@@ -84,14 +84,19 @@ const Script: FC<ScriptProps> = ({ tour, onClick }) => {
                 })}
                 onClick={loadTour}
             >
-                <small className="tour-name">{tour.name}</small>
-                <small className="tour-time">{format(new Date(tour.date), "dd-MM-yyyy в HH:mm")}</small>
+                <div className="tour-name">
+                    <small>{tour.name}</small>
+                </div>
+                <div className="tour-time">
+                    <small>{format(new Date(tour.date), "dd-MM-yyyy в HH:mm")}</small>
+                </div>
+                <div />
                 <ButtonToolbar className="tour-buttons">
                     <Button variant="light" size="sm" onClick={changeCode}>
-                        <FontAwesomeIcon icon={faEdit} className="i-close" size="2x" color="#A1A2A2" />
+                        <FontAwesomeIcon icon={faEdit} className="i-close"  color="#A1A2A2" />
                     </Button>
                     <Button variant="light" size="sm"  onClick={deleteCode}>
-                        <FontAwesomeIcon icon={faTrashAlt} className="i-close" size="2x" color="#A1A2A2" />
+                        <FontAwesomeIcon icon={faTrashAlt} className="i-close"  color="#A1A2A2" />
                     </Button>
                 </ButtonToolbar>
             </div>

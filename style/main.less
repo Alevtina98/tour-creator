@@ -124,32 +124,42 @@ html, body, #container {
     background-color: #f8fcff;
   }
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 0.9fr;
+  grid-template-rows: 1fr auto;
+  grid-template-areas:
+          "name name"
+          "time buttons";
+          //grid-template-rows: 1fr 1fr;
   background-color: #ffffff;
   outline: 0.2px solid #f1f3f6;
-  padding: 12px 0px 10px 0px;//сверху справа снизу слева
+  padding: 10px 10px;//сверху справа снизу слева
   min-height: 80px;
+  position: relative;
 }
 .tour--active{
   background: #eceef1;
 }
 .tour-name{
+  grid-area: name;
   font-weight: 400;
   font-size: medium;
-  position: absolute;
-  left: 10px;
+  /*position: absolute;*/
+  /*left: 10px;*/
   color: dimgray;
+  overflow: hidden;
 }
 .tour-time{
-  position: absolute;
+  display: flex;
+  grid-area: time;
   color: #939393;
-  left: 58%;
+  align-items: flex-end;
 }
-.tour-button{
-  position: relative;
-  left: 60%;
-  top:30px ;
-  height: 30px;
+.tour-buttons{
+  //position: absolute;
+  right: 10px;
+  justify-content: flex-end;
+  grid-area: buttons;
+  //bottom: 3px;
 }
 .burger-menu-button-open{
 
@@ -227,12 +237,7 @@ html, body, #container {
   flex: 1;
 }
 
-.tour-buttons{
-  position: absolute;
-  right: 10px;
-  padding: 22px 0 0 0;
 
-}
 .button-progects{
   @base-url: "https://www.google.com";
   background-image: url("@{base-url}/url?sa=i&source=images&cd=&ved=2ahUKEwiMiYPIopTlAhUMy6YKHXe4BsEQjRx6BAgBEAQ&url=http%3A%2F%2Fgreenstory.ru%2F%25D0%25BE%25D1%2582%25D0%25B4%25D0%25B5%25D0%25BB%25D0%25BA%25D0%25B0%2F&psig=AOvVaw2UxuI-T7RGVxm6rG-F8yLC&ust=1570885469447096");
