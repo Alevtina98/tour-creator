@@ -45,6 +45,7 @@ const Script: FC<ScriptProps> = ({ tour, onClick }) => {
         dispatch(saveTour(tour));
         dispatch(loadListTour());
         handleClose();
+       // console.log("tour.name >> ", tour.name);
     };
     const changeCode = (e: any) => {
         e.stopPropagation();
@@ -90,31 +91,37 @@ const Script: FC<ScriptProps> = ({ tour, onClick }) => {
                         <Button variant="light" size="sm" onClick={changeCode} data-testid="edit-button">
                             <FontAwesomeIcon icon={faEdit} className="i-close" color="#A1A2A2" />
                         </Button>
-                        <Button variant="light" size="sm" onClick={deleteCode}>
+                        <Button variant="light" size="sm" onClick={deleteCode} data-testid="delete-button">
                             <FontAwesomeIcon icon={faTrashAlt} className="i-close" color="#A1A2A2" />
                         </Button>
                     </ButtonGroup>
                 </ButtonToolbar>
             </div>
-            <Modal show={show} onHide={handleShow}>
+
+            <Modal show={show} onHide={handleShow} data-testid="edit-model">
                 <Modal.Header>Редактирование шаблона</Modal.Header>
                 <InputGroup className="mb-3">
                     <InputGroup.Prepend>
                         <InputGroup.Text>Название</InputGroup.Text>
                     </InputGroup.Prepend>
-                    <FormControl aria-label="TournewName" aria-newDescribedby="basic-addon1" {...newName} />
+                    <FormControl
+                        aria-label="TournewName"
+                        aria-newDescribedby="basic-addon1"
+                        data-testid="changeName"
+                        {...newName}
+                    />
                 </InputGroup>
                 <InputGroup>
                     <InputGroup.Prepend>
                         <InputGroup.Text>Описание</InputGroup.Text>
                     </InputGroup.Prepend>
-                    <FormControl as="textarea" aria-label="With textarea" {...newDesc} />
+                    <FormControl as="textarea" aria-label="With textarea" data-testid="changeDesc" {...newDesc} />
                 </InputGroup>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
+                    <Button variant="secondary" onClick={handleClose} data-testid="cancel-edit-button">
                         Отмена
                     </Button>
-                    <Button variant="primary" onClick={saveChangeCode}>
+                    <Button variant="primary" onClick={saveChangeCode} data-testid="save-edit-button">
                         Сохранить изменения
                     </Button>
                 </Modal.Footer>
