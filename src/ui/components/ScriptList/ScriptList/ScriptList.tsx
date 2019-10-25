@@ -17,7 +17,7 @@ export interface MenuProps {
     onClickEsc: any;
     isOpen: boolean;
 }
-const ScriptList: FC<MenuProps> = ({ onClickScript, onClickEsc, isOpen }) => {
+    const ScriptList: FC<MenuProps> = ({ onClickScript, onClickEsc, isOpen }) => {
     const dispatch = useDispatch();
     const { listTour } = useSelector<StoreType, ScriptListProps>(({ SelectedTourState }) => SelectedTourState);
     //const [list, setList] = useState<ScriptValue[]>([]);

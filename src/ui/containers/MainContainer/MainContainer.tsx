@@ -6,8 +6,8 @@ import { setInspectDisabled, setInspectEnabled } from "../../actions/inspectActi
 import { StoreType } from "../../reducers";
 import BlocklyComponent from "../../components/BlocklyComponent";
 import ScriptButtons from "../../components/ScriptButtons";
-import DateLastSave from "../../components/dateLlstSave";
 import ConnectionStatus from "../../components/ConnectionStatus/ConnectionStatus";
+import DateLastSave from "../../components/DateListSave";
 
 export interface MainComponentProps {
     connected: boolean;
@@ -20,10 +20,10 @@ export interface MainComponentSelector {
 const MainComponent = () => {
     const dispatch = useDispatch();
     //маппинг значений из store
-    const { blocklyReloadEnabled, connected } = useSelector<StoreType, MainComponentProps>(
+    const { blocklyReloadEnabled, connected} = useSelector<StoreType, MainComponentProps>(
         ({ SelectedTourState, MainState }) => ({
             blocklyReloadEnabled: SelectedTourState.blocklyReloadEnabled,
-            connected: MainState.connected
+            connected: MainState.connected,
         })
     );
     const { isInspectEnabled, selector } = useSelector<StoreType, MainComponentSelector>(
@@ -57,9 +57,9 @@ const MainComponent = () => {
         <div className="mainSelector">
             <div className="relative panel">
                 <ScriptButtons />
-                {(blocklyReloadEnabled &&
-                    <><DateLastSave /><ConnectionStatus connection={connected} /></>
-                    ) || null}
+                <ConnectionStatus connection={connected} />
+                <DateLastSave />
+
             </div>
             {(blocklyReloadEnabled && (
                 <div className="main-container">
