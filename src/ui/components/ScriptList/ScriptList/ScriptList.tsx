@@ -17,7 +17,7 @@ export interface MenuProps {
     onClickEsc: any;
     isOpen: boolean;
 }
-    const ScriptList: FC<MenuProps> = ({ onClickScript, onClickEsc, isOpen }) => {
+const ScriptList: FC<MenuProps> = ({ onClickScript, onClickEsc, isOpen }) => {
     const dispatch = useDispatch();
     const { listTour } = useSelector<StoreType, ScriptListProps>(({ SelectedTourState }) => SelectedTourState);
     //const [list, setList] = useState<ScriptValue[]>([]);
@@ -31,6 +31,11 @@ export interface MenuProps {
     };*/
     useEffect(() => {
         setFilterList(listTour);
+        listTour.sort(function(a, b) {
+            const dateA: Date = new Date(a.date),
+                dateB: Date = new Date(b.date);
+            return +dateB - +dateA; //сортировка по убыванию дате
+        });
     }, [listTour]);
     useEffect(() => {
         dispatch(loadListTour());
