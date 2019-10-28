@@ -6,19 +6,12 @@ import { StoreType } from "../reducers";
 import {
     closeSelectedTour,
     createNewTour,
-    delToDb,
-    loadToDb,
-    periodicallySave,
-    saveTour
+    saveSelectedTour, setTourDB
 } from "../actions/selectedTourAction";
-import {Button, ButtonGroup, ButtonToolbar, FormControl, InputGroup, Modal} from "react-bootstrap";
+import { Button, ButtonToolbar, FormControl, InputGroup, Modal } from "react-bootstrap";
 import { useInputValue } from "../hooks/useInputValue";
-import { FC, memo } from "react";
-import { format } from "date-fns";
-import Script from "./ScriptList/Script/Script";
-import uuid from "uuid";
-import HamburgerButton from "./HamburgerButton";
 import BurgerMenu from "./BurgerMenu";
+import {useControlledInputValue} from "../hooks/useControleInputValue";
 
 export interface ScriptButtons {
     tourDB: ScriptValue;
@@ -34,9 +27,21 @@ const ScriptButtons = () => {
     const { tourDB, blocklyReloadEnabled } = useSelector<StoreType, ScriptButtons>(
         ({ SelectedTourState }) => SelectedTourState
     );
+    const [show, setShow] = useState(false);
+    const { setValue: setNameValue, ...newName } = useControlledInputValue(tourDB.name);
+    const { setValue: setDescValue, ...newDesc } = useControlledInputValue(tourDB.desc);
+
+    const handleShow = () => {
+        setShow(true);
+    };
+    const handleClose = () => {
+        setShow(false);
+        setNameValue(tourDB.name);
+        setDescValue(tourDB.desc);
+    };
     const saveCode = () => {
         dispatch(
-            saveTour({
+            setTourDB({
                 name: newName.value,
                 date: tourDB.date,
                 desc: newDesc.value,
@@ -44,18 +49,9 @@ const ScriptButtons = () => {
                 key: tourDB.key
             })
         );
+        dispatch(saveSelectedTour());
         handleClose();
     };
-    const [show, setShow] = useState(false);
-    const newName = useInputValue(tourDB.name);
-    const newDesc = useInputValue(tourDB.desc);
-
-    const handleClose = () => {
-        setShow(false);
-        newName.value = "";
-        newDesc.value = "";
-    };
-    const handleShow = () => setShow(true);
     const newTour = () => {
         dispatch(createNewTour());
     };
@@ -84,17 +80,12 @@ const ScriptButtons = () => {
             </ButtonToolbar>
             {/*  </div>*/}
             <Modal show={show} onHide={handleShow}>
-                <Modal.Header>Сохранение копии тура</Modal.Header>
+                <Modal.Header>Сохранение тура</Modal.Header>
                 <InputGroup className="mb-3">
                     <InputGroup.Prepend>
                         <InputGroup.Text>Название</InputGroup.Text>
                     </InputGroup.Prepend>
-                    {/* eslint-disable-next-line max-len */}
-                    <FormControl
-                        aria-label="TournewName"
-                        aria-newDescribedby="basic-addon1"
-                        {...newName}
-                    />
+                    <FormControl aria-label="TournewName" aria-newDescribedby="basic-addon1" {...newName} />
                 </InputGroup>
                 <InputGroup>
                     <InputGroup.Prepend>

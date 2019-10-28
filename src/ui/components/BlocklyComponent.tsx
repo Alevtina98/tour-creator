@@ -5,7 +5,7 @@ import parseWorkspaceXml from "./blockly/BlocklyHelper";
 import { connect } from "react-redux";
 import { StoreType } from "../reducers";
 import { bindActionCreators, Dispatch } from "redux";
-import {periodicallySave, putThisTour, saveTour, setTourXML} from "../actions/selectedTourAction";
+import {periodicallySave, saveThisTour, saveDescTour, setTourXML} from "../actions/selectedTourAction";
 import { ScriptValue } from "../util/indexedDB";
 import { format } from "date-fns";
 import uuid from "uuid";

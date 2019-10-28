@@ -39,7 +39,7 @@ const MainComponent = () => {
         // console.log("Script -> ",demo());
     }, [dispatch]);
     /* useEffect(() => {
-        window.addEventListener("beforeunload", () => dispatch(putTour()));
+        window.addEventListener("beforeunload", () => dispatch(saveSelectedTour()));
     }, [dispatch]);*/
     const onInspectClickHandler = () => {
         if (isInspectEnabled) {

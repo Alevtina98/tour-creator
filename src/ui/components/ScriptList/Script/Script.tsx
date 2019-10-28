@@ -1,6 +1,11 @@
 import React, { FC, useState } from "react";
 import { ScriptValue } from "../../../util/indexedDB";
-import { delToDb, loadListTour, loadToDb, saveTour } from "../../../actions/selectedTourAction";
+import {
+    delToDb,
+    loadListTour,
+    loadToDb,
+    saveDescTour,
+} from "../../../actions/selectedTourAction";
 import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
 import { Button, ButtonGroup, ButtonToolbar, FormControl, InputGroup, Modal } from "react-bootstrap";
@@ -36,13 +41,14 @@ const Script: FC<ScriptProps> = ({ tour, onClick }) => {
     const handleCloseDel = () => setShowDel(false);
     //редактирование
     const saveChangeCode = () => {
+        const updatedTour = { ...tour };
         //Если имя тура не указано, оно остается прежним
-        if (newName.value != "") tour.name = newName.value;
-        tour.desc = newDesc.value; //Как позволить пользователю редактировать существующее описание??
+        if (newName.value != "") updatedTour.name = newName.value;
+        updatedTour.desc = newDesc.value;
         //старая версия удаляется
-        dispatch(delToDb(tour.key));
+        //dispatch(delToDb(updatedTour.key));
         //создается новая версия
-        dispatch(saveTour(tour));
+        dispatch(saveDescTour(updatedTour));
         dispatch(loadListTour());
         handleClose();
        // console.log("tour.name >> ", tour.name);
@@ -127,16 +133,16 @@ const Script: FC<ScriptProps> = ({ tour, onClick }) => {
                 </Modal.Footer>
             </Modal>
 
-            <Modal show={showDel} onHide={handleShowDel}>
+            <Modal show={showDel} onHide={handleShowDel} data-testid="del-model">
                 <Modal.Header>Подтверждение удаления тура</Modal.Header>
                 <Modal.Body>
                     <p>Вы действительно хотите удалить "{tour.name}"?</p>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseDel}>
+                    <Button variant="secondary" onClick={handleCloseDel} data-testid="cancel-del-button">
                         Отмена
                     </Button>
-                    <Button variant="primary" onClick={saveDeleteCode}>
+                    <Button variant="primary" onClick={saveDeleteCode} data-testid="save-del-button">
                         Удалить
                     </Button>
                 </Modal.Footer>
