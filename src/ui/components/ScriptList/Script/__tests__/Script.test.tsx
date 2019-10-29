@@ -26,90 +26,63 @@ describe("Script", () => {
     it("should Script render", () => {
         const onClick = jest.fn();
         const { getByTestId } = render(ProviderWithComponent(() => <Script onClick={onClick} tour={testTour} />)());
-        /*ProviderWithComponent(() => <Script onClick={onClick} tour={testTour} />, {
-                SelectedTourState: {
-                    tourDB: {
-                        key: "test-key"
-                    }
-                }
-            } as any)()
-        );*/
         expect(getByTestId("tour-name").textContent).toBe("custom name");
         expect(getByTestId("tour-time").textContent).toBe("24-10-2019 в 10:52:15");
     });
-    it("should Script ModelOnClickShow", async () => {
-        const { getByTestId, queryByText,  } = render(
-            ProviderWithComponent(() => <Script onClick={onClick} tour={testTour} />)()
-        );
-        //expect(queryByText("Редактирование шаблона")).toBeNull();
-        //expect(document.body.classList.contains("modal-open")).toBe(false);
-        //expect(getByTestId("edit-model")).toBeNull();
-
-        /*expect(queryByText("Подтверждение удаления тура")).toBeNull();
-        fireEvent.click(getByTestId("delete-button"));
-        expect(queryByText("Подтверждение удаления тура")).not.toBeNull();
-
+    it("should ModelChange render", async () => {
+        const { getByTestId } = render(ProviderWithComponent(() => <Script onClick={onClick} tour={testTour} />)());
         fireEvent.click(getByTestId("edit-button"));
-        expect(getByTestId("edit-model")).not.toBeNull();
-        fireEvent.click(getByTestId("cancel-edit-button"));
-        expect(getByTestId("edit-model")).toBeNull();
-
-        fireEvent.click(getByTestId("edit-button"));
-        fireEvent.click(getByTestId("save-edit-button"));
-
-        await waitForElementToBeRemoved(() => getByText("edit-button"));
-        fireEvent.click(getByTestId("edit-button"));
-        fireEvent.abort(getByTestId("edit-model"));*/
-        fireEvent.abort(getByTestId("edit-button"));
+        await waitForElement(() => getByTestId("edit-model"));
         expect(getByTestId("changeName").value).toBe(testTour.name);
         expect(getByTestId("changeDesc").value).toBe(testTour.desc);
+        fireEvent.click(getByTestId("cancel-edit-button"));
+        await waitForElementToBeRemoved(() => getByTestId("edit-model"));
+        fireEvent.click(getByTestId("edit-button"));
+        await waitForElement(() => getByTestId("edit-model"));
+        fireEvent.click(getByTestId("save-edit-button"));
+        await waitForElementToBeRemoved(() => getByTestId("edit-model"));
     });
-    it("should Script ModelChange", async () => {
-        const { getByTestId, queryByText } = render(
-            ProviderWithComponent(() => <Script onClick={onClick} tour={testTour} />)()
-        );
+    it("should ModelDel render", async () => {
+        const { getByTestId } = render(ProviderWithComponent(() => <Script onClick={onClick} tour={testTour} />)());
+        fireEvent.click(getByTestId("del-button"));
+        await waitForElement(() => getByTestId("del-model"));
+        expect(getByTestId("del-name").textContent).toBe("Вы действительно хотите удалить \"" + testTour.name + "\"?");
+        fireEvent.click(getByTestId("cancel-del-button"));
+        await waitForElementToBeRemoved(() => getByTestId("del-model"));
+        fireEvent.click(getByTestId("del-button"));
+        await waitForElement(() => getByTestId("del-model"));
+        fireEvent.click(getByTestId("save-del-button"));
+        await waitForElementToBeRemoved(() => getByTestId("del-model"));
+    });
+    it("should ModelChange", async () => {
+        const { getByTestId } = render(ProviderWithComponent(() => <Script onClick={onClick} tour={testTour} />)());
         await (await IDB()).put("script", testTour, testTour.key);
         fireEvent.click(getByTestId("edit-button"));
-        expect(queryByText("Редактирование шаблона")).not.toBeNull();
-        expect(getByTestId("changeName").value).toBe("custom name");
-        expect(getByTestId("changeDesc").value).toBe("custom description");
+        expect(getByTestId("changeName").value).toBe(testTour.name);
+        expect(getByTestId("changeDesc").value).toBe(testTour.desc);
         fireEvent.click(getByTestId("cancel-edit-button"));
         //Отмена изменения
         fireEvent.click(getByTestId("edit-button"));
         fireEvent.change(getByTestId("changeName"), { target: { value: "change custom name" } });
         fireEvent.click(getByTestId("cancel-edit-button"));
         const tour_get: ScriptValue | undefined = await (await IDB()).get("script", testTour.key);
-        expect(tour_get.name).toBe("custom name");
-        //Прерывание изменения
-        fireEvent.click(getByTestId("edit-button"));
-        fireEvent.change(getByTestId("changeName"), { target: { value: "change custom name" } });
-        fireEvent.abort(getByTestId("edit-model"));
-        const tour_get2: ScriptValue | undefined = await (await IDB()).get("script", testTour.key);
-        expect(tour_get2.name).toBe("custom name");
+        expect(tour_get.name).toBe(testTour.name);
         //Сохранение изменения
         fireEvent.click(getByTestId("edit-button"));
-        expect(queryByText("fade modal show")).toBeNull();
         fireEvent.change(getByTestId("changeName"), { target: { value: "change custom name" } });
         fireEvent.click(getByTestId("save-edit-button"));
         const tour_get3: ScriptValue | undefined = await (await IDB()).get("script", testTour.key);
         expect(tour_get3.name).toBe("change custom name");
         (await IDB()).delete("script", testTour.key);
     });
-    it("should Script ModelDel", async () => {
-        const { getByTestId, queryByText } = render(
-            ProviderWithComponent(() => <Script onClick={onClick} tour={testTour} />)()
-        );
+    it("should ModelDel", async () => {
+        const { getByTestId } = render(ProviderWithComponent(() => <Script onClick={onClick} tour={testTour} />)());
         await (await IDB()).put("script", testTour, testTour.key);
         //Отмена удаления
         fireEvent.click(getByTestId("del-button"));
         fireEvent.click(getByTestId("cancel-del-button"));
         const tour_test2_get: ScriptValue | undefined = await (await IDB()).get("script", testTour.key);
         expect(tour_test2_get).not.toBeUndefined();
-        //прерывание удаления
-        fireEvent.click(getByTestId("del-button"));
-        fireEvent.abort(getByTestId("del-model"));
-        const tour_test2_get2: ScriptValue | undefined = await (await IDB()).get("script", testTour.key);
-        expect(tour_test2_get2).not.toBeUndefined();
         //Подтверждение удаления
         fireEvent.click(getByTestId("del-button"));
         fireEvent.click(getByTestId("save-del-button"));
