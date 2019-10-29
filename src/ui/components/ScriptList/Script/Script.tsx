@@ -97,7 +97,7 @@ const Script: FC<ScriptProps> = ({ tour, onClick }) => {
                         <Button variant="light" size="sm" onClick={changeCode} data-testid="edit-button">
                             <FontAwesomeIcon icon={faEdit} className="i-close" color="#A1A2A2" />
                         </Button>
-                        <Button variant="light" size="sm" onClick={deleteCode} data-testid="delete-button">
+                        <Button variant="light" size="sm" onClick={deleteCode} data-testid="del-button">
                             <FontAwesomeIcon icon={faTrashAlt} className="i-close" color="#A1A2A2" />
                         </Button>
                     </ButtonGroup>

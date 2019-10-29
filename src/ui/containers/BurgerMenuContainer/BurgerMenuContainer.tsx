@@ -1,8 +1,8 @@
 import { slide as Menu, State } from "react-burger-menu";
 import { useEffect, useState } from "react";
 import React from "react";
-import ScriptList from "./ScriptList/ScriptList/ScriptList";
-import { loadListTour } from "../actions/selectedTourAction";
+import ScriptList from "../../components/ScriptList/ScriptList/ScriptList";
+import { loadListTour } from "../../actions/selectedTourAction";
 import { useDispatch } from "react-redux";
 import { Button } from "react-bootstrap";
 /*
@@ -14,7 +14,7 @@ http://teatrnur.ru/wp-content/themes/twentyfifteen/img/cross.png
 https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Hamburger_icon.svg/1200px-Hamburger_icon.svg.png
 
 */
-const BurgerMenu = () => {
+const BurgerMenuContainer = () => {
     const [show, setShow] = useState(false);
     const [menuIsOpen, setMenuIsOpen] = useState(false);
     const dispatch = useDispatch();
@@ -35,7 +35,7 @@ const BurgerMenu = () => {
     const closeAllMenus = e => {
         // if (e.key === "Escape" || e == "CLICK_ON_Tour") {
         setMenuIsOpen(false);
-        console.log("CLOSE");
+        //console.log("CLOSE");
         // }
     };
     // useEffect(() => {
@@ -46,7 +46,7 @@ const BurgerMenu = () => {
     const openBurgerMenu = () => {
         setMenuIsOpen(true);
     };
-    console.log("menu is open", menuIsOpen);
+    //console.log("menu is open", menuIsOpen);
     return (
         <div>
             {/* <Menu
@@ -91,4 +91,4 @@ const BurgerMenu = () => {
         </div>
     );
 };
-export default BurgerMenu;
+export default BurgerMenuContainer;

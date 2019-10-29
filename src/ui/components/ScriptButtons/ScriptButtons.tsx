@@ -1,17 +1,17 @@
 import React, { DOMElement, useEffect, useState } from "react";
 //import Modal from "react-bootstrap";
-import IDB, { ScriptValue } from "../util/indexedDB";
+import IDB, { ScriptValue } from "../../util/indexedDB";
 import { useDispatch, useSelector } from "react-redux";
-import { StoreType } from "../reducers";
+import { StoreType } from "../../reducers";
 import {
     closeSelectedTour,
     createNewTour,
     saveSelectedTour, setTourDB
-} from "../actions/selectedTourAction";
+} from "../../actions/selectedTourAction";
 import { Button, ButtonToolbar, FormControl, InputGroup, Modal } from "react-bootstrap";
-import { useInputValue } from "../hooks/useInputValue";
-import BurgerMenu from "./BurgerMenu";
-import {useControlledInputValue} from "../hooks/useControleInputValue";
+import { useInputValue } from "../../hooks/useInputValue";
+import BurgerMenuContainer from "../../containers/BurgerMenuContainer/BurgerMenuContainer";
+import {useControlledInputValue} from "../../hooks/useControleInputValue";
 
 export interface ScriptButtons {
     tourDB: ScriptValue;
@@ -62,7 +62,7 @@ const ScriptButtons = () => {
         <div className="relative">
             {/* //<div className="btn-group" role="group" aria-label="Basic example">*/}
             <div id="outer-container">
-                <BurgerMenu />
+                <BurgerMenuContainer />
                 {/*<main id="page-wrap">
                 Проекты
                 </main>*/}

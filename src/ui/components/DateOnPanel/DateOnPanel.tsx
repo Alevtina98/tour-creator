@@ -1,10 +1,10 @@
-import React, {DOMElement, FC, useEffect, useState} from "react";
+import React, { DOMElement, FC, useEffect, useState } from "react";
 //import Modal from "react-bootstrap";
-import { ScriptValue } from "../util/indexedDB";
+import { ScriptValue } from "../../util/indexedDB";
 import { useSelector } from "react-redux";
-import { StoreType } from "../reducers";
+import { StoreType } from "../../reducers";
 import { format } from "date-fns";
-import {MainComponentProps} from "../containers/MainContainer/MainContainer";
+import { MainComponentProps } from "../../containers/MainContainer/MainContainer";
 
 export interface ScriptButtons {
     tourDB: ScriptValue;
@@ -15,22 +15,24 @@ export interface ScriptButtons {
 interface DateListSaveProps {
     showDate?: boolean;
 }
-const DateLastSave: FC<DateListSaveProps> = ({showDate}) => {
-    const { blocklyReloadEnabled, tourDB, tourXML} = useSelector<StoreType, ScriptButtons>(
+const DateOnPanel: FC<DateListSaveProps> = ({ showDate }) => {
+    const { blocklyReloadEnabled, tourDB, tourXML } = useSelector<StoreType, ScriptButtons>(
         ({ SelectedTourState, MainState }) => ({
             blocklyReloadEnabled: SelectedTourState.blocklyReloadEnabled,
             tourDB: SelectedTourState.tourDB,
             tourXML: SelectedTourState.tourXML
         })
     );
-    if (!blocklyReloadEnabled){
+    if (!blocklyReloadEnabled) {
         return null;
     }
 
     if (showDate && tourDB.date) {
-        return <div className="date-save-on-panel">
-            Последнее сохранение {format(new Date(tourDB.date), "dd-MM-yyyy в HH:mm:ss")}
-        </div>;
+        return (
+            <div className="date-save-on-panel">
+                Последнее сохранение {format(new Date(tourDB.date), "dd-MM-yyyy в HH:mm:ss")}
+            </div>
+        );
     }
 
     if (tourXML === tourDB.code) {
@@ -39,4 +41,4 @@ const DateLastSave: FC<DateListSaveProps> = ({showDate}) => {
     return <div className="date-save-on-panel"> ...</div>;
 };
 
-export default DateLastSave;
+export default DateOnPanel;
