@@ -136,7 +136,7 @@ const Script: FC<ScriptProps> = ({ tour, onClick }) => {
             <Modal show={showDel} onHide={handleShowDel} data-testid="del-model">
                 <Modal.Header>Подтверждение удаления тура</Modal.Header>
                 <Modal.Body>
-                    <p>Вы действительно хотите удалить "{tour.name}"?</p>
+                    <p data-testid="del-name">Вы действительно хотите удалить "{tour.name}"?</p>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseDel} data-testid="cancel-del-button">
