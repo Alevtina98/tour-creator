@@ -52,10 +52,10 @@ const ScriptList: FC<MenuProps> = ({ onClickScript, onClickEsc, isOpen }) => {
                 "tour-list--open": isOpen
             })}
         >
-            <Button variant="light" onClick={onClickEsc} className="burger-menu-button-close">
+            <Button variant="light" onClick={onClickEsc} className="burger-menu-button-close" data-testid="list-button-close">
                 <FontAwesomeIcon icon={faTimes} className="i-close" size="3x" color="#A1A2A2" />
             </Button>
-            <FormControl placeholder="Поиск" className="tour-search" onChange={searchUpdated} />
+            <FormControl placeholder="Поиск" className="tour-search" onChange={searchUpdated} data-testid="list-search"/>
             <div className="list-tour-group">
                 {filterList.map(el => (
                     <Script tour={el} onClick={onClickScript} key={el.key} />

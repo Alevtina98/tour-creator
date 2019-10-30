@@ -1,38 +1,23 @@
 import React from "react";
 import ProviderWithComponent from "../../store/ProviderWithComponent";
 import TourEditorContainer from "./EditorContainer";
+import { storiesOf } from "@storybook/react";
+import { boolean, text, withKnobs } from "@storybook/addon-knobs";
 
 const Component = ProviderWithComponent(TourEditorContainer);
 
-export default { title: "MainContainer/EditorContainer", component: <Component /> };
-export const blocklyDisabled = () => (
-    <div className="main-selector">
-        <div />
-        {ProviderWithComponent(TourEditorContainer)()}
-    </div>
-);
-export const blocklyEnabled = () => (
-    <div className="main-selector">
-        <div />
-        {ProviderWithComponent(TourEditorContainer, {
-            SelectedTourState: {
-                blocklyReloadEnabled: true
-            }
-        } as any)()}
-    </div>
-);
-export const inspectEnabled = () => (
-    <div className="main-selector">
-        <div />
-        {ProviderWithComponent(TourEditorContainer, {
-            SelectedTourState: {
-                blocklyReloadEnabled: true
-            },
-            InspectState: {
-                isInspectEnabled: true
-            }
-        } as any)()}
-    </div>
-);
-
-
+const editor = storiesOf("MainContainer/EditorContainer", module)
+    .addDecorator(withKnobs)
+    .add("editor", () => (
+        <div className="main-selector">
+            <div />
+            {ProviderWithComponent(TourEditorContainer, {
+                SelectedTourState: {
+                    blocklyReloadEnabled: boolean("blocklyReloadEnabled", true)
+                },
+                InspectState: {
+                    isInspectEnabled: boolean("isInspectEnabled", false)
+                }
+            } as any)()}
+        </div>
+    ));

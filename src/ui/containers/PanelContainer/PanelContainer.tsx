@@ -19,7 +19,7 @@ const PanelContainer = () => {
         <div className="relative panel">
             <ScriptButtons />
             <ConnectionStatus connection={connected} />
-            <DateOnPanel />
+            <DateOnPanel data-testid="panel-date"/>
         </div>
     );
 };

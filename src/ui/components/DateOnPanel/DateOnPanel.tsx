@@ -29,16 +29,24 @@ const DateOnPanel: FC<DateListSaveProps> = ({ showDate }) => {
 
     if (showDate && tourDB.date) {
         return (
-            <div className="date-save-on-panel">
+            <div className="date-save-on-panel" data-testid="panel-date">
                 Последнее сохранение {format(new Date(tourDB.date), "dd-MM-yyyy в HH:mm:ss")}
             </div>
         );
     }
 
     if (tourXML === tourDB.code) {
-        return <div className="date-save-on-panel"> Все изменения сохранены</div>;
+        return (
+            <div className="date-save-on-panel" data-testid="panel-not-date">
+                Все изменения сохранены
+            </div>
+        );
     }
-    return <div className="date-save-on-panel"> ...</div>;
+    return (
+        <div className="date-save-on-panel" data-testid="panel-not-save">
+            ...
+        </div>
+    );
 };
 
 export default DateOnPanel;

@@ -25,13 +25,10 @@ const onClickScript = () => {};
 const onClickEsc = () => {};
 export const scriptListComponent = () => (
     <div className="relative list-tour-group">
-        {ProviderWithComponent(
-            () => <ScriptList onClickScript={onClickScript()} onClickEsc={onClickEsc()} isOpen={true} />,
-            {
-                SelectedTourState: {
-                    tourDB: storeTour
-                }
-            } as any
-        )()}
+        {ProviderWithComponent(() => <ScriptList onClickScript={onClickScript()} onClickEsc={onClickEsc()} isOpen={true}/>, {
+            SelectedTourState: {
+                tourDB: storeTour
+            }
+        } as any)()}
     </div>
 );
