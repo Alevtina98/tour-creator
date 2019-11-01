@@ -1,5 +1,7 @@
 import DescrComponent from "../ui/components/DescrComponent";
 import * as React from "react";
+import ReactDOM from "react-dom";
+
 
 export const select = (element: HTMLElement) => {
     return document.querySelector(element);
@@ -40,7 +42,10 @@ export const blackout = (element: HTMLElement) => {
 export const description = (element: HTMLElement, desc: string) => {
     const el: HTMLElement = select(element);
     console.log("description FN", el, desc);
-    return <DescrComponent />;
-};
+    const descr = window.document.createElement("div");
+    descr.id = "container";
+    window.document.body.appendChild(descr);
+    ReactDOM.render(<DescrComponent />, document.getElementById("container"));
 
+};
 
