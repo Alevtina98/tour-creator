@@ -37,6 +37,12 @@ class Agent {
             //   this.subscribedEntityId = null;
             // },
 
+            runScript: str => {
+                const el = this.window.document.createElement("script");
+                el.innerText = `eval(${str})`;
+                this.window.document.body.appendChild(el);
+            },
+
             enableSelectMode: () => {
                 this.attachSelectClickHandler();
             },

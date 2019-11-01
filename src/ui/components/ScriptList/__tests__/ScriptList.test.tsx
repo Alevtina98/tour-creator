@@ -1,11 +1,10 @@
 import { cleanup, render } from "@testing-library/react";
-import { ScriptValue } from "../../../util/indexedDB";
+import IDB, { ScriptValue } from "../../../util/indexedDB";
 import ProviderWithComponent from "../../../store/ProviderWithComponent";
 import Script from "../../ScriptList/Script/Script";
 import React from "react";
 import ScriptList from "../../ScriptList/ScriptList/ScriptList";
-import DateOnPanel from "../../DateOnPanel/DateOnPanel";
-import { format } from "date-fns";
+import "fake-indexeddb/auto";
 
 describe("Script", () => {
     beforeEach(cleanup);
@@ -40,20 +39,23 @@ describe("Script", () => {
         }
     ];
     const onClick = () => {};
-    it("should ScriptList render", () => {
+    it("should ScriptList render", async () => {
         const { getByTestId, queryByTestId, debug } = render(
-            ProviderWithComponent(() => <ScriptList onClickScript={onClick()} onClickEsc={onClick()} isOpen={true}/>, {
+            ProviderWithComponent(() => <ScriptList onClickScript={onClick()} onClickEsc={onClick()} isOpen={true} />, {
                 SelectedTourState: {
                     tourDB: testTour,
-                    tourXML: testTour.code,
+                    tourXML: testTour[0].code,
                     blocklyReloadEnabled: true
                 }
             } as any)()
         );
-        debug();
-        /*expect(getByTestId("panel-date").textContent).toBe(
-            `Последнее сохранение ${format(new Date(testTour.date), "dd-MM-yyyy в HH:mm:ss")}`
-        );*/
+        // debug();
+        const promiseAdd = testTour.map(async el => await (await IDB()).add("script", el, el.key));
+        await Promise.all(promiseAdd);
+        const promiseList = testTour.map(async el => await (await IDB()).get("script", el.key));
+        const result = await Promise.all(promiseList);
+        expect(testTour).toStrictEqual(result)
+
         expect(queryByTestId("list-button-close")).not.toBeNull();
         expect(queryByTestId("list-search")).not.toBeNull();
     });
