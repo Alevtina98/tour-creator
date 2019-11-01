@@ -12,6 +12,7 @@ import { Button, ButtonToolbar, FormControl, InputGroup, Modal } from "react-boo
 import { useInputValue } from "../../hooks/useInputValue";
 import BurgerMenuContainer from "../../containers/BurgerMenuContainer/BurgerMenuContainer";
 import {useControlledInputValue} from "../../hooks/useControleInputValue";
+import agentActions from "../../actions/agentActions";
 
 export interface ScriptButtons {
     tourDB: ScriptValue;
@@ -58,6 +59,9 @@ const ScriptButtons = () => {
     const closeTour = () => {
         dispatch(closeSelectedTour());
     };
+    const runTour = () => {
+        agentActions.runScript('что-то');
+    };
     return (
         <div className="relative">
             {/* //<div className="btn-group" role="group" aria-label="Basic example">*/}
@@ -70,6 +74,9 @@ const ScriptButtons = () => {
             <ButtonToolbar>
                 <Button variant="light" onClick={newTour}>
                     Создать
+                </Button>
+                <Button size="sm" variant="light" onClick={runTour} disabled={!blocklyReloadEnabled}>
+                    Запустить
                 </Button>
                 <Button size="sm" variant="light" onClick={handleShow} disabled={!blocklyReloadEnabled}>
                     Сохранить
