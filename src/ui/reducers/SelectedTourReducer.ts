@@ -8,7 +8,7 @@ import {
     isLoadingDB,
     setLoadBocklyEnabled,
     setLoadBocklyDisabled,
-    setListTour
+    setListTour, setTourJS
 } from "../actions/selectedTourAction";
 import uuid from "uuid";
 
@@ -18,6 +18,7 @@ export interface SelectedTourReducerState {
     isLoadingDB: boolean;
     blocklyReloadEnabled: boolean;
     listTour: ScriptValue[];
+    tourJS: string;
     //toutDBKey: string;
 }
 const initScriptValue = {
@@ -31,21 +32,23 @@ const tourDBReducer = createReducer<ScriptValue, SelectedTourAction>(initScriptV
     setTourDB,
     (state, action) => action.payload
 );
-const TourBlocklyReducer = createReducer<string>("").handleAction(setTourXML, (state, action) => action.payload);
+const tourBlocklyReducer = createReducer<string>("").handleAction(setTourXML, (state, action) => action.payload);
 const isLoadingDBReducer = createReducer<boolean>(false).handleAction(isLoadingDB, () => true);
 //const SelectedIndexReducer = createReducer<string>("").handleAction(setKey, (state, action) => action.payload);
 const blocklyLoadReducer = createReducer<boolean>(false)
     .handleAction(setLoadBocklyEnabled, () => true)
     .handleAction(setLoadBocklyDisabled, () => false);
-const ListTourReducer = createReducer<ScriptValue[]>([]).handleAction(setListTour, (state, action) => action.payload);
+const listTourReducer = createReducer<ScriptValue[]>([]).handleAction(setListTour, (state, action) => action.payload);
+const tourJSReducer = createReducer<string>("").handleAction(setTourJS, (state, action) => action.payload);
 
 const SelectedTourReducer = combineReducers<SelectedTourReducerState>({
     tourDB: tourDBReducer,
-    tourXML: TourBlocklyReducer,
+    tourXML: tourBlocklyReducer,
     isLoadingDB: isLoadingDBReducer,
     blocklyReloadEnabled: blocklyLoadReducer,
-    listTour: ListTourReducer
+    listTour: listTourReducer,
     //toutDBKey: SelectedIndexReducer
+    tourJS: tourJSReducer
 });
 
 export default SelectedTourReducer;

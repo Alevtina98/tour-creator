@@ -17,6 +17,7 @@ import agentActions from "../../actions/agentActions";
 export interface ScriptButtons {
     tourDB: ScriptValue;
     blocklyReloadEnabled: boolean;
+    tourJS: string
 }
 
 /*export interface DateFormat {
@@ -25,7 +26,7 @@ export interface ScriptButtons {
 const ScriptButtons = () => {
     const dispatch = useDispatch();
     //маппинг значений из store
-    const { tourDB, blocklyReloadEnabled } = useSelector<StoreType, ScriptButtons>(
+    const { tourDB, blocklyReloadEnabled, tourJS } = useSelector<StoreType, ScriptButtons>(
         ({ SelectedTourState }) => SelectedTourState
     );
     const [show, setShow] = useState(false);
@@ -60,7 +61,8 @@ const ScriptButtons = () => {
         dispatch(closeSelectedTour());
     };
     const runTour = () => {
-        agentActions.runScript('что-то');
+        agentActions.runScript(tourJS);
+        console.log("tourJS >>", tourJS);
     };
     return (
         <div className="relative">

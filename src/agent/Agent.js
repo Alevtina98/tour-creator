@@ -19,10 +19,6 @@ class Agent {
         console.log(c);
         // Agent state
         this.subscribedEntityId = null; //идентификатор события
-        //Добавление функций воспроизведения тура
-        const functions = this.window.document.createElement("script");
-        functions.src = "C:\\workspace\\tour-creator\\src\\agent\\functionsRunScript.js";
-        this.window.document.head.appendChild(functions);
         // Kick off debug loop and message handler
         this.initDevtoolsMessageListener();
         this.handlers = {
@@ -40,13 +36,9 @@ class Agent {
             //   this.subscribedEntityId = null;
             // },
 
-            runScript: descr => {
+            runScript: code => {
                 const el = this.window.document.createElement("script");
-                el.innerText = `eval(\`
- \t\tblackout('body>div:nth-child(3)');
- \t\tdescription('body>div:nth-child(1)', '${descr}');
- \`)`;
-               // el.innerText = "eval(${descr})";
+                el.innerText = `eval("${code.replace(`"`, "")}")`;
                 this.window.document.body.appendChild(el);
 
             },

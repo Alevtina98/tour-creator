@@ -5,7 +5,7 @@ import parseWorkspaceXml from "./blockly/BlocklyHelper";
 import { connect } from "react-redux";
 import { StoreType } from "../reducers";
 import { bindActionCreators, Dispatch } from "redux";
-import {periodicallySave, saveThisTour, saveDescTour, setTourXML} from "../actions/selectedTourAction";
+import {periodicallySave, saveThisTour, saveDescTour, setTourXML, setTourJS} from "../actions/selectedTourAction";
 import { ScriptValue } from "../util/indexedDB";
 import { format } from "date-fns";
 import uuid from "uuid";
@@ -60,6 +60,7 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
         if (this.props.code && this.props.code.current) {
             this.props.code.current.value = code;
         }
+        this.props.dispatch(setTourJS(code));
         const s = new XMLSerializer();
         const newXmlStr = s.serializeToString(Blockly.Xml.workspaceToDom(workspace));
         this.props.dispatch(setTourXML(newXmlStr)); //Отправка экшена

@@ -12,10 +12,11 @@ module.exports = {
             "google-blockly/msg/js/ru",
         ],
         ui: "./src/ui/index.tsx",
-        agent: "./src/agent/index.js"
+        agent: "./src/agent/index.js",
+        functions: "./src/clientFunctions/index.ts"
     },
     resolve: {
-        extensions: [".ts", ".tsx", ".js", ".jsx", ".less", ".cur"],
+        extensions: [".ts", ".tsx", ".js", ".jsx", ".less", ".cur"]
     },
 
     devtool: "source-map",

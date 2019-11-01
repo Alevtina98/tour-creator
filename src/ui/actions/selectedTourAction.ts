@@ -12,6 +12,7 @@ export const isLoadingDB = createStandardAction("IS_LOADING_DB")();
 export const setListTour = createStandardAction("SET_LIST_TOUR")<ScriptValue[]>();
 export const setTourDB = createStandardAction("SET_TOUR")<ScriptValue>();
 export const setTourXML = createStandardAction("SET_TOUR_XML")<string>();
+export const setTourJS = createStandardAction("SET_TOUR_JS")<string>();
 export const setKey = createStandardAction("SET_KEY")<string>();
 
 export const loadListTour = () => async (dispatch: Dispatch, getState: () => StoreType) => {
