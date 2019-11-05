@@ -4,16 +4,19 @@ import ReactDOM from "react-dom";
 
 
 export const select = (element: HTMLElement) => {
+    console.log("selector >> ", element);
     return document.querySelector(element);
 };
-export const blackout = (element: HTMLElement) => {
+export const blackout = async (element: HTMLElement) => {
     const el: HTMLElement = select(element);
+    if (!el) return console.log("ERROR: selector not found");
     console.log("blackout FN", el);
     const bounds = el.getBoundingClientRect() as DOMRect;
-    const x: number = bounds.x;
-    const y: number = bounds.y;
+    const x: number = bounds.x + (window.pageXOffset || document.documentElement.scrollLeft);
+    const y: number = bounds.y + (window.pageYOffset || document.documentElement.scrollTop);
     const height: number = bounds.height;
     const width: number = bounds.width;
+    await el.scrollIntoView(true);
     const windowWidth: number = document.body.clientWidth;
     const windowHeight: number = document.body.clientHeight;
     const newRect = (rTop: number, rLeft: number, rWidth: number, rHeight: number) => {
@@ -41,11 +44,11 @@ export const blackout = (element: HTMLElement) => {
 };
 export const description = (element: HTMLElement, desc: string) => {
     const el: HTMLElement = select(element);
-    console.log("description FN", el, desc);
+    console.log("description FN >> ", el, " desc >> ", desc);
     const descr = window.document.createElement("div");
     descr.id = "container";
     window.document.body.appendChild(descr);
-    ReactDOM.render(<DescrComponent />, document.getElementById("container"));
+    ReactDOM.render(<DescrComponent selector={el} text={desc} />, document.getElementById("container"));
 
 };
 

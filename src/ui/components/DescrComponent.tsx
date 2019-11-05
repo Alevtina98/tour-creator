@@ -1,23 +1,18 @@
 import { Manager, Reference, Popper } from "react-popper";
-import React from "react";
+import React, { FC } from "react";
 
-const DescrComponent = () => (
-    <Manager>
-        <Reference>
-            {({ ref }) => (
-                <button type="button" ref={ref}>
-                    Reference element
-                </button>
-            )}
-        </Reference>
-        <Popper placement="right">
-            {({ ref, style, placement, arrowProps }) => (
-                <div ref={ref} style={style} data-placement={placement}>
-                    Popper element
-                    <div ref={arrowProps.ref} style={arrowProps.style} />
-                </div>
-            )}
-        </Popper>
-    </Manager>
+export interface DescrComponentProps {
+    selector: HTMLElement;
+    text: string;
+}
+const DescrComponent: FC<DescrComponentProps> = ({ selector, text }) => (
+    <Popper referenceElement={selector}>
+        {({ ref, style, placement, arrowProps }) => (
+            <div ref={ref} style={style} data-placement={placement} className="popper">
+                {text}
+                <div ref={arrowProps.ref} style={arrowProps.style} />
+            </div>
+        )}
+    </Popper>
 );
 export default DescrComponent;

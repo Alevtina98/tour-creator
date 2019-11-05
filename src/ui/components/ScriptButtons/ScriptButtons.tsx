@@ -13,11 +13,13 @@ import { useInputValue } from "../../hooks/useInputValue";
 import BurgerMenuContainer from "../../containers/BurgerMenuContainer/BurgerMenuContainer";
 import {useControlledInputValue} from "../../hooks/useControleInputValue";
 import agentActions from "../../actions/agentActions";
+import ReactDOM from "react-dom";
+import DescrComponent from "../DescrComponent";
 
 export interface ScriptButtons {
     tourDB: ScriptValue;
     blocklyReloadEnabled: boolean;
-    tourJS: string
+    tourJS: string;
 }
 
 /*export interface DateFormat {
@@ -63,6 +65,7 @@ const ScriptButtons = () => {
     const runTour = () => {
         agentActions.runScript(tourJS);
         console.log("tourJS >>", tourJS);
+
     };
     return (
         <div className="relative">

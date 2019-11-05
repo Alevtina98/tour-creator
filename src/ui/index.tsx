@@ -5,6 +5,7 @@ import "../../style/main.less";
 import Main from "./containers/MainContainer/MainContainer";
 import injectDebugger from "./injectDebugger";
 import configureStore from "./store/configureStore";
+import DescrComponent from "./components/DescrComponent";
 
 injectDebugger();
 

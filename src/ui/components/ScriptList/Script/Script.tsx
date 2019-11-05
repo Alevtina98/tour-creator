@@ -33,11 +33,7 @@ const Script: FC<ScriptProps> = ({ tour, onClick }) => {
     const [showDel, setShowDel] = useState(false);
     const handleShow = () => setShow(true);
     const handleShowDel = () => setShowDel(true);
-    const handleClose = () => {
-        setShow(false);
-        setNameValue(tour.name);
-        setDescValue(tour.desc);
-    };
+    const handleClose = () => setShow(false);
     const handleCloseDel = () => setShowDel(false);
     //редактирование
     const saveChangeCode = () => {
@@ -45,29 +41,27 @@ const Script: FC<ScriptProps> = ({ tour, onClick }) => {
         //Если имя тура не указано, оно остается прежним
         if (newName.value != "") updatedTour.name = newName.value;
         updatedTour.desc = newDesc.value;
-        //старая версия удаляется
-        //dispatch(delToDb(updatedTour.key));
-        //создается новая версия
         dispatch(saveDescTour(updatedTour));
-        dispatch(loadListTour());
         handleClose();
        // console.log("tour.name >> ", tour.name);
     };
     const changeCode = (e: any) => {
         e.stopPropagation();
         e.preventDefault();
-        //dispatch(setTourDB(tour));
+        setNameValue(tour.name);
+        setDescValue(tour.desc);
         handleShow();
     };
     const saveDeleteCode = () => {
         dispatch(delToDb(tour.key));
-        dispatch(loadListTour());
         handleCloseDel();
     };
     //удаление
     const deleteCode = (e: any) => {
         e.stopPropagation();
         e.preventDefault();
+        setNameValue(tour.name);
+        setDescValue(tour.desc);
         handleShowDel();
     };
     //загрузка

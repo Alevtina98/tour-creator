@@ -96,5 +96,6 @@ export const delToDb = (key: string) => async (dispatch: Dispatch, getState: () 
     if (key == store.SelectedTourState.tourDB.key) dispatch(setLoadBocklyDisabled());
     (await IDB()).delete("script", key);
     clearInterval(periodicallySaveTimer);
+    loadListTour()(dispatch, getState);
 };
 export type SelectedTourAction = ActionType<typeof setTourDB>;
