@@ -1,14 +1,13 @@
-import DescrComponent from "../ui/components/DescrComponent";
+import DescriptionComponent from "../ui/components/DescriptionComponent";
 import * as React from "react";
 import ReactDOM from "react-dom";
 
-
-export const select = (element: HTMLElement) => {
+export const select = (element: string): HTMLElement | null => {
     console.log("selector >> ", element);
     return document.querySelector(element);
 };
-export const blackout = async (element: HTMLElement) => {
-    const el: HTMLElement = select(element);
+export const blackout = (element: string) => {
+    const el = select(element);
     if (!el) return console.log("ERROR: selector not found");
     console.log("blackout FN", el);
     const bounds = el.getBoundingClientRect() as DOMRect;
@@ -16,7 +15,7 @@ export const blackout = async (element: HTMLElement) => {
     const y: number = bounds.y + (window.pageYOffset || document.documentElement.scrollTop);
     const height: number = bounds.height;
     const width: number = bounds.width;
-    await el.scrollIntoView(true);
+    el.scrollIntoView({block: "center", behavior: "smooth" });
     const windowWidth: number = document.body.clientWidth;
     const windowHeight: number = document.body.clientHeight;
     const newRect = (rTop: number, rLeft: number, rWidth: number, rHeight: number) => {
@@ -42,13 +41,21 @@ export const blackout = async (element: HTMLElement) => {
     newRect(0, x, width, y);
     newRect(y + height, x, width, windowHeight - height - y);
 };
-export const description = (element: HTMLElement, desc: string) => {
-    const el: HTMLElement = select(element);
+export const description = (element: string, desc: string) => {
+    const el = select(element);
     console.log("description FN >> ", el, " desc >> ", desc);
     const descr = window.document.createElement("div");
     descr.id = "container";
     window.document.body.appendChild(descr);
-    ReactDOM.render(<DescrComponent selector={el} text={desc} />, document.getElementById("container"));
-
+    ReactDOM.render(<DescriptionComponent selector={el} text={desc} />, document.getElementById("container"));
 };
 
+const helperFunction = {
+    select,
+    blackout,
+    description
+};
+
+Object.keys(helperFunction).forEach(value => {
+    (window as any)[value] = (helperFunction as any)[value];
+});

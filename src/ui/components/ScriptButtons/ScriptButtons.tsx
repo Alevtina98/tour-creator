@@ -9,12 +9,9 @@ import {
     saveSelectedTour, setTourDB
 } from "../../actions/selectedTourAction";
 import { Button, ButtonToolbar, FormControl, InputGroup, Modal } from "react-bootstrap";
-import { useInputValue } from "../../hooks/useInputValue";
 import BurgerMenuContainer from "../../containers/BurgerMenuContainer/BurgerMenuContainer";
 import {useControlledInputValue} from "../../hooks/useControleInputValue";
 import agentActions from "../../actions/agentActions";
-import ReactDOM from "react-dom";
-import DescrComponent from "../DescrComponent";
 
 export interface ScriptButtons {
     tourDB: ScriptValue;

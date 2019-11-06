@@ -5,7 +5,7 @@ import { StoreType } from "../../reducers";
 import { setInspectDisabled, setInspectEnabled } from "../../actions/inspectAction";
 import agentActions from "../../actions/agentActions";
 import ReactDOM from "react-dom";
-import DescrComponent from "../../components/DescrComponent";
+import DescriptionComponent from "../../components/DescriptionComponent";
 
 export interface TourEditorComponentProps {
     blocklyReloadEnabled: boolean;
