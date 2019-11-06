@@ -1,6 +1,5 @@
-import React, { DOMElement, useEffect, useState } from "react";
-//import Modal from "react-bootstrap";
-import IDB, { ScriptValue } from "../../util/indexedDB";
+import React, {useState } from "react";
+import { ScriptValue } from "../../util/indexedDB";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../../reducers";
 import {
@@ -8,11 +7,11 @@ import {
     createNewTour,
     saveSelectedTour, setTourDB
 } from "../../actions/selectedTourAction";
-import { Button, ButtonToolbar, FormControl, InputGroup, Modal } from "react-bootstrap";
+import { Button, ButtonToolbar } from "react-bootstrap";
 import BurgerMenuContainer from "../../containers/BurgerMenuContainer/BurgerMenuContainer";
 import {useControlledInputValue} from "../../hooks/useControleInputValue";
 import agentActions from "../../actions/agentActions";
-import {useInputValue} from "../../hooks/useInputValue";
+import ModalComponent from "../ModalInputsComponent";
 
 export interface ScriptButtons {
     tourDB: ScriptValue;
@@ -20,9 +19,6 @@ export interface ScriptButtons {
     tourJS: string;
 }
 
-/*export interface DateFormat {
-    dayNumber: number;
-}*/
 const ScriptButtons = () => {
     const dispatch = useDispatch();
     //маппинг значений из store
@@ -53,6 +49,7 @@ const ScriptButtons = () => {
     const handleCloseCreated = () => {
         setShowCreated(false);
     };
+
     const saveCode = () => {
         dispatch(
             setTourDB({
@@ -78,14 +75,11 @@ const ScriptButtons = () => {
         console.log("tourJS >>", tourJS);
 
     };
+
     return (
         <div className="relative">
-            {/* //<div className="btn-group" role="group" aria-label="Basic example">*/}
             <div id="outer-container">
                 <BurgerMenuContainer />
-                {/*<main id="page-wrap">
-                Проекты
-                </main>*/}
             </div>
             <ButtonToolbar>
                 <Button variant="light" onClick={handleShowCreated}>
@@ -101,53 +95,24 @@ const ScriptButtons = () => {
                     Закрыть
                 </Button>
             </ButtonToolbar>
-            {/*  </div>*/}
-            <Modal show={show} onHide={handleShow}>
-                <Modal.Header>Сохранение тура</Modal.Header>
-                <InputGroup className="mb-3">
-                    <InputGroup.Prepend>
-                        <InputGroup.Text>Название</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <FormControl aria-label="TournewName" aria-newDescribedby="basic-addon1" {...newName} />
-                </InputGroup>
-                <InputGroup>
-                    <InputGroup.Prepend>
-                        <InputGroup.Text>Описание</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <FormControl as="textarea" aria-label="With textarea" {...newDesc} />
-                </InputGroup>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Отмена
-                    </Button>
-                    <Button variant="primary" onClick={saveCode}>
-                        Сохранить
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-            <Modal show={showCreated} onHide={handleShowCreated}>
-                <Modal.Header>Создание тура</Modal.Header>
-                <InputGroup className="mb-3">
-                    <InputGroup.Prepend>
-                        <InputGroup.Text>Название</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <FormControl aria-label="TournewName" aria-newDescribedby="basic-addon1" {...newTourName} />
-                </InputGroup>
-                <InputGroup>
-                    <InputGroup.Prepend>
-                        <InputGroup.Text>Описание</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <FormControl as="textarea" aria-label="With textarea" {...newTourDesc} />
-                </InputGroup>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseCreated}>
-                        Отмена
-                    </Button>
-                    <Button variant="primary" onClick={createdNewTour}>
-                        Создать
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <ModalComponent modalName="Создание тура"
+                            show={showCreated}
+                            handleShow={handleShowCreated}
+                            inputName={newTourName}
+                            inputDesc={newTourDesc}
+                            handelCancel={handleCloseCreated}
+                            handelOk={createdNewTour}
+                            okButtonName="Создать"
+            />
+            <ModalComponent modalName="Сохранение тура"
+                            show={show}
+                            handleShow={handleShow}
+                            inputName={newName}
+                            inputDesc={newDesc}
+                            handelCancel={handleClose}
+                            handelOk={saveCode}
+                            okButtonName="Сохранить"
+            />
         </div>
     );
 };

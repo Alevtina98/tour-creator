@@ -14,6 +14,8 @@ import cn from "classnames";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useControlledInputValue } from "../../../hooks/useControleInputValue";
+import ModalInputsComponent from "../../ModalInputsComponent";
+import ModalTextComponent from "../../ModalTextComponent";
 
 export interface ScriptProps {
     tour: ScriptValue;
@@ -97,50 +99,32 @@ const Script: FC<ScriptProps> = ({ tour, onClick }) => {
                     </ButtonGroup>
                 </ButtonToolbar>
             </div>
-
-            <Modal show={show} onHide={handleShow} data-testid="edit-model">
-                <Modal.Header>Редактирование шаблона</Modal.Header>
-                <InputGroup className="mb-3">
-                    <InputGroup.Prepend>
-                        <InputGroup.Text>Название</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <FormControl
-                        aria-label="TournewName"
-                        aria-newDescribedby="basic-addon1"
-                        data-testid="changeName"
-                        {...newName}
-                    />
-                </InputGroup>
-                <InputGroup>
-                    <InputGroup.Prepend>
-                        <InputGroup.Text>Описание</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <FormControl as="textarea" aria-label="With textarea" data-testid="changeDesc" {...newDesc} />
-                </InputGroup>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose} data-testid="cancel-edit-button">
-                        Отмена
-                    </Button>
-                    <Button variant="primary" onClick={saveChangeCode} data-testid="save-edit-button">
-                        Сохранить изменения
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-
-            <Modal show={showDel} onHide={handleShowDel} data-testid="del-model">
-                <Modal.Header>Подтверждение удаления тура</Modal.Header>
-                <Modal.Body>
-                    <p data-testid="del-name">Вы действительно хотите удалить "{tour.name}"?</p>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseDel} data-testid="cancel-del-button">
-                        Отмена
-                    </Button>
-                    <Button variant="primary" onClick={saveDeleteCode} data-testid="save-del-button">
-                        Удалить
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <ModalInputsComponent modalName="Редактирование шаблона"
+                                  show={show}
+                                  handleShow={handleShow}
+                                  inputName={newName}
+                                  inputDesc={newDesc}
+                                  handelCancel={handleClose}
+                                  handelOk={saveChangeCode}
+                                  okButtonName="Сохранить изменения"
+                                  nameTestId="changeName"
+                                  descTestId="changeDesc"
+                                  cancelTestId="cancel-edit-button"
+                                  okTestId="save-edit-button"
+                                  modalTestId="edit-model"
+            />
+            <ModalTextComponent modalName="Подтверждение удаления тура"
+                                show={showDel}
+                                handleShow={handleShowDel}
+                                text={`Вы действительно хотите удалить ${tour.name}?`}
+                                handelCancel={handleCloseDel}
+                                handelOk={saveDeleteCode}
+                                okButtonName="Удалить"
+                                textTestId="del-name"
+                                cancelTestId="cancel-del-button"
+                                okTestId="save-del-button"
+                                modalTestId="del-model"
+            />
         </div>
     );
 };

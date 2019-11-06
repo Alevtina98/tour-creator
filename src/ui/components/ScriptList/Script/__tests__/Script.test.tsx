@@ -44,7 +44,7 @@ describe("Script", () => {
         const { getByTestId } = render(ProviderWithComponent(() => <Script onClick={onClick} tour={testTour}/>)());
         fireEvent.click(getByTestId("del-button"));
         await waitForElement(() => getByTestId("del-model"));
-        expect(getByTestId("del-name").textContent).toBe("Вы действительно хотите удалить \"" + testTour.name + "\"?");
+        expect(getByTestId("del-name").textContent).toBe("Вы действительно хотите удалить custom name?");
         fireEvent.click(getByTestId("cancel-del-button"));
         await waitForElementToBeRemoved(() => getByTestId("del-model"));
         fireEvent.click(getByTestId("del-button"));
