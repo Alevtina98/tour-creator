@@ -4,8 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../../reducers";
 import { setInspectDisabled, setInspectEnabled } from "../../actions/inspectAction";
 import agentActions from "../../actions/agentActions";
-import ReactDOM from "react-dom";
-import DescriptionComponent from "../../components/DescriptionComponent";
+import ModalLockDevtoolsComponent from "../../components/ModalLockDevtoolsComponent";
 
 export interface TourEditorComponentProps {
     blocklyReloadEnabled: boolean;
@@ -42,26 +41,11 @@ const EditorContainer = () => {
                 </>
             )) ||
                 null}
-            {(isInspectEnabled && (
-                <div className="back-drop">
-                    <div
-                        className="alert alert-light"
-                        role="alert"
-                        style={{
-                            textAlign: "center",
-                            background: "rgb(255,255,255)",
-                            width: "500px",
-                            margin: "auto"
-                        }}
-                    >
-                        Выберите элемент на основной странице или нажмите
-                        <button onClick={onInspectClickHandler} type="button" className="btn btn-light">
-                            Отмена
-                        </button>
-                    </div>
-                </div>
-            )) ||
-                null}
+                <ModalLockDevtoolsComponent
+                    show={isInspectEnabled}
+                    text="Выберите элемент на основной странице или нажмите"
+                    handelCancel={onInspectClickHandler}
+                />
         </div>
     );
 };

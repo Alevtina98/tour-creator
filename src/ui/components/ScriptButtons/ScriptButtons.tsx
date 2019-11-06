@@ -12,6 +12,7 @@ import BurgerMenuContainer from "../../containers/BurgerMenuContainer/BurgerMenu
 import {useControlledInputValue} from "../../hooks/useControleInputValue";
 import agentActions from "../../actions/agentActions";
 import ModalComponent from "../ModalInputsComponent";
+import ModalLockDevtoolsComponent from "../ModalLockDevtoolsComponent";
 
 export interface ScriptButtons {
     tourDB: ScriptValue;
@@ -26,6 +27,7 @@ const ScriptButtons = () => {
         ({ SelectedTourState }) => SelectedTourState
     );
     const [show, setShow] = useState(false);
+    const [showRunTour, setShowRunTour] = useState(false);
     const [showCreated, setShowCreated] = useState(false);
 
     const { setValue: setNameValue, ...newName } = useControlledInputValue(tourDB.name);
@@ -48,6 +50,12 @@ const ScriptButtons = () => {
     };
     const handleCloseCreated = () => {
         setShowCreated(false);
+    };
+    const handleShowRunTour = () => {
+        setShowRunTour(true);
+    };
+    const handleCloseRunTour = () => {
+        setShowRunTour(false);
     };
 
     const saveCode = () => {
@@ -72,8 +80,8 @@ const ScriptButtons = () => {
     };
     const runTour = () => {
         agentActions.runScript(tourJS);
+        handleShowRunTour();
         console.log("tourJS >>", tourJS);
-
     };
 
     return (
@@ -112,6 +120,11 @@ const ScriptButtons = () => {
                             handelCancel={handleClose}
                             handelOk={saveCode}
                             okButtonName="Сохранить"
+            />
+            <ModalLockDevtoolsComponent
+                show={showRunTour}
+                text="Для завершения просмотра тура нажмите"
+                handelCancel={handleCloseRunTour}
             />
         </div>
     );
