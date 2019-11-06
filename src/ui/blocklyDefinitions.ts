@@ -1,5 +1,6 @@
 import { any } from "prop-types";
-
+import TourHelper from "../agent/utils";
+const helperClass = TourHelper.name;
 Blockly.Blocks["dark"] = {
     init: function() {
         this.appendValueInput("selector")
@@ -56,18 +57,19 @@ Blockly.JavaScript["selector"] = function(block: any) {
     const code = Blockly.JavaScript.quote_(block.getFieldValue("NAME"));
     return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
+
 Blockly.JavaScript["desc"] = function(block: any) {
     // Define a procedure with a return value.
-    const funcName = "description";
+    const funcName = helperClass + ".description";
     const args1: string = Blockly.JavaScript.valueToCode(block, "selector", Blockly.JavaScript.ORDER_NONE);
     const args2: string = Blockly.JavaScript.valueToCode(block, "text", Blockly.JavaScript.ORDER_NONE);
-    const code: string = funcName + "(" + args1 + ", " + args2 + ");\n";
+    const code: string =  funcName + "(" + args1 + ", " + args2 + ");\n";
     // Add % so as not to collide with helper functions in definitions list.
     //Blockly.JavaScript.definitions_['%' + funcName] = code;
     return code;
 };
 Blockly.JavaScript["dark"] = function(block: any) {
-    const funcName = "blackout";
+    const funcName = helperClass + ".blackout";
     const args1: string = Blockly.JavaScript.valueToCode(block, "selector", Blockly.JavaScript.ORDER_NONE);
     const code: string = funcName + "(" + args1 + ");\n";
     // Add % so as not to collide with helper functions in definitions list.

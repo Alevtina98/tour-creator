@@ -20,14 +20,14 @@ export const loadListTour = () => async (dispatch: Dispatch, getState: () => Sto
     dispatch(setListTour(result));
 };
 // eslint-disable-next-line @typescript-eslint/require-await
-export const createNewTour = () => async (dispatch: Dispatch, getState: () => StoreType) => {
+export const createNewTour = (name: string, desc: string) => async (dispatch: Dispatch, getState: () => StoreType) => {
     closeSelectedTour()(dispatch, getState);
     //console.log("dispatch(setLoadBocklyDisabled());");
     //const store = getState();
     const tour: ScriptValue = {
-        name: "NewTour",
+        name: name,
         date: "",
-        desc: "",
+        desc: desc,
         code: "",
         key: uuid.v4()
     };
@@ -51,7 +51,7 @@ export const closeSelectedTour = () => (dispatch: Dispatch, getState: () => Stor
 };
 //фоновое сохранение тура
 export const periodicallySave = () => (dispatch: Dispatch, getState: () => StoreType) => {
-    //console.log("periodicallySave");
+    console.log("periodicallySave");
     clearInterval(periodicallySaveTimer);
     periodicallySaveTimer = window.setInterval(() => {
         saveSelectedTour()(dispatch, getState);

@@ -12,6 +12,7 @@ import { Button, ButtonToolbar, FormControl, InputGroup, Modal } from "react-boo
 import BurgerMenuContainer from "../../containers/BurgerMenuContainer/BurgerMenuContainer";
 import {useControlledInputValue} from "../../hooks/useControleInputValue";
 import agentActions from "../../actions/agentActions";
+import {useInputValue} from "../../hooks/useInputValue";
 
 export interface ScriptButtons {
     tourDB: ScriptValue;
@@ -29,16 +30,28 @@ const ScriptButtons = () => {
         ({ SelectedTourState }) => SelectedTourState
     );
     const [show, setShow] = useState(false);
+    const [showCreated, setShowCreated] = useState(false);
+
     const { setValue: setNameValue, ...newName } = useControlledInputValue(tourDB.name);
     const { setValue: setDescValue, ...newDesc } = useControlledInputValue(tourDB.desc);
+    const { setValue: setNewTourNameValue, ...newTourName } = useControlledInputValue("NewTour");
+    const { setValue: setNewTourDescValue, ...newTourDesc } = useControlledInputValue("");
 
     const handleShow = () => {
+        setNameValue(tourDB.name);
+        setDescValue(tourDB.desc);
         setShow(true);
     };
     const handleClose = () => {
         setShow(false);
-        setNameValue(tourDB.name);
-        setDescValue(tourDB.desc);
+    };
+    const handleShowCreated = () => {
+        setNewTourNameValue("NewTour");
+        setNewTourDescValue("");
+        setShowCreated(true);
+    };
+    const handleCloseCreated = () => {
+        setShowCreated(false);
     };
     const saveCode = () => {
         dispatch(
@@ -53,8 +66,9 @@ const ScriptButtons = () => {
         dispatch(saveSelectedTour());
         handleClose();
     };
-    const newTour = () => {
-        dispatch(createNewTour());
+    const createdNewTour = () => {
+        dispatch(createNewTour(newTourName.value, newTourDesc.value));
+        handleCloseCreated();
     };
     const closeTour = () => {
         dispatch(closeSelectedTour());
@@ -74,7 +88,7 @@ const ScriptButtons = () => {
                 </main>*/}
             </div>
             <ButtonToolbar>
-                <Button variant="light" onClick={newTour}>
+                <Button variant="light" onClick={handleShowCreated}>
                     Создать
                 </Button>
                 <Button size="sm" variant="light" onClick={runTour} disabled={!blocklyReloadEnabled}>
@@ -108,6 +122,29 @@ const ScriptButtons = () => {
                     </Button>
                     <Button variant="primary" onClick={saveCode}>
                         Сохранить
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+            <Modal show={showCreated} onHide={handleShowCreated}>
+                <Modal.Header>Создание тура</Modal.Header>
+                <InputGroup className="mb-3">
+                    <InputGroup.Prepend>
+                        <InputGroup.Text>Название</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl aria-label="TournewName" aria-newDescribedby="basic-addon1" {...newTourName} />
+                </InputGroup>
+                <InputGroup>
+                    <InputGroup.Prepend>
+                        <InputGroup.Text>Описание</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl as="textarea" aria-label="With textarea" {...newTourDesc} />
+                </InputGroup>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseCreated}>
+                        Отмена
+                    </Button>
+                    <Button variant="primary" onClick={createdNewTour}>
+                        Создать
                     </Button>
                 </Modal.Footer>
             </Modal>
