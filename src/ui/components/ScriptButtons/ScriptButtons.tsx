@@ -1,15 +1,11 @@
-import React, {useState } from "react";
+import React, { useState } from "react";
 import { ScriptValue } from "../../util/indexedDB";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../../reducers";
-import {
-    closeSelectedTour,
-    createNewTour,
-    saveSelectedTour, setTourDB
-} from "../../actions/selectedTourAction";
+import { closeSelectedTour, createNewTour, saveSelectedTour, setTourDB } from "../../actions/selectedTourAction";
 import { Button, ButtonToolbar } from "react-bootstrap";
 import BurgerMenuContainer from "../../containers/BurgerMenuContainer/BurgerMenuContainer";
-import {useControlledInputValue} from "../../hooks/useControleInputValue";
+import { useControlledInputValue } from "../../hooks/useControleInputValue";
 import agentActions from "../../actions/agentActions";
 import ModalComponent from "../ModalInputsComponent";
 import ModalLockDevtoolsComponent from "../ModalLockDevtoolsComponent";
@@ -56,6 +52,7 @@ const ScriptButtons = () => {
     };
     const handleCloseRunTour = () => {
         setShowRunTour(false);
+        agentActions.disableRunScript();
     };
 
     const saveCode = () => {
@@ -103,23 +100,25 @@ const ScriptButtons = () => {
                     Закрыть
                 </Button>
             </ButtonToolbar>
-            <ModalComponent modalName="Создание тура"
-                            show={showCreated}
-                            handleShow={handleShowCreated}
-                            inputName={newTourName}
-                            inputDesc={newTourDesc}
-                            handelCancel={handleCloseCreated}
-                            handelOk={createdNewTour}
-                            okButtonName="Создать"
+            <ModalComponent
+                modalName="Создание тура"
+                show={showCreated}
+                handleShow={handleShowCreated}
+                inputName={newTourName}
+                inputDesc={newTourDesc}
+                handelCancel={handleCloseCreated}
+                handelOk={createdNewTour}
+                okButtonName="Создать"
             />
-            <ModalComponent modalName="Сохранение тура"
-                            show={show}
-                            handleShow={handleShow}
-                            inputName={newName}
-                            inputDesc={newDesc}
-                            handelCancel={handleClose}
-                            handelOk={saveCode}
-                            okButtonName="Сохранить"
+            <ModalComponent
+                modalName="Сохранение тура"
+                show={show}
+                handleShow={handleShow}
+                inputName={newName}
+                inputDesc={newDesc}
+                handelCancel={handleClose}
+                handelOk={saveCode}
+                okButtonName="Сохранить"
             />
             <ModalLockDevtoolsComponent
                 show={showRunTour}

@@ -10,6 +10,9 @@ const agentActions = {
     },
     runScript: function(codeJS: string) {
         sendMessage("runScript", codeJS);
+    },
+    disableRunScript: function() {
+        sendMessage("disableRunScript");
     }
 };
 

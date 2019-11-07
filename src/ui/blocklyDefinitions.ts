@@ -1,6 +1,7 @@
-import { any } from "prop-types";
 import TourHelper from "../agent/utils";
+
 const helperClass = TourHelper.name;
+
 Blockly.Blocks["dark"] = {
     init: function() {
         this.appendValueInput("selector")

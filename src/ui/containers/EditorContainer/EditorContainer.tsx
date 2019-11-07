@@ -41,11 +41,11 @@ const EditorContainer = () => {
                 </>
             )) ||
                 null}
-                <ModalLockDevtoolsComponent
-                    show={isInspectEnabled}
-                    text="Выберите элемент на основной странице или нажмите"
-                    handelCancel={onInspectClickHandler}
-                />
+            <ModalLockDevtoolsComponent
+                show={isInspectEnabled}
+                text="Выберите элемент на основной странице или нажмите"
+                handelCancel={onInspectClickHandler}
+            />
         </div>
     );
 };

@@ -1,9 +1,7 @@
 import sendMessage from "./util/sendMessage";
 import Selector from "./Selector";
 import "./style/agentStyle.less";
-//import unique from 'unique-selector'
-import serializeEntity from "./util/serializeEntity";
-import deepUpdate from "../common/deepUpdate";
+import TourHelper from "./utils";
 
 const _ = require("lodash");
 
@@ -15,6 +13,7 @@ class Agent {
      * not sure what to refactor it into, tho
      */
     constructor(c) {
+        //const helperClass = TourHelper.name;
         this.window = c;
         console.log(c);
         // Agent state
@@ -49,6 +48,9 @@ class Agent {
 
             disableSelectMode: () => {
                 this.removeSelectClickHandler();
+            },
+            disableRunScript: () => {
+                TourHelper.clear();
             }
         };
     }
