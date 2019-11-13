@@ -1,6 +1,7 @@
 declare module "react-blockly-component";
 declare let Blockly: any;
 declare module "react-overlay";
+declare module "scroll-lock";
 declare module "node-blockly";
 declare module "google-blockly";
 declare module "react-search-input";

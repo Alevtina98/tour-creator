@@ -1,17 +1,20 @@
 function getDomPath(el: any): string {
     const stack = [];
+    console.log("e.target >> ", el);
+    //двигаемся вверх по дереву от самого вложенного (по которому произошел клик)
     while (el.parentNode != null) {
         // console.log(el.nodeName);
         let sibCount = 0;
         let sibIndex = 0;
         for (let i = 0; i < el.parentNode.childNodes.length; i++) {
             const sib = el.parentNode.childNodes[i];
+            //если есть братья-элементы того же типа, считаем их количество
             if (sib.nodeName == el.nodeName) {
                 if (sib === el) {
                     sibIndex = sibCount;
                 }
-                sibCount++;
             }
+            sibCount++;
         }
         if (el.hasAttribute("id") && el.id != "") {
             stack.unshift(el.nodeName.toLowerCase() + "#" + el.id);

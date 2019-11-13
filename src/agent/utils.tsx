@@ -2,6 +2,7 @@ import DescriptionComponent from "../ui/components/DescriptionComponent";
 import * as React from "react";
 import ReactDOM from "react-dom";
 import Script from "../ui/components/ScriptList/Script/Script";
+import { disablePageScroll, enablePageScroll } from "scroll-lock";
 
 export default class TourHelper {
     static tourElement = [];
@@ -13,11 +14,15 @@ export default class TourHelper {
     public static clear = () => {
         TourHelper.tourElement.map(el => el.remove());
         TourHelper.tourElement = [];
+        enablePageScroll();
     };
     public static blackout = (element: string) => {
         const el = TourHelper.select(element);
+        if (!el) {
+            return;
+        }
+        el.scrollIntoView({ block: "center", behavior: "smooth" });
         //console.log("blackout FN", el);
-        el.scrollIntoView({ block: "nearest", behavior: "smooth" });
         const bounds = el.getBoundingClientRect() as DOMRect;
         const x: number = bounds.x + (window.pageXOffset || document.documentElement.scrollLeft);
         const y: number = bounds.y + (window.pageYOffset || document.documentElement.scrollTop);
@@ -29,8 +34,10 @@ export default class TourHelper {
         TourHelper.newRect(0, x + width, windowWidth - width - x, windowHeight);
         TourHelper.newRect(0, x, width, y);
         TourHelper.newRect(y + height, x, width, windowHeight - height - y);
+        disablePageScroll();
     };
     public static description = (element: string, desc: string) => {
+
         const el = TourHelper.select(element);
         if (!el) {
             return;
@@ -41,11 +48,12 @@ export default class TourHelper {
         window.document.body.appendChild(descr);
         ReactDOM.render(<DescriptionComponent selector={el} text={desc} />, document.getElementById("container"));
         TourHelper.tourElement.push(descr);
+
     };
     private static newRect = (rTop: number, rLeft: number, rWidth: number, rHeight: number) => {
         const rectStyle: CSSStyleDeclaration = {
             position: "absolute",
-            zIndex: "1000",
+            zIndex: "11000000",
             top: `${rTop}px`,
             left: `${rLeft}px`,
             width: `${rWidth}px`,

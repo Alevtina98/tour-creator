@@ -97,7 +97,7 @@ class Agent {
             e.preventDefault(); //запрещает исполнение метода по умолчанию, предназначенного для данного события
             const target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
             const str = Selector(target);
-            console.log("str >> ", str);
+            //console.log("str >> ", str);
             target.style.outlineStyle = "none";
             this.subscribedEntityId = str; //matching.__inspect_uuid__;
 

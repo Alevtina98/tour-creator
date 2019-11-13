@@ -132,8 +132,8 @@ const DescriptionComponent: FC<DescrComponentProps> = ({ selector, text }) => {
             }}
         >
             {({ ref, style, placement, arrowProps }) => (
-                <StyledTooltipContainer ref={ref} style={{ ...style, zIndex: 1001 }} data-placement={placement}>
-                    <div>{text}</div>
+                <StyledTooltipContainer ref={ref} style={{ ...style, zIndex: 11000000,  maxWidth: "50%"}} data-placement={placement}>
+                    <div className="description">{text}</div>
                     <StyledArrow data-placement={placement} ref={arrowProps.ref} style={arrowProps.style} />
                 </StyledTooltipContainer>
             )}
