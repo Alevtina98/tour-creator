@@ -1,28 +1,57 @@
 import DescriptionComponent from "../ui/components/DescriptionComponent";
 import * as React from "react";
 import ReactDOM from "react-dom";
-import Script from "../ui/components/ScriptList/Script/Script";
 import { disablePageScroll, enablePageScroll } from "scroll-lock";
 
 export default class TourHelper {
-    static tourElement = [];
-    public static select = (element: string): HTMLElement | null => {
-        console.log("selector >> ", element);
-        if (!document.querySelector(element)) console.log("ERROR: selector not found");
-        return document.querySelector(element);
-    };
-    public static clear = () => {
-        TourHelper.tourElement.map(el => el.remove());
-        TourHelper.tourElement = [];
-        enablePageScroll();
-    };
+    static rectElement = [];
+    static popperElement = [];
+    static targetElement: Element | null = null;
     public static blackout = (element: string) => {
-        const el = TourHelper.select(element);
+        TourHelper.setTargetElement(element);
+        const el = TourHelper.targetElement;
         if (!el) {
             return;
         }
         el.scrollIntoView({ block: "center", behavior: "smooth" });
         //console.log("blackout FN", el);
+        TourHelper.drowFourRect();
+        disablePageScroll();
+        window.addEventListener("resize", TourHelper.drowFourRect);
+    };
+    public static description = (element: string, desc: string) => {
+        TourHelper.setTargetElement(element);
+        const el = TourHelper.targetElement;
+        if (!el) {
+            return;
+        }
+        //console.log("description FN >> ", el, " desc >> ", desc);
+        const descrNode = window.document.createElement("div");
+        descrNode.id = "container";
+        window.document.body.appendChild(descrNode);
+        ReactDOM.render(<DescriptionComponent selector={el} text={desc} />, document.getElementById("container"));
+        TourHelper.popperElement.push(descrNode);
+
+    };
+    public static clearAllElement = () => {
+        window.removeEventListener("resize", TourHelper.drowFourRect);
+        TourHelper.clearRectElement();
+        TourHelper.clearPopperElement();
+        enablePageScroll();
+    };
+
+    private static setTargetElement = (element: string) => {
+        //console.log("selector >> ", element);
+        const el = document.querySelector(element);
+        if (!el) console.log("ERROR: selector not found");
+        TourHelper.targetElement = el;
+    };
+    private static drowFourRect = () => {
+        TourHelper.clearRectElement();
+        const el = TourHelper.targetElement;
+        if (!el) {
+            return;
+        }
         const bounds = el.getBoundingClientRect() as DOMRect;
         const x: number = bounds.x + (window.pageXOffset || document.documentElement.scrollLeft);
         const y: number = bounds.y + (window.pageYOffset || document.documentElement.scrollTop);
@@ -34,21 +63,6 @@ export default class TourHelper {
         TourHelper.newRect(0, x + width, windowWidth - width - x, windowHeight);
         TourHelper.newRect(0, x, width, y);
         TourHelper.newRect(y + height, x, width, windowHeight - height - y);
-        disablePageScroll();
-    };
-    public static description = (element: string, desc: string) => {
-
-        const el = TourHelper.select(element);
-        if (!el) {
-            return;
-        }
-        //console.log("description FN >> ", el, " desc >> ", desc);
-        const descr = window.document.createElement("div");
-        descr.id = "container";
-        window.document.body.appendChild(descr);
-        ReactDOM.render(<DescriptionComponent selector={el} text={desc} />, document.getElementById("container"));
-        TourHelper.tourElement.push(descr);
-
     };
     private static newRect = (rTop: number, rLeft: number, rWidth: number, rHeight: number) => {
         const rectStyle: CSSStyleDeclaration = {
@@ -67,7 +81,15 @@ export default class TourHelper {
             rect.style[key] = rectStyle[key];
         });
         window.document.body.appendChild(rect);
-        TourHelper.tourElement.push(rect);
+        TourHelper.rectElement.push(rect);
+    };
+    private static clearRectElement = () => {
+        TourHelper.rectElement.map(el => el.remove());
+        TourHelper.rectElement = [];
+    };
+    private static clearPopperElement = () => {
+        TourHelper.popperElement.map(el => el.remove());
+        TourHelper.popperElement = [];
     };
 }
 

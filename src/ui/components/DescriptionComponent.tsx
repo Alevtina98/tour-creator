@@ -3,7 +3,7 @@ import React, { FC } from "react";
 import styled from "styled-components";
 
 export interface DescrComponentProps {
-    selector: HTMLElement;
+    selector: Element;
     text: string;
 }
 
@@ -132,7 +132,7 @@ const DescriptionComponent: FC<DescrComponentProps> = ({ selector, text }) => {
             }}
         >
             {({ ref, style, placement, arrowProps }) => (
-                <StyledTooltipContainer ref={ref} style={{ ...style, zIndex: 11000000,  maxWidth: "50%"}} data-placement={placement}>
+                <StyledTooltipContainer ref={ref} style={{ ...style, zIndex: 11000001,  maxWidth: "50%"}} data-placement={placement}>
                     <div className="description">{text}</div>
                     <StyledArrow data-placement={placement} ref={arrowProps.ref} style={arrowProps.style} />
                 </StyledTooltipContainer>

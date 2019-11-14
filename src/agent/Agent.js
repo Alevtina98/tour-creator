@@ -50,7 +50,7 @@ class Agent {
                 this.removeSelectClickHandler();
             },
             disableRunScript: () => {
-                TourHelper.clear();
+                TourHelper.clearAllElement();
             }
         };
     }
