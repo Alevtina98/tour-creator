@@ -31,6 +31,18 @@ Blockly.Blocks["desc"] = {
         this.setHelpUrl("");
     }
 };
+Blockly.Blocks["step"] = {
+    init: function() {
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        //this.appendField("step");
+        // this.setColour(230);
+        this.setStyle("procedure_blocks");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
 Blockly.Blocks["selector"] = {
     init: function() {
         this.appendDummyInput("selector")
@@ -45,7 +57,6 @@ Blockly.Blocks["selector"] = {
             .appendField(new Blockly.FieldTextInput(""), "NAME");
         this.setInputsInline(true);
         this.setOutput(true);
-        //this.setColour(230);
         this.setStyle("text_blocks");
         this.setTooltip("");
         this.setHelpUrl("");
@@ -77,3 +88,11 @@ Blockly.JavaScript["dark"] = function(block: any) {
     //Blockly.JavaScript.definitions_['%' + funcName] = code;
     return code;
 };
+Blockly.JavaScript["step"] = function(block: any) {
+    const funcName = helperClass + ".blocklyStep";
+    const code: string = funcName + "();\n";
+    // Add % so as not to collide with helper functions in definitions list.
+    //Blockly.JavaScript.definitions_['%' + funcName] = code;
+    return code;
+};
+

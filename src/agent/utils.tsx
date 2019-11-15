@@ -3,38 +3,96 @@ import * as React from "react";
 import ReactDOM from "react-dom";
 import { disablePageScroll, enablePageScroll } from "scroll-lock";
 
+export interface StepType {
+    blackout: Function[];
+    description: Function[];
+}
+
 export default class TourHelper {
+    static steps: StepType[] = [
+        {
+            blackout: [],
+            description: []
+        }
+    ];
+    /**
+     * инкремент шага из блокли
+     */
+    static stepCount: number = 0;
+    /**
+     * инкремент сделанного шага
+     */
+    static currentStep: number = 0;
+
     static rectElement = [];
     static popperElement = [];
     static targetElement: Element | null = null;
-    public static blackout = (element: string) => {
-        TourHelper.setTargetElement(element);
-        const el = TourHelper.targetElement;
-        if (!el) {
-            return;
+
+    public static blocklyStep = () => {
+        TourHelper.stepCount += 1;
+        console.log("blocklyStep");
+        if (!TourHelper.steps[TourHelper.stepCount]) {
+            TourHelper.steps[TourHelper.stepCount] = {
+                blackout: [],
+                description: []
+            };
         }
-        el.scrollIntoView({ block: "center", behavior: "smooth" });
-        //console.log("blackout FN", el);
-        TourHelper.drowFourRect();
-        disablePageScroll();
-        window.addEventListener("resize", TourHelper.drowFourRect);
+    };
+
+    public static step = () => {
+        console.log("step");
+        TourHelper.clearAllElement();
+        TourHelper.currentStep += 1;
+        TourHelper.startTour();
+    };
+
+    public static startTour = () => {
+        window.addEventListener("click", TourHelper.step);
+        console.log("startTour >> ", TourHelper.currentStep, TourHelper.steps[TourHelper.currentStep]);
+        TourHelper.steps[TourHelper.currentStep].blackout.forEach(fn => fn());
+        TourHelper.steps[TourHelper.currentStep].description.forEach(fn => fn());
+    };
+
+    public static blackout = (element: string) => {
+        console.log("blackout", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
+        TourHelper.steps[TourHelper.stepCount].blackout.push(() => {
+            console.log("blackout");
+
+            TourHelper.setTargetElement(element);
+            const el = TourHelper.targetElement;
+            if (!el) {
+                return;
+            }
+            el.scrollIntoView({ block: "center", behavior: "smooth" });
+            //console.log("blackout FN", el);
+            TourHelper.drawFourRect();
+            disablePageScroll();
+            window.addEventListener("resize", TourHelper.drawFourRect);
+        });
     };
     public static description = (element: string, desc: string) => {
-        TourHelper.setTargetElement(element);
-        const el = TourHelper.targetElement;
-        if (!el) {
-            return;
-        }
-        //console.log("description FN >> ", el, " desc >> ", desc);
-        const descrNode = window.document.createElement("div");
-        descrNode.id = "container";
-        window.document.body.appendChild(descrNode);
-        ReactDOM.render(<DescriptionComponent selector={el} text={desc} />, document.getElementById("container"));
-        TourHelper.popperElement.push(descrNode);
+        console.log("description", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
+        TourHelper.steps[TourHelper.stepCount].description.push(() => {
+            console.log("description");
 
+            TourHelper.setTargetElement(element);
+            const el = TourHelper.targetElement;
+            if (!el) {
+                return;
+            }
+            //console.log("description FN >> ", el, " desc >> ", desc);
+            const descrNode = window.document.createElement("div");
+            descrNode.id = "container";
+            window.document.body.appendChild(descrNode);
+            ReactDOM.render(<DescriptionComponent selector={el} text={desc} />, document.getElementById("container"));
+            TourHelper.popperElement.push(descrNode);
+        });
     };
+
+
     public static clearAllElement = () => {
-        window.removeEventListener("resize", TourHelper.drowFourRect);
+        window.removeEventListener("resize", TourHelper.drawFourRect);
+        window.removeEventListener("click", TourHelper.step);
         TourHelper.clearRectElement();
         TourHelper.clearPopperElement();
         enablePageScroll();
@@ -46,7 +104,7 @@ export default class TourHelper {
         if (!el) console.log("ERROR: selector not found");
         TourHelper.targetElement = el;
     };
-    private static drowFourRect = () => {
+    private static drawFourRect = () => {
         TourHelper.clearRectElement();
         const el = TourHelper.targetElement;
         if (!el) {
