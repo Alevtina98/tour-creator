@@ -38,21 +38,27 @@ export default class TourHelper {
             };
         }
     };
-
     public static step = () => {
+        window.removeEventListener("click", TourHelper.step);
+        if (TourHelper.currentStep == TourHelper.steps.length) return;
         console.log("step");
         TourHelper.clearAllElement();
         TourHelper.currentStep += 1;
-        TourHelper.startTour();
+        TourHelper.startStep();
     };
-
-    public static startTour = () => {
+    public static click = () => {
         window.addEventListener("click", TourHelper.step);
-        console.log("startTour >> ", TourHelper.currentStep, TourHelper.steps[TourHelper.currentStep]);
+    };
+    public static clickOn = (element: string) => {
+        window.addEventListener("click", TourHelper.step);
+        const el = document.querySelector(element);
+        if (!el) console.log("ERROR: selector not found");
+    };
+    public static startStep = () => {
+        console.log("startStep >> ", TourHelper.currentStep, TourHelper.steps[TourHelper.currentStep]);
         TourHelper.steps[TourHelper.currentStep].blackout.forEach(fn => fn());
         TourHelper.steps[TourHelper.currentStep].description.forEach(fn => fn());
     };
-
     public static blackout = (element: string) => {
         console.log("blackout", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
         TourHelper.steps[TourHelper.stepCount].blackout.push(() => {
@@ -92,7 +98,6 @@ export default class TourHelper {
 
     public static clearAllElement = () => {
         window.removeEventListener("resize", TourHelper.drawFourRect);
-        window.removeEventListener("click", TourHelper.step);
         TourHelper.clearRectElement();
         TourHelper.clearPopperElement();
         enablePageScroll();

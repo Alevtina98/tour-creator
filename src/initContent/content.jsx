@@ -7,6 +7,8 @@ const INITIAL_TOOLBOX_XML = '<xml xmlns="http://www.w3.org/1999/xhtml" id="toolb
     '    <block type="dark"></block>\n' +
     '    <block type="selector"></block>\n' +
     '    <block type="step"></block>\n' +
+    '    <block type="click"></block>\n' +
+    '    <block type="clickOn"></block>\n' +
     ' </category>\n' +
     '<category name="Логика" colour="#5C81A6">\n' +
   '    <block type="controls_if"></block>\n' +
