@@ -36,6 +36,22 @@ export const createNewTour = (name: string, desc: string) => async (dispatch: Di
         dispatch(setLoadBocklyEnabled());
     }, 5);
 };
+export const createCopyTour = (name: string, desc: string) => async (dispatch: Dispatch, getState: () => StoreType) => {
+    closeSelectedTour()(dispatch, getState);
+    //console.log("dispatch(setLoadBocklyDisabled());");
+    const store = getState();
+    const tour: ScriptValue = {
+        name: name,
+        date: "",
+        desc: desc,
+        code: store.SelectedTourState.tourXML,
+        key: uuid.v4()
+    };
+    dispatch(setTourDB(tour));
+    return window.setTimeout(() => {
+        dispatch(setLoadBocklyEnabled());
+    }, 5);
+};
 let periodicallySaveTimer = 0;
 export const closeSelectedTour = () => (dispatch: Dispatch, getState: () => StoreType) => {
     dispatch(setLoadBocklyDisabled());

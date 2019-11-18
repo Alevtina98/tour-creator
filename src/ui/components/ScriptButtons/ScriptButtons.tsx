@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import { ScriptValue } from "../../util/indexedDB";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../../reducers";
-import { closeSelectedTour, createNewTour, saveSelectedTour, setTourDB } from "../../actions/selectedTourAction";
+import {
+    closeSelectedTour,
+    createCopyTour,
+    createNewTour,
+    saveSelectedTour,
+    setTourDB
+} from "../../actions/selectedTourAction";
 import { Button, ButtonToolbar } from "react-bootstrap";
 import BurgerMenuContainer from "../../containers/BurgerMenuContainer/BurgerMenuContainer";
 import { useControlledInputValue } from "../../hooks/useControleInputValue";
@@ -23,13 +29,14 @@ const ScriptButtons = () => {
         ({ SelectedTourState }) => SelectedTourState
     );
     const [show, setShow] = useState(false);
-    const [showRunTour, setShowRunTour] = useState(false);
+    const [showRun, setShowRun] = useState(false);
     const [showCreated, setShowCreated] = useState(false);
+    const [showCopy, setShowCopy] = useState(false);
 
     const { setValue: setNameValue, ...newName } = useControlledInputValue(tourDB.name);
     const { setValue: setDescValue, ...newDesc } = useControlledInputValue(tourDB.desc);
-    const { setValue: setNewTourNameValue, ...newTourName } = useControlledInputValue("NewTour");
-    const { setValue: setNewTourDescValue, ...newTourDesc } = useControlledInputValue("");
+    const { setValue: setNewNameValue, ...newTourName } = useControlledInputValue("NewTour");
+    const { setValue: setNewDescValue, ...newTourDesc } = useControlledInputValue("");
 
     const handleShow = () => {
         setNameValue(tourDB.name);
@@ -40,21 +47,30 @@ const ScriptButtons = () => {
         setShow(false);
     };
     const handleShowCreated = () => {
-        setNewTourNameValue("NewTour");
-        setNewTourDescValue("");
+        setNewNameValue("NewTour");
+        setNewDescValue("");
         setShowCreated(true);
     };
     const handleCloseCreated = () => {
         setShowCreated(false);
     };
-    const handleShowRunTour = () => {
-        setShowRunTour(true);
+    const handleShowRun = () => {
+        setShowRun(true);
     };
-    const handleCloseRunTour = () => {
-        setShowRunTour(false);
+    const handleCloseRun = () => {
+        setShowRun(false);
         agentActions.disableRunScript();
     };
-
+    const handleShowCopy = () => {
+        setNameValue(tourDB.name + " - копия");
+        setDescValue(tourDB.desc);
+        setShowCopy(true);
+    };
+    const handleCloseCopy = () => {
+        setNameValue(tourDB.name);
+        setDescValue(tourDB.desc);
+        setShowCopy(false);
+    };
     const saveCode = () => {
         dispatch(
             setTourDB({
@@ -68,6 +84,10 @@ const ScriptButtons = () => {
         dispatch(saveSelectedTour());
         handleClose();
     };
+    const copyTour = () => {
+        dispatch(createCopyTour(newName.value, newDesc.value));
+        handleCloseCopy();
+    };
     const createdNewTour = () => {
         dispatch(createNewTour(newTourName.value, newTourDesc.value));
         handleCloseCreated();
@@ -77,10 +97,9 @@ const ScriptButtons = () => {
     };
     const runTour = () => {
         agentActions.runScript(tourJS);
-        handleShowRunTour();
+        handleShowRun();
         console.log("tourJS >>", tourJS);
     };
-
     return (
         <div className="relative">
             <div id="outer-container">
@@ -90,11 +109,14 @@ const ScriptButtons = () => {
                 <Button variant="light" onClick={handleShowCreated}>
                     Создать
                 </Button>
-                <Button size="sm" variant="light" onClick={runTour} disabled={!blocklyReloadEnabled}>
-                    Запустить
-                </Button>
                 <Button size="sm" variant="light" onClick={handleShow} disabled={!blocklyReloadEnabled}>
                     Сохранить
+                </Button>
+                <Button size="sm" variant="light" onClick={handleShowCopy} disabled={!blocklyReloadEnabled}>
+                    Создать копию
+                </Button>
+                <Button size="sm" variant="light" onClick={runTour} disabled={!blocklyReloadEnabled}>
+                    Запустить
                 </Button>
                 <Button size="sm" variant="light" onClick={closeTour} disabled={!blocklyReloadEnabled}>
                     Закрыть
@@ -120,10 +142,20 @@ const ScriptButtons = () => {
                 handelOk={saveCode}
                 okButtonName="Сохранить"
             />
+            <ModalComponent
+                modalName="Создание копии тура"
+                show={showCopy}
+                handleShow={handleShowCopy}
+                inputName={newName}
+                inputDesc={newDesc}
+                handelCancel={handleCloseCopy}
+                handelOk={copyTour}
+                okButtonName="Создать копию"
+            />
             <ModalLockDevtoolsComponent
-                show={showRunTour}
+                show={showRun}
                 text="Для завершения просмотра тура нажмите"
-                handelCancel={handleCloseRunTour}
+                handelCancel={handleCloseRun}
             />
         </div>
     );
