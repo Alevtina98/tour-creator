@@ -33,7 +33,7 @@ Blockly.Blocks["desc"] = {
 Blockly.Blocks["step"] = {
     init: function() {
         this.appendDummyInput("TOPROW").appendField("nextStep", "NAME");
-        this.appendValueInput("condition").setCheck("Boolean");
+        this.appendValueInput("condition");
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
@@ -126,18 +126,19 @@ Blockly.JavaScript["step"] = function(block: any) {
 };
 Blockly.JavaScript["click"] = function(block: any) {
     const funcName = helperClass + ".click";
-    const code: string = "function(){ return " + funcName + "();}\n";
+    console.log("click.to")
+    const code: string = "function(){ return " + funcName + "()}";
     // Add % so as not to collide with helper functions in definitions list.
     //Blockly.JavaScript.definitions_['%' + funcName] = code;
-    return code;
+    return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 Blockly.JavaScript["clickOn"] = function(block: any) {
     const funcName = helperClass + ".clickOn";
     console.log(funcName);
     const args1: string = Blockly.JavaScript.valueToCode(block, "selector", Blockly.JavaScript.ORDER_NONE);
     console.log(args1);
-    const code: string = "function(){ return " + funcName + "(" + args1 + ");}\n";
+    const code: string = "function(){ return " + funcName + "(" + args1 + ")}";
     // Add % so as not to collide with helper functions in definitions list.
     //Blockly.JavaScript.definitions_['%' + funcName] = code;
-    return code;
+    return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
