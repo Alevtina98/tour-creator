@@ -181,7 +181,7 @@ export default class TourHelper {
         const str = Selector(target);
         const element = TourHelper.conditionElement;
         //console.log("Произошел клик по ", str);
-        if (element == str) {
+        if (str.startsWith(element)) {
             //console.log("делаем новый шаг!");
             window.removeEventListener("click", TourHelper.clickOnHandler);
             TourHelper.step();
