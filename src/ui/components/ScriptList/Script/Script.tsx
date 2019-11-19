@@ -1,14 +1,18 @@
 import React, { FC, useState } from "react";
 import { ScriptValue } from "../../../util/indexedDB";
-import {
-    delToDb,
-    loadListTour,
-    loadToDb,
-    saveDescTour,
-} from "../../../actions/selectedTourAction";
+import { delToDb, loadListTour, loadToDb, saveDescTour } from "../../../actions/selectedTourAction";
 import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
-import { Button, ButtonGroup, ButtonToolbar, FormControl, InputGroup, Modal } from "react-bootstrap";
+import {
+    Button,
+    ButtonGroup,
+    ButtonToolbar,
+    FormControl,
+    InputGroup,
+    Modal,
+    OverlayTrigger, Popover,
+    Tooltip
+} from "react-bootstrap";
 import { StoreType } from "../../../reducers";
 import cn from "classnames";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
@@ -27,7 +31,6 @@ const Script: FC<ScriptProps> = ({ tour, onClick }) => {
     const selectedTourKey: string = useSelector<StoreType, string>(
         ({ SelectedTourState }) => SelectedTourState.tourDB.key
     );
-
     //для работы с модальным окном
     const { setValue: setNameValue, ...newName } = useControlledInputValue(tour.name);
     const { setValue: setDescValue, ...newDesc } = useControlledInputValue(tour.desc);
@@ -45,7 +48,7 @@ const Script: FC<ScriptProps> = ({ tour, onClick }) => {
         updatedTour.desc = newDesc.value;
         dispatch(saveDescTour(updatedTour));
         handleClose();
-       // console.log("tour.name >> ", tour.name);
+        // console.log("tour.name >> ", tour.name);
     };
     const changeCode = (e: any) => {
         e.stopPropagation();
@@ -75,55 +78,69 @@ const Script: FC<ScriptProps> = ({ tour, onClick }) => {
     };
     return (
         <div>
-            <div
-                className={cn("tour", {
-                    "tour--active": selectedTourKey === tour.key
-                })}
-                onClick={loadTour}
+            <OverlayTrigger
+                key="bottom"
+                placement="bottom"
+                overlay={
+                    (tour.desc && (
+                        <Popover className="tooltip">
+                            {tour.desc}
+                        </Popover>
+                    )) || <div />
+                }
             >
-                <div className="tour-name" data-testid="tour-name">
-                    <small>{tour.name}</small>
+                <div
+                    className={cn("tour", {
+                        "tour--active": selectedTourKey === tour.key
+                    })}
+                    onClick={loadTour}
+                >
+                    <div className="tour-name" data-testid="tour-name">
+                        <small>{tour.name}</small>
+                    </div>
+                    <div className="tour-time" data-testid="tour-time">
+                        <small>{format(new Date(tour.date), "dd-MM-yyyy в HH:mm:ss")}</small>
+                    </div>
+                    <div />
+                    <ButtonToolbar className="tour-buttons">
+                        <ButtonGroup>
+                            <Button variant="light" size="sm" onClick={changeCode} data-testid="edit-button">
+                                <FontAwesomeIcon icon={faEdit} className="i-close" color="#A1A2A2" />
+                            </Button>
+                            <Button variant="light" size="sm" onClick={deleteCode} data-testid="del-button">
+                                <FontAwesomeIcon icon={faTrashAlt} className="i-close" color="#A1A2A2" />
+                            </Button>
+                        </ButtonGroup>
+                    </ButtonToolbar>
                 </div>
-                <div className="tour-time" data-testid="tour-time">
-                    <small>{format(new Date(tour.date), "dd-MM-yyyy в HH:mm:ss")}</small>
-                </div>
-                <div />
-                <ButtonToolbar className="tour-buttons">
-                    <ButtonGroup>
-                        <Button variant="light" size="sm" onClick={changeCode} data-testid="edit-button">
-                            <FontAwesomeIcon icon={faEdit} className="i-close" color="#A1A2A2" />
-                        </Button>
-                        <Button variant="light" size="sm" onClick={deleteCode} data-testid="del-button">
-                            <FontAwesomeIcon icon={faTrashAlt} className="i-close" color="#A1A2A2" />
-                        </Button>
-                    </ButtonGroup>
-                </ButtonToolbar>
-            </div>
-            <ModalInputsComponent modalName="Редактирование шаблона"
-                                  show={show}
-                                  handleShow={handleShow}
-                                  inputName={newName}
-                                  inputDesc={newDesc}
-                                  handelCancel={handleClose}
-                                  handelOk={saveChangeCode}
-                                  okButtonName="Сохранить изменения"
-                                  nameTestId="changeName"
-                                  descTestId="changeDesc"
-                                  cancelTestId="cancel-edit-button"
-                                  okTestId="save-edit-button"
-                                  modalTestId="edit-model"
+            </OverlayTrigger>
+            <ModalInputsComponent
+                modalName="Редактирование шаблона"
+                show={show}
+                handleShow={handleShow}
+                inputName={newName}
+                inputDesc={newDesc}
+                handelCancel={handleClose}
+                handelOk={saveChangeCode}
+                okButtonName="Сохранить изменения"
+                nameTestId="changeName"
+                descTestId="changeDesc"
+                cancelTestId="cancel-edit-button"
+                okTestId="save-edit-button"
+                modalTestId="edit-model"
             />
-            <ModalTextComponent modalName="Подтверждение удаления тура"
-                                show={showDel}
-                                handleShow={handleShowDel}
-                                text={`Вы действительно хотите удалить ${tour.name}?`}
-                                handelCancel={handleCloseDel}
-                                handelOk={saveDeleteCode}
-                                okButtonName="Удалить"
-                                textTestId="del-name"
-                                cancelTestId="cancel-del-button"
-                                okTestId="save-del-button"
-                                modalTestId="del-model"
+            <ModalTextComponent
+                modalName="Подтверждение удаления тура"
+                show={showDel}
+                handleShow={handleShowDel}
+                text={`Вы действительно хотите удалить ${tour.name}?`}
+                handelCancel={handleCloseDel}
+                handelOk={saveDeleteCode}
+                okButtonName="Удалить"
+                textTestId="del-name"
+                cancelTestId="cancel-del-button"
+                okTestId="save-del-button"
+                modalTestId="del-model"
             />
         </div>
     );

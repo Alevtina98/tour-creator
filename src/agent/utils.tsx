@@ -7,13 +7,17 @@ import Selector from "./Selector";
 export interface StepType {
     blackout: Function[];
     description: Function[];
+    condition: Function[];
 }
 
 export default class TourHelper {
+    static rectElement = [];
+    static popperElement = [];
     static steps: StepType[] = [
         {
             blackout: [],
-            description: []
+            description: [],
+            condition: []
         }
     ];
     /**
@@ -24,59 +28,69 @@ export default class TourHelper {
      * инкремент сделанного шага
      */
     static currentStep: number = 0;
-
-    static rectElement = [];
-    static popperElement = [];
+    /**
+     * элемент, демонстрирующийся на данном шаге
+     */
     static targetElement: Element | null = null;
+    /**
+     * элемент, поосле клика на который будет совершен следующий шаг
+     */
     static conditionElement = "";
 
+    public static startTour = () => {
+        disablePageScroll();
+        TourHelper.startStep();
+    };
+    public static endTour = () => {
+        TourHelper.currentStep = 0;
+        TourHelper.stepCount = 0;
+        //TourHelper.clearAllElement();
+        //TourHelper.targetElement = null;
+        // TourHelper.conditionElement = "";
+        enablePageScroll();
+        TourHelper.clearAllElement();
+        console.log("end tour");
+    };
+    //вызывается блоком из blockly
     public static blocklyStep = (condition: Function) => {
+        /*if (condition === Function) condition();
+        else console.log(`ERROR condition type. It must be function "click" or "clickOn"`);*/
         condition();
         TourHelper.stepCount += 1;
-        console.log("blocklyStep");
+        // console.log("blocklyStep");
         if (!TourHelper.steps[TourHelper.stepCount]) {
             TourHelper.steps[TourHelper.stepCount] = {
                 blackout: [],
-                description: []
+                description: [],
+                condition: []
             };
         }
     };
-    public static step = () => {
-        if (TourHelper.currentStep == TourHelper.steps.length) return;
-        console.log("step");
-        TourHelper.clearAllElement();
-        TourHelper.currentStep += 1;
-        TourHelper.startStep();
-    };
     public static click = () => {
-        window.addEventListener("click", TourHelper.clickHandler);
+        TourHelper.steps[TourHelper.stepCount].condition.push(() => {
+            window.addEventListener("click", TourHelper.clickHandler);
+        });
     };
     public static clickOn = (element: string) => {
-        TourHelper.conditionElement = element;
-        const el = document.querySelector(element);
-        if (!el) console.log("ERROR: selector not found")
-        else console.log("Ожидается клик по ", element);
-        window.addEventListener("click", TourHelper.clickOnHandler);
-    };
-    public static startStep = () => {
-        console.log("startStep >> ", TourHelper.currentStep, TourHelper.steps[TourHelper.currentStep]);
-        TourHelper.steps[TourHelper.currentStep].blackout.forEach(fn => fn());
-        TourHelper.steps[TourHelper.currentStep].description.forEach(fn => fn());
+        TourHelper.steps[TourHelper.stepCount].condition.push(() => {
+            TourHelper.conditionElement = element;
+            const el = document.querySelector(element);
+            if (!el) console.log("ERROR: selector not found");
+            //else console.log("Ожидается клик по ", element);
+            window.addEventListener("click", TourHelper.clickOnHandler);
+        });
     };
     public static blackout = (element: string) => {
         console.log("blackout", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
         TourHelper.steps[TourHelper.stepCount].blackout.push(() => {
             console.log("blackout");
-
             TourHelper.setTargetElement(element);
             const el = TourHelper.targetElement;
             if (!el) {
                 return;
             }
-            el.scrollIntoView({ block: "center", behavior: "smooth" });
             //console.log("blackout FN", el);
             TourHelper.drawFourRect();
-            disablePageScroll();
             window.addEventListener("resize", TourHelper.drawFourRect);
         });
     };
@@ -98,33 +112,28 @@ export default class TourHelper {
             TourHelper.popperElement.push(descrNode);
         });
     };
-    private static clickHandler = (e) => {
-        window.removeEventListener("click", TourHelper.clickHandler);
-        TourHelper.step();
-    };
-    private static clickOnHandler = (e) => {
-        const target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
-        const str = Selector(target);
-        const element = TourHelper.conditionElement;
-        console.log("Произошел клик по ", str);
-        if (element == str) {
-            console.log("делаем новый шаг!");
-            window.removeEventListener("click", TourHelper.clickOnHandler);
-            TourHelper.step();
-        };
-    };
-    public static clearAllElement = () => {
-        window.removeEventListener("resize", TourHelper.drawFourRect);
-        TourHelper.clearRectElement();
-        TourHelper.clearPopperElement();
-        enablePageScroll();
-    };
 
+    private static startStep = () => {
+        //console.log("startStep >> ", TourHelper.currentStep, TourHelper.steps[TourHelper.currentStep]);
+        TourHelper.steps[TourHelper.currentStep].blackout.forEach(fn => fn());
+        TourHelper.steps[TourHelper.currentStep].description.forEach(fn => fn());
+        TourHelper.steps[TourHelper.currentStep].condition.forEach(fn => fn());
+    };
+    private static step = () => {
+        TourHelper.clearAllElement();
+        TourHelper.targetElement = null;
+        TourHelper.conditionElement = "";
+        if (TourHelper.currentStep == TourHelper.steps.length) return;
+        //console.log("step");
+        TourHelper.currentStep += 1;
+        TourHelper.startStep();
+    };
     private static setTargetElement = (element: string) => {
-        //console.log("selector >> ", element);
         const el = document.querySelector(element);
         if (!el) console.log("ERROR: selector not found");
         TourHelper.targetElement = el;
+        el.scrollIntoView({ block: "center", behavior: "smooth" });
+        console.log("show on the this element >> ", el);
     };
     private static drawFourRect = () => {
         TourHelper.clearRectElement();
@@ -153,7 +162,7 @@ export default class TourHelper {
             width: `${rWidth}px`,
             height: `${rHeight}px`,
             bottom: "0",
-            background: "rgba(0, 0, 0, 0.2)",
+            background: "rgba(0, 0, 0, 0.3)",
             border: "none"
         };
         const rect = window.document.createElement("div");
@@ -163,13 +172,35 @@ export default class TourHelper {
         window.document.body.appendChild(rect);
         TourHelper.rectElement.push(rect);
     };
+    private static clickHandler = e => {
+        window.removeEventListener("click", TourHelper.clickHandler);
+        TourHelper.step();
+    };
+    private static clickOnHandler = e => {
+        const target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
+        const str = Selector(target);
+        const element = TourHelper.conditionElement;
+        //console.log("Произошел клик по ", str);
+        if (element == str) {
+            //console.log("делаем новый шаг!");
+            window.removeEventListener("click", TourHelper.clickOnHandler);
+            TourHelper.step();
+            TourHelper.conditionElement = "";
+        }
+    };
     private static clearRectElement = () => {
         TourHelper.rectElement.map(el => el.remove());
         TourHelper.rectElement = [];
+        enablePageScroll();
     };
     private static clearPopperElement = () => {
         TourHelper.popperElement.map(el => el.remove());
         TourHelper.popperElement = [];
+    };
+    private static clearAllElement = () => {
+        window.removeEventListener("resize", TourHelper.drawFourRect);
+        TourHelper.clearRectElement();
+        TourHelper.clearPopperElement();
     };
 }
 

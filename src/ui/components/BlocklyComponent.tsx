@@ -5,10 +5,9 @@ import parseWorkspaceXml from "./blockly/BlocklyHelper";
 import { connect } from "react-redux";
 import { StoreType } from "../reducers";
 import { bindActionCreators, Dispatch } from "redux";
-import {periodicallySave, saveThisTour, saveDescTour, setTourXML, setTourJS} from "../actions/selectedTourAction";
+import { periodicallySave, saveThisTour, saveDescTour, setTourXML, setTourJS} from "../actions/selectedTourAction";
 import { ScriptValue } from "../util/indexedDB";
-import { format } from "date-fns";
-import uuid from "uuid";
+import {setCurrentSelector} from "../actions/inspectAction";
 
 export interface Blockly {
     toolboxCategories: any[];
@@ -76,6 +75,7 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
                 this.setState({
                     blockId: ""
                 });
+                this.props.dispatch(setCurrentSelector(""));
             }
             //console.log("selector >> ", this.props.selector);
         }

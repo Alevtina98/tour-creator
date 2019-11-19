@@ -2,8 +2,6 @@ import { ActionType, createAsyncAction, createStandardAction } from "typesafe-ac
 import IDB, { ScriptValue } from "../util/indexedDB";
 import { Dispatch } from "redux";
 import { StoreType } from "../reducers";
-import ConfigFiles from "../../initContent/content";
-import { format } from "date-fns";
 import uuid from "uuid";
 
 export const setLoadBocklyEnabled = createStandardAction("SET_RELOAD_BLOCKLY_ENABLED")();
@@ -19,11 +17,8 @@ export const loadListTour = () => async (dispatch: Dispatch, getState: () => Sto
     const result = await (await IDB()).getAll("script");
     dispatch(setListTour(result));
 };
-// eslint-disable-next-line @typescript-eslint/require-await
 export const createNewTour = (name: string, desc: string) => async (dispatch: Dispatch, getState: () => StoreType) => {
     closeSelectedTour()(dispatch, getState);
-    //console.log("dispatch(setLoadBocklyDisabled());");
-    //const store = getState();
     const tour: ScriptValue = {
         name: name,
         date: "",
@@ -38,7 +33,6 @@ export const createNewTour = (name: string, desc: string) => async (dispatch: Di
 };
 export const createCopyTour = (name: string, desc: string) => async (dispatch: Dispatch, getState: () => StoreType) => {
     closeSelectedTour()(dispatch, getState);
-    //console.log("dispatch(setLoadBocklyDisabled());");
     const store = getState();
     const tour: ScriptValue = {
         name: name,

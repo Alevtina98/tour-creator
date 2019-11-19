@@ -37,9 +37,8 @@ class Agent {
 
             runScript: code => {
                 const el = this.window.document.createElement("script");
-                el.innerText = `eval("${code.replace(`"`, "")};")`;
+                el.innerText = `eval("${code.replace(`"`, "")};TourHelper.startTour();")`;
                 this.window.document.body.appendChild(el);
-                TourHelper.startStep();
             },
 
             enableSelectMode: () => {
@@ -50,7 +49,7 @@ class Agent {
                 this.removeSelectClickHandler();
             },
             disableRunScript: () => {
-                TourHelper.clearAllElement();
+                TourHelper.endTour();
             }
         };
     }

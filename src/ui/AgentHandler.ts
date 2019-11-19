@@ -19,15 +19,18 @@ class AgentHandler {
 
         tick: (data: { id: string }) => {
             const { id } = data;
-            if (this.currentSelected !== id) {
+            //if (this.currentSelected !== id) {
                 this.dispatch(setCurrentSelector(id));
                 this.currentSelected = id;
-            }
+            //}
             console.log("Selector", data);
         },
 
         enabledSelectMode: () => this.dispatch(setInspectEnabled()),
-        disabledSelectMode: () => this.dispatch(setInspectDisabled())
+        disabledSelectMode: () => {
+            this.dispatch(setInspectDisabled());
+            //this.dispatch(setCurrentSelector(""));
+        }
     };
 
     constructor(dispatch: Dispatch) {
