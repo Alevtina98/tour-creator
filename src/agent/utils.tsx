@@ -44,11 +44,20 @@ export default class TourHelper {
     public static endTour = () => {
         TourHelper.currentStep = 0;
         TourHelper.stepCount = 0;
-        //TourHelper.clearAllElement();
-        //TourHelper.targetElement = null;
-        // TourHelper.conditionElement = "";
+        TourHelper.clearAllElement();
+        TourHelper.targetElement = null;
+        TourHelper.conditionElement = "";
+        TourHelper.steps = [
+            {
+                blackout: [],
+                description: [],
+                condition: []
+            }
+        ];
         enablePageScroll();
         TourHelper.clearAllElement();
+        window.removeEventListener("click", TourHelper.clickHandler);
+        window.removeEventListener("click", TourHelper.clickOnHandler);
         console.log("end tour");
     };
     //вызывается блоком из blockly
@@ -181,6 +190,7 @@ export default class TourHelper {
         const str = Selector(target);
         const element = TourHelper.conditionElement;
         //console.log("Произошел клик по ", str);
+        //if (element == str) {
         if (str.startsWith(element)) {
             //console.log("делаем новый шаг!");
             window.removeEventListener("click", TourHelper.clickOnHandler);
@@ -191,7 +201,6 @@ export default class TourHelper {
     private static clearRectElement = () => {
         TourHelper.rectElement.map(el => el.remove());
         TourHelper.rectElement = [];
-        enablePageScroll();
     };
     private static clearPopperElement = () => {
         TourHelper.popperElement.map(el => el.remove());

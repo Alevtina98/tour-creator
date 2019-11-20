@@ -1,5 +1,4 @@
-import React, {FC, memo} from "react";
-import {Button, Modal} from "react-bootstrap";
+import React, { FC, memo } from "react";
 
 interface ModalLockDevtoolsComponent {
     //modalName: string;
@@ -7,16 +6,24 @@ interface ModalLockDevtoolsComponent {
     //handleShow: () => void;
     text: string;
     handelCancel: () => void;
-    //okButtonName?: string;
+    buttonName?: string;
     //okTestId?: string;
     cancelTestId?: string;
     textTestId?: string;
     modalTestId?: string;
 }
 
-const  ModalLockDevtoolsComponent: FC<ModalLockDevtoolsComponent> = ( {show, text, handelCancel, cancelTestId, textTestId, modalTestId} ) => {
+const ModalLockDevtoolsComponent: FC<ModalLockDevtoolsComponent> = ({
+    buttonName,
+    show,
+    text,
+    handelCancel,
+    cancelTestId,
+    textTestId,
+    modalTestId
+}) => {
     return (
-        show && (
+        (show && (
             <div className="back-drop" data-testid={modalTestId || ""}>
                 <div
                     className="alert alert-light"
@@ -30,14 +37,18 @@ const  ModalLockDevtoolsComponent: FC<ModalLockDevtoolsComponent> = ( {show, tex
                     data-testid={textTestId || ""}
                 >
                     {text}
-                    <button onClick={handelCancel} type="button" className="btn btn-light" data-testid={cancelTestId || ""}>
-                        Отмена
+                    <button
+                        onClick={handelCancel}
+                        type="button"
+                        className="btn btn-light"
+                        data-testid={cancelTestId || ""}
+                    >
+                        {buttonName || "Отмена"}
                     </button>
                 </div>
             </div>
-        )
-        || null
+        )) ||
+        null
     );
 };
-export default memo( ModalLockDevtoolsComponent);
-
+export default memo(ModalLockDevtoolsComponent);

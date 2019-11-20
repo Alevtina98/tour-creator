@@ -157,6 +157,7 @@ const ScriptButtons = () => {
                 show={showRun}
                 text="Для завершения просмотра тура нажмите"
                 handelCancel={handleCloseRun}
+                buttonName="Завершить"
             />
         </div>
     );
