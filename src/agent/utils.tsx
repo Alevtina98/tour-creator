@@ -137,6 +137,23 @@ export default class TourHelper {
         TourHelper.currentStep += 1;
         TourHelper.startStep();
     };
+    private static clickHandler = e => {
+        window.removeEventListener("click", TourHelper.clickHandler);
+        TourHelper.step();
+    };
+    private static clickOnHandler = e => {
+        const target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
+        const str = Selector(target);
+        const element = TourHelper.conditionElement;
+        //console.log("Произошел клик по ", str);
+        //if (element == str) {
+        if (str.startsWith(element)) {
+            //console.log("делаем новый шаг!");
+            window.removeEventListener("click", TourHelper.clickOnHandler);
+            TourHelper.step();
+            TourHelper.conditionElement = "";
+        }
+    };
     private static setTargetElement = (element: string) => {
         const el = document.querySelector(element);
         if (!el) console.log("ERROR: selector not found");
@@ -180,23 +197,6 @@ export default class TourHelper {
         });
         window.document.body.appendChild(rect);
         TourHelper.rectElement.push(rect);
-    };
-    private static clickHandler = e => {
-        window.removeEventListener("click", TourHelper.clickHandler);
-        TourHelper.step();
-    };
-    private static clickOnHandler = e => {
-        const target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
-        const str = Selector(target);
-        const element = TourHelper.conditionElement;
-        //console.log("Произошел клик по ", str);
-        //if (element == str) {
-        if (str.startsWith(element)) {
-            //console.log("делаем новый шаг!");
-            window.removeEventListener("click", TourHelper.clickOnHandler);
-            TourHelper.step();
-            TourHelper.conditionElement = "";
-        }
     };
     private static clearRectElement = () => {
         TourHelper.rectElement.map(el => el.remove());
