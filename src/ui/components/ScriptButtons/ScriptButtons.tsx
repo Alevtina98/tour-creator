@@ -110,11 +110,11 @@ const ScriptButtons = () => {
                 <Button variant="light" onClick={handleShowCreated}>
                     Создать
                 </Button>
-                <Button size="sm" variant="light" onClick={handleShow} disabled={!blocklyReloadEnabled}>
-                    Сохранить
-                </Button>
                 <Button size="sm" variant="light" onClick={handleShowCopy} disabled={!blocklyReloadEnabled}>
                     Создать копию
+                </Button>
+                <Button size="sm" variant="light" onClick={handleShow} disabled={!blocklyReloadEnabled}>
+                    Сохранить
                 </Button>
                 <Button size="sm" variant="light" onClick={runTour} disabled={!blocklyReloadEnabled}>
                     Запустить

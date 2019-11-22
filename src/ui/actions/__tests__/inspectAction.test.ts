@@ -14,7 +14,9 @@ describe("inspectAction", function() {
         expect(inspectActions.setInspectDisabled()).toEqual({
             type: "SET_INSPECT_DISABLED"
         });
-        expect(inspectActions.setCurrentSelector("")).toEqual({
+        expect(inspectActions.setCurrentSelector("div")).toEqual({
+            meta: undefined,
+            payload: "div",
             type: "SET_CURRENT_SELECTOR"
         });
     });
