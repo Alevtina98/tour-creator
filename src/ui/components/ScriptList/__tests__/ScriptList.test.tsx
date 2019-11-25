@@ -54,7 +54,7 @@ describe("Script", () => {
         await Promise.all(promiseAdd);
         const promiseList = testTour.map(async el => await (await IDB()).get("script", el.key));
         const result = await Promise.all(promiseList);
-        expect(testTour).toStrictEqual(result)
+        expect(testTour).toStrictEqual(result);
 
         expect(queryByTestId("list-button-close")).not.toBeNull();
         expect(queryByTestId("list-search")).not.toBeNull();

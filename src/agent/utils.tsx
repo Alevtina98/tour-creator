@@ -65,6 +65,7 @@ export default class TourHelper {
         /*if (condition === Function) condition();
         else console.log(`ERROR condition type. It must be function "click" or "clickOn"`);*/
         condition();
+        console.log("STEP", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
         TourHelper.stepCount += 1;
         // console.log("blocklyStep");
         if (!TourHelper.steps[TourHelper.stepCount]) {
@@ -74,6 +75,7 @@ export default class TourHelper {
                 condition: []
             };
         }
+
     };
     public static click = () => {
         TourHelper.steps[TourHelper.stepCount].condition.push(() => {
@@ -82,38 +84,32 @@ export default class TourHelper {
     };
     public static clickOn = (element: string) => {
         TourHelper.steps[TourHelper.stepCount].condition.push(() => {
-            TourHelper.conditionElement = element;
-            const el = document.querySelector(element);
-            if (!el) console.log("ERROR: selector not found");
-            //else console.log("Ожидается клик по ", element);
+            TourHelper.setConditionElement(element);
             window.addEventListener("click", TourHelper.clickOnHandler);
         });
     };
     public static blackout = (element: string) => {
-        console.log("blackout", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
+        //console.log("blackout", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
         TourHelper.steps[TourHelper.stepCount].blackout.push(() => {
-            console.log("blackout");
             TourHelper.setTargetElement(element);
             const el = TourHelper.targetElement;
             if (!el) {
                 return;
             }
-            //console.log("blackout FN", el);
+            console.log("blackout ", el);
             TourHelper.drawFourRect();
             window.addEventListener("resize", TourHelper.drawFourRect);
         });
     };
     public static description = (element: string, desc: string) => {
-        console.log("description", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
+        //console.log("description", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
         TourHelper.steps[TourHelper.stepCount].description.push(() => {
-            console.log("description");
-
             TourHelper.setTargetElement(element);
             const el = TourHelper.targetElement;
             if (!el) {
                 return;
             }
-            //console.log("description FN >> ", el, " desc >> ", desc);
+            //console.log("description ", el, desc);
             const descrNode = window.document.createElement("div");
             descrNode.id = "container";
             window.document.body.appendChild(descrNode);
@@ -143,12 +139,12 @@ export default class TourHelper {
     };
     private static clickOnHandler = e => {
         const target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
-        const str = Selector(target);
         const element = TourHelper.conditionElement;
-        //console.log("Произошел клик по ", str);
-        //if (element == str) {
-        if (str.startsWith(element)) {
-            //console.log("делаем новый шаг!");
+        //console.log("Ожидался клик по ", element);
+       // console.log("Произошел клик по ", target);
+       // if (str.startsWith(element)) {
+        if (element === target) {
+            //console.log("все правильно");
             window.removeEventListener("click", TourHelper.clickOnHandler);
             TourHelper.step();
             TourHelper.conditionElement = "";
@@ -159,7 +155,12 @@ export default class TourHelper {
         if (!el) console.log("ERROR: selector not found");
         TourHelper.targetElement = el;
         el.scrollIntoView({ block: "center", behavior: "smooth" });
-        console.log("show on the this element >> ", el);
+        //console.log("show on the this element >> ", el);
+    };
+    private static setConditionElement = (element: string) => {
+        const el = document.querySelector(element);
+        if (!el) console.log("ERROR: selector condition element not found");
+        TourHelper.conditionElement = el;
     };
     private static drawFourRect = () => {
         TourHelper.clearRectElement();

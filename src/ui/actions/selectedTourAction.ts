@@ -4,15 +4,12 @@ import { Dispatch } from "redux";
 import { StoreType } from "../reducers";
 import uuid from "uuid";
 
-
 export const setLoadBocklyEnabled = createStandardAction("SET_RELOAD_BLOCKLY_ENABLED")();
 export const setLoadBocklyDisabled = createStandardAction("SET_RELOAD_BLOCKLY_DISABLED")();
-//export const isLoadingDB = createStandardAction("IS_LOADING_DB")();
 export const setListTour = createStandardAction("SET_LIST_TOUR")<ScriptValue[]>();
 export const setTourDB = createStandardAction("SET_TOUR")<ScriptValue>();
 export const setTourXML = createStandardAction("SET_TOUR_XML")<string>();
 export const setTourJS = createStandardAction("SET_TOUR_JS")<string>();
-//export const setKey = createStandardAction("SET_KEY")<string>();
 
 export const loadListTour = () => async (dispatch: Dispatch, getState: () => StoreType) => {
     const result = await (await IDB()).getAll("script");

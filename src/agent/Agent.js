@@ -26,27 +26,17 @@ class Agent {
                 console.log("Browser connect handler -> connected");
                 sendMessage("connected");
             },
-
-            // subscribeToEntity: function (data) {
-            //   this.subscribedEntityId = data.entityId;
-            // },
-            //
-            // unsubscribeFromEntity: function (/*data*/) {
-            //   this.subscribedEntityId = null;
-            // },
-
-            runScript: code => {
-                const el = this.window.document.createElement("script");
-                el.innerText = `eval("${code.replace(`"`, "")};TourHelper.startTour();")`;
-                this.window.document.body.appendChild(el);
-            },
-
             enableSelectMode: () => {
                 this.attachSelectClickHandler();
             },
 
             disableSelectMode: () => {
                 this.removeSelectClickHandler();
+            },
+            runScript: code => {
+                const el = this.window.document.createElement("script");
+                el.innerText = `eval("${code.replace(`"`, "")};TourHelper.startTour();")`;
+                this.window.document.body.appendChild(el);
             },
             disableRunScript: () => {
                 TourHelper.endTour();

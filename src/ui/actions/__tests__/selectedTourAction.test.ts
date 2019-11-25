@@ -105,6 +105,9 @@ describe("inspectAction", function() {
         listTour: testListTour,
         tourJS: ""
     };
+    const middlewares: any[] = [thunk];
+    const mockStore = createMockStore(middlewares);
+    const testStore = mockStore({ SelectedTourState: initialState });
     it("should return correct type", () => {
         expect(selectedTourAction.setLoadBocklyEnabled()).toEqual({
             type: "SET_RELOAD_BLOCKLY_ENABLED"
@@ -155,7 +158,45 @@ describe("inspectAction", function() {
             tourJS: "NEW"
         });
     });
-    it("should dispatch actions (for function action)", async () => {
+    it("should dispatch actions (for action loadListTour)", async () => {
+        const promiseAdd = testListTour.map(async el => await (await IDB()).add("script", el, el.key));
+        await Promise.all(promiseAdd);
+        testStore.dispatch(selectedTourAction.loadListTour()).then(() => {
+            expect(testStore.getActions()).toEqual([
+                {
+                    payload: testListTour,
+                    type: "SET_LIST_TOUR"
+                }
+            ]);
+        });
+        //Редактирование описания
+        await (await IDB()).put("script", { ...testTour, name: "old test name", desc: "old test desc" }, testTour.key);
+        await selectedTourAction.saveDescTour(testTour)(testStore.dispatch, testStore.getState);
+        //выбранного тура
+        expect(testStore.getActions()).toEqual([
+            {
+                payload: testTour,
+                type: "SET_TOUR"
+            },
+            {
+                payload: testListTour,
+                type: "SET_LIST_TOUR"
+            }
+        ]);
+        //Закрытие
+        // await (await IDB()).delete("script", "anyKey");
+        testStore.dispatch(selectedTourAction.closeSelectedTour());
+        expect(testStore.getActions()).toEqual([
+            {
+                type: "SET_RELOAD_BLOCKLY_DISABLED"
+            },
+            {
+                payload: initTour,
+                type: "SET_TOUR"
+            }
+        ]);
+    });
+    it("should dispatch actions (for action loadListTour)", async () => {
         const middlewares: any[] = [thunk];
         const mockStore = createMockStore(middlewares);
         const testStore = mockStore({ SelectedTourState: initialState });
@@ -173,10 +214,15 @@ describe("inspectAction", function() {
         //Редактирование описания
         await (await IDB()).put("script", { ...testTour, name: "old test name", desc: "old test desc" }, testTour.key);
         await selectedTourAction.saveDescTour(testTour)(testStore.dispatch, testStore.getState);
+        //выбранного тура
         expect(testStore.getActions()).toEqual([
             {
-                /*payload: testTour,
-                type: "SET_LIST_TOUR"*/
+                payload: testTour,
+                type: "SET_TOUR"
+            },
+            {
+                payload: testListTour,
+                type: "SET_LIST_TOUR"
             }
         ]);
         //Закрытие
