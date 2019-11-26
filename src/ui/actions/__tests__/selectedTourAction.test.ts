@@ -81,7 +81,9 @@ const testListTourNew: ScriptValue[] = [
     }
 ];
 
-describe("inspectAction", function() {
+jest.useFakeTimers();
+
+describe("selectedTourAction", function() {
     beforeEach(cleanup);
     const initialState = {
         tourDB: testListTour[0],
@@ -92,6 +94,7 @@ describe("inspectAction", function() {
     };
     const middlewares: any[] = [thunk];
     const mockStore = createMockStore(middlewares);
+    let periodicallySaveTimer = 0;
     it("should return correct type", () => {
         expect(selectedTourAction.setLoadBocklyEnabled()).toEqual({
             type: "SET_RELOAD_BLOCKLY_ENABLED"
@@ -190,6 +193,7 @@ describe("inspectAction", function() {
         ]);
     });
     it("should dispatch actions (for action delToDb)", async () => {
+        periodicallySaveTimer = 10;
         const store = mockStore({ SelectedTourState: initialState });
         const promiseAdd = testListTour.map(async el => await (await IDB()).add("script", el, el.key));
         await Promise.all(promiseAdd);
@@ -215,6 +219,105 @@ describe("inspectAction", function() {
                 type: "SET_LIST_TOUR"
             }
         ]);
+    });
+    it("should dispatch actions (for action periodicallySave) after each 5 second", async () => {
+        const store = mockStore({ SelectedTourState: initialState });
+        const promiseAdd = testListTour.map(async el => await (await IDB()).add("script", el, el.key));
+        await Promise.all(promiseAdd);
+        await selectedTourAction.periodicallySave()(store.dispatch, store.getState);
+        //const newDate = store.getActions()[0].payload.date;
+        expect(store.getActions()).toEqual([]);
+        jest.advanceTimersByTime(5000);
+        //const newDate = store.getActions()[0].payload.date;
+        const newDate = Date();
+        const result = await (await IDB()).getAll("script");
+        expect(store.getActions()).toEqual([
+            {
+                payload: {
+                    ...initialState.tourDB,
+                    code: initialState.tourXML,
+                    date: newDate
+                },
+                type: "SET_TOUR"
+            },
+            {
+                payload: result,
+                type: "SET_LIST_TOUR"
+            }
+        ]);
+        jest.advanceTimersByTime(5000);
+        const newDate2 = Date();
+        //const newDate2 = store.getActions()[2].payload.date;
+        const result2 = await (await IDB()).getAll("script");
+        expect(store.getActions()).toEqual([
+            {
+                payload: {
+                    ...initialState.tourDB,
+                    code: initialState.tourXML,
+                    date: newDate
+                },
+                type: "SET_TOUR"
+            },
+            {
+                payload: result,
+                type: "SET_LIST_TOUR"
+            },
+            {
+                payload: {
+                    ...initialState.tourDB,
+                    code: initialState.tourXML,
+                    date: newDate2
+                },
+                type: "SET_TOUR"
+            },
+            {
+                payload: result2,
+                type: "SET_LIST_TOUR"
+            }
+        ]);
+        jest.advanceTimersByTime(5000);
+        //const newDate3 = store.getActions()[4].payload.date;
+        const newDate3 = Date();
+        const result3 = await (await IDB()).getAll("script");
+        expect(store.getActions()).toEqual([
+            {
+                payload: {
+                    ...initialState.tourDB,
+                    code: initialState.tourXML,
+                    date: newDate
+                },
+                type: "SET_TOUR"
+            },
+            {
+                payload: result,
+                type: "SET_LIST_TOUR"
+            },
+            {
+                payload: {
+                    ...initialState.tourDB,
+                    code: initialState.tourXML,
+                    date: newDate2
+                },
+                type: "SET_TOUR"
+            },
+            {
+                payload: result2,
+                type: "SET_LIST_TOUR"
+            },
+            {
+                payload: {
+                    ...initialState.tourDB,
+                    code: initialState.tourXML,
+                    date: newDate3
+                },
+                type: "SET_TOUR"
+            },
+            {
+                payload: result3,
+                type: "SET_LIST_TOUR"
+            }
+        ]);
+        jest.clearAllTimers();
     });
     it("should dispatch actions (for action loadToDb)", async () => {
         const store = mockStore({ SelectedTourState: initialState });
@@ -300,25 +403,22 @@ describe("inspectAction", function() {
             done();
         }, 5);
     });
-    it("should dispatch actions (for action saveSelectedTour)", async done => {
+    it("should dispatch actions (for action saveSelectedTour)", async () => {
         const store = mockStore({ SelectedTourState: initialState });
         //const tourDB: ScriptValue = store.getState().SelectedTourState.tourDB;
         //const tourXML = store.getState().SelectedTourState.tourXM;
         await selectedTourAction.saveSelectedTour()(store.dispatch, store.getState);
         const newDate = store.getActions()[0].payload.date;
-        setTimeout(() => {
-            expect(store.getActions()).toEqual([
-                {
-                    payload: {
-                        ...initialState.tourDB,
-                        code: initialState.tourXML,
-                        date: newDate
-                    },
-                    type: "SET_TOUR"
-                }
-            ]);
-            done();
-        }, 5);
+        expect(store.getActions()).toEqual([
+            {
+                payload: {
+                    ...initialState.tourDB,
+                    code: initialState.tourXML,
+                    date: newDate
+                },
+                type: "SET_TOUR"
+            }
+        ]);
     });
     it("should dispatch actions (for action closeSelectedTour)", () => {
         const store = mockStore({ SelectedTourState: initialState });
@@ -332,5 +432,6 @@ describe("inspectAction", function() {
                 type: "SET_TOUR"
             }
         ]);
+        //expect(periodicallySaveTimer).toEqual(0);
     });
 });

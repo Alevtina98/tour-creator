@@ -35,7 +35,7 @@ export const delToDb = (key: string) => async (dispatch: Dispatch, getState: () 
 };
 let periodicallySaveTimer = 0;
 export const periodicallySave = () => (dispatch: Dispatch, getState: () => StoreType) => {
-    console.log("periodicallySave");
+    //console.log("periodicallySave");
     clearInterval(periodicallySaveTimer);
     periodicallySaveTimer = window.setInterval(() => {
         saveSelectedTour()(dispatch, getState);
