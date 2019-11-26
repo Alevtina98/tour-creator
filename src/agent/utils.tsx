@@ -2,7 +2,6 @@ import DescriptionComponent from "../ui/components/DescriptionComponent";
 import * as React from "react";
 import ReactDOM from "react-dom";
 import { disablePageScroll, enablePageScroll } from "scroll-lock";
-import Selector from "./Selector";
 
 export interface StepType {
     blackout: Function[];
@@ -36,7 +35,6 @@ export default class TourHelper {
      * элемент, поосле клика на который будет совершен следующий шаг
      */
     static conditionElement = "";
-
     public static startTour = () => {
         disablePageScroll();
         TourHelper.startStep();
@@ -61,33 +59,6 @@ export default class TourHelper {
         console.log("end tour");
     };
     //вызывается блоком из blockly
-    public static blocklyStep = (condition: Function) => {
-        /*if (condition === Function) condition();
-        else console.log(`ERROR condition type. It must be function "click" or "clickOn"`);*/
-        condition();
-        console.log("STEP", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
-        TourHelper.stepCount += 1;
-        // console.log("blocklyStep");
-        if (!TourHelper.steps[TourHelper.stepCount]) {
-            TourHelper.steps[TourHelper.stepCount] = {
-                blackout: [],
-                description: [],
-                condition: []
-            };
-        }
-
-    };
-    public static click = () => {
-        TourHelper.steps[TourHelper.stepCount].condition.push(() => {
-            window.addEventListener("click", TourHelper.clickHandler);
-        });
-    };
-    public static clickOn = (element: string) => {
-        TourHelper.steps[TourHelper.stepCount].condition.push(() => {
-            TourHelper.setConditionElement(element);
-            window.addEventListener("click", TourHelper.clickOnHandler);
-        });
-    };
     public static blackout = (element: string) => {
         //console.log("blackout", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
         TourHelper.steps[TourHelper.stepCount].blackout.push(() => {
@@ -117,6 +88,32 @@ export default class TourHelper {
             TourHelper.popperElement.push(descrNode);
         });
     };
+    public static blocklyStep = (condition: Function) => {
+        /*if (condition === Function) condition();
+        else console.log(`ERROR condition type. It must be function "click" or "clickOn"`);*/
+        condition();
+        console.log("STEP", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
+        TourHelper.stepCount += 1;
+        // console.log("blocklyStep");
+        if (!TourHelper.steps[TourHelper.stepCount]) {
+            TourHelper.steps[TourHelper.stepCount] = {
+                blackout: [],
+                description: [],
+                condition: []
+            };
+        }
+    };
+    public static click = () => {
+        TourHelper.steps[TourHelper.stepCount].condition.push(() => {
+            window.addEventListener("click", TourHelper.clickHandler);
+        });
+    };
+    public static clickOn = (element: string) => {
+        TourHelper.steps[TourHelper.stepCount].condition.push(() => {
+            TourHelper.setConditionElement(element);
+            window.addEventListener("click", TourHelper.clickOnHandler);
+        });
+    };
 
     private static startStep = () => {
         //console.log("startStep >> ", TourHelper.currentStep, TourHelper.steps[TourHelper.currentStep]);
@@ -133,16 +130,16 @@ export default class TourHelper {
         TourHelper.currentStep += 1;
         TourHelper.startStep();
     };
-    private static clickHandler = e => {
+    private static clickHandler = () => {
         window.removeEventListener("click", TourHelper.clickHandler);
         TourHelper.step();
     };
-    private static clickOnHandler = e => {
+    private static clickOnHandler = (e: { target: any }) => {
         const target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
         const element = TourHelper.conditionElement;
         //console.log("Ожидался клик по ", element);
-       // console.log("Произошел клик по ", target);
-       // if (str.startsWith(element)) {
+        // console.log("Произошел клик по ", target);
+        // if (str.startsWith(element)) {
         if (element === target) {
             //console.log("все правильно");
             window.removeEventListener("click", TourHelper.clickOnHandler);

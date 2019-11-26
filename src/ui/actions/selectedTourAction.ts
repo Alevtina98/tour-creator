@@ -11,7 +11,7 @@ export const setTourDB = createStandardAction("SET_TOUR")<ScriptValue>();
 export const setTourXML = createStandardAction("SET_TOUR_XML")<string>();
 export const setTourJS = createStandardAction("SET_TOUR_JS")<string>();
 
-export const loadListTour = () => async (dispatch: Dispatch, getState: () => StoreType) => {
+export const loadListTour = () => async (dispatch: Dispatch) => {
     const result = await (await IDB()).getAll("script");
     dispatch(setListTour(result));
 };
@@ -27,10 +27,7 @@ export const saveDescTour = (tourDB: ScriptValue) => async (dispatch: Dispatch, 
     loadListTour()(dispatch, getState);
 };
 export const delToDb = (key: string) => async (dispatch: Dispatch, getState: () => StoreType) => {
-    //console.log("DelKey >> ",getState().SelectedTourState.selectedIndex);
-    // const store = getState();
     const store = getState();
-    //console.log("saveDescTour");
     if (key == store.SelectedTourState.tourDB.key) dispatch(setLoadBocklyDisabled());
     (await IDB()).delete("script", key);
     clearInterval(periodicallySaveTimer);
@@ -45,12 +42,12 @@ export const periodicallySave = () => (dispatch: Dispatch, getState: () => Store
         loadListTour()(dispatch, getState);
     }, 5000);
 };
-export const loadToDb = (key: string) => async (dispatch: Dispatch, getState: () => StoreType) => {
+export const loadToDb = (key: string) => async (dispatch: Dispatch) => {
     //загрузка нового тура с пререзагрузкой блокли
     dispatch(setLoadBocklyDisabled());
     const tour: ScriptValue | undefined = await (await IDB()).get("script", key);
     if (tour) dispatch(setTourDB(tour));
-    console.log(tour);
+    //console.log(tour);
     return dispatch(setLoadBocklyEnabled());
 };
 export const createNewTour = (name: string, desc: string) => async (dispatch: Dispatch, getState: () => StoreType) => {

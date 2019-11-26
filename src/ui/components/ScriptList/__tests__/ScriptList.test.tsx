@@ -40,7 +40,7 @@ describe("Script", () => {
     ];
     const onClick = () => {};
     it("should ScriptList render", async () => {
-        const { getByTestId, queryByTestId, debug } = render(
+        const { queryByTestId } = render(
             ProviderWithComponent(() => <ScriptList onClickScript={onClick()} onClickEsc={onClick()} isOpen={true} />, {
                 SelectedTourState: {
                     tourDB: testTour,
