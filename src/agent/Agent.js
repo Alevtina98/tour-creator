@@ -1,7 +1,7 @@
 import sendMessage from "./util/sendMessage";
 import Selector from "./Selector";
 import "./style/agentStyle.less";
-import TourHelper from "./utils";
+import TourHelper from "./TourHelper/utils";
 
 const _ = require("lodash");
 

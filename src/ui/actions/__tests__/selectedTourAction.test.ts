@@ -81,8 +81,6 @@ const testListTourNew: ScriptValue[] = [
     }
 ];
 
-jest.useFakeTimers();
-
 describe("selectedTourAction", function() {
     beforeEach(cleanup);
     const initialState = {
@@ -224,6 +222,7 @@ describe("selectedTourAction", function() {
         const store = mockStore({ SelectedTourState: initialState });
         const promiseAdd = testListTour.map(async el => await (await IDB()).add("script", el, el.key));
         await Promise.all(promiseAdd);
+        jest.useFakeTimers();
         await selectedTourAction.periodicallySave()(store.dispatch, store.getState);
         //const newDate = store.getActions()[0].payload.date;
         expect(store.getActions()).toEqual([]);
@@ -314,7 +313,7 @@ describe("selectedTourAction", function() {
             },
             {
                 payload: result3,
-                type: "SET_LIST_TOUR"
+                type: "ET_LIST_TOUR"
             }
         ]);
         jest.clearAllTimers();

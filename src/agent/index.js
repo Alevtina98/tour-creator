@@ -1,7 +1,7 @@
 import Agent from "./Agent";
 
 import sendMessage from "./util/sendMessage";
-import "./utils";
+import "./TourHelper/utils";
 window.__coquette_inspect_agent_injected__ = true; //injectDebugger проверяет это значение
 sendMessage("locatedCoquette");
 // patchEntities(window.__coquette__);

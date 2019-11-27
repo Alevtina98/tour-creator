@@ -1,4 +1,4 @@
-import TourHelper from "../agent/utils";
+import TourHelper from "../agent/TourHelper/utils";
 import {argumentPlaceholder} from "@babel/types";
 
 const helperClass = TourHelper.name;

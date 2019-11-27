@@ -15,7 +15,7 @@ import { useControlledInputValue } from "../../hooks/useControleInputValue";
 import agentActions from "../../actions/agentActions";
 import ModalComponent from "../ModalInputsComponent";
 import ModalLockDevtoolsComponent from "../ModalLockDevtoolsComponent";
-import TourHelper from "../../../agent/utils";
+import TourHelper from "../../../agent/TourHelper/utils";
 
 export interface ScriptButtons {
     tourDB: ScriptValue;

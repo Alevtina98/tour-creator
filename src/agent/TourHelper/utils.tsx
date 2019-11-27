@@ -1,4 +1,4 @@
-import DescriptionComponent from "../ui/components/DescriptionComponent";
+import DescriptionComponent from "../../ui/components/DescriptionComponent";
 import * as React from "react";
 import ReactDOM from "react-dom";
 import { disablePageScroll, enablePageScroll } from "scroll-lock";
@@ -10,8 +10,10 @@ export interface StepType {
 }
 
 export default class TourHelper {
-    static rectElement = [];
-    static popperElement = [];
+    /**
+     * для записи тура
+     */
+    static stepCount: number = 0;
     static steps: StepType[] = [
         {
             blackout: [],
@@ -20,31 +22,26 @@ export default class TourHelper {
         }
     ];
     /**
-     * инкремент шага из блокли
-     */
-    static stepCount: number = 0;
-    /**
-     * инкремент сделанного шага
+     * для воспроизведения тура
      */
     static currentStep: number = 0;
-    /**
-     * элемент, демонстрирующийся на данном шаге
-     */
     static targetElement: Element | null = null;
-    /**
-     * элемент, поосле клика на который будет совершен следующий шаг
-     */
-    static conditionElement = "";
+    static conditionElement: Element | null = null;
+    static rectElement = [];
+    static popperElement = [];
     public static startTour = () => {
         disablePageScroll();
         TourHelper.startStep();
     };
     public static endTour = () => {
-        TourHelper.currentStep = 0;
-        TourHelper.stepCount = 0;
+        enablePageScroll();
+        window.removeEventListener("click", TourHelper.clickHandler);
+        window.removeEventListener("click", TourHelper.clickOnHandler);
         TourHelper.clearAllElement();
         TourHelper.targetElement = null;
-        TourHelper.conditionElement = "";
+        TourHelper.conditionElement = null;
+        TourHelper.currentStep = 0;
+        TourHelper.stepCount = 0;
         TourHelper.steps = [
             {
                 blackout: [],
@@ -52,13 +49,8 @@ export default class TourHelper {
                 condition: []
             }
         ];
-        enablePageScroll();
-        TourHelper.clearAllElement();
-        window.removeEventListener("click", TourHelper.clickHandler);
-        window.removeEventListener("click", TourHelper.clickOnHandler);
         console.log("end tour");
     };
-    //вызывается блоком из blockly
     public static blackout = (element: string) => {
         //console.log("blackout", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
         TourHelper.steps[TourHelper.stepCount].blackout.push(() => {
@@ -71,6 +63,7 @@ export default class TourHelper {
             TourHelper.drawFourRect();
             window.addEventListener("resize", TourHelper.drawFourRect);
         });
+       // console.log(TourHelper.steps)
     };
     public static description = (element: string, desc: string) => {
         //console.log("description", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
@@ -124,7 +117,7 @@ export default class TourHelper {
     private static step = () => {
         TourHelper.clearAllElement();
         TourHelper.targetElement = null;
-        TourHelper.conditionElement = "";
+        TourHelper.conditionElement = null;
         if (TourHelper.currentStep == TourHelper.steps.length) return;
         //console.log("step");
         TourHelper.currentStep += 1;
@@ -144,7 +137,7 @@ export default class TourHelper {
             //console.log("все правильно");
             window.removeEventListener("click", TourHelper.clickOnHandler);
             TourHelper.step();
-            TourHelper.conditionElement = "";
+            TourHelper.conditionElement = null;
         }
     };
     private static setTargetElement = (element: string) => {

@@ -1,12 +1,11 @@
 import { cleanup, render } from "@testing-library/react";
 import IDB, { ScriptValue } from "../../../util/indexedDB";
 import ProviderWithComponent from "../../../store/ProviderWithComponent";
-import Script from "../../ScriptList/Script/Script";
 import React from "react";
 import ScriptList from "../../ScriptList/ScriptList/ScriptList";
 import "fake-indexeddb/auto";
 
-describe("Script", () => {
+describe("ScriptList", () => {
     beforeEach(cleanup);
     const testTour: ScriptValue[] = [
         {
