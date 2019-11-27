@@ -1,68 +1,12 @@
-import {cleanup, fireEvent} from "@testing-library/react";
-import TourHelper from "../utils";
+import { fireEvent, cleanup } from "@testing-library/react";
+import TourHelper, {StepType} from "../utils";
 import { testTour } from "../testTour";
 import fs from "fs";
 import path from "path";
-/*const tourHelperInitialState = {
-    steps: [
-        //набор функций для каждого шага
-        {
-            blackout: [],
-            description: [],
-            condition: []
-        }
-    ],
-    stepCount: 0, //индекс, по которому записывается в массив набор блоков-функций (записанный шаг)
-    currentStep: 0, //индекс, по которому извлекаются из массива функции при просмотре тура (сделанный шаг)
-    /!**
-     * для каждого шага
-     *!/
-    targetElement: null, //выделяемый на данном шаге элемент
-    rectElement: [], //затемняющие прямоугольники
-    popperElement: [], //показываемый около элемента тект
-    conditionElement: null //элемент, клик по которому приведет к инкременту шага
-};*/
+
 const testHtml = fs.readFileSync(path.resolve(__dirname, "../testPage1.html"), "utf8");
 const testElement = window.document.createElement("div");
 const testCode = () => {};
-const correctTestSteps = [
-    {
-        blackout: [() => TourHelper.blackout(selector_1)],
-        description: [() => TourHelper.description(selector_1, "Посмотрите сюда")],
-        condition: [
-            () =>
-                TourHelper.blocklyStep(function() {
-                    return TourHelper.click();
-                })
-        ]
-    },
-    {
-        blackout: [() => TourHelper.blackout(selector_2)],
-        description: [() => TourHelper.description(selector_2, "А теперь сюда")],
-        condition: [
-            () =>
-                TourHelper.blocklyStep(function() {
-                    return TourHelper.click();
-                })
-        ]
-    },
-    {
-        blackout: [() => TourHelper.blackout(selector_3)],
-        description: [() => TourHelper.description(selector_3, "А еще есть это - кликните сюда")],
-        condition: [
-            () =>
-                TourHelper.blocklyStep(function() {
-                    return TourHelper.clickOn(selector_2);
-                })
-        ]
-    },
-    {
-        blackout: [() => TourHelper.blackout(selector_4)],
-        description: [() => TourHelper.description(selector_4, "И даже вот это!")],
-        condition: []
-    }
-];
-const enablePageScroll = () => {};
 const testTourHelperState = () => {
     TourHelper.rectElement = [testElement, testElement, testElement, testElement];
     TourHelper.popperElement = [testElement];
@@ -78,40 +22,26 @@ const testTourHelperState = () => {
         }
     ];
 };
-const initSteps = [
-    {
-        blackout: [],
-        description: [],
-        condition: []
-    }
-];
 const initialTourHelperState = () => {
-    TourHelper.stepCount = 0;
-    TourHelper.steps = initSteps;
-    TourHelper.currentStep = 0;
-    TourHelper.targetElement = null;
-    TourHelper.conditionElement = null;
-    TourHelper.rectElement = [];
-    TourHelper.popperElement = [];
+    TourHelper.steps = [
+        {
+            blackout: [],
+            description: [],
+            condition: []
+        }
+    ]; //набор функций для каждого шага
+    TourHelper.stepCount = 0; //индекс, по которому записывается в массив набор блоков-функций (записанный шаг)
+    TourHelper.currentStep = 0; //индекс, по которому извлекаются из массива функции при просмотре тура (сделанный шаг)
+    TourHelper.targetElement = null; //выделяемый на данном шаге элемент
+    TourHelper.conditionElement = null; //элемент, клик по которому приведет к инкременту шага
+    TourHelper.rectElement = []; //затемняющие прямоугольники
+    TourHelper.popperElement = []; //показываемый около элемента тект
 };
+
 describe("TourHelper", () => {
     beforeEach(() => {
-        // cleanup;
+        cleanup();
         document.documentElement.innerHTML = testHtml.toString();
-    });
-    initialTourHelperState();
-    window.HTMLElement.prototype.scrollIntoView = () => {};
-    it("tour should be record", () => {
-        testTour();
-        expect(TourHelper.stepCount).toStrictEqual(3);
-        expect(TourHelper.steps).not.toStrictEqual(initSteps);
-        //expect(TourHelper.steps).toStrictEqual(correctTestSteps);
-    });
-    it("tour should be play in steps", () => {
-        const el_0 = document.querySelector("body");
-        const el_1 = document.querySelector("body>p:nth-child(3)");
-        const el_2 = document.querySelector("body>p:nth-child(10)");
-        const el_3 = document.querySelector("body>p:nth-child(15)");
         if (window.document) {
             window.document.createRange = () => ({
                 setStart: () => {},
@@ -122,40 +52,51 @@ describe("TourHelper", () => {
                 }
             });
         }
+        initialTourHelperState();
+    });
+    const initSteps: StepType[] = [
+        {
+            blackout: [],
+            description: [],
+            condition: []
+        }
+    ];
+    window.HTMLElement.prototype.scrollIntoView = () => {};
+    it("tour should be record", () => {
+        expect(TourHelper.steps).toStrictEqual(initSteps);
+        testTour();
+        expect(TourHelper.stepCount).toStrictEqual(3);
+        expect(TourHelper.steps).not.toStrictEqual(initSteps);
+        //expect(TourHelper.steps).toStrictEqual(correctTestSteps);
+    });
+    it("tour should be play in steps", () => {
+        const el_2 = document.querySelector("body>p:nth-child(10)");
         testTour();
         TourHelper.startTour();
         expect(TourHelper.currentStep).toStrictEqual(0);
-        expect(TourHelper.targetElement).toStrictEqual(el_0);
         expect(TourHelper.conditionElement).toBeNull();
         fireEvent.click(document.body);
         expect(TourHelper.currentStep).toStrictEqual(1);
-        expect(TourHelper.targetElement).toStrictEqual(el_1);
         expect(TourHelper.conditionElement).toBeNull();
         fireEvent.click(document.body);
         expect(TourHelper.currentStep).toStrictEqual(2);
-        expect(TourHelper.targetElement).toStrictEqual(el_2);
         expect(TourHelper.conditionElement).toStrictEqual(el_2);
         fireEvent.click(document.body);
         expect(TourHelper.currentStep).toStrictEqual(2);
-        expect(TourHelper.targetElement).toStrictEqual(el_2);
         expect(TourHelper.conditionElement).toStrictEqual(el_2);
         fireEvent.click(el_2);
         expect(TourHelper.currentStep).toStrictEqual(3);
-        expect(TourHelper.targetElement).toStrictEqual(el_3);
         expect(TourHelper.conditionElement).toBeNull();
-
     });
     it("should be show blackout", () => {
+        const el_0 = document.querySelector("body");
         testTour();
-
         TourHelper.startTour();
-        //expect(TourHelper.steps).toStrictEqual(correctTestSteps);
+        expect(TourHelper.targetElement).toStrictEqual(el_0);
     });
     it("should be show description", () => {
         testTour();
-
         TourHelper.startTour();
-        //expect(TourHelper.steps).toStrictEqual(correctTestSteps);
     });
     it("endTour should do initial state", () => {
         testTourHelperState();

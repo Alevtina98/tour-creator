@@ -63,7 +63,7 @@ export default class TourHelper {
             TourHelper.drawFourRect();
             window.addEventListener("resize", TourHelper.drawFourRect);
         });
-       // console.log(TourHelper.steps)
+        // console.log(TourHelper.steps)
     };
     public static description = (element: string, desc: string) => {
         //console.log("description", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
@@ -163,8 +163,25 @@ export default class TourHelper {
         const y: number = bounds.y + (window.pageYOffset || document.documentElement.scrollTop);
         const height: number = bounds.height;
         const width: number = bounds.width;
-        const windowWidth: number = document.body.scrollWidth;
-        const windowHeight: number = document.body.scrollHeight;
+        const windowWidth: number = Math.max(
+            document.body.scrollWidth,
+            document.body.clientWidth,
+            document.defaultView.innerWidth
+        );;
+        const windowHeight: number = Math.max(
+            document.body.scrollHeight,
+            document.body.clientHeight,
+            document.defaultView.innerHeight
+        );
+        const parametrs = {
+            x: x,
+            y: y,
+            height: height,
+            width: width,
+            windowWidth: windowWidth,
+            windowHeight: windowHeight
+        };
+        console.log(parametrs);
         TourHelper.newRect(0, 0, x, windowHeight);
         TourHelper.newRect(0, x + width, windowWidth - width - x, windowHeight);
         TourHelper.newRect(0, x, width, y);
