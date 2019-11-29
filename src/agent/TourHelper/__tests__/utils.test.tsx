@@ -1,8 +1,10 @@
-import { fireEvent, cleanup } from "@testing-library/react";
-import TourHelper, {StepType} from "../utils";
+import { fireEvent, cleanup, render } from "@testing-library/react";
+import TourHelper, { StepType } from "../utils";
 import { testTour } from "../testTour";
 import fs from "fs";
 import path from "path";
+import React from "react";
+import { element } from "prop-types";
 
 const testHtml = fs.readFileSync(path.resolve(__dirname, "../testPage1.html"), "utf8");
 const testElement = window.document.createElement("div");
@@ -37,7 +39,16 @@ const initialTourHelperState = () => {
     TourHelper.rectElement = []; //затемняющие прямоугольники
     TourHelper.popperElement = []; //показываемый около элемента тект
 };
-
+const getRectParametrs = (el: Element) => {
+    const bounds = el.getBoundingClientRect() as DOMRect;
+    const parametrsRect = {
+        x: bounds.x + (window.pageXOffset || document.documentElement.scrollLeft),
+        y: bounds.y + (window.pageYOffset || document.documentElement.scrollTop),
+        height: bounds.height,
+        width: bounds.width
+    };
+    return parametrsRect;
+};
 describe("TourHelper", () => {
     beforeEach(() => {
         cleanup();
@@ -70,29 +81,72 @@ describe("TourHelper", () => {
         //expect(TourHelper.steps).toStrictEqual(correctTestSteps);
     });
     it("tour should be play in steps", () => {
+        const el_0 = document.querySelector("body");
+        const el_1 = document.querySelector("body>p:nth-child(3)");
         const el_2 = document.querySelector("body>p:nth-child(10)");
+        const el_3 = document.querySelector("body>p:nth-child(15)");
         testTour();
         TourHelper.startTour();
         expect(TourHelper.currentStep).toStrictEqual(0);
+        expect(TourHelper.targetElement).toStrictEqual(el_0);
         expect(TourHelper.conditionElement).toBeNull();
         fireEvent.click(document.body);
         expect(TourHelper.currentStep).toStrictEqual(1);
+        expect(TourHelper.targetElement).toStrictEqual(el_1);
         expect(TourHelper.conditionElement).toBeNull();
         fireEvent.click(document.body);
         expect(TourHelper.currentStep).toStrictEqual(2);
+        expect(TourHelper.targetElement).toStrictEqual(el_2);
         expect(TourHelper.conditionElement).toStrictEqual(el_2);
         fireEvent.click(document.body);
         expect(TourHelper.currentStep).toStrictEqual(2);
+        expect(TourHelper.targetElement).toStrictEqual(el_2);
         expect(TourHelper.conditionElement).toStrictEqual(el_2);
         fireEvent.click(el_2);
         expect(TourHelper.currentStep).toStrictEqual(3);
+        expect(TourHelper.targetElement).toStrictEqual(el_3);
         expect(TourHelper.conditionElement).toBeNull();
     });
     it("should be show blackout", () => {
-        const el_0 = document.querySelector("body");
+        //window (width, height): 913 1280
+        /* const getBoundingClientRect = jest.fn(() => ({ top: 16, left: 8, width: 1264, height: 494 }));
+        const scrollIntoView = jest.fn(() => ({}));
+        document.querySelector = jest.fn(() => ({
+            scrollIntoView: scrollIntoView,
+            getBoundingClientRect: getBoundingClientRect // <= add getBoundingClientRect
+        }));*/
+        document.defaultView.innerWidth = 1280;
+        document.defaultView.innerHeight = 913;
+        const boundsEl = {
+            bottom: 510,
+            height: 494,
+            left: 8,
+            right: 1272,
+            top: 16,
+            width: 1264,
+            x: 8,
+            y: 16
+        };
+        /*const { getByTestId, debug } = render(<div className="testElementPosition" data-testid="testElement" />, el_0);
+        debug();
+        expect(getByTestId("testElement").getBoundingClientRect()).toBe({ x: 16, y: 8, width: 1264, height: 494 });*/
+        const el = document.querySelector("body");
+        el.getBoundingClientRect = () => {
+            return boundsEl;
+        };
+
         testTour();
         TourHelper.startTour();
-        expect(TourHelper.targetElement).toStrictEqual(el_0);
+        expect(TourHelper.rectElement[0].getAttribute("data-testid")).toBe("blackoutRect0");
+        expect(TourHelper.rectElement[1].getAttribute("data-testid")).toBe("blackoutRect1");
+        expect(TourHelper.rectElement[2].getAttribute("data-testid")).toBe("blackoutRect2");
+        expect(TourHelper.rectElement[3].getAttribute("data-testid")).toBe("blackoutRect3");
+        //el_0 (top, left, width, height): 16 8 1264 494
+        expect(TourHelper.targetElement.getBoundingClientRect()).toStrictEqual(boundsEl);
+        expect(TourHelper.rectElementParam[0]).toStrictEqual({ top: 0, left: 0, width: 8, height: 913 });
+        expect(TourHelper.rectElementParam[1]).toStrictEqual({ top: 0, left: 1272, width: 8, height: 913 });
+        expect(TourHelper.rectElementParam[2]).toStrictEqual({ top: 0, left: 8, width: 1264, height: 16 });
+        expect(TourHelper.rectElementParam[3]).toStrictEqual({ top: 510, left: 8, width: 1264, height: 403 });
     });
     it("should be show description", () => {
         testTour();

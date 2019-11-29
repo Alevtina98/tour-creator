@@ -8,7 +8,12 @@ export interface StepType {
     description: Function[];
     condition: Function[];
 }
-
+export interface ParamType {
+    top: number;
+    left: number;
+    width: number;
+    height: number;
+}
 export default class TourHelper {
     /**
      * для записи тура
@@ -28,6 +33,7 @@ export default class TourHelper {
     static targetElement: Element | null = null;
     static conditionElement: Element | null = null;
     static rectElement = [];
+    static rectElementParam: ParamType[] = [];
     static popperElement = [];
     public static startTour = () => {
         disablePageScroll();
@@ -59,7 +65,7 @@ export default class TourHelper {
             if (!el) {
                 return;
             }
-            console.log("blackout ", el);
+            //console.log("blackout ", el);
             TourHelper.drawFourRect();
             window.addEventListener("resize", TourHelper.drawFourRect);
         });
@@ -85,7 +91,7 @@ export default class TourHelper {
         /*if (condition === Function) condition();
         else console.log(`ERROR condition type. It must be function "click" or "clickOn"`);*/
         condition();
-        console.log("STEP", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
+       // console.log("STEP", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
         TourHelper.stepCount += 1;
         // console.log("blocklyStep");
         if (!TourHelper.steps[TourHelper.stepCount]) {
@@ -140,18 +146,6 @@ export default class TourHelper {
             TourHelper.conditionElement = null;
         }
     };
-    private static setTargetElement = (element: string) => {
-        const el = document.querySelector(element);
-        if (!el) console.log("ERROR: selector not found");
-        TourHelper.targetElement = el;
-        el.scrollIntoView({ block: "center", behavior: "smooth" });
-        //console.log("show on the this element >> ", el);
-    };
-    private static setConditionElement = (element: string) => {
-        const el = document.querySelector(element);
-        if (!el) console.log("ERROR: selector condition element not found");
-        TourHelper.conditionElement = el;
-    };
     private static drawFourRect = () => {
         TourHelper.clearRectElement();
         const el = TourHelper.targetElement;
@@ -159,6 +153,7 @@ export default class TourHelper {
             return;
         }
         const bounds = el.getBoundingClientRect() as DOMRect;
+        //console.log("el.getBoundingClientRect() >> ", bounds);
         const x: number = bounds.x + (window.pageXOffset || document.documentElement.scrollLeft);
         const y: number = bounds.y + (window.pageYOffset || document.documentElement.scrollTop);
         const height: number = bounds.height;
@@ -167,27 +162,24 @@ export default class TourHelper {
             document.body.scrollWidth,
             document.body.clientWidth,
             document.defaultView.innerWidth
-        );;
+        );
         const windowHeight: number = Math.max(
             document.body.scrollHeight,
             document.body.clientHeight,
             document.defaultView.innerHeight
         );
-        const parametrs = {
-            x: x,
-            y: y,
-            height: height,
-            width: width,
-            windowWidth: windowWidth,
-            windowHeight: windowHeight
-        };
-        console.log(parametrs);
         TourHelper.newRect(0, 0, x, windowHeight);
         TourHelper.newRect(0, x + width, windowWidth - width - x, windowHeight);
         TourHelper.newRect(0, x, width, y);
         TourHelper.newRect(y + height, x, width, windowHeight - height - y);
     };
     private static newRect = (rTop: number, rLeft: number, rWidth: number, rHeight: number) => {
+        TourHelper.rectElementParam[TourHelper.rectElement.length] = {
+            top: rTop,
+            left: rLeft,
+            width: rWidth,
+            height: rHeight
+        };
         const rectStyle: CSSStyleDeclaration = {
             position: "absolute",
             zIndex: "11000000",
@@ -203,12 +195,15 @@ export default class TourHelper {
         Object.keys(rectStyle).forEach(key => {
             rect.style[key] = rectStyle[key];
         });
+        rect.setAttribute("data-testid", "blackoutRect" + TourHelper.rectElement.length);
         window.document.body.appendChild(rect);
         TourHelper.rectElement.push(rect);
+        //console.log(parametrsNewRect, " => ", rect.getBoundingClientRect());
     };
     private static clearRectElement = () => {
         TourHelper.rectElement.map(el => el.remove());
         TourHelper.rectElement = [];
+        TourHelper.rectElementParam = [];
     };
     private static clearPopperElement = () => {
         TourHelper.popperElement.map(el => el.remove());
@@ -218,6 +213,18 @@ export default class TourHelper {
         window.removeEventListener("resize", TourHelper.drawFourRect);
         TourHelper.clearRectElement();
         TourHelper.clearPopperElement();
+    };
+    private static setTargetElement = (element: string) => {
+        const el = document.querySelector(element);
+        if (!el) console.log("ERROR: selector not found");
+        TourHelper.targetElement = el;
+        el.scrollIntoView({ block: "center", behavior: "smooth" });
+        //console.log("show on the this element >> ", el);
+    };
+    private static setConditionElement = (element: string) => {
+        const el = document.querySelector(element);
+        if (!el) console.log("ERROR: selector condition element not found");
+        TourHelper.conditionElement = el;
     };
 }
 
