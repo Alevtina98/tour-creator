@@ -108,15 +108,6 @@ describe("TourHelper", () => {
         expect(TourHelper.conditionElement).toBeNull();
     });
     it("should be show blackout", () => {
-        //window (width, height): 913 1280
-        /* const getBoundingClientRect = jest.fn(() => ({ top: 16, left: 8, width: 1264, height: 494 }));
-        const scrollIntoView = jest.fn(() => ({}));
-        document.querySelector = jest.fn(() => ({
-            scrollIntoView: scrollIntoView,
-            getBoundingClientRect: getBoundingClientRect // <= add getBoundingClientRect
-        }));*/
-        document.defaultView.innerWidth = 1280;
-        document.defaultView.innerHeight = 913;
         const boundsEl = {
             bottom: 510,
             height: 494,
@@ -127,21 +118,18 @@ describe("TourHelper", () => {
             x: 8,
             y: 16
         };
-        /*const { getByTestId, debug } = render(<div className="testElementPosition" data-testid="testElement" />, el_0);
-        debug();
-        expect(getByTestId("testElement").getBoundingClientRect()).toBe({ x: 16, y: 8, width: 1264, height: 494 });*/
-        const el = document.querySelector("body");
-        el.getBoundingClientRect = () => {
+        document.querySelector("body").getBoundingClientRect = () => {
             return boundsEl;
         };
-
+        document.defaultView.innerWidth = 1280;
+        document.defaultView.innerHeight = 913;
         testTour();
         TourHelper.startTour();
         expect(TourHelper.rectElement[0].getAttribute("data-testid")).toBe("blackoutRect0");
         expect(TourHelper.rectElement[1].getAttribute("data-testid")).toBe("blackoutRect1");
         expect(TourHelper.rectElement[2].getAttribute("data-testid")).toBe("blackoutRect2");
         expect(TourHelper.rectElement[3].getAttribute("data-testid")).toBe("blackoutRect3");
-        //el_0 (top, left, width, height): 16 8 1264 494
+        //targetElement (top, left, width, height): 16 8 1264 494
         expect(TourHelper.targetElement.getBoundingClientRect()).toStrictEqual(boundsEl);
         expect(TourHelper.rectElementParam[0]).toStrictEqual({ top: 0, left: 0, width: 8, height: 913 });
         expect(TourHelper.rectElementParam[1]).toStrictEqual({ top: 0, left: 1272, width: 8, height: 913 });
@@ -151,6 +139,8 @@ describe("TourHelper", () => {
     it("should be show description", () => {
         testTour();
         TourHelper.startTour();
+        expect(TourHelper.popperElement[0].getAttribute("data-testid")).toBe("popper0");
+        expect(TourHelper.popperElement[0].textContent).toBe("Посмотрите сюда");
     });
     it("endTour should do initial state", () => {
         testTourHelperState();

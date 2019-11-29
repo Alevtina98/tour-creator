@@ -82,6 +82,7 @@ export default class TourHelper {
             //console.log("description ", el, desc);
             const descrNode = window.document.createElement("div");
             descrNode.id = "container";
+            descrNode.setAttribute("data-testid", "popper" + TourHelper.popperElement.length);
             window.document.body.appendChild(descrNode);
             ReactDOM.render(<DescriptionComponent selector={el} text={desc} />, document.getElementById("container"));
             TourHelper.popperElement.push(descrNode);
