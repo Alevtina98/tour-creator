@@ -313,7 +313,7 @@ describe("selectedTourAction", function() {
             },
             {
                 payload: result3,
-                type: "ET_LIST_TOUR"
+                type: "SET_LIST_TOUR"
             }
         ]);
         jest.clearAllTimers();
@@ -404,8 +404,6 @@ describe("selectedTourAction", function() {
     });
     it("should dispatch actions (for action saveSelectedTour)", async () => {
         const store = mockStore({ SelectedTourState: initialState });
-        //const tourDB: ScriptValue = store.getState().SelectedTourState.tourDB;
-        //const tourXML = store.getState().SelectedTourState.tourXM;
         await selectedTourAction.saveSelectedTour()(store.dispatch, store.getState);
         const newDate = store.getActions()[0].payload.date;
         expect(store.getActions()).toEqual([
@@ -431,6 +429,5 @@ describe("selectedTourAction", function() {
                 type: "SET_TOUR"
             }
         ]);
-        //expect(periodicallySaveTimer).toEqual(0);
     });
 });

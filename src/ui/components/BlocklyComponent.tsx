@@ -28,7 +28,7 @@ export interface WorkspaceEventType {
 export interface BlocklyExternalProps {
     selector: string;
     inspect: any;
-    code: MutableRefObject<HTMLTextAreaElement | undefined>;
+    code: any;
 }
 
 export type BlocklyProps = BlocklyExternalProps & BlocklyComponentConnectedDispatch & BlocklyComponentConnectedProps;
@@ -56,9 +56,9 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
     workspaceDidChange = (workspace: any) => {
         const code: string = Blockly.JavaScript.workspaceToCode(workspace);
         //console.log("code >> ", code);
-        if (this.props.code && this.props.code.current) {
+        /*if (this.props.code && this.props.code.current) {
             this.props.code.current.value = code;
-        }
+        }*/
         this.props.dispatch(setTourJS(code));
         const s = new XMLSerializer();
         const newXmlStr = s.serializeToString(Blockly.Xml.workspaceToDom(workspace));

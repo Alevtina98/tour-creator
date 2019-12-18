@@ -9,7 +9,6 @@ import {
 import ProviderWithComponent from "../../../../store/ProviderWithComponent";
 import Script from "../Script";
 import IDB, { ScriptValue } from "../../../../util/indexedDB";
-import "fake-indexeddb/auto";
 
 describe("Script", () => {
     beforeEach(cleanup);

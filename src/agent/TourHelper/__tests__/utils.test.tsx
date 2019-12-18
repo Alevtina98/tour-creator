@@ -1,12 +1,11 @@
 import { fireEvent, cleanup, render } from "@testing-library/react";
 import TourHelper, { StepType } from "../utils";
-import { testTour } from "../testTour";
+import { testTour } from "./testTour";
 import fs from "fs";
 import path from "path";
 import React from "react";
-import { element } from "prop-types";
 
-const testHtml = fs.readFileSync(path.resolve(__dirname, "../testPage1.html"), "utf8");
+const testHtml = fs.readFileSync(path.resolve(__dirname, "testPage1.html"), "utf8");
 const testElement = window.document.createElement("div");
 const testCode = () => {};
 const testTourHelperState = () => {

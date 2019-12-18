@@ -15,7 +15,6 @@ import { useControlledInputValue } from "../../hooks/useControleInputValue";
 import agentActions from "../../actions/agentActions";
 import ModalComponent from "../ModalInputsComponent";
 import ModalLockDevtoolsComponent from "../ModalLockDevtoolsComponent";
-import TourHelper from "../../../agent/TourHelper/utils";
 
 export interface ScriptButtons {
     tourDB: ScriptValue;
@@ -107,19 +106,43 @@ const ScriptButtons = () => {
                 <BurgerMenuContainer />
             </div>
             <ButtonToolbar>
-                <Button variant="light" onClick={handleShowCreated}>
+                <Button variant="light" onClick={handleShowCreated} data-testid="createTourButton">
                     Создать
                 </Button>
-                <Button size="sm" variant="light" onClick={handleShowCopy} disabled={!blocklyReloadEnabled}>
+                <Button
+                    size="sm"
+                    variant="light"
+                    onClick={handleShowCopy}
+                    disabled={!blocklyReloadEnabled}
+                    data-testid="copyTourButton"
+                >
                     Создать копию
                 </Button>
-                <Button size="sm" variant="light" onClick={handleShow} disabled={!blocklyReloadEnabled}>
+                <Button
+                    size="sm"
+                    variant="light"
+                    onClick={handleShow}
+                    disabled={!blocklyReloadEnabled}
+                    data-testid="saveTourButton"
+                >
                     Сохранить
                 </Button>
-                <Button size="sm" variant="light" onClick={runTour} disabled={!blocklyReloadEnabled}>
+                <Button
+                    size="sm"
+                    variant="light"
+                    onClick={runTour}
+                    disabled={!blocklyReloadEnabled}
+                    data-testid="runTourButton"
+                >
                     Запустить
                 </Button>
-                <Button size="sm" variant="light" onClick={closeTour} disabled={!blocklyReloadEnabled}>
+                <Button
+                    size="sm"
+                    variant="light"
+                    onClick={closeTour}
+                    disabled={!blocklyReloadEnabled}
+                    data-testid="closeTourButton"
+                >
                     Закрыть
                 </Button>
             </ButtonToolbar>

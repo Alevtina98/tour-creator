@@ -9,7 +9,7 @@ module.exports = {
             "expose-loader?Blockly!exports-loader?Blockly,goog!google-blockly/blockly_compressed",
             "google-blockly/blocks_compressed",
             "google-blockly/javascript_compressed",
-            "google-blockly/msg/js/ru",
+            "google-blockly/msg/js/ru"
         ],
         ui: "./src/ui/index.tsx",
         agent: "./src/agent/index.js"
@@ -22,7 +22,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, "chrome-extension/build/"),
         publicPath: "build",
-        filename: "[name].bundle.js",
+        filename: "[name].bundle.js"
     },
 
     // plugins: [
@@ -48,33 +48,33 @@ module.exports = {
             {
                 test: /\.(ts|js|tsx|jsx)?$/,
                 exclude: /node_modules/,
-                loader: "babel-loader",
+                loader: "babel-loader"
             },
 
             {
                 test: /\.less$/,
                 loaders: [
                     {
-                        loader: "style-loader",
+                        loader: "style-loader"
                     },
                     {
                         loader: "css-loader",
                         options: {
-                            url: false,
-                        },
+                            url: false
+                        }
                     },
                     {
-                        loader: "less-loader",
-                    },
-                ],
+                        loader: "less-loader"
+                    }
+                ]
             },
             {
                 test: /(?:\.woff2?$|\.ttf$|\.svg$|\.eot$)/,
                 loader: "file-loader",
                 query: {
-                    name: "/build/font/[hash].[ext]",
-                },
-            },
-        ],
-    },
+                    name: "/build/font/[hash].[ext]"
+                }
+            }
+        ]
+    }
 };

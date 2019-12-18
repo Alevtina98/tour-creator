@@ -5,22 +5,30 @@ import { StoreType } from "../../reducers";
 import { setInspectDisabled, setInspectEnabled } from "../../actions/inspectAction";
 import agentActions from "../../actions/agentActions";
 import ModalLockDevtoolsComponent from "../../components/ModalLockDevtoolsComponent";
+import Script from "../../components/ScriptList/Script/Script";
 
 export interface TourEditorComponentProps {
     blocklyReloadEnabled: boolean;
     isInspectEnabled: boolean;
     selector: string;
+    tourJS: string;
 }
 const EditorContainer = () => {
     const dispatch = useDispatch();
-    const { blocklyReloadEnabled, isInspectEnabled, selector } = useSelector<StoreType, TourEditorComponentProps>(
-        ({ SelectedTourState, InspectState }) => ({
-            blocklyReloadEnabled: SelectedTourState.blocklyReloadEnabled,
-            isInspectEnabled: InspectState.isInspectEnabled,
-            selector: InspectState.selector
-        })
-    );
-    const codeBlock = useRef<HTMLTextAreaElement>();
+    const { blocklyReloadEnabled, isInspectEnabled, selector, tourJS } = useSelector<
+        StoreType,
+        TourEditorComponentProps
+    >(({ SelectedTourState, InspectState }) => ({
+        blocklyReloadEnabled: SelectedTourState.blocklyReloadEnabled,
+        tourJS: SelectedTourState.tourJS,
+        isInspectEnabled: InspectState.isInspectEnabled,
+        selector: InspectState.selector
+    }));
+    /*const getCodeBlock = () => {
+        tourJS.split(/(\/\/.*)|(\/\*\*\n \*.*\n \*\/)/g).map
+    };*/
+    // code.split(/(\/\/.*)|(\/\*\*\n \*.*\n \*\/)/g)
+
     const onInspectClickHandler = () => {
         if (isInspectEnabled) {
             dispatch(setInspectDisabled()); //Отправка экшена
@@ -36,8 +44,16 @@ const EditorContainer = () => {
         <div className="main-container">
             {(blocklyReloadEnabled && (
                 <>
-                    <BlocklyComponent selector={selector} inspect={onInspectClickHandler} code={codeBlock} />
-                    <textarea readOnly className="code-block" ref={codeBlock as any} />
+                    <BlocklyComponent selector={selector} inspect={onInspectClickHandler} />
+                    <div className="code-block">
+                        {tourJS.split(/(\/\/.*)|(\/\*\*\n \*.*\n \*\/)/g).map((el, index) => {
+                            if (!el) return null;
+                            let name = "comment";
+                            if (!(index % 3)) name = "text";
+                            else if (!((index - 1) % 3)) name = "error";
+                            return el.split(/[\n]/g).map(str => <div className={name + "Style"}>{str}</div>);
+                        })}
+                    </div>
                 </>
             )) ||
                 null}

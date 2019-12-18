@@ -1,12 +1,9 @@
-import React, { FC, memo, useEffect, useRef } from "react";
-import ScriptsButtons from "../../components/ScriptButtons/ScriptButtons";
-import ScriptList from "../../components/ScriptList/ScriptList/ScriptList";
+import React, { memo } from "react";
 import ConnectionStatus from "../../components/ConnectionStatus/ConnectionStatus";
 import DateOnPanel from "../../components/DateOnPanel/DateOnPanel";
 import ScriptButtons from "../../components/ScriptButtons/ScriptButtons";
 import { useSelector } from "react-redux";
 import { StoreType } from "../../reducers";
-import { MainComponentProps } from "../MainContainer/MainContainer";
 
 export interface PanelComponentProps {
     connected: boolean;
