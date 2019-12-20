@@ -36,7 +36,8 @@ class Agent {
             runScript: code => {
                 console.log("begin tour");
                 const el = this.window.document.createElement("script");
-                el.innerText = `eval("${code.replace(`"`, "")};TourHelper.startTour();")`;
+                const script = `${code.replace(`"`, "")};TourHelper.startTour();`;
+                el.innerText = `eval("${script.split(/\/\/.*\n/g).join("\n")}")`;
                 this.window.document.body.appendChild(el);
                 console.log("скрипт тура добавлен");
             },

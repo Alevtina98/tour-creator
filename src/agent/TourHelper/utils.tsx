@@ -38,7 +38,7 @@ export default class TourHelper {
     static rectElementParam: ParamType[] = [];
     static popperElement = [];
     public static startTour = () => {
-       console.log("startTour");
+        console.log("startTour");
         disablePageScroll();
         TourHelper.startStep();
     };
@@ -61,7 +61,7 @@ export default class TourHelper {
         console.log("end tour");
     };
     public static blackout = (element: string) => {
-        //console.log("blackout", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
+        console.log("blackout", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
         TourHelper.steps[TourHelper.stepCount].blackout.push(() => {
             TourHelper.setTargetElement(element);
             const el = TourHelper.targetElement;
@@ -75,7 +75,7 @@ export default class TourHelper {
         // console.log(TourHelper.steps)
     };
     public static description = (element: string, desc: string) => {
-        //console.log("description", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
+        console.log("description", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
         TourHelper.steps[TourHelper.stepCount].description.push(() => {
             TourHelper.setTargetElement(element);
             const el = TourHelper.targetElement;
@@ -97,7 +97,7 @@ export default class TourHelper {
         condition();
        // console.log("STEP", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
         TourHelper.stepCount += 1;
-        // console.log("blocklyStep");
+        console.log("blocklyStep");
         if (!TourHelper.steps[TourHelper.stepCount]) {
             TourHelper.steps[TourHelper.stepCount] = {
                 blackout: [],

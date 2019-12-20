@@ -36,7 +36,6 @@ Blockly.Blocks["desc"] = {
 };
 Blockly.Blocks["step"] = {
     init: function() {
-        this.setCommentText(Blockly.Msg['PROCEDURES_DEFNORETURN_COMMENT']);
         this.appendDummyInput("TOPROW").appendField("next step", "NAME");
         this.appendValueInput("condition")
             .appendField("after", "NAME")
@@ -94,9 +93,8 @@ Blockly.Blocks["clickOn"] = {
 };
 Blockly.Blocks["comment"] = {
     init: function() {
-        this.appendDummyInput("TOPROW").appendField("add", "NAME");
+        this.appendDummyInput("TOPROW").appendField("comment", "NAME");
         this.appendValueInput("text")
-            .appendField("comment", "NAME")
             .setCheck("String");
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
@@ -108,12 +106,29 @@ Blockly.Blocks["comment"] = {
         this.setHelpUrl("");
     }
 };
-
+Blockly.Blocks["long_comment"] = {
+    init: function() {
+        this.appendDummyInput("TOPROW").appendField("long comment", "NAME");
+        this.setInputsInline(true);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        //this.appendField("step");
+        // this.setColour(230);
+        this.setCommentText(Blockly.Msg["PROCEDURES_DEFNORETURN_COMMENT"]);
+        this.setStyle("procedure_blocks");
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT = "";
 Blockly.JavaScript["comment"] = function(block: any) {
     const arg: string = Blockly.JavaScript.valueToCode(block, "text", Blockly.JavaScript.ORDER_NONE);
     const code: string =
         "/**\n" + Blockly.JavaScript.prefixLines(arg.substring(1, arg.length - 1) + "\n", " * ") + " */\n";
     return code;
+};
+Blockly.JavaScript["long_comment"] = function(block: any) {
+    return "";
 };
 Blockly.JavaScript["selector"] = function(block: any) {
     /*// Generate JavaScript for setting the width.
