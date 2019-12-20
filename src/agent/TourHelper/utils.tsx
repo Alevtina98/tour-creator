@@ -38,6 +38,7 @@ export default class TourHelper {
     static rectElementParam: ParamType[] = [];
     static popperElement = [];
     public static startTour = () => {
+       console.log("startTour");
         disablePageScroll();
         TourHelper.startStep();
     };
@@ -221,8 +222,7 @@ export default class TourHelper {
         const el = document.querySelector(element);
         if (!el) {
             console.log("ERROR: selector not found");
-            const error: string = "selector " + element + " is not found on step " + TourHelper.currentStep;
-
+            const error: string = "selector " + element + " is not found on step " + TourHelper.currentStep +1;
             sendMessage("newError", error);
             return;
         }
@@ -235,7 +235,7 @@ export default class TourHelper {
         if (!el) {
             console.log("ERROR: selector condition element not found");
             const error: string =
-                "selector " + element + " condition element is not found on step " + TourHelper.currentStep;
+                "selector " + element + " condition element is not found on step " + TourHelper.currentStep +1;
             sendMessage("newError", error);
             return;
         }

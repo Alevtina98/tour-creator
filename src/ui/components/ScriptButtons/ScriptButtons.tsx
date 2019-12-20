@@ -100,7 +100,7 @@ const ScriptButtons = () => {
         agentActions.runScript(tourJS);
         dispatch(setErrorsRunTour([]));
         handleShowRun();
-        console.log("tourJS >>", tourJS);
+        //console.log("tourJS >>", tourJS);
     };
     
     return (

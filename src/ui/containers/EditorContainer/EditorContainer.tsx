@@ -46,11 +46,11 @@ const EditorContainer = () => {
                 <>
                     <BlocklyComponent selector={selector} inspect={onInspectClickHandler} />
                     <div className="code-block">
-                        {tourJS.split(/(\/\/.*)|(\/\*\*\n \*.*\n \*\/)/g).map((el, index) => {
+                        {tourJS.split(/(\/\/!.*)|(\/\*\*\n \*.*\n \*\/)|(\/\/.*)/g).map((el, index) => {
                             if (!el) return null;
                             let name = "comment";
-                            if (!(index % 3)) name = "text";
-                            else if (!((index - 1) % 3)) name = "error";
+                            if (!(index % 4)) name = "text";
+                            else if (!((index - 1) % 4)) name = "error";
                             return el.split(/[\n]/g).map(str => <div className={name + "Style"}>{str}</div>);
                         })}
                     </div>

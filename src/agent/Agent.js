@@ -34,9 +34,11 @@ class Agent {
                 this.removeSelectClickHandler();
             },
             runScript: code => {
+                console.log("begin tour");
                 const el = this.window.document.createElement("script");
                 el.innerText = `eval("${code.replace(`"`, "")};TourHelper.startTour();")`;
                 this.window.document.body.appendChild(el);
+                console.log("скрипт тура добавлен");
             },
             disableRunScript: () => {
                 TourHelper.endTour();

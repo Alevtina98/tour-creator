@@ -34,6 +34,8 @@ class AgentHandler {
         },
         newError: (error: string) => {
             this.dispatch(addErrorRunTour(error));
+            console.log("new error >> ", error);
+
         }
     };
 

@@ -36,6 +36,7 @@ Blockly.Blocks["desc"] = {
 };
 Blockly.Blocks["step"] = {
     init: function() {
+        this.setCommentText(Blockly.Msg['PROCEDURES_DEFNORETURN_COMMENT']);
         this.appendDummyInput("TOPROW").appendField("next step", "NAME");
         this.appendValueInput("condition")
             .appendField("after", "NAME")
@@ -93,7 +94,7 @@ Blockly.Blocks["clickOn"] = {
 };
 Blockly.Blocks["comment"] = {
     init: function() {
-        this.appendDummyInput("TOPROW").appendField("Add", "NAME");
+        this.appendDummyInput("TOPROW").appendField("add", "NAME");
         this.appendValueInput("text")
             .appendField("comment", "NAME")
             .setCheck("String");
@@ -127,8 +128,8 @@ Blockly.JavaScript["desc"] = function(block: any) {
     const funcName = helperClass + ".description";
     const args1: string = Blockly.JavaScript.valueToCode(block, "selector", Blockly.JavaScript.ORDER_NONE);
     const args2: string = Blockly.JavaScript.valueToCode(block, "text", Blockly.JavaScript.ORDER_NONE);
-    const error1: string = args1 ? "" : "// нет аргумента 1 (выделяемый элемент)\n";
-    const error2: string = args2 ? "" : "// нет аргумента 2 (описание к выделяемому элементу)\n";
+    const error1: string = args1 ? "" : "//! нет аргумента 1 (выделяемый элемент)\n";
+    const error2: string = args2 ? "" : "//! нет аргумента 2 (описание к выделяемому элементу)\n";
     const code: string = error1 + error2 + funcName + "(" + args1 + ", " + args2 + ");\n";
     // Add % so as not to collide with helper functions in definitions list.
     //Blockly.JavaScript.definitions_['%' + funcName] = code;
@@ -137,7 +138,7 @@ Blockly.JavaScript["desc"] = function(block: any) {
 Blockly.JavaScript["dark"] = function(block: any) {
     const funcName = helperClass + ".blackout";
     const args1: string = Blockly.JavaScript.valueToCode(block, "selector", Blockly.JavaScript.ORDER_NONE);
-    const error: string = args1 ? "" : "// нет аргумента (выделяемый элемент)\n";
+    const error: string = args1 ? "" : "//! нет аргумента (выделяемый элемент)\n";
     const code: string = error + funcName + "(" + args1 + ");\n";
     // Add % so as not to collide with helper functions in definitions list.
     //Blockly.JavaScript.definitions_['%' + funcName] = code;
@@ -147,7 +148,7 @@ let errorClickOn: string;
 Blockly.JavaScript["step"] = function(block: any) {
     const funcName = helperClass + ".blocklyStep";
     const args1: string = Blockly.JavaScript.valueToCode(block, "condition", Blockly.JavaScript.ORDER_NONE);
-    const error: string = args1 ? "" : "// нет аргумента (условие исполнения следующего шага тура)\n";
+    const error: string = args1 ? "" : "//! нет аргумента (условие исполнения следующего шага тура)\n";
     const code: string = error + errorClickOn + funcName + "(" + args1 + ");\n";
     console.log("errorClickOn >>", errorClickOn);
     // Add % so as not to collide with helper functions in definitions list.
@@ -169,7 +170,7 @@ Blockly.JavaScript["clickOn"] = function(block: any) {
     console.log(funcName);
     const args1: string = Blockly.JavaScript.valueToCode(block, "selector", Blockly.JavaScript.ORDER_NONE);
     console.log(args1);
-    errorClickOn = args1 ? "" : "// нет аргумента (выделяемый элемент)\n";
+    errorClickOn = args1 ? "" : "//! нет аргумента (выделяемый элемент)\n";
     const code: string = "(function(){ return " + funcName + "(" + args1 + ")})";
     // Add % so as not to collide with helper functions in definitions list.
     //Blockly.JavaScript.definitions_['%' + funcName] = code;
