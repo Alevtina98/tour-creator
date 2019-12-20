@@ -6,7 +6,7 @@ import {
     closeSelectedTour,
     createCopyTour,
     createNewTour,
-    saveSelectedTour,
+    saveSelectedTour, setErrorsRunTour,
     setTourDB
 } from "../../actions/selectedTourAction";
 import { Button, ButtonToolbar } from "react-bootstrap";
@@ -20,12 +20,13 @@ export interface ScriptButtons {
     tourDB: ScriptValue;
     blocklyReloadEnabled: boolean;
     tourJS: string;
+    errorsRunTour: string[];
 }
 
 const ScriptButtons = () => {
     const dispatch = useDispatch();
     //маппинг значений из store
-    const { tourDB, blocklyReloadEnabled, tourJS } = useSelector<StoreType, ScriptButtons>(
+    const { tourDB, blocklyReloadEnabled, tourJS, errorsRunTour } = useSelector<StoreType, ScriptButtons>(
         ({ SelectedTourState }) => SelectedTourState
     );
     const [show, setShow] = useState(false);
@@ -97,9 +98,11 @@ const ScriptButtons = () => {
     };
     const runTour = () => {
         agentActions.runScript(tourJS);
+        dispatch(setErrorsRunTour([]));
         handleShowRun();
         console.log("tourJS >>", tourJS);
     };
+    
     return (
         <div className="relative">
             <div id="outer-container">
@@ -181,6 +184,7 @@ const ScriptButtons = () => {
                 text="Для завершения просмотра тура нажмите"
                 handelCancel={handleCloseRun}
                 buttonName="Завершить"
+                errors={errorsRunTour}
             />
         </div>
     );

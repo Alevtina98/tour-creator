@@ -2,6 +2,8 @@ import DescriptionComponent from "../../ui/components/DescriptionComponent";
 import * as React from "react";
 import ReactDOM from "react-dom";
 import { disablePageScroll, enablePageScroll } from "scroll-lock";
+import sendMessage from "../util/sendMessage";
+
 
 export interface StepType {
     blackout: Function[];
@@ -217,14 +219,26 @@ export default class TourHelper {
     };
     private static setTargetElement = (element: string) => {
         const el = document.querySelector(element);
-        if (!el) console.log("ERROR: selector not found");
+        if (!el) {
+            console.log("ERROR: selector not found");
+            const error: string = "selector " + element + " is not found on step " + TourHelper.currentStep;
+
+            sendMessage("newError", error);
+            return;
+        }
         TourHelper.targetElement = el;
         el.scrollIntoView({ block: "center", behavior: "smooth" });
         //console.log("show on the this element >> ", el);
     };
     private static setConditionElement = (element: string) => {
         const el = document.querySelector(element);
-        if (!el) console.log("ERROR: selector condition element not found");
+        if (!el) {
+            console.log("ERROR: selector condition element not found");
+            const error: string =
+                "selector " + element + " condition element is not found on step " + TourHelper.currentStep;
+            sendMessage("newError", error);
+            return;
+        }
         TourHelper.conditionElement = el;
     };
 }

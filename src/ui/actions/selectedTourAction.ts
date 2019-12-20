@@ -10,6 +10,8 @@ export const setListTour = createStandardAction("SET_LIST_TOUR")<ScriptValue[]>(
 export const setTourDB = createStandardAction("SET_TOUR")<ScriptValue>();
 export const setTourXML = createStandardAction("SET_TOUR_XML")<string>();
 export const setTourJS = createStandardAction("SET_TOUR_JS")<string>();
+export const setErrorsRunTour = createStandardAction("SET_ERRORS")<string[]>();
+export const addErrorRunTour = createStandardAction("ADD_ERROR")<string>();
 
 export const loadListTour = () => async (dispatch: Dispatch) => {
     const result = await (await IDB()).getAll("script");

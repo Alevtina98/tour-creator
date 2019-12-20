@@ -6,7 +6,7 @@ const injectDebugger = function() {
     const injectedGlobal = "window.__coquette_inspect_agent_injected__";
 
     chrome.devtools.inspectedWindow.eval(injectedGlobal, function(result) {
-        //Функция, вызываемая по завершении оценки
+        //Функция, вызываемая по завершению оценки
         if (!result) {
             // script hasn't been injected yet
             const xhr = new XMLHttpRequest();

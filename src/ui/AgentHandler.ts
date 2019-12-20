@@ -3,6 +3,7 @@ import { setCurrentSelector, setInspectDisabled, setInspectEnabled } from "./act
 import injectDebugger from "./injectDebugger";
 import port from "./port";
 import { Dispatch } from "redux";
+import {addErrorRunTour} from "./actions/selectedTourAction";
 
 /*
  * agent -> content-script.js -> background.js -> **dev tools**
@@ -20,8 +21,8 @@ class AgentHandler {
         tick: (data: { id: string }) => {
             const { id } = data;
             //if (this.currentSelected !== id) {
-                this.dispatch(setCurrentSelector(id));
-                this.currentSelected = id;
+            this.dispatch(setCurrentSelector(id));
+            this.currentSelected = id;
             //}
             console.log("Selector", data);
         },
@@ -30,6 +31,9 @@ class AgentHandler {
         disabledSelectMode: () => {
             this.dispatch(setInspectDisabled());
             //this.dispatch(setCurrentSelector(""));
+        },
+        newError: (error: string) => {
+            this.dispatch(addErrorRunTour(error));
         }
     };
 

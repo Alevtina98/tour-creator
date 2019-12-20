@@ -1,4 +1,5 @@
 import React, { FC, memo } from "react";
+import { Alert } from "react-bootstrap";
 
 interface ModalLockDevtoolsComponent {
     //modalName: string;
@@ -11,12 +12,14 @@ interface ModalLockDevtoolsComponent {
     cancelTestId?: string;
     textTestId?: string;
     modalTestId?: string;
+    errors?: string[];
 }
 
 const ModalLockDevtoolsComponent: FC<ModalLockDevtoolsComponent> = ({
     buttonName,
     show,
     text,
+    errors,
     handelCancel,
     cancelTestId,
     textTestId,
@@ -45,6 +48,15 @@ const ModalLockDevtoolsComponent: FC<ModalLockDevtoolsComponent> = ({
                     >
                         {buttonName || "Отмена"}
                     </button>
+                    {errors && errors.length > 0 && (
+                        <Alert variant="danger" className="text-left error-list">
+                            <ul>
+                                {errors.map(er => (
+                                    <li className="errorString">{er}</li>
+                                ))}
+                            </ul>
+                        </Alert>
+                    )}
                 </div>
             </div>
         )) ||

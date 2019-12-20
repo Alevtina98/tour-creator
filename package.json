@@ -131,6 +131,8 @@
   },
   "jest": {
     "preset": "@krista/tsconfigs",
-    "setupFiles": ["./tests/setupFile.js"]
+    "setupFiles": [
+      "./tests/setupFile.js"
+    ]
   }
 }
