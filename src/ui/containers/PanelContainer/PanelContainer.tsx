@@ -4,7 +4,7 @@ import DateOnPanel from "../../components/DateOnPanel/DateOnPanel";
 import ScriptButtons from "../../components/ScriptButtons/ScriptButtons";
 import { useSelector } from "react-redux";
 import { StoreType } from "../../reducers";
-
+//showDate={true}
 export interface PanelComponentProps {
     connected: boolean;
 }
@@ -16,7 +16,7 @@ const PanelContainer = () => {
         <div className="relative panel">
             <ScriptButtons />
             <ConnectionStatus connection={connected} />
-            <DateOnPanel data-testid="panel-date"/>
+            <DateOnPanel data-testid="panel-date" />
         </div>
     );
 };

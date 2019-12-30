@@ -23,6 +23,7 @@ const ScriptList: FC<MenuProps> = ({ onClickScript, onClickEsc, isOpen }) => {
     //const [list, setList] = useState<ScriptValue[]>([]);
     const [filterList, setFilterList] = useState<ScriptValue[]>([]);
     const [searchTour, setSearchTour] = useState<string>("");
+    const [filterTour, setFilterTour] = useState<string>("");
     /*const SelectedTour = (key: string) => {
         dispatch(setKey(key));
         // setColor("#808080 !important")
@@ -36,12 +37,15 @@ const ScriptList: FC<MenuProps> = ({ onClickScript, onClickEsc, isOpen }) => {
                 dateB: Date = new Date(b.date);
             return +dateB - +dateA; //сортировка по убыванию дате
         });
+        setFilterList(listTour.filter(myFilter(filterTour)));
     }, [listTour]);
     useEffect(() => {
         dispatch(loadListTour());
+        console.log("ScriptList useEffect");
     }, [dispatch]);
     const searchUpdated = (event: React.ChangeEvent<any>) => {
         setFilterList(listTour.filter(myFilter(event.target.value)));
+        setFilterTour(event.target.value);
     };
     const myFilter = (searchTour: string) => ({ name, desc }: ScriptValue): boolean => {
         return clearValue(name).includes(clearValue(searchTour)) || clearValue(desc).includes(clearValue(searchTour));

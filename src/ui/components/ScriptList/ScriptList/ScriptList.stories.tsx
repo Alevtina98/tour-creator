@@ -2,6 +2,7 @@ import { ScriptValue } from "../../../util/indexedDB";
 import ProviderWithComponent from "../../../store/ProviderWithComponent";
 import * as React from "react";
 import ScriptList from "./ScriptList";
+
 export default {
     title: "MainContainer/PanelContainer/BurgerMenuContainer/ScriptList",
     component: ProviderWithComponent(ScriptList)()
@@ -25,10 +26,13 @@ const onClickScript = () => {};
 const onClickEsc = () => {};
 export const scriptListComponent = () => (
     <div className="relative list-tour-group">
-        {ProviderWithComponent(() => <ScriptList onClickScript={onClickScript()} onClickEsc={onClickEsc()} isOpen={true}/>, {
-            SelectedTourState: {
-                tourDB: storeTour
-            }
-        } as any)()}
+        {ProviderWithComponent(
+            () => <ScriptList onClickScript={onClickScript()} onClickEsc={onClickEsc()} isOpen={true} />,
+            {
+                SelectedTourState: {
+                    tourDB: storeTour
+                }
+            } as any
+        )()}
     </div>
 );

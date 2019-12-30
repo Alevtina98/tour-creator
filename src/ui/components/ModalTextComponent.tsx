@@ -1,5 +1,5 @@
-import React, {FC, memo} from "react";
-import {Button, FormControl, InputGroup, Modal} from "react-bootstrap";
+import React, { FC, memo } from "react";
+import { Button, FormControl, InputGroup, Modal } from "react-bootstrap";
 
 interface ModalTextComponentProps {
     modalName: string;
@@ -15,8 +15,19 @@ interface ModalTextComponentProps {
     modalTestId?: string;
 }
 
-const  ModalTextComponent: FC<ModalTextComponentProps> = ( {modalName, show, handleShow, text, handelCancel, handelOk,
-                                                                   okButtonName, okTestId, cancelTestId, textTestId, modalTestId} ) => {
+const ModalTextComponent: FC<ModalTextComponentProps> = ({
+    modalName,
+    show,
+    handleShow,
+    text,
+    handelCancel,
+    handelOk,
+    okButtonName,
+    okTestId,
+    cancelTestId,
+    textTestId,
+    modalTestId
+}) => {
     return (
         <Modal show={show} onHide={handleShow} data-testid={modalTestId || ""}>
             <Modal.Header>{modalName}</Modal.Header>
@@ -34,5 +45,4 @@ const  ModalTextComponent: FC<ModalTextComponentProps> = ( {modalName, show, han
         </Modal>
     );
 };
-export default memo( ModalTextComponent);
-
+export default memo(ModalTextComponent);

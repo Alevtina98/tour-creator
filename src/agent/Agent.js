@@ -7,6 +7,10 @@ const _ = require("lodash");
 
 const GAME_OBJECT_ID = "game_object";
 
+export const getCodeEval = function(code) {
+    const script = `${code.replace(`"`, "")};`;
+    return `eval("${script.split(/\/\/.*\n/g).join("\n")}")`;
+};
 class Agent {
     /**
      * TODO: why is this even a Class? doesn't really do anything particularly ~object-oriented~
@@ -15,7 +19,7 @@ class Agent {
     constructor(c) {
         //const helperClass = TourHelper.name;
         this.window = c;
-        console.log(c);
+        console.log("Agent constructor (c) >> ", c);
         // Agent state
         this.subscribedEntityId = null; //идентификатор события
         // Kick off debug loop and message handler
@@ -36,10 +40,10 @@ class Agent {
             runScript: code => {
                 console.log("begin tour");
                 const el = this.window.document.createElement("script");
-                const script = `${code.replace(`"`, "")};TourHelper.startTour();`;
-                el.innerText = `eval("${script.split(/\/\/.*\n/g).join("\n")}")`;
+                el.innerText = getCodeEval(code);
                 this.window.document.body.appendChild(el);
                 console.log("скрипт тура добавлен");
+                TourHelper.startTour();
             },
             disableRunScript: () => {
                 TourHelper.endTour();
