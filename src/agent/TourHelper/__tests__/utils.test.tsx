@@ -87,7 +87,7 @@ describe("TourHelper", () => {
         testTour();
         TourHelper.startTour();
         expect(TourHelper.currentStep).toStrictEqual(0);
-        expect(TourHelper.targetElement).toStrictEqual(el_0);
+        expect(TourHelper.targetElement).toStrictEqual(el_1);
         expect(TourHelper.conditionElement).toBeNull();
         fireEvent.click(document.body);
         expect(TourHelper.currentStep).toStrictEqual(1);

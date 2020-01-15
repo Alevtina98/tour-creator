@@ -3,12 +3,17 @@ import * as React from "react";
 import ReactDOM from "react-dom";
 import { disablePageScroll, enablePageScroll } from "scroll-lock";
 import sendMessage from "../util/sendMessage";
-
+import { boolean } from "@storybook/addon-knobs";
+import { array } from "prop-types";
 
 export interface StepType {
     blackout: Function[];
     description: Function[];
     condition: Function[];
+}
+export interface DescrElementType {
+    element: Element | null;
+    description: string;
 }
 export interface ParamType {
     top: number;
@@ -32,14 +37,16 @@ export default class TourHelper {
      * для воспроизведения тура
      */
     static currentStep: number = 0;
-    static targetElement: Element | null = null;
+    static blackElement: HTMLElement[] = [];
+    static descrElement: DescrElementType[] = [];
     static conditionElement: Element | null = null;
-    static rectElement = [];
+    static rectElement: Element[] = [];
     static rectElementParam: ParamType[] = [];
-    static popperElement = [];
+    static popperElement: Element[] = [];
+
     public static startTour = () => {
         console.log("startTour");
-        disablePageScroll();
+        // disablePageScroll();
         TourHelper.startStep();
     };
     public static endTour = () => {
@@ -47,7 +54,8 @@ export default class TourHelper {
         window.removeEventListener("click", TourHelper.clickHandler);
         window.removeEventListener("click", TourHelper.clickOnHandler);
         TourHelper.clearAllElement();
-        TourHelper.targetElement = null;
+        TourHelper.blackElement = [];
+        TourHelper.descrElement = [];
         TourHelper.conditionElement = null;
         TourHelper.currentStep = 0;
         TourHelper.stepCount = 0;
@@ -61,41 +69,35 @@ export default class TourHelper {
         console.log("end tour");
     };
     public static blackout = (element: string) => {
-        console.log("blackout", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
+        //console.log("blackout", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
         TourHelper.steps[TourHelper.stepCount].blackout.push(() => {
-            TourHelper.setTargetElement(element);
-            const el = TourHelper.targetElement;
+            TourHelper.setblackElement(element);
+            const el = TourHelper.blackElement[TourHelper.blackElement.length - 1];
             if (!el) {
                 return;
             }
             //console.log("blackout ", el);
-            TourHelper.drawFourRect();
-            window.addEventListener("resize", TourHelper.drawFourRect);
+            //TourHelper.drawFourRect();
         });
+
         // console.log(TourHelper.steps)
     };
     public static description = (element: string, desc: string) => {
-        console.log("description", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
+        //console.log("description", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
         TourHelper.steps[TourHelper.stepCount].description.push(() => {
-            TourHelper.setTargetElement(element);
-            const el = TourHelper.targetElement;
+            TourHelper.setDescrElement(element, desc);
+            const el = TourHelper.descrElement[TourHelper.descrElement.length - 1].element;
             if (!el) {
                 return;
             }
             //console.log("description ", el, desc);
-            const descrNode = window.document.createElement("div");
-            descrNode.id = "container";
-            descrNode.setAttribute("data-testid", "popper" + TourHelper.popperElement.length);
-            window.document.body.appendChild(descrNode);
-            ReactDOM.render(<DescriptionComponent selector={el} text={desc} />, document.getElementById("container"));
-            TourHelper.popperElement.push(descrNode);
         });
     };
     public static blocklyStep = (condition: Function) => {
         /*if (condition === Function) condition();
         else console.log(`ERROR condition type. It must be function "click" or "clickOn"`);*/
         condition();
-       // console.log("STEP", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
+        // console.log("STEP", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
         TourHelper.stepCount += 1;
         console.log("blocklyStep");
         if (!TourHelper.steps[TourHelper.stepCount]) {
@@ -120,39 +122,101 @@ export default class TourHelper {
 
     private static startStep = () => {
         //console.log("startStep >> ", TourHelper.currentStep, TourHelper.steps[TourHelper.currentStep]);
+        TourHelper.clearAllElement()
         TourHelper.steps[TourHelper.currentStep].blackout.forEach(fn => fn());
         TourHelper.steps[TourHelper.currentStep].description.forEach(fn => fn());
+        TourHelper.showElements();
         TourHelper.steps[TourHelper.currentStep].condition.forEach(fn => fn());
     };
-    private static step = () => {
-        TourHelper.clearAllElement();
-        TourHelper.targetElement = null;
-        TourHelper.conditionElement = null;
-        if (TourHelper.currentStep == TourHelper.steps.length) return;
-        //console.log("step");
-        TourHelper.currentStep += 1;
-        TourHelper.startStep();
+    private static showElements = () => {
+        if (TourHelper.blackElement[0])
+            TourHelper.blackElement[0].scrollIntoView({ block: "center", behavior: "smooth" });
+        if (TourHelper.descrElement[0].element)
+            TourHelper.descrElement[0].element.scrollIntoView({ block: "center", behavior: "smooth" });
+        // window.addEventListener("resize", TourHelper.drawFourRect);
+        TourHelper.blackoutWindow();
+        TourHelper.rectElementParam.forEach(el => TourHelper.newRect(el.top, el.left, el.width, el.height));
+        TourHelper.descrElement.forEach(el => TourHelper.describeElement(el));
+        console.log("descrElement", TourHelper.descrElement);
+
     };
-    private static clickHandler = () => {
-        window.removeEventListener("click", TourHelper.clickHandler);
-        TourHelper.step();
-    };
-    private static clickOnHandler = (e: { target: any }) => {
-        const target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
-        const element = TourHelper.conditionElement;
-        //console.log("Ожидался клик по ", element);
-        // console.log("Произошел клик по ", target);
-        // if (str.startsWith(element)) {
-        if (element === target) {
-            //console.log("все правильно");
-            window.removeEventListener("click", TourHelper.clickOnHandler);
-            TourHelper.step();
-            TourHelper.conditionElement = null;
+    private static blackoutWindow = () => {
+        const windowWidth: number = Math.max(
+            document.body.scrollWidth,
+            document.body.clientWidth,
+            document.defaultView.innerWidth
+        );
+        const windowHeight: number = Math.max(
+            document.body.scrollHeight,
+            document.body.clientHeight,
+            document.defaultView.innerHeight
+        );
+        const w: boolean[][] = Array(windowHeight + 1).fill(null);
+        for (let i = 0; i < w.length; i++) {
+            w[i] = Array(windowWidth).fill(true);
         }
+        TourHelper.blackElement.forEach(el => {
+            const bounds = el.getBoundingClientRect() as DOMRect;
+            const leftElement: number = parseInt(
+                bounds.x + (window.pageXOffset || document.documentElement.scrollLeft),
+                10
+            );
+            const topElement: number = parseInt(
+                bounds.y + (window.pageYOffset || document.documentElement.scrollTop),
+                10
+            );
+            const height: number = bounds.height;
+            const width: number = bounds.width;
+            for (let i = topElement; i < topElement + height; i++) {
+                for (let j = leftElement; j < leftElement + width; j++) {
+                    w[i][j] = false;
+                }
+            }
+        });
+        let goDown = true,
+            goRight = true;
+        let widthRect = 0,
+            heightRect = 0;
+
+        for (let x = 0; x < windowHeight; x++) {
+            for (let y = 0; y < windowWidth; y++) {
+                if (w[x][y]) {
+                    heightRect = 0;
+                    widthRect = windowWidth;
+                    goDown = true;
+                    for (let i = x; i < windowHeight && goDown; i++) {
+                        goDown = true;
+                        goRight = true;
+                        for (let j = y; j < y + widthRect && goRight; j++) {
+                            if (w[i][j]) {
+                                w[i][j] = false;
+                                if (!w[i + 1][j]) goDown = false;
+                            } else {
+                                goRight = false;
+                                widthRect = j - y;
+                            }
+                        }
+                        heightRect++;
+                    }
+                    TourHelper.rectElementParam.push({
+                        top: x,
+                        left: y,
+                        width: widthRect,
+                        height: heightRect
+                    });
+                }
+            }
+        }
+
+        //console.log("rectElementParam >> ", TourHelper.rectElementParam);
+        /*const blackNode: Element = window.document.createElement("div");
+        blackNode.id = "tourBlackout";
+        window.document.body.appendChild(blackNode);
+        TourHelper.drawFourRect(blackNode);*/
     };
-    private static drawFourRect = () => {
+    /*private static drawFourRect = (element: HTMLElement) => {
         TourHelper.clearRectElement();
-        const el = TourHelper.targetElement;
+        const el: HTMLElement = element;
         if (!el) {
             return;
         }
@@ -176,7 +240,7 @@ export default class TourHelper {
         TourHelper.newRect(0, x + width, windowWidth - width - x, windowHeight);
         TourHelper.newRect(0, x, width, y);
         TourHelper.newRect(y + height, x, width, windowHeight - height - y);
-    };
+    };*/
     private static newRect = (rTop: number, rLeft: number, rWidth: number, rHeight: number) => {
         TourHelper.rectElementParam[TourHelper.rectElement.length] = {
             top: rTop,
@@ -204,30 +268,97 @@ export default class TourHelper {
         TourHelper.rectElement.push(rect);
         //console.log(parametrsNewRect, " => ", rect.getBoundingClientRect());
     };
+    private static describeElement = (el: DescrElementType) => {
+        const descrNode: Element = window.document.createElement("div");
+        const containerName: string = "container-" + TourHelper.popperElement.length;
+        descrNode.id = containerName;
+        descrNode.setAttribute("data-testid", "popper-" + TourHelper.popperElement.length);
+        window.document.body.appendChild(descrNode);
+        ReactDOM.render(
+            <DescriptionComponent selector={el.element} text={el.description} />,
+            document.getElementById(containerName)
+        );
+        TourHelper.popperElement.push(descrNode);
+    };
+    /*private static upZIndex = (el: HTMLElement) => {
+        el.style.zIndex += "1000";
+    };
+    private static baseZIndex = (el: HTMLElement) => {
+        const baseZI: string = el.style.zIndex;
+        el.style.zIndex = baseZI.substring(0, baseZI.length - 4);
+    };*/
+    private static step = () => {
+        TourHelper.clearAllElement();
+        TourHelper.blackElement = [];
+        TourHelper.tElementIndex = -1;
+        TourHelper.conditionElement = null;
+        if (TourHelper.currentStep == TourHelper.steps.length) return;
+        //console.log("step");
+        TourHelper.currentStep += 1;
+        TourHelper.startStep();
+    };
+
+    private static clickHandler = () => {
+        window.removeEventListener("click", TourHelper.clickHandler);
+        TourHelper.step();
+    };
+    private static clickOnHandler = (e: { target: any }) => {
+        const target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
+        const element = TourHelper.conditionElement;
+        //console.log("Ожидался клик по ", element);
+        // console.log("Произошел клик по ", target);
+        // if (str.startsWith(element)) {
+        if (element === target) {
+            //console.log("все правильно");
+            window.removeEventListener("click", TourHelper.clickOnHandler);
+            TourHelper.step();
+            TourHelper.conditionElement = null;
+        }
+    };
+
     private static clearRectElement = () => {
         TourHelper.rectElement.map(el => el.remove());
+        //TourHelper.rectElement.map(el => console.log("rectElement >> ", el));
         TourHelper.rectElement = [];
         TourHelper.rectElementParam = [];
+        //TourHelper.blackElement.forEach(el => TourHelper.baseZIndex(el));
+        TourHelper.blackElement = [];
     };
     private static clearPopperElement = () => {
-        TourHelper.popperElement.map(el => el.remove());
+        TourHelper.popperElement.map(el => el.parentNode.removeChild(el));
+        //TourHelper.popperElement.map(el => console.log(el));
         TourHelper.popperElement = [];
     };
     private static clearAllElement = () => {
         window.removeEventListener("resize", TourHelper.drawFourRect);
         TourHelper.clearRectElement();
         TourHelper.clearPopperElement();
+        TourHelper.blackElement = [];
+        TourHelper.descrElement = [];
     };
-    private static setTargetElement = (element: string) => {
+
+    private static setblackElement = (element: string) => {
         const el = document.querySelector(element);
         if (!el) {
-            console.log("ERROR: selector not found");
-            const error: string = "selector " + element + " is not found on step " + TourHelper.currentStep +1;
+            console.log("ERROR: selector not found", TourHelper.blackElement);
+            const error: string =
+                "blackouting selector " + element + " is not found on step " + TourHelper.currentStep + 1;
             sendMessage("newError", error);
             return;
         }
-        TourHelper.targetElement = el;
-        el.scrollIntoView({ block: "center", behavior: "smooth" });
+        TourHelper.blackElement.push(el);
+        //console.log("show on the this element >> ", el);
+    };
+    private static setDescrElement = (element: string, description: string) => {
+        const el = document.querySelector(element);
+        if (!el) {
+            console.log("ERROR: selector not found");
+            const error: string =
+                "descriptoning selector " + element + " is not found on step " + TourHelper.currentStep + 1;
+            sendMessage("newError", error);
+            return;
+        }
+        TourHelper.descrElement.push({ element: el, description: description });
         //console.log("show on the this element >> ", el);
     };
     private static setConditionElement = (element: string) => {
@@ -235,7 +366,7 @@ export default class TourHelper {
         if (!el) {
             console.log("ERROR: selector condition element not found");
             const error: string =
-                "selector " + element + " condition element is not found on step " + TourHelper.currentStep +1;
+                "selector " + element + " condition element is not found on step " + TourHelper.currentStep + 1;
             sendMessage("newError", error);
             return;
         }
