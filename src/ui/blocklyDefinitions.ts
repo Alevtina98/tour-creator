@@ -108,7 +108,7 @@ Blockly.Blocks["comment"] = {
 };
 Blockly.Blocks["long_comment"] = {
     init: function() {
-        this.appendDummyInput("TOPROW").appendField("long comment", "NAME");
+        this.appendDummyInput("TOPROW").appendField("comment lines", "NAME");
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
