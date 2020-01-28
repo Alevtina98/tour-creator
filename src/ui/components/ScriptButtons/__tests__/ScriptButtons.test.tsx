@@ -1,17 +1,11 @@
 import ScriptButtons from "../ScriptButtons";
-import { ScriptValue } from "../../../util/indexedDB";
 import { cleanup, render } from "@testing-library/react";
 import ProviderWithComponent from "../../../store/ProviderWithComponent";
 import * as React from "react";
 import sinonChrome from "sinon-chrome";
+import { getInitData, ScriptValue } from "../../../util/restClient/requestTour";
 
-const testTour: ScriptValue = {
-    key: "custom-key",
-    name: "custom name",
-    code: "<xml/>",
-    desc: "custom description",
-    date: "Thu Oct 24 2019 10:52:15 GMT+0300 (Москва, стандартное время)"
-};
+const testTour: ScriptValue = getInitData();
 describe("ScriptButtons", () => {
     /*beforeAll(() => {
         chrome = sinonChrome;

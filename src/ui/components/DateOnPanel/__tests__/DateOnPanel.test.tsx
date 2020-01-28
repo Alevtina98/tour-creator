@@ -1,20 +1,14 @@
-import {cleanup, queryByTestId, render, waitForElement} from "@testing-library/react";
-import { ScriptValue } from "../../../util/indexedDB";
+import { cleanup, render } from "@testing-library/react";
 import ProviderWithComponent from "../../../store/ProviderWithComponent";
 import Script from "../../ScriptList/Script/Script";
 import React from "react";
 import DateOnPanel from "../DateOnPanel";
 import { format } from "date-fns";
+import { getInitData, ScriptValue } from "../../../util/restClient/requestTour";
 
 describe("Script", () => {
     beforeEach(cleanup);
-    const testTour: ScriptValue = {
-        key: "custom-key",
-        name: "custom name",
-        code: "<xml/>",
-        desc: "custom description",
-        date: "Thu Oct 24 2019 10:52:15 GMT+0300 (Москва, стандартное время)"
-    };
+    const testTour: ScriptValue = getInitData();
     it("date show", () => {
         const { getByTestId, queryByTestId, debug } = render(
             ProviderWithComponent(() => <DateOnPanel showDate={true}/>, {
@@ -27,7 +21,7 @@ describe("Script", () => {
         );
         debug();
         expect(getByTestId("panel-date").textContent).toBe(
-            `Последнее сохранение ${format(new Date(testTour.date), "dd-MM-yyyy в HH:mm:ss")}`
+            `Последнее сохранение ${format(new Date(testTour.dateChange), "dd-MM-yyyy в HH:mm:ss")}`
         );
         expect(queryByTestId("panel-not-date")).toBeNull();
         expect(queryByTestId("panel-not-save")).toBeNull();

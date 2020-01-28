@@ -2,83 +2,36 @@ import * as selectedTourAction from "../selectedTourAction";
 import selectedTourState from "../../reducers/selectedTourReducer";
 import createMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
-import IDB, { ScriptValue } from "../../util/indexedDB";
+import IDB from "../../util/indexedDB";
 import { cleanup } from "@testing-library/react";
 import "fake-indexeddb/auto";
+import { getInitData, ScriptValue } from "../../util/restClient/requestTour";
 
-const initTour: ScriptValue = {
-    name: "",
-    date: "",
-    desc: "",
-    code: "",
-    key: ""
-};
+const initTour: ScriptValue = getInitData();
 const testListTour: ScriptValue[] = [
-    {
+    getInitData({
         key: "custom-key",
-        name: "custom name",
-        code: "<xml/>",
-        desc: "custom description",
-        date: "Thu Oct 24 2019 10:52:15 GMT+0300 (GMT+03:00)"
-    },
-    {
+        name: "custom name"
+    }),
+    getInitData({
         key: "custom-key2",
-        name: "custom name2",
-        code: "<xml/>",
-        desc: "custom description2",
-        date: "Thu Oct 24 2019 10:52:15 GMT+0300 (GMT+03:00)"
-    },
-    {
+        name: "custom name2"
+    }),
+    getInitData({
         key: "custom-key3",
-        name: "custom name3",
-        code: "<xml/>",
-        desc: "custom description3",
-        date: "Thu Oct 24 2019 10:52:15 GMT+0300 (GMT+03:00)"
-    },
-    {
+        name: "custom name3"
+    }),
+    getInitData({
         key: "custom-key4",
-        name: "custom name4",
-        code: "<xml/>",
-        desc: "custom description4",
-        date: "Thu Oct 24 2019 10:52:15 GMT+0300 (GMT+03:00)"
-    }
+        name: "custom name4"
+    })
 ];
 const testListTourNew: ScriptValue[] = [
-    {
-        key: "custom-key",
-        name: "custom name",
-        code: "<xml/>",
-        desc: "custom description",
-        date: "Thu Oct 24 2019 10:52:15 GMT+0300 (GMT+03:00)"
-    },
-    {
-        key: "custom-key2",
-        name: "custom name2",
-        code: "<xml/>",
-        desc: "custom description2",
-        date: "Thu Oct 24 2019 10:52:15 GMT+0300 (GMT+03:00)"
-    },
-    {
-        key: "custom-key3",
-        name: "custom name3",
-        code: "<xml/>",
-        desc: "custom description3",
-        date: "Thu Oct 24 2019 10:52:15 GMT+0300 (GMT+03:00)"
-    },
-    {
-        key: "custom-key4",
-        name: "custom name4",
-        code: "<xml/>",
-        desc: "custom description4",
-        date: "Thu Oct 24 2019 10:52:15 GMT+0300 (GMT+03:00)"
-    },
-    {
+    ...testListTour,
+    getInitData({
         key: "custom-key5",
-        name: "custom name5",
-        code: "<xml/>",
-        desc: "custom description5",
-        date: "Thu Oct 24 2019 10:52:15 GMT+0300 (GMT+03:00)"
-    }
+        name: "custom name5"
+    })
 ];
 
 describe("selectedTourAction", function() {
@@ -88,7 +41,8 @@ describe("selectedTourAction", function() {
         tourXML: "<xml/>",
         blocklyReloadEnabled: false,
         listTour: testListTour,
-        tourJS: ""
+        tourJS: "",
+        errorsRunTour: []
     };
     const middlewares: any[] = [thunk];
     const mockStore = createMockStore(middlewares);
@@ -165,10 +119,10 @@ describe("selectedTourAction", function() {
             store.getState
         );
         const result = await (await IDB()).getAll("script");
-        const newDate = store.getActions()[0].payload.date;
+        const newdateChange = store.getActions()[0].payload.dateChange;
         expect(store.getActions()).toEqual([
             {
-                payload: { ...testListTour[0], name: "new name", desc: "new desc", date: newDate },
+                payload: { ...testListTour[0], name: "new name", desc: "new desc", dateChange: newdateChange },
                 type: "SET_TOUR"
             },
             {
@@ -224,18 +178,18 @@ describe("selectedTourAction", function() {
         await Promise.all(promiseAdd);
         jest.useFakeTimers();
         await selectedTourAction.periodicallySave()(store.dispatch, store.getState);
-        //const newDate = store.getActions()[0].payload.date;
+        //const newdateChange = store.getActions()[0].payload.dateChange;
         expect(store.getActions()).toEqual([]);
         jest.advanceTimersByTime(5000);
-        //const newDate = store.getActions()[0].payload.date;
-        const newDate = Date();
+        //const newdateChange = store.getActions()[0].payload.dateChange;
+        const newdateChange = dateChange();
         const result = await (await IDB()).getAll("script");
         expect(store.getActions()).toEqual([
             {
                 payload: {
                     ...initialState.tourDB,
                     code: initialState.tourXML,
-                    date: newDate
+                    dateChange: newdateChange
                 },
                 type: "SET_TOUR"
             },
@@ -245,15 +199,15 @@ describe("selectedTourAction", function() {
             }
         ]);
         jest.advanceTimersByTime(5000);
-        const newDate2 = Date();
-        //const newDate2 = store.getActions()[2].payload.date;
+        const newdateChange2 = dateChange();
+        //const newdateChange2 = store.getActions()[2].payload.dateChange;
         const result2 = await (await IDB()).getAll("script");
         expect(store.getActions()).toEqual([
             {
                 payload: {
                     ...initialState.tourDB,
                     code: initialState.tourXML,
-                    date: newDate
+                    dateChange: newdateChange
                 },
                 type: "SET_TOUR"
             },
@@ -265,7 +219,7 @@ describe("selectedTourAction", function() {
                 payload: {
                     ...initialState.tourDB,
                     code: initialState.tourXML,
-                    date: newDate2
+                    dateChange: newdateChange2
                 },
                 type: "SET_TOUR"
             },
@@ -275,15 +229,15 @@ describe("selectedTourAction", function() {
             }
         ]);
         jest.advanceTimersByTime(5000);
-        //const newDate3 = store.getActions()[4].payload.date;
-        const newDate3 = Date();
+        //const newdateChange3 = store.getActions()[4].payload.dateChange;
+        const newdateChange3 = dateChange();
         const result3 = await (await IDB()).getAll("script");
         expect(store.getActions()).toEqual([
             {
                 payload: {
                     ...initialState.tourDB,
                     code: initialState.tourXML,
-                    date: newDate
+                    dateChange: newdateChange
                 },
                 type: "SET_TOUR"
             },
@@ -295,7 +249,7 @@ describe("selectedTourAction", function() {
                 payload: {
                     ...initialState.tourDB,
                     code: initialState.tourXML,
-                    date: newDate2
+                    dateChange: newdateChange2
                 },
                 type: "SET_TOUR"
             },
@@ -307,7 +261,7 @@ describe("selectedTourAction", function() {
                 payload: {
                     ...initialState.tourDB,
                     code: initialState.tourXML,
-                    date: newDate3
+                    dateChange: newdateChange3
                 },
                 type: "SET_TOUR"
             },
@@ -405,13 +359,13 @@ describe("selectedTourAction", function() {
     it("should dispatch actions (for action saveSelectedTour)", async () => {
         const store = mockStore({ SelectedTourState: initialState });
         await selectedTourAction.saveSelectedTour()(store.dispatch, store.getState);
-        const newDate = store.getActions()[0].payload.date;
+        const newdateChange = store.getActions()[0].payload.dateChange;
         expect(store.getActions()).toEqual([
             {
                 payload: {
                     ...initialState.tourDB,
                     code: initialState.tourXML,
-                    date: newDate
+                    dateChange: newdateChange
                 },
                 type: "SET_TOUR"
             }

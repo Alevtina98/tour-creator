@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { ScriptValue } from "../../util/indexedDB";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../../reducers";
 import {
     closeSelectedTour,
     createCopyTour,
     createNewTour,
-    saveSelectedTour, setErrorsRunTour,
+    saveSelectedTour,
+    setErrorsRunTour,
     setTourDB
 } from "../../actions/selectedTourAction";
 import { Button, ButtonToolbar } from "react-bootstrap";
@@ -15,6 +15,7 @@ import { useControlledInputValue } from "../../hooks/useControleInputValue";
 import agentActions from "../../actions/agentActions";
 import ModalComponent from "../ModalInputsComponent";
 import ModalLockDevtoolsComponent from "../ModalLockDevtoolsComponent";
+import { ScriptValue } from "../../util/restClient/requestTour";
 
 export interface ScriptButtons {
     tourDB: ScriptValue;
@@ -34,8 +35,8 @@ const ScriptButtons = () => {
     const [showCreated, setShowCreated] = useState(false);
     const [showCopy, setShowCopy] = useState(false);
 
-    const { setValue: setNameValue, ...newName } = useControlledInputValue(tourDB.name);
-    const { setValue: setDescValue, ...newDesc } = useControlledInputValue(tourDB.desc);
+    const { setValue: setNameValue, ...newName } = useControlledInputValue(tourDB.name || "");
+    const { setValue: setDescValue, ...newDesc } = useControlledInputValue(tourDB.desc || "");
     const { setValue: setNewNameValue, ...newTourName } = useControlledInputValue("NewTour");
     const { setValue: setNewDescValue, ...newTourDesc } = useControlledInputValue("");
 
@@ -76,10 +77,8 @@ const ScriptButtons = () => {
         dispatch(
             setTourDB({
                 name: newName.value,
-                date: tourDB.date,
                 desc: newDesc.value,
-                code: tourDB.code,
-                key: tourDB.key
+                ...tourDB
             })
         );
         dispatch(saveSelectedTour());
@@ -102,7 +101,7 @@ const ScriptButtons = () => {
         handleShowRun();
         //console.log("tourJS >>", tourJS);
     };
-    
+
     return (
         <div className="relative">
             <div id="outer-container">

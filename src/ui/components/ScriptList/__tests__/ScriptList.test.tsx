@@ -1,41 +1,30 @@
 import { cleanup, render } from "@testing-library/react";
-import IDB, { ScriptValue } from "../../../util/indexedDB";
+import IDB from "../../../util/indexedDB";
 import ProviderWithComponent from "../../../store/ProviderWithComponent";
 import React from "react";
 import ScriptList from "../../ScriptList/ScriptList/ScriptList";
 import "fake-indexeddb/auto";
+import { getInitData, ScriptValue } from "../../../util/restClient/requestTour";
 
 describe("ScriptList", () => {
     beforeEach(cleanup);
     const testTour: ScriptValue[] = [
-        {
+        getInitData({
             key: "custom-key",
-            name: "custom name",
-            code: "<xml/>",
-            desc: "custom description",
-            date: "Thu Oct 24 2019 10:52:15 GMT+0300 (Москва, стандартное время)"
-        },
-        {
+            name: "custom name"
+        }),
+        getInitData({
             key: "custom-key2",
             name: "custom name2",
-            code: "<xml/>",
-            desc: "custom description2",
-            date: "Thu Oct 24 2019 10:52:15 GMT+0300 (Москва, стандартное время)"
-        },
-        {
+        }),
+        getInitData({
             key: "custom-key3",
             name: "custom name3",
-            code: "<xml/>",
-            desc: "custom description3",
-            date: "Thu Oct 24 2019 10:52:15 GMT+0300 (Москва, стандартное время)"
-        },
-        {
+        }),
+        getInitData({
             key: "custom-key4",
             name: "custom name4",
-            code: "<xml/>",
-            desc: "custom description4",
-            date: "Thu Oct 24 2019 10:52:15 GMT+0300 (Москва, стандартное время)"
-        }
+        })
     ];
     const onClick = () => {};
     it("should ScriptList render", async () => {

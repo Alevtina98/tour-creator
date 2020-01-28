@@ -1,5 +1,6 @@
 import { openDB, DBSchema } from "idb";
 import { IDBPDatabase } from "idb/lib/entry";
+import {ScriptValue} from "./restClient/requestTour";
 
 interface MyDB extends DBSchema {
     script: {
@@ -7,13 +8,14 @@ interface MyDB extends DBSchema {
         key: string;
     };
 }
-export interface ScriptValue {
+/*export interface ScriptValue {
+    key: string;
     name: string;
-    date: string;
     desc: string;
     code: string;
-    key: string;
-}
+    dateCreate: string;
+    dateChange: string;
+}*/
 async function IDB(): Promise<IDBPDatabase<MyDB>> {
     const db = await openDB<MyDB>("tours", 1, {
         upgrade(db) {

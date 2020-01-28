@@ -1,33 +1,22 @@
 import React from "react";
-import {
-    render,
-    cleanup,
-    fireEvent,
-    waitForElement,
-    waitForElementToBeRemoved
-} from "@testing-library/react";
+import { render, cleanup, fireEvent, waitForElement, waitForElementToBeRemoved } from "@testing-library/react";
 import ProviderWithComponent from "../../../../store/ProviderWithComponent";
 import Script from "../Script";
-import IDB, { ScriptValue } from "../../../../util/indexedDB";
+import IDB from "../../../../util/indexedDB";
+import { getInitData, ScriptValue } from "../../../../util/restClient/requestTour";
 
 describe("Script", () => {
     beforeEach(cleanup);
-    const testTour: ScriptValue = {
-        key: "custom-key",
-        name: "custom name",
-        code: "<xml/>",
-        desc: "custom description",
-        date: "Thu Oct 24 2019 10:52:15 GMT+0300 (Москва, стандартное время)"
-    };
+    const testTour: ScriptValue = getInitData();
     const onClick = jest.fn();
     it("should Script render", () => {
         const onClick = jest.fn();
-        const { getByTestId } = render(ProviderWithComponent(() => <Script onClick={onClick} tour={testTour}/>)());
+        const { getByTestId } = render(ProviderWithComponent(() => <Script onClick={onClick} tour={testTour} />)());
         expect(getByTestId("tour-name").textContent).toBe("custom name");
         expect(getByTestId("tour-time").textContent).toBe("24-10-2019 в 10:52:15");
     });
     it("should ModelChange render", async () => {
-        const { getByTestId } = render(ProviderWithComponent(() => <Script onClick={onClick} tour={testTour}/>)());
+        const { getByTestId } = render(ProviderWithComponent(() => <Script onClick={onClick} tour={testTour} />)());
         fireEvent.click(getByTestId("edit-button"));
         await waitForElement(() => getByTestId("edit-model"));
         expect(getByTestId("changeName").value).toBe(testTour.name);
@@ -40,7 +29,7 @@ describe("Script", () => {
         await waitForElementToBeRemoved(() => getByTestId("edit-model"));
     });
     it("should ModelDel render", async () => {
-        const { getByTestId } = render(ProviderWithComponent(() => <Script onClick={onClick} tour={testTour}/>)());
+        const { getByTestId } = render(ProviderWithComponent(() => <Script onClick={onClick} tour={testTour} />)());
         fireEvent.click(getByTestId("del-button"));
         await waitForElement(() => getByTestId("del-model"));
         expect(getByTestId("del-name").textContent).toBe("Вы действительно хотите удалить custom name?");
@@ -52,7 +41,7 @@ describe("Script", () => {
         await waitForElementToBeRemoved(() => getByTestId("del-model"));
     });
     it("should ModelChange", async () => {
-        const { getByTestId } = render(ProviderWithComponent(() => <Script onClick={onClick} tour={testTour}/>)());
+        const { getByTestId } = render(ProviderWithComponent(() => <Script onClick={onClick} tour={testTour} />)());
         await (await IDB()).put("script", testTour, testTour.key);
         fireEvent.click(getByTestId("edit-button"));
         expect(getByTestId("changeName").value).toBe(testTour.name);
@@ -73,7 +62,7 @@ describe("Script", () => {
         (await IDB()).delete("script", testTour.key);
     });
     it("should ModelDel", async () => {
-        const { getByTestId } = render(ProviderWithComponent(() => <Script onClick={onClick} tour={testTour}/>)());
+        const { getByTestId } = render(ProviderWithComponent(() => <Script onClick={onClick} tour={testTour} />)());
         await (await IDB()).put("script", testTour, testTour.key);
         //Отмена удаления
         fireEvent.click(getByTestId("del-button"));

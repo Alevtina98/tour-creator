@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState } from "react";
-import IDB, { ScriptValue } from "../../../util/indexedDB";
 import Script from "../Script/Script";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, FormControl } from "react-bootstrap";
@@ -8,6 +7,7 @@ import { loadListTour } from "../../../actions/selectedTourAction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import cn from "classnames";
+import { ScriptValue } from "../../../util/restClient/requestTour";
 
 export interface ScriptListProps {
     listTour: ScriptValue[];
@@ -33,14 +33,15 @@ const ScriptList: FC<MenuProps> = ({ onClickScript, onClickEsc, isOpen }) => {
     useEffect(() => {
         setFilterList(listTour);
         listTour.sort(function(a, b) {
-            const dateA: Date = new Date(a.date),
-                dateB: Date = new Date(b.date);
+            const dateA: Date = new Date(a.dateChange),
+                dateB: Date = new Date(b.dateChange);
             return +dateB - +dateA; //сортировка по убыванию дате
         });
         setFilterList(listTour.filter(myFilter(filterTour)));
-    }, [listTour]);
+    }, [filterTour, listTour]);
     useEffect(() => {
         dispatch(loadListTour());
+        // eslint-disable-next-line no-console
         console.log("ScriptList useEffect");
     }, [dispatch]);
     const searchUpdated = (event: React.ChangeEvent<any>) => {
@@ -48,7 +49,10 @@ const ScriptList: FC<MenuProps> = ({ onClickScript, onClickEsc, isOpen }) => {
         setFilterTour(event.target.value);
     };
     const myFilter = (searchTour: string) => ({ name, desc }: ScriptValue): boolean => {
-        return clearValue(name).includes(clearValue(searchTour)) || clearValue(desc).includes(clearValue(searchTour));
+        return (
+            clearValue(name || "").includes(clearValue(searchTour)) ||
+            clearValue(desc || "").includes(clearValue(searchTour))
+        );
     };
     return (
         <div
@@ -78,5 +82,7 @@ const ScriptList: FC<MenuProps> = ({ onClickScript, onClickEsc, isOpen }) => {
         </div>
     );
 };
-export const clearValue = (str: string): string => str.toLocaleLowerCase().trim();
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
+export const clearValue = (str: string | null): string => str.toLocaleLowerCase().trim();
 export default ScriptList;

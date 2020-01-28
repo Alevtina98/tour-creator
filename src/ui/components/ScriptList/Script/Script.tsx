@@ -1,18 +1,8 @@
 import React, { FC, useState } from "react";
-import { ScriptValue } from "../../../util/indexedDB";
-import { delToDb, loadListTour, loadToDb, saveDescTour } from "../../../actions/selectedTourAction";
+import { delToDb, loadToDb, saveDescTour } from "../../../actions/selectedTourAction";
 import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
-import {
-    Button,
-    ButtonGroup,
-    ButtonToolbar,
-    FormControl,
-    InputGroup,
-    Modal,
-    OverlayTrigger, Popover,
-    Tooltip
-} from "react-bootstrap";
+import { Button, ButtonGroup, ButtonToolbar, OverlayTrigger, Popover } from "react-bootstrap";
 import { StoreType } from "../../../reducers";
 import cn from "classnames";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
@@ -20,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useControlledInputValue } from "../../../hooks/useControleInputValue";
 import ModalInputsComponent from "../../ModalInputsComponent";
 import ModalTextComponent from "../../ModalTextComponent";
+import { ScriptValue } from "../../../util/restClient/requestTour";
 
 export interface ScriptProps {
     tour: ScriptValue;
@@ -81,13 +72,7 @@ const Script: FC<ScriptProps> = ({ tour, onClick }) => {
             <OverlayTrigger
                 key="bottom"
                 placement="bottom"
-                overlay={
-                    (tour.desc && (
-                        <Popover className="tooltip">
-                            {tour.desc}
-                        </Popover>
-                    )) || <div />
-                }
+                overlay={(tour.desc && <Popover className="tooltip">{tour.desc}</Popover>) || <div />}
             >
                 <div
                     className={cn("tour", {
@@ -99,7 +84,7 @@ const Script: FC<ScriptProps> = ({ tour, onClick }) => {
                         <small>{tour.name}</small>
                     </div>
                     <div className="tour-time" data-testid="tour-time">
-                        <small>{format(new Date(tour.date), "dd-MM-yyyy в HH:mm:ss")}</small>
+                        <small>{format(new Date(tour.dateChange), "dd-MM-yyyy в HH:mm:ss")}</small>
                     </div>
                     <div />
                     <ButtonToolbar className="tour-buttons">

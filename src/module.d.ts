@@ -32,5 +32,4 @@ declare module "react-immutable-proptypes" {
 
     export default ImmutablePropTypes;
 }
-
 //declare module "xmldom";

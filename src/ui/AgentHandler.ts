@@ -42,7 +42,7 @@ class AgentHandler {
     constructor(dispatch: Dispatch) {
         this.dispatch = dispatch;
 
-        port.onMessage.addListener(msg => {
+        port!.onMessage.addListener(msg => {
             this.handleMessage(msg);
         });
     }

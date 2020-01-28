@@ -1,10 +1,8 @@
-import React, { DOMElement, FC, useEffect, useState } from "react";
-//import Modal from "react-bootstrap";
-import { ScriptValue } from "../../util/indexedDB";
+import React, { FC } from "react";
 import { useSelector } from "react-redux";
 import { StoreType } from "../../reducers";
 import { format } from "date-fns";
-import { MainComponentProps } from "../../containers/MainContainer/MainContainer";
+import { ScriptValue } from "../../util/restClient/requestTour";
 
 export interface ScriptButtons {
     tourDB: ScriptValue;
@@ -27,10 +25,10 @@ const DateOnPanel: FC<DateListSaveProps> = ({ showDate }) => {
         return null;
     }
 
-    if (showDate && tourDB.date) {
+    if (showDate && tourDB.dateChange) {
         return (
             <div className="date-save-on-panel" data-testid="panel-date">
-                Последнее сохранение {format(new Date(tourDB.date), "dd-MM-yyyy в HH:mm:ss")}
+                Последнее сохранение {format(new Date(tourDB.dateChange), "dd-MM-yyyy в HH:mm:ss")}
             </div>
         );
     }

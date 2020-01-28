@@ -1,10 +1,8 @@
 import DescriptionComponent from "../../ui/components/DescriptionComponent";
 import * as React from "react";
 import ReactDOM from "react-dom";
-import { disablePageScroll, enablePageScroll } from "scroll-lock";
+import { enablePageScroll } from "scroll-lock";
 import sendMessage from "../util/sendMessage";
-import { boolean } from "@storybook/addon-knobs";
-import { array } from "prop-types";
 
 export interface StepType {
     blackout: Function[];
@@ -144,12 +142,12 @@ export default class TourHelper {
         const windowWidth: number = Math.max(
             document.body.scrollWidth,
             document.body.clientWidth,
-            document.defaultView.innerWidth
+            document.defaultView!.innerWidth
         );
         const windowHeight: number = Math.max(
             document.body.scrollHeight,
             document.body.clientHeight,
-            document.defaultView.innerHeight
+            document.defaultView!.innerHeight
         );
         const w: boolean[][] = Array(windowHeight + 1).fill(null);
         for (let i = 0; i < w.length; i++) {
@@ -325,7 +323,7 @@ export default class TourHelper {
         TourHelper.blackElement = [];
     };
     private static clearPopperElement = () => {
-        TourHelper.popperElement.map(el => el.parentNode.removeChild(el));
+        TourHelper.popperElement.map(el => el.parentNode!.removeChild(el));
         //TourHelper.popperElement.map(el => console.log(el));
         TourHelper.popperElement = [];
     };

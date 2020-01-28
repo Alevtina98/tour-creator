@@ -1,13 +1,13 @@
-import React, { MutableRefObject } from "react";
+import React from "react";
 import ReactBlocklyComponent from "react-blockly-component";
 import ConfigFiles from "../../initContent/content.jsx";
 import parseWorkspaceXml from "./blockly/BlocklyHelper";
 import { connect } from "react-redux";
 import { StoreType } from "../reducers";
 import { bindActionCreators, Dispatch } from "redux";
-import { periodicallySave, saveThisTour, saveDescTour, setTourXML, setTourJS} from "../actions/selectedTourAction";
-import { ScriptValue } from "../util/indexedDB";
-import {setCurrentSelector} from "../actions/inspectAction";
+import { periodicallySave, setTourXML, setTourJS } from "../actions/selectedTourAction";
+import { setCurrentSelector } from "../actions/inspectAction";
+import { getInitData, ScriptValue } from "../util/restClient/requestTour";
 
 export interface Blockly {
     toolboxCategories: any[];
@@ -39,13 +39,7 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
     state: BlocklyState = {
         toolboxCategories: parseWorkspaceXml(ConfigFiles.INITIAL_TOOLBOX_XML),
         blockId: "",
-        selectedTour: {
-            name: "",
-            date: "",
-            desc: "newTour",
-            code: "",
-            key: ""
-        },
+        selectedTour: getInitData(),
         //tourXML: "",
         reload: false
     };
@@ -54,15 +48,11 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
         this.props.actions.periodicallySave();
     }
     workspaceDidChange = (workspace: any) => {
-        const code: string = Blockly.JavaScript.workspaceToCode(workspace);
-        //console.log("code >> ", code);
-        /*if (this.props.code && this.props.code.current) {
-            this.props.code.current.value = code;
-        }*/
-        this.props.dispatch(setTourJS(code));
-        const s = new XMLSerializer();
-        const newXmlStr = s.serializeToString(Blockly.Xml.workspaceToDom(workspace));
-        this.props.dispatch(setTourXML(newXmlStr)); //Отправка экшена
+        const newJS: string = Blockly.JavaScript.workspaceToCode(workspace);
+        this.props.dispatch(setTourJS(newJS));
+        const newXml = new XMLSerializer();
+        const newXmlStr = newXml.serializeToString(Blockly.Xml.workspaceToDom(workspace));
+        this.props.dispatch(setTourXML(newXmlStr));
     };
     componentDidUpdate({ selector }: BlocklyProps): void {
         if (this.props.selector !== selector && this.state.blockId) {
@@ -98,9 +88,8 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
     render = () => {
         if (this.blocklyRef && this.blocklyRef.workspace && !this.isCreated) {
             const workspaceSVG = this.blocklyRef.workspace.state.workspace;
-
             const onFirstComment = (event: WorkspaceEventType) => {
-                if (/*event.type == Blockly.Events.CHANGE ||*/ event.type === Blockly.Events.UI) {
+                if (event.type === Blockly.Events.UI) {
                     //console.log("event", event);
                     if (event.element !== "click") return;
                     const blockId = event.blockId || event.newValue || "";
@@ -137,7 +126,6 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
                 initialXml={this.props.selectedTour.code}
                 wrapperDivClassName="d-flex flex"
                 workspaceDidChange={this.workspaceDidChange}
-
             />
         );
     };
