@@ -10,17 +10,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useControlledInputValue } from "../../../hooks/useControleInputValue";
 import ModalInputsComponent from "../../ModalInputsComponent";
 import ModalTextComponent from "../../ModalTextComponent";
-import { ScriptValue } from "../../../util/restClient/requestTour";
+import {getDateClientFormat, TourType} from "../../../util/restClient/requestTour";
 
 export interface ScriptProps {
-    tour: ScriptValue;
+    tour: TourType;
     onClick: any;
 }
 
 const Script: FC<ScriptProps> = ({ tour, onClick }) => {
     const dispatch = useDispatch();
     const selectedTourKey: string = useSelector<StoreType, string>(
-        ({ SelectedTourState }) => SelectedTourState.tourDB.key
+        ({ SelectedTourState }) => SelectedTourState.tourDB.id
     );
     //для работы с модальным окном
     const { setValue: setNameValue, ...newName } = useControlledInputValue(tour.name);
@@ -35,7 +35,9 @@ const Script: FC<ScriptProps> = ({ tour, onClick }) => {
     const saveChangeCode = () => {
         const updatedTour = { ...tour };
         //Если имя тура не указано, оно остается прежним
-        if (newName.value != "") updatedTour.name = newName.value;
+        if (newName.value != "") {
+            updatedTour.name = newName.value;
+        }
         updatedTour.desc = newDesc.value;
         dispatch(saveDescTour(updatedTour));
         handleClose();
@@ -49,7 +51,7 @@ const Script: FC<ScriptProps> = ({ tour, onClick }) => {
         handleShow();
     };
     const saveDeleteCode = () => {
-        dispatch(delToDb(tour.key));
+        dispatch(delToDb(tour.id));
         handleCloseDel();
     };
     //удаление
@@ -63,8 +65,8 @@ const Script: FC<ScriptProps> = ({ tour, onClick }) => {
     //загрузка
     const loadTour = () => {
         onClick();
-        if (selectedTourKey != tour.key) {
-            dispatch(loadToDb(tour.key));
+        if (selectedTourKey != tour.id) {
+            dispatch(loadToDb(tour.id));
         }
     };
     return (
@@ -76,7 +78,7 @@ const Script: FC<ScriptProps> = ({ tour, onClick }) => {
             >
                 <div
                     className={cn("tour", {
-                        "tour--active": selectedTourKey === tour.key
+                        "tour--active": selectedTourKey === tour.id
                     })}
                     onClick={loadTour}
                 >
@@ -84,7 +86,7 @@ const Script: FC<ScriptProps> = ({ tour, onClick }) => {
                         <small>{tour.name}</small>
                     </div>
                     <div className="tour-time" data-testid="tour-time">
-                        <small>{format(new Date(tour.dateChange), "dd-MM-yyyy в HH:mm:ss")}</small>
+                        <small>{getDateClientFormat(tour.dateChange)}</small>
                     </div>
                     <div />
                     <ButtonToolbar className="tour-buttons">

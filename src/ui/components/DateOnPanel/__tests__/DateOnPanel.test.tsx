@@ -4,11 +4,11 @@ import Script from "../../ScriptList/Script/Script";
 import React from "react";
 import DateOnPanel from "../DateOnPanel";
 import { format } from "date-fns";
-import { getInitData, ScriptValue } from "../../../util/restClient/requestTour";
+import {getDateClientFormat, getInitData, TourType} from "../../../util/restClient/requestTour";
 
 describe("Script", () => {
     beforeEach(cleanup);
-    const testTour: ScriptValue = getInitData();
+    const testTour: TourType = getInitData();
     it("date show", () => {
         const { getByTestId, queryByTestId, debug } = render(
             ProviderWithComponent(() => <DateOnPanel showDate={true}/>, {
@@ -21,7 +21,7 @@ describe("Script", () => {
         );
         debug();
         expect(getByTestId("panel-date").textContent).toBe(
-            `Последнее сохранение ${format(new Date(testTour.dateChange), "dd-MM-yyyy в HH:mm:ss")}`
+            `Последнее сохранение ${getDateClientFormat(testTour.dateChange)}`
         );
         expect(queryByTestId("panel-not-date")).toBeNull();
         expect(queryByTestId("panel-not-save")).toBeNull();

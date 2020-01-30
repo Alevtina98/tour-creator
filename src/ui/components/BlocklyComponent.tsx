@@ -7,7 +7,7 @@ import { StoreType } from "../reducers";
 import { bindActionCreators, Dispatch } from "redux";
 import { periodicallySave, setTourXML, setTourJS } from "../actions/selectedTourAction";
 import { setCurrentSelector } from "../actions/inspectAction";
-import { getInitData, ScriptValue } from "../util/restClient/requestTour";
+import { getInitData, TourType } from "../util/restClient/requestTour";
 
 export interface Blockly {
     toolboxCategories: any[];
@@ -139,7 +139,7 @@ export interface BlocklyComponentConnectedDispatch {
     };
 }
 export interface BlocklyComponentConnectedProps {
-    selectedTour: ScriptValue;
+    selectedTour: TourType;
 }
 export default connect<
     BlocklyComponentConnectedProps,

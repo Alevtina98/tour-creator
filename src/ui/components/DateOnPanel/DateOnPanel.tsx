@@ -2,10 +2,10 @@ import React, { FC } from "react";
 import { useSelector } from "react-redux";
 import { StoreType } from "../../reducers";
 import { format } from "date-fns";
-import { ScriptValue } from "../../util/restClient/requestTour";
+import {getDateClientFormat, TourType} from "../../util/restClient/requestTour";
 
 export interface ScriptButtons {
-    tourDB: ScriptValue;
+    tourDB: TourType;
     tourXML: string;
     blocklyReloadEnabled: boolean;
 }
@@ -28,7 +28,7 @@ const DateOnPanel: FC<DateListSaveProps> = ({ showDate }) => {
     if (showDate && tourDB.dateChange) {
         return (
             <div className="date-save-on-panel" data-testid="panel-date">
-                Последнее сохранение {format(new Date(tourDB.dateChange), "dd-MM-yyyy в HH:mm:ss")}
+                Последнее сохранение {getDateClientFormat(tourDB.dateChange)}
             </div>
         );
     }

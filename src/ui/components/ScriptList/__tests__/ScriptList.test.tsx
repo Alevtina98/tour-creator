@@ -4,26 +4,26 @@ import ProviderWithComponent from "../../../store/ProviderWithComponent";
 import React from "react";
 import ScriptList from "../../ScriptList/ScriptList/ScriptList";
 import "fake-indexeddb/auto";
-import { getInitData, ScriptValue } from "../../../util/restClient/requestTour";
+import { getInitData, TourType } from "../../../util/restClient/requestTour";
 
 describe("ScriptList", () => {
     beforeEach(cleanup);
-    const testTour: ScriptValue[] = [
+    const testTour: TourType[] = [
         getInitData({
-            key: "custom-key",
+            id: 0,
             name: "custom name"
         }),
         getInitData({
-            key: "custom-key2",
-            name: "custom name2",
+            id: 1,
+            name: "custom name2"
         }),
         getInitData({
-            key: "custom-key3",
-            name: "custom name3",
+            id: 2,
+            name: "custom name3"
         }),
         getInitData({
-            key: "custom-key4",
-            name: "custom name4",
+            id: 3,
+            name: "custom name4"
         })
     ];
     const onClick = () => {};
@@ -38,9 +38,9 @@ describe("ScriptList", () => {
             } as any)()
         );
         // debug();
-        const promiseAdd = testTour.map(async el => await (await IDB()).add("script", el, el.key));
+        const promiseAdd = testTour.map(async el => await (await IDB()).add("script", el, el.id.toString()));
         await Promise.all(promiseAdd);
-        const promiseList = testTour.map(async el => await (await IDB()).get("script", el.key));
+        const promiseList = testTour.map(async el => await (await IDB()).get("script", el.id.toString()));
         const result = await Promise.all(promiseList);
         expect(testTour).toStrictEqual(result);
 

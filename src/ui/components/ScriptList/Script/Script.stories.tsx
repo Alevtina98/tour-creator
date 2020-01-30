@@ -3,10 +3,10 @@ import Script from "./Script";
 import ProviderWithComponent from "../../../store/ProviderWithComponent";
 import { storiesOf } from "@storybook/react";
 import { boolean, withKnobs } from "@storybook/addon-knobs";
-import { getInitData, ScriptValue } from "../../../util/restClient/requestTour";
+import { getInitData, TourType } from "../../../util/restClient/requestTour";
 
-const storeTour: ScriptValue = getInitData();
-const tour: ScriptValue = getInitData({ key: "custom-key2" });
+const storeTour: TourType = getInitData();
+const tour: TourType = getInitData({ key: "custom-key2" });
 const checkTour = () => {
     if (boolean("selectedTour", true)) return storeTour;
     return tour;

@@ -13,20 +13,20 @@ import {
     addErrorRunTour
 } from "../actions/selectedTourAction";
 import uuid from "uuid";
-import { getInitData, ScriptValue } from "../util/restClient/requestTour";
+import { getInitData, TourType } from "../util/restClient/requestTour";
 
 export interface SelectedTourReducerState {
-    tourDB: ScriptValue;
+    tourDB: TourType;
     tourXML: string;
     //isLoadingDB: boolean;
     blocklyReloadEnabled: boolean;
-    listTour: ScriptValue[];
+    listTour: TourType[];
     tourJS: string;
     errorsRunTour: string[];
     //toutDBKey: string;
 }
-const initScriptValue = getInitData();
-const tourDBReducer = createReducer<ScriptValue, SelectedTourAction>(initScriptValue).handleAction(
+const initTourType = getInitData();
+const tourDBReducer = createReducer<TourType, SelectedTourAction>(initTourType).handleAction(
     setTourDB,
     (state, action) => action.payload
 );
@@ -40,7 +40,7 @@ const errorsRunTourReducer = createReducer<string[]>([])
 const blocklyLoadReducer = createReducer<boolean>(false)
     .handleAction(setLoadBocklyEnabled, () => true)
     .handleAction(setLoadBocklyDisabled, () => false);
-const listTourReducer = createReducer<ScriptValue[]>([]).handleAction(setListTour, (state, action) => action.payload);
+const listTourReducer = createReducer<TourType[]>([]).handleAction(setListTour, (state, action) => action.payload);
 const tourJSReducer = createReducer<string>("").handleAction(setTourJS, (state, action) => action.payload);
 
 const SelectedTourReducer = combineReducers<SelectedTourReducerState>({

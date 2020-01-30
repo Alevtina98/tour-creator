@@ -3,11 +3,11 @@ import { render, cleanup, fireEvent, waitForElement, waitForElementToBeRemoved }
 import ProviderWithComponent from "../../../../store/ProviderWithComponent";
 import Script from "../Script";
 import IDB from "../../../../util/indexedDB";
-import { getInitData, ScriptValue } from "../../../../util/restClient/requestTour";
+import { getInitData, TourType } from "../../../../util/restClient/requestTour";
 
 describe("Script", () => {
     beforeEach(cleanup);
-    const testTour: ScriptValue = getInitData();
+    const testTour: TourType = getInitData();
     const onClick = jest.fn();
     it("should Script render", () => {
         const onClick = jest.fn();
@@ -42,7 +42,7 @@ describe("Script", () => {
     });
     it("should ModelChange", async () => {
         const { getByTestId } = render(ProviderWithComponent(() => <Script onClick={onClick} tour={testTour} />)());
-        await (await IDB()).put("script", testTour, testTour.key);
+        await (await IDB()).put("script", testTour, testtour.id);
         fireEvent.click(getByTestId("edit-button"));
         expect(getByTestId("changeName").value).toBe(testTour.name);
         expect(getByTestId("changeDesc").value).toBe(testTour.desc);
@@ -51,28 +51,28 @@ describe("Script", () => {
         fireEvent.click(getByTestId("edit-button"));
         fireEvent.change(getByTestId("changeName"), { target: { value: "change custom name" } });
         fireEvent.click(getByTestId("cancel-edit-button"));
-        const tour_get: ScriptValue | undefined = await (await IDB()).get("script", testTour.key);
+        const tour_get: TourType | undefined = await (await IDB()).get("script", testtour.id);
         expect(tour_get.name).toBe(testTour.name);
         //Сохранение изменения
         fireEvent.click(getByTestId("edit-button"));
         fireEvent.change(getByTestId("changeName"), { target: { value: "change custom name" } });
         fireEvent.click(getByTestId("save-edit-button"));
-        const tour_get3: ScriptValue | undefined = await (await IDB()).get("script", testTour.key);
+        const tour_get3: TourType | undefined = await (await IDB()).get("script", testtour.id);
         expect(tour_get3.name).toBe("change custom name");
-        (await IDB()).delete("script", testTour.key);
+        (await IDB()).delete("script", testtour.id);
     });
     it("should ModelDel", async () => {
         const { getByTestId } = render(ProviderWithComponent(() => <Script onClick={onClick} tour={testTour} />)());
-        await (await IDB()).put("script", testTour, testTour.key);
+        await (await IDB()).put("script", testTour, testtour.id);
         //Отмена удаления
         fireEvent.click(getByTestId("del-button"));
         fireEvent.click(getByTestId("cancel-del-button"));
-        const tour_test2_get: ScriptValue | undefined = await (await IDB()).get("script", testTour.key);
+        const tour_test2_get: TourType | undefined = await (await IDB()).get("script", testtour.id);
         expect(tour_test2_get).not.toBeUndefined();
         //Подтверждение удаления
         fireEvent.click(getByTestId("del-button"));
         fireEvent.click(getByTestId("save-del-button"));
-        const tour_test2_get3: ScriptValue | undefined = await (await IDB()).get("script", testTour.key);
+        const tour_test2_get3: TourType | undefined = await (await IDB()).get("script", testtour.id);
         expect(tour_test2_get3).toBeUndefined();
     });
 });

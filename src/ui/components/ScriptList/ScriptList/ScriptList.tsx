@@ -7,10 +7,10 @@ import { loadListTour } from "../../../actions/selectedTourAction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import cn from "classnames";
-import { ScriptValue } from "../../../util/restClient/requestTour";
+import { getDate, TourType } from "../../../util/restClient/requestTour";
 
 export interface ScriptListProps {
-    listTour: ScriptValue[];
+    listTour: TourType[];
 }
 export interface MenuProps {
     onClickScript: any;
@@ -20,8 +20,8 @@ export interface MenuProps {
 const ScriptList: FC<MenuProps> = ({ onClickScript, onClickEsc, isOpen }) => {
     const dispatch = useDispatch();
     const { listTour } = useSelector<StoreType, ScriptListProps>(({ SelectedTourState }) => SelectedTourState);
-    //const [list, setList] = useState<ScriptValue[]>([]);
-    const [filterList, setFilterList] = useState<ScriptValue[]>([]);
+    //const [list, setList] = useState<TourType[]>([]);
+    const [filterList, setFilterList] = useState<TourType[]>([]);
     const [searchTour, setSearchTour] = useState<string>("");
     const [filterTour, setFilterTour] = useState<string>("");
     /*const SelectedTour = (key: string) => {
@@ -33,8 +33,8 @@ const ScriptList: FC<MenuProps> = ({ onClickScript, onClickEsc, isOpen }) => {
     useEffect(() => {
         setFilterList(listTour);
         listTour.sort(function(a, b) {
-            const dateA: Date = new Date(a.dateChange),
-                dateB: Date = new Date(b.dateChange);
+            const dateA: Date = getDate(a.dateChange),
+                dateB: Date = getDate(b.dateChange);
             return +dateB - +dateA; //сортировка по убыванию дате
         });
         setFilterList(listTour.filter(myFilter(filterTour)));
@@ -48,7 +48,7 @@ const ScriptList: FC<MenuProps> = ({ onClickScript, onClickEsc, isOpen }) => {
         setFilterList(listTour.filter(myFilter(event.target.value)));
         setFilterTour(event.target.value);
     };
-    const myFilter = (searchTour: string) => ({ name, desc }: ScriptValue): boolean => {
+    const myFilter = (searchTour: string) => ({ name, desc }: TourType): boolean => {
         return (
             clearValue(name || "").includes(clearValue(searchTour)) ||
             clearValue(desc || "").includes(clearValue(searchTour))
@@ -76,7 +76,7 @@ const ScriptList: FC<MenuProps> = ({ onClickScript, onClickEsc, isOpen }) => {
             />
             <div className="list-tour-group">
                 {filterList.map(el => (
-                    <Script tour={el} onClick={onClickScript} key={el.key} />
+                    <Script tour={el} onClick={onClickScript} key={el.id} />
                 ))}
             </div>
         </div>

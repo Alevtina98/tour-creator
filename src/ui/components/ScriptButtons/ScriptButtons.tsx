@@ -15,10 +15,10 @@ import { useControlledInputValue } from "../../hooks/useControleInputValue";
 import agentActions from "../../actions/agentActions";
 import ModalComponent from "../ModalInputsComponent";
 import ModalLockDevtoolsComponent from "../ModalLockDevtoolsComponent";
-import { ScriptValue } from "../../util/restClient/requestTour";
+import { TourType } from "../../util/restClient/requestTour";
 
 export interface ScriptButtons {
-    tourDB: ScriptValue;
+    tourDB: TourType;
     blocklyReloadEnabled: boolean;
     tourJS: string;
     errorsRunTour: string[];

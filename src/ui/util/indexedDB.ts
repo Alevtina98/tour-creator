@@ -1,14 +1,14 @@
 import { openDB, DBSchema } from "idb";
 import { IDBPDatabase } from "idb/lib/entry";
-import {ScriptValue} from "./restClient/requestTour";
+import {TourType} from "./restClient/requestTour";
 
 interface MyDB extends DBSchema {
     script: {
-        value: ScriptValue;
+        value: TourType;
         key: string;
     };
 }
-/*export interface ScriptValue {
+/*export interface TourType {
     key: string;
     name: string;
     desc: string;

@@ -5,31 +5,31 @@ import thunk from "redux-thunk";
 import IDB from "../../util/indexedDB";
 import { cleanup } from "@testing-library/react";
 import "fake-indexeddb/auto";
-import { getInitData, ScriptValue } from "../../util/restClient/requestTour";
+import { getInitData, TourType } from "../../util/restClient/requestTour";
 
-const initTour: ScriptValue = getInitData();
-const testListTour: ScriptValue[] = [
+const initTour: TourType = getInitData();
+const testListTour: TourType[] = [
     getInitData({
-        key: "custom-key",
+        id: 0,
         name: "custom name"
     }),
     getInitData({
-        key: "custom-key2",
+        id: 1,
         name: "custom name2"
     }),
     getInitData({
-        key: "custom-key3",
+        id: 2,
         name: "custom name3"
     }),
     getInitData({
-        key: "custom-key4",
+        id: 3,
         name: "custom name4"
     })
 ];
-const testListTourNew: ScriptValue[] = [
+const testListTourNew: TourType[] = [
     ...testListTour,
     getInitData({
-        key: "custom-key5",
+        id: 4,
         name: "custom name5"
     })
 ];
@@ -99,7 +99,7 @@ describe("selectedTourAction", function() {
     });
     it("should dispatch actions (for action loadListTour)", async () => {
         const testStore = mockStore({ SelectedTourState: initialState });
-        const promiseAdd = testListTourNew.map(async el => await (await IDB()).add("script", el, el.key));
+        const promiseAdd = testListTourNew.map(async el => await (await IDB()).add("script", el, el.id));
         await Promise.all(promiseAdd);
         await selectedTourAction.loadListTour(testListTourNew)(testStore.dispatch);
         expect(testStore.getActions()).toEqual([
@@ -111,7 +111,7 @@ describe("selectedTourAction", function() {
     });
     it("should dispatch actions (for action saveDescTour)", async () => {
         const store = mockStore({ SelectedTourState: initialState });
-        const promiseAdd = testListTour.map(async el => await (await IDB()).add("script", el, el.key));
+        const promiseAdd = testListTour.map(async el => await (await IDB()).add("script", el, el.id));
         await Promise.all(promiseAdd);
         //текущего тура
         await selectedTourAction.saveDescTour({ ...testListTour[0], name: "new name", desc: "new desc" })(
@@ -147,10 +147,10 @@ describe("selectedTourAction", function() {
     it("should dispatch actions (for action delToDb)", async () => {
         periodicallySaveTimer = 10;
         const store = mockStore({ SelectedTourState: initialState });
-        const promiseAdd = testListTour.map(async el => await (await IDB()).add("script", el, el.key));
+        const promiseAdd = testListTour.map(async el => await (await IDB()).add("script", el, el.id));
         await Promise.all(promiseAdd);
         //текущего тура
-        await selectedTourAction.delToDb(testListTour[0].key)(store.dispatch, store.getState);
+        await selectedTourAction.delToDb(testListTour[0].id)(store.dispatch, store.getState);
         const result = await (await IDB()).getAll("script");
         expect(store.getActions()).toEqual([
             {
@@ -163,7 +163,7 @@ describe("selectedTourAction", function() {
         ]);
         store.clearActions();
         //другого тура
-        await selectedTourAction.delToDb(testListTour[2].key)(store.dispatch, store.getState);
+        await selectedTourAction.delToDb(testListTour[2].id)(store.dispatch, store.getState);
         const result2 = await (await IDB()).getAll("script");
         expect(store.getActions()).toEqual([
             {
@@ -174,7 +174,7 @@ describe("selectedTourAction", function() {
     });
     it("should dispatch actions (for action periodicallySave) after each 5 second", async () => {
         const store = mockStore({ SelectedTourState: initialState });
-        const promiseAdd = testListTour.map(async el => await (await IDB()).add("script", el, el.key));
+        const promiseAdd = testListTour.map(async el => await (await IDB()).add("script", el, el.id));
         await Promise.all(promiseAdd);
         jest.useFakeTimers();
         await selectedTourAction.periodicallySave()(store.dispatch, store.getState);
@@ -274,9 +274,9 @@ describe("selectedTourAction", function() {
     });
     it("should dispatch actions (for action loadToDb)", async () => {
         const store = mockStore({ SelectedTourState: initialState });
-        const promiseAdd = testListTour.map(async el => await (await IDB()).add("script", el, el.key));
+        const promiseAdd = testListTour.map(async el => await (await IDB()).add("script", el, el.id));
         await Promise.all(promiseAdd);
-        await selectedTourAction.loadToDb(testListTour[2].key)(store.dispatch);
+        await selectedTourAction.loadToDb(testListTour[2].id)(store.dispatch);
         expect(store.getActions()).toEqual([
             {
                 type: "SET_RELOAD_BLOCKLY_DISABLED"
@@ -292,10 +292,10 @@ describe("selectedTourAction", function() {
     });
     it("should dispatch actions (for action createNewTour)", async done => {
         const store = mockStore({ SelectedTourState: initialState });
-        const promiseAdd = testListTour.map(async el => await (await IDB()).add("script", el, el.key));
+        const promiseAdd = testListTour.map(async el => await (await IDB()).add("script", el, el.id));
         await Promise.all(promiseAdd);
         await selectedTourAction.createNewTour("custom name5 NEW tour", "custom description5")(store.dispatch);
-        const key = store.getActions()[2].payload.key;
+        const key = store.getActions()[2].payload.id;
         setTimeout(() => {
             expect(store.getActions()).toEqual([
                 {
@@ -323,13 +323,13 @@ describe("selectedTourAction", function() {
     });
     it("should dispatch actions (for action createCopyTour)", async done => {
         const store = mockStore({ SelectedTourState: initialState });
-        const promiseAdd = testListTour.map(async el => await (await IDB()).add("script", el, el.key));
+        const promiseAdd = testListTour.map(async el => await (await IDB()).add("script", el, el.id));
         await Promise.all(promiseAdd);
         await selectedTourAction.createCopyTour("custom name5 COPY tour", "custom description5")(
             store.dispatch,
             store.getState
         );
-        const key = store.getActions()[2].payload.key;
+        const key = store.getActions()[2].payload.id;
         setTimeout(() => {
             expect(store.getActions()).toEqual([
                 {
