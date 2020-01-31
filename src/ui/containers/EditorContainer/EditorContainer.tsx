@@ -5,7 +5,6 @@ import { StoreType } from "../../reducers";
 import { setInspectDisabled, setInspectEnabled } from "../../actions/inspectAction";
 import agentActions from "../../actions/agentActions";
 import ModalLockDevtoolsComponent from "../../components/ModalLockDevtoolsComponent";
-import Script from "../../components/ScriptList/Script/Script";
 
 export interface TourEditorComponentProps {
     blocklyReloadEnabled: boolean;
@@ -41,8 +40,8 @@ const EditorContainer = () => {
         //console.log("inspectEnabled > ", isInspectEnabled)
     };
     return (
-        <div className="main-container">
-            {(blocklyReloadEnabled && (
+        <div className="editor-container">
+            {blocklyReloadEnabled && (
                 <>
                     <BlocklyComponent selector={selector} inspect={onInspectClickHandler} />
                     <div className="code-block">
@@ -55,8 +54,7 @@ const EditorContainer = () => {
                         })}
                     </div>
                 </>
-            )) ||
-                null}
+            )}
             <ModalLockDevtoolsComponent
                 show={isInspectEnabled}
                 text="Выберите элемент на основной странице или нажмите"

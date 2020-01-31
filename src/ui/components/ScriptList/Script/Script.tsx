@@ -1,7 +1,6 @@
-import React, { FC, useState } from "react";
+import React, { FC, memo, useEffect, useState } from "react";
 import { delToDb, loadToDb, saveDescTour } from "../../../actions/selectedTourAction";
 import { useDispatch, useSelector } from "react-redux";
-import { format } from "date-fns";
 import { Button, ButtonGroup, ButtonToolbar, OverlayTrigger, Popover } from "react-bootstrap";
 import { StoreType } from "../../../reducers";
 import cn from "classnames";
@@ -10,18 +9,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useControlledInputValue } from "../../../hooks/useControleInputValue";
 import ModalInputsComponent from "../../ModalInputsComponent";
 import ModalTextComponent from "../../ModalTextComponent";
-import {getDateClientFormat, TourType} from "../../../util/restClient/requestTour";
+import { getDateClientFormat, TourType } from "../../../util/restClient/requestTour";
 
 export interface ScriptProps {
     tour: TourType;
-    onClick: any;
+    style: React.CSSProperties;
 }
 
-const Script: FC<ScriptProps> = ({ tour, onClick }) => {
+const Script: FC<ScriptProps> = ({ tour, style }) => {
     const dispatch = useDispatch();
-    const selectedTourKey: string = useSelector<StoreType, string>(
-        ({ SelectedTourState }) => SelectedTourState.tourDB.id
-    );
+    const selectedTourKey = useSelector<StoreType, number>(({ SelectedTourState }) => SelectedTourState.tourDB.id);
     //для работы с модальным окном
     const { setValue: setNameValue, ...newName } = useControlledInputValue(tour.name);
     const { setValue: setDescValue, ...newDesc } = useControlledInputValue(tour.desc);
@@ -64,13 +61,13 @@ const Script: FC<ScriptProps> = ({ tour, onClick }) => {
     };
     //загрузка
     const loadTour = () => {
-        onClick();
         if (selectedTourKey != tour.id) {
             dispatch(loadToDb(tour.id));
         }
     };
+
     return (
-        <div>
+        <div style={style}>
             <OverlayTrigger
                 key="bottom"
                 placement="bottom"
@@ -133,4 +130,4 @@ const Script: FC<ScriptProps> = ({ tour, onClick }) => {
     );
 };
 
-export default Script;
+export default memo(Script, () => true);

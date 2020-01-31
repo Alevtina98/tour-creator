@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { ComponentType, FC, useEffect, useRef, useState } from "react";
 import Script from "../Script/Script";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, FormControl } from "react-bootstrap";
@@ -8,10 +8,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import cn from "classnames";
 import { getDate, TourType } from "../../../util/restClient/requestTour";
+import { FixedSizeList as List, ListChildComponentProps } from "react-window";
+import { useMeasure } from "react-use";
 
-export interface ScriptListProps {
-    listTour: TourType[];
-}
 export interface MenuProps {
     onClickScript: any;
     onClickEsc: any;
@@ -19,11 +18,13 @@ export interface MenuProps {
 }
 const ScriptList: FC<MenuProps> = ({ onClickScript, onClickEsc, isOpen }) => {
     const dispatch = useDispatch();
-    const { listTour } = useSelector<StoreType, ScriptListProps>(({ SelectedTourState }) => SelectedTourState);
+    const listTour = useSelector<StoreType, TourType[]>(({ SelectedTourState }) => SelectedTourState.listTour);
     //const [list, setList] = useState<TourType[]>([]);
     const [filterList, setFilterList] = useState<TourType[]>([]);
-    const [searchTour, setSearchTour] = useState<string>("");
     const [filterTour, setFilterTour] = useState<string>("");
+    useEffect(() => {
+        setFilterList(listTour);
+    }, [listTour]);
     /*const SelectedTour = (key: string) => {
         dispatch(setKey(key));
         // setColor("#808080 !important")
@@ -31,22 +32,13 @@ const ScriptList: FC<MenuProps> = ({ onClickScript, onClickEsc, isOpen }) => {
         console.log("key >> ", key);
     };*/
     useEffect(() => {
-        setFilterList(listTour);
-        listTour.sort(function(a, b) {
-            const dateA: Date = getDate(a.dateChange),
-                dateB: Date = getDate(b.dateChange);
-            return +dateB - +dateA; //сортировка по убыванию дате
-        });
-        setFilterList(listTour.filter(myFilter(filterTour)));
-    }, [filterTour, listTour]);
-    useEffect(() => {
         dispatch(loadListTour());
-        // eslint-disable-next-line no-console
-        console.log("ScriptList useEffect");
     }, [dispatch]);
     const searchUpdated = (event: React.ChangeEvent<any>) => {
-        setFilterList(listTour.filter(myFilter(event.target.value)));
         setFilterTour(event.target.value);
+        setFilterList(listTour.filter(myFilter(event.target.value)));
+        //window.scrollTo(0, scriptListElement.current.offsetTop);
+        //.scrollIntoView({ block: "center", behavior: "smooth" })
     };
     const myFilter = (searchTour: string) => ({ name, desc }: TourType): boolean => {
         return (
@@ -54,6 +46,11 @@ const ScriptList: FC<MenuProps> = ({ onClickScript, onClickEsc, isOpen }) => {
             clearValue(desc || "").includes(clearValue(searchTour))
         );
     };
+    const Row: ComponentType<ListChildComponentProps> = ({ index, style }) => (
+        <Script tour={filterList[index]} key={index} style={style} />
+    );
+    const [ref, { width, height }] = useMeasure();
+
     return (
         <div
             className={cn("tour-list", {
@@ -71,13 +68,20 @@ const ScriptList: FC<MenuProps> = ({ onClickScript, onClickEsc, isOpen }) => {
             <FormControl
                 placeholder="Поиск"
                 className="tour-search"
+                value={filterTour}
                 onChange={searchUpdated}
                 data-testid="list-search"
             />
-            <div className="list-tour-group">
-                {filterList.map(el => (
-                    <Script tour={el} onClick={onClickScript} key={el.id} />
-                ))}
+            <div className="list-tour-group" ref={ref}>
+                <List
+                    height={height}
+                    itemKey={index => filterList[index].id}
+                    itemCount={filterList.length}
+                    itemSize={80}
+                    width={width}
+                >
+                    {Row}
+                </List>
             </div>
         </div>
     );

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useCallback, useState} from "react";
 import React from "react";
 import ScriptList from "../../components/ScriptList/ScriptList/ScriptList";
 import { Button } from "react-bootstrap";
@@ -12,9 +12,9 @@ https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Hamburger_icon.svg/120
 const BurgerMenuContainer = () => {
     const [menuIsOpen, setMenuIsOpen] = useState(false);
     // const dispatch = useDispatch();
-    const closeAllMenus = () => {
+    const closeAllMenus = useCallback(() => {
         setMenuIsOpen(false);
-    };
+    }, []);
     const openBurgerMenu = () => {
         setMenuIsOpen(true);
     };

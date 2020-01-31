@@ -1,4 +1,4 @@
-import {format} from "date-fns";
+import { format } from "date-fns";
 
 export interface TourType {
     id: number;
@@ -20,8 +20,7 @@ export const getInitData = (data?: Partial<TourType>): TourType => ({
     ...data
 });
 export const getDateClientFormat = (str: string) => {
-    const dateClientFormat: string = format(getDate(str), "dd-MM-yyyy в HH:mm:ss");
-    return dateClientFormat;
+    return format(getDate(str), "dd-MM-yyyy в HH:mm:ss");
 };
 export const getDate = (str: string) => {
     //const dateServer = new Date.UTC(str)
@@ -35,7 +34,7 @@ export const getAllTours = async () => {
     //console.log("DATA", data);
     return data;
 };
-export const getTourById = async (id: string) => {
+export const getTourById = async (id: number) => {
     const url = "http://localhost:8080/api/tour/" + id;
     const response = await fetch(url);
     const data = (await response.json()) as TourType;

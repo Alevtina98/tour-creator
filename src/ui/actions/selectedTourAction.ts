@@ -75,7 +75,7 @@ export const periodicallySave = () => (dispatch: Dispatch, getState: () => Store
         loadListTour()(dispatch);
     }, 10000);
 };
-export const loadToDb = (key: string) => async (dispatch: Dispatch) => {
+export const loadToDb = (key: number) => async (dispatch: Dispatch) => {
     //загрузка нового тура с пререзагрузкой блокли
     dispatch(setLoadBocklyDisabled());
     const tour: TourType | undefined = await getTourById(key);

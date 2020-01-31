@@ -17,5 +17,5 @@ const MainContainer = () => {
 };
 
 window.addEventListener("load", function() {
-    ReactDOM.render(<MainContainer />, document.getElementById("container"));
+    ReactDOM.render(<MainContainer />, document.getElementById("root"));
 });

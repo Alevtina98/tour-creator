@@ -9,14 +9,9 @@ const MainComponent = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         new AgentHandler(dispatch); //Инициализация агента общения со страницей
-        // this.props.script = demo();
-        // console.log("Script -> ",demo());
     }, [dispatch]);
-    /* useEffect(() => {
-        window.addEventListener("beforeunload", () => dispatch(saveSelectedTour()));
-    }, [dispatch]);*/
     return (
-        <div className="main-selector">
+        <div className="main-container">
             <PanelContainer />
             <TourEditorContainer />
         </div>

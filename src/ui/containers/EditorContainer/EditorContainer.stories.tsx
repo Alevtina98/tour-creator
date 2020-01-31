@@ -9,7 +9,7 @@ const Component = ProviderWithComponent(TourEditorContainer);
 const editor = storiesOf("MainContainer/EditorContainer", module)
     .addDecorator(withKnobs)
     .add("editor", () => (
-        <div className="main-selector">
+        <div className="main-container">
             <div />
             {ProviderWithComponent(TourEditorContainer, {
                 SelectedTourState: {
