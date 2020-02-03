@@ -10,7 +10,8 @@ import {
     setListTour,
     setTourJS,
     setErrorsRunTour,
-    addErrorRunTour
+    addErrorRunTour,
+    editTourDB
 } from "../actions/selectedTourAction";
 import uuid from "uuid";
 import { getInitData, TourType } from "../util/restClient/requestTour";
@@ -26,10 +27,13 @@ export interface SelectedTourReducerState {
     //toutDBKey: string;
 }
 const initTourType = getInitData();
-const tourDBReducer = createReducer<TourType, SelectedTourAction>(initTourType).handleAction(
-    setTourDB,
-    (state, action) => action.payload
-);
+const tourDBReducer = createReducer<TourType, SelectedTourAction>(initTourType)
+    .handleAction(setTourDB, (state, action) => action.payload)
+    .handleAction(editTourDB, (state, action) => ({
+        ...state,
+        ...action.payload
+    }));
+
 const tourBlocklyReducer = createReducer<string>("").handleAction(setTourXML, (state, action) => action.payload);
 const errorsRunTourReducer = createReducer<string[]>([])
     .handleAction(setErrorsRunTour, (state, action) => action.payload)

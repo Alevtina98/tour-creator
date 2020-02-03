@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { useSelector } from "react-redux";
 import { StoreType } from "../../reducers";
 import { format } from "date-fns";
-import {getDateClientFormat, TourType} from "../../util/restClient/requestTour";
+import {getDate, getDateClientFormat, TourType} from "../../util/restClient/requestTour";
 
 export interface ScriptButtons {
     tourDB: TourType;
@@ -33,7 +33,7 @@ const DateOnPanel: FC<DateListSaveProps> = ({ showDate }) => {
         );
     }
 
-    if (tourXML === tourDB.code) {
+    if (tourDB.dateChange) {
         return (
             <div className="date-save-on-panel" data-testid="panel-not-date">
                 Все изменения сохранены

@@ -1,8 +1,6 @@
 import { ActionType, createStandardAction } from "typesafe-actions";
-import IDB from "../util/indexedDB";
 import { Dispatch } from "redux";
 import { StoreType } from "../reducers";
-//import uuid from "uuid";
 import {
     createTour,
     deleteTourById,
@@ -12,11 +10,13 @@ import {
     TourType,
     updateTour
 } from "../util/restClient/requestTour";
+import { error } from "react-notification-system-redux";
 
 export const setLoadBocklyEnabled = createStandardAction("SET_RELOAD_BLOCKLY_ENABLED")();
 export const setLoadBocklyDisabled = createStandardAction("SET_RELOAD_BLOCKLY_DISABLED")();
 export const setListTour = createStandardAction("SET_LIST_TOUR")<TourType[]>();
 export const setTourDB = createStandardAction("SET_TOUR")<TourType>();
+export const editTourDB = createStandardAction("EDIT_TOUR")<Partial<TourType>>();
 export const setTourXML = createStandardAction("SET_TOUR_XML")<string>();
 export const setTourJS = createStandardAction("SET_TOUR_JS")<string>();
 export const setErrorsRunTour = createStandardAction("SET_ERRORS")<string[]>();
@@ -27,52 +27,44 @@ export const loadListTour = () => async (dispatch: Dispatch) => {
     //await (await IDB()).getAll("script");
     dispatch(setListTour(result));
 };
+
 export const delToDb = (key: string) => async (dispatch: Dispatch, getState: () => StoreType) => {
     const store = getState();
     //(await IDB()).delete("script", key);
-    const ok: boolean = await deleteTourById(key);
-    if (ok) {
+    await deleteTourById(key);
+    try {
         if (key == store.SelectedTourState.tourDB.id.toString()) dispatch(setLoadBocklyDisabled());
-        //(await IDB()).delete("script", key);
         clearInterval(periodicallySaveTimer);
         loadListTour()(dispatch);
-    } else console.log("Ошибка при удалении тура");
+    } catch (e) {
+        console.error("ERROR", e.getMessage());
+        dispatch(error({ message: e.getMessage() }));
+    }
 };
-export const saveDescTour = (tourDB: TourType) => async (dispatch: Dispatch, getState: () => StoreType) => {
-    //console.log("saveTour");
+
+export const saveTour = (tour: TourType) => async (dispatch: Dispatch, getState: () => StoreType) => {
     const store = getState();
     const selectedTour = store.SelectedTourState.tourDB;
-    // (await IDB()).put("script", saveTour, saveTour.id);
-    const updatedTour: TourType = await updateTour(tourDB);
-    if (updatedTour) {
-        if (tourDB.id === selectedTour.id) {
-            dispatch(setTourDB(tourDB));
+    try {
+        const savedTour: TourType = await updateTour(tour);
+        if (savedTour.id === selectedTour.id) {
+            dispatch(setTourDB(savedTour));
         }
         loadListTour()(dispatch);
-    } else console.log("Ошибка при сохранении измененного тура");
-};
-export const saveSelectedTour = () => async (dispatch: Dispatch, getState: () => StoreType) => {
-    //console.log("saveSelectedTour");
-    const store = getState();
-    const saveTour: TourType = {
-        ...store.SelectedTourState.tourDB,
-        code: store.SelectedTourState.tourXML,
-        codeJS: store.SelectedTourState.tourJS
-    };
-    //await (await IDB()).put("script", saveTour, saveTour.id);
-    const updatedTour: TourType = await updateTour(saveTour);
-    if (updatedTour) {
-        dispatch(setTourDB(saveTour));
-    } else console.log("Ошибка при сохранении измененного тура");
+    } catch (e) {
+        console.error("ERROR", e.getMessage());
+        dispatch(error({ message: e.getMessage() }));
+    }
 };
 
 let periodicallySaveTimer = 0;
 export const periodicallySave = () => (dispatch: Dispatch, getState: () => StoreType) => {
-    //console.log("periodicallySave");
     clearInterval(periodicallySaveTimer);
     periodicallySaveTimer = window.setInterval(() => {
-        saveSelectedTour()(dispatch, getState);
-        loadListTour()(dispatch);
+        const store = getState();
+        const tour: TourType = store.SelectedTourState.tourDB;
+        if (tour.dateChange) return;
+        saveTour(tour)(dispatch, getState);
     }, 10000);
 };
 export const loadToDb = (key: number) => async (dispatch: Dispatch) => {
@@ -80,9 +72,13 @@ export const loadToDb = (key: number) => async (dispatch: Dispatch) => {
     dispatch(setLoadBocklyDisabled());
     const tour: TourType | undefined = await getTourById(key);
     //(await IDB()).get("script", key);
-    if (tour) dispatch(setTourDB(tour));
-    //console.log(tour);
-    return dispatch(setLoadBocklyEnabled());
+    try {
+        dispatch(setTourDB(tour));
+        dispatch(setLoadBocklyEnabled());
+    } catch (e) {
+        console.error("ERROR", e.getMessage());
+        dispatch(error({ message: e.getMessage() }));
+    }
 };
 export const createNewTour = (name: string | null, desc: string | null) => async (dispatch: Dispatch) => {
     const tour: TourType = getInitData({
@@ -90,7 +86,7 @@ export const createNewTour = (name: string | null, desc: string | null) => async
         desc: desc
     });
     const createdTour: TourType = await createTour(tour);
-    if (createdTour) {
+    try {
         closeSelectedTour()(dispatch);
         //console.log("createdTour >> ", createdTour);
         dispatch(setTourDB(createdTour));
@@ -98,7 +94,10 @@ export const createNewTour = (name: string | null, desc: string | null) => async
         return window.setTimeout(() => {
             dispatch(setLoadBocklyEnabled());
         }, 5);
-    } else console.log("Ошибка при создании тура");
+    } catch (e) {
+        console.error("ERROR", e.getMessage());
+        dispatch(error({ message: e.getMessage() }));
+    }
 };
 export const createCopyTour = (name: string | null, desc: string | null) => async (
     dispatch: Dispatch,
@@ -129,4 +128,4 @@ export const closeSelectedTour = () => (dispatch: Dispatch) => {
     clearInterval(periodicallySaveTimer);
 };
 
-export type SelectedTourAction = ActionType<typeof setTourDB>;
+export type SelectedTourAction = ActionType<typeof setTourDB | typeof editTourDB>;

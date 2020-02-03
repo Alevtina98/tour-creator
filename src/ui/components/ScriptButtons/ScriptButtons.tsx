@@ -5,7 +5,7 @@ import {
     closeSelectedTour,
     createCopyTour,
     createNewTour,
-    saveSelectedTour,
+    saveSelectedTour, saveTour,
     setErrorsRunTour,
     setTourDB
 } from "../../actions/selectedTourAction";
@@ -30,7 +30,6 @@ const ScriptButtons = () => {
     const { tourDB, blocklyReloadEnabled, tourJS, errorsRunTour } = useSelector<StoreType, ScriptButtons>(
         ({ SelectedTourState }) => SelectedTourState
     );
-    const [show, setShow] = useState(false);
     const [showRun, setShowRun] = useState(false);
     const [showCreated, setShowCreated] = useState(false);
     const [showCopy, setShowCopy] = useState(false);
@@ -40,14 +39,6 @@ const ScriptButtons = () => {
     const { setValue: setNewNameValue, ...newTourName } = useControlledInputValue("NewTour");
     const { setValue: setNewDescValue, ...newTourDesc } = useControlledInputValue("");
 
-    const handleShow = () => {
-        setNameValue(tourDB.name);
-        setDescValue(tourDB.desc);
-        setShow(true);
-    };
-    const handleClose = () => {
-        setShow(false);
-    };
     const handleShowCreated = () => {
         setNewNameValue("NewTour");
         setNewDescValue("");
@@ -74,15 +65,7 @@ const ScriptButtons = () => {
         setShowCopy(false);
     };
     const saveCode = () => {
-        dispatch(
-            setTourDB({
-                name: newName.value,
-                desc: newDesc.value,
-                ...tourDB
-            })
-        );
-        dispatch(saveSelectedTour());
-        handleClose();
+        dispatch(saveTour(tourDB));
     };
     const copyTour = () => {
         dispatch(createCopyTour(newName.value, newDesc.value));
@@ -118,12 +101,12 @@ const ScriptButtons = () => {
                     disabled={!blocklyReloadEnabled}
                     data-testid="copyTourButton"
                 >
-                    Создать копию
+                    Сохранить как
                 </Button>
                 <Button
                     size="sm"
                     variant="light"
-                    onClick={handleShow}
+                    onClick={saveCode}
                     disabled={!blocklyReloadEnabled}
                     data-testid="saveTourButton"
                 >
@@ -157,16 +140,6 @@ const ScriptButtons = () => {
                 handelCancel={handleCloseCreated}
                 handelOk={createdNewTour}
                 okButtonName="Создать"
-            />
-            <ModalComponent
-                modalName="Сохранение тура"
-                show={show}
-                handleShow={handleShow}
-                inputName={newName}
-                inputDesc={newDesc}
-                handelCancel={handleClose}
-                handelOk={saveCode}
-                okButtonName="Сохранить"
             />
             <ModalComponent
                 modalName="Создание копии тура"

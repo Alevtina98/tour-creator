@@ -22,8 +22,11 @@ export const getInitData = (data?: Partial<TourType>): TourType => ({
 export const getDateClientFormat = (str: string) => {
     return format(getDate(str), "dd-MM-yyyy в HH:mm:ss");
 };
-export const getDate = (str: string) => {
+export const getDate = (str?: string) => {
     //const dateServer = new Date.UTC(str)
+    if (!str) {
+        return new Date();
+    }
     return new Date(str);
 };
 
@@ -43,10 +46,7 @@ export const getTourById = async (id: number) => {
 };
 export const deleteTourById = async (id: string) => {
     const url = "http://localhost:8080/api/tour/" + id;
-    const response = await fetch(url, { method: "DELETE" });
-    const data = response.ok;
-    console.log("DATA", data);
-    return data;
+    await fetch(url, { method: "DELETE" });
 };
 export const createTour = async (tour: TourType) => {
     const url = "http://localhost:8080/api/tour";

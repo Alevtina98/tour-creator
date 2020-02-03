@@ -1,5 +1,5 @@
 import React, { FC, memo, useEffect, useState } from "react";
-import { delToDb, loadToDb, saveDescTour } from "../../../actions/selectedTourAction";
+import {delToDb, loadToDb, saveDescTour, saveTour} from "../../../actions/selectedTourAction";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, ButtonGroup, ButtonToolbar, OverlayTrigger, Popover } from "react-bootstrap";
 import { StoreType } from "../../../reducers";
@@ -36,7 +36,7 @@ const Script: FC<ScriptProps> = ({ tour, style }) => {
             updatedTour.name = newName.value;
         }
         updatedTour.desc = newDesc.value;
-        dispatch(saveDescTour(updatedTour));
+        dispatch(saveTour(updatedTour));
         handleClose();
         // console.log("tour.name >> ", tour.name);
     };
