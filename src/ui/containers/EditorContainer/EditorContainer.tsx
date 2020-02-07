@@ -4,7 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../../reducers";
 import { setInspectDisabled, setInspectEnabled } from "../../actions/inspectAction";
 import agentActions from "../../actions/agentActions";
-import ModalLockDevtoolsComponent from "../../components/ModalLockDevtoolsComponent";
+import ModalLockDevtoolsComponent from "../../components/ModalTemplates/ModalLockDevtoolsComponent";
+import ModalInputsComponent from "../../components/ModalTemplates/ModalInputsComponent";
+import ModalTextComponent from "../../components/ModalTemplates/ModalTextComponent";
+import { useControlledInputValue } from "../../hooks/useControleInputValue";
+import { TourType } from "../../util/restClient/requestTour";
+import {delToDb, saveTour} from "../../actions/selectedTourAction";
+import ModelsScript from "../../components/ScriptList/ModalsScript";
 
 export interface TourEditorComponentProps {
     blocklyReloadEnabled: boolean;

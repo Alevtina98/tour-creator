@@ -10,6 +10,7 @@ import cn from "classnames";
 import { getDate, TourType } from "../../../util/restClient/requestTour";
 import { FixedSizeList as List, ListChildComponentProps } from "react-window";
 import { useMeasure } from "react-use";
+import ModelsScript from "../ModalsScript";
 
 export interface MenuProps {
     onClickScript: any;
@@ -19,6 +20,7 @@ export interface MenuProps {
 const ScriptList: FC<MenuProps> = ({ onClickScript, onClickEsc, isOpen }) => {
     const dispatch = useDispatch();
     const listTour = useSelector<StoreType, TourType[]>(({ SelectedTourState }) => SelectedTourState.listTour);
+    const modalTour = useSelector<StoreType, TourType | null>(({ ModalState }) => ModalState.tour);
     //const [list, setList] = useState<TourType[]>([]);
     const [filterList, setFilterList] = useState<TourType[]>([]);
     const [filterTour, setFilterTour] = useState<string>("");
@@ -32,6 +34,7 @@ const ScriptList: FC<MenuProps> = ({ onClickScript, onClickEsc, isOpen }) => {
         console.log("key >> ", key);
     };*/
     useEffect(() => {
+        console.log("madalTour >>", modalTour);
         dispatch(loadListTour());
     }, [dispatch]);
     const searchUpdated = (event: React.ChangeEvent<any>) => {

@@ -14,7 +14,7 @@ export const getInitData = (data?: Partial<TourType>): TourType => ({
     name: "custom name",
     code: "<xml/>",
     codeJS: "",
-    desc: "custom description",
+    desc: "",
     dateCreate: "",
     dateChange: "",
     ...data
@@ -44,11 +44,11 @@ export const getTourById = async (id: number) => {
     //console.log("DATA", data);
     return data;
 };
-export const deleteTourById = async (id: string) => {
-    const url = "http://localhost:8080/api/tour/" + id;
+export const deleteTourById = async (id: number) => {
+    const url = "http://localhost:8080/api/tour/" + id.toString();
     await fetch(url, { method: "DELETE" });
 };
-export const createTour = async (tour: TourType) => {
+export const createTour = async (tour: TourType | null) => {
     const url = "http://localhost:8080/api/tour";
     const response = await fetch(url, {
         method: "POST",
