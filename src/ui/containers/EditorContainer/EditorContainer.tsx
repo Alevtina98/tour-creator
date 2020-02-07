@@ -1,4 +1,4 @@
-import React, { memo, useRef } from "react";
+import React, { memo, useRef, useState } from "react";
 import BlocklyComponent from "../../components/BlocklyComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../../reducers";
@@ -16,24 +16,18 @@ export interface TourEditorComponentProps {
     blocklyReloadEnabled: boolean;
     isInspectEnabled: boolean;
     selector: string;
-    tourJS: string;
+    tour: TourType;
 }
 const EditorContainer = () => {
     const dispatch = useDispatch();
-    const { blocklyReloadEnabled, isInspectEnabled, selector, tourJS } = useSelector<
-        StoreType,
-        TourEditorComponentProps
-    >(({ SelectedTourState, InspectState }) => ({
-        blocklyReloadEnabled: SelectedTourState.blocklyReloadEnabled,
-        tourJS: SelectedTourState.tourJS,
-        isInspectEnabled: InspectState.isInspectEnabled,
-        selector: InspectState.selector
-    }));
-    /*const getCodeBlock = () => {
-        tourJS.split(/(\/\/.*)|(\/\*\*\n \*.*\n \*\/)/g).map
-    };*/
-    // code.split(/(\/\/.*)|(\/\*\*\n \*.*\n \*\/)/g)
-
+    const { blocklyReloadEnabled, isInspectEnabled, selector, tour } = useSelector<StoreType, TourEditorComponentProps>(
+        ({ SelectedTourState, InspectState }) => ({
+            blocklyReloadEnabled: SelectedTourState.blocklyReloadEnabled,
+            tour: SelectedTourState.tourDB,
+            isInspectEnabled: InspectState.isInspectEnabled,
+            selector: InspectState.selector
+        })
+    );
     const onInspectClickHandler = () => {
         if (isInspectEnabled) {
             dispatch(setInspectDisabled()); //Отправка экшена
@@ -51,7 +45,7 @@ const EditorContainer = () => {
                 <>
                     <BlocklyComponent selector={selector} inspect={onInspectClickHandler} />
                     <div className="code-block">
-                        {tourJS.split(/(\/\/!.*)|(\/\*\*\n \*.*\n \*\/)|(\/\/.*)/g).map((el, index) => {
+                        {tour.codeJS.split(/(\/\/!.*)|(\/\*\*\n \*.*\n \*\/)|(\/\/.*)/g).map((el, index) => {
                             if (!el) return null;
                             let name = "comment";
                             if (!(index % 4)) name = "text";

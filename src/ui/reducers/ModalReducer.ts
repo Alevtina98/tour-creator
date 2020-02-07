@@ -1,22 +1,26 @@
 import { createReducer } from "typesafe-actions";
 import { combineReducers } from "redux";
-import { getInitData, TourType } from "../util/restClient/requestTour";
-import { setIdDeleted, setTourModal } from "../actions/modalAction";
+import { TourType } from "../util/restClient/requestTour";
+import { setModalStatus, setModalTour } from "../actions/modalAction";
 
 export interface ModalReducerState {
-    tour: TourType;
-    idDeleted: number;
+    tour: TourType | null;
+    status: string | null;
 }
 
-const tourModalReducer = createReducer<TourType>(getInitData()).handleAction(
-    setTourModal,
+const tourModalReducer = createReducer<TourType | null>(null).handleAction(
+    setModalTour,
     (state, action) => action.payload
 );
-const tourIdDelReducer = createReducer<number>(-1).handleAction(setIdDeleted, (state, action) => action.payload);
+
+const statusModalReducer = createReducer<string | null>(null).handleAction(
+    setModalStatus,
+    (state, action) => action.payload
+);
 
 const ModalReducer = combineReducers<ModalReducerState>({
     tour: tourModalReducer,
-    idDeleted: tourIdDelReducer
+    status: statusModalReducer
 });
 
 export default ModalReducer;

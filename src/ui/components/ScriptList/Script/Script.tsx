@@ -1,15 +1,17 @@
 import React, { FC, memo, useEffect, useState } from "react";
-import {delToDb, loadToDb, saveDescTour, saveTour} from "../../../actions/selectedTourAction";
+import { loadToDb, saveTour} from "../../../actions/selectedTourAction";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, ButtonGroup, ButtonToolbar, OverlayTrigger, Popover } from "react-bootstrap";
 import { StoreType } from "../../../reducers";
 import cn from "classnames";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useControlledInputValue } from "../../../hooks/useControleInputValue";
-import ModalInputsComponent from "../../ModalInputsComponent";
-import ModalTextComponent from "../../ModalTextComponent";
 import { getDateClientFormat, TourType } from "../../../util/restClient/requestTour";
+import {
+    setModal,
+    setModalStatus,
+    setModalTour,
+} from "../../../actions/modalAction";
 
 export interface ScriptProps {
     tour: TourType;
@@ -19,53 +21,22 @@ export interface ScriptProps {
 const Script: FC<ScriptProps> = ({ tour, style }) => {
     const dispatch = useDispatch();
     const selectedTourKey = useSelector<StoreType, number>(({ SelectedTourState }) => SelectedTourState.tourDB.id);
-    //для работы с модальным окном
-    const { setValue: setNameValue, ...newName } = useControlledInputValue(tour.name);
-    const { setValue: setDescValue, ...newDesc } = useControlledInputValue(tour.desc);
-    const [show, setShow] = useState(false);
-    const [showDel, setShowDel] = useState(false);
-    const handleShow = () => setShow(true);
-    const handleShowDel = () => setShowDel(true);
-    const handleClose = () => setShow(false);
-    const handleCloseDel = () => setShowDel(false);
-    //редактирование
-    const saveChangeCode = () => {
-        const updatedTour = { ...tour };
-        //Если имя тура не указано, оно остается прежним
-        if (newName.value != "") {
-            updatedTour.name = newName.value;
-        }
-        updatedTour.desc = newDesc.value;
-        dispatch(saveTour(updatedTour));
-        handleClose();
-        // console.log("tour.name >> ", tour.name);
-    };
-    const changeCode = (e: any) => {
-        e.stopPropagation();
-        e.preventDefault();
-        setNameValue(tour.name);
-        setDescValue(tour.desc);
-        handleShow();
-    };
-    const saveDeleteCode = () => {
-        dispatch(delToDb(tour.id));
-        handleCloseDel();
-    };
-    //удаление
-    const deleteCode = (e: any) => {
-        e.stopPropagation();
-        e.preventDefault();
-        setNameValue(tour.name);
-        setDescValue(tour.desc);
-        handleShowDel();
-    };
     //загрузка
     const loadTour = () => {
         if (selectedTourKey != tour.id) {
             dispatch(loadToDb(tour.id));
         }
     };
-
+    const putSavedTour = (e: any) => {
+        e.stopPropagation();
+        e.preventDefault();
+        dispatch(setModal(tour, "edit"));
+    };
+    const putDeletedTourId = (e: any) => {
+        e.stopPropagation();
+        e.preventDefault();
+        dispatch(setModal(tour, "delete"));
+    };
     return (
         <div style={style}>
             <OverlayTrigger
@@ -88,44 +59,16 @@ const Script: FC<ScriptProps> = ({ tour, style }) => {
                     <div />
                     <ButtonToolbar className="tour-buttons">
                         <ButtonGroup>
-                            <Button variant="light" size="sm" onClick={changeCode} data-testid="edit-button">
+                            <Button variant="light" size="sm" onClick={putSavedTour} data-testid="edit-button">
                                 <FontAwesomeIcon icon={faEdit} className="i-close" color="#A1A2A2" />
                             </Button>
-                            <Button variant="light" size="sm" onClick={deleteCode} data-testid="del-button">
+                            <Button variant="light" size="sm" onClick={putDeletedTourId} data-testid="del-button">
                                 <FontAwesomeIcon icon={faTrashAlt} className="i-close" color="#A1A2A2" />
                             </Button>
                         </ButtonGroup>
                     </ButtonToolbar>
                 </div>
             </OverlayTrigger>
-            <ModalInputsComponent
-                modalName="Редактирование шаблона"
-                show={show}
-                handleShow={handleShow}
-                inputName={newName}
-                inputDesc={newDesc}
-                handelCancel={handleClose}
-                handelOk={saveChangeCode}
-                okButtonName="Сохранить изменения"
-                nameTestId="changeName"
-                descTestId="changeDesc"
-                cancelTestId="cancel-edit-button"
-                okTestId="save-edit-button"
-                modalTestId="edit-model"
-            />
-            <ModalTextComponent
-                modalName="Подтверждение удаления тура"
-                show={showDel}
-                handleShow={handleShowDel}
-                text={`Вы действительно хотите удалить ${tour.name}?`}
-                handelCancel={handleCloseDel}
-                handelOk={saveDeleteCode}
-                okButtonName="Удалить"
-                textTestId="del-name"
-                cancelTestId="cancel-del-button"
-                okTestId="save-del-button"
-                modalTestId="del-model"
-            />
         </div>
     );
 };

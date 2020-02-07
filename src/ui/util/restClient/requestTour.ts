@@ -10,8 +10,8 @@ export interface TourType {
     name: string | null;
 }
 export const getInitData = (data?: Partial<TourType>): TourType => ({
-    id: 0,
-    name: "custom name",
+    id: -1,
+    name: "Unnamed",
     code: "<xml/>",
     codeJS: "",
     desc: "",

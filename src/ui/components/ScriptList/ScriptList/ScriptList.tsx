@@ -86,6 +86,7 @@ const ScriptList: FC<MenuProps> = ({ onClickScript, onClickEsc, isOpen }) => {
                     {Row}
                 </List>
             </div>
+            {modalTour !== null && <ModelsScript />};
         </div>
     );
 };

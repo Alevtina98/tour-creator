@@ -28,7 +28,7 @@ export const loadListTour = () => async (dispatch: Dispatch) => {
     dispatch(setListTour(result));
 };
 
-export const delToDb = (key: string) => async (dispatch: Dispatch, getState: () => StoreType) => {
+export const delToDb = (key: number) => async (dispatch: Dispatch, getState: () => StoreType) => {
     const store = getState();
     //(await IDB()).delete("script", key);
     await deleteTourById(key);
