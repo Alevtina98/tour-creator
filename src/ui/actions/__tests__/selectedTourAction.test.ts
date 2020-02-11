@@ -62,14 +62,6 @@ describe("selectedTourAction", function() {
             payload: testListTour[0],
             type: "SET_TOUR"
         });
-        expect(selectedTourAction.setTourXML("<xml/>")).toEqual({
-            payload: "<xml/>",
-            type: "SET_TOUR_XML"
-        });
-        expect(selectedTourAction.setTourJS("")).toEqual({
-            payload: "",
-            type: "SET_TOUR_JS"
-        });
     });
     it("should change state (for standard action)", () => {
         expect(selectedTourState(initialState, selectedTourAction.setLoadBocklyEnabled())).toEqual({

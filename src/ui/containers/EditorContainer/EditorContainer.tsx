@@ -1,43 +1,30 @@
-import React, { memo, useRef, useState } from "react";
+import React, { memo } from "react";
 import BlocklyComponent from "../../components/BlocklyComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../../reducers";
-import { setInspectDisabled, setInspectEnabled } from "../../actions/inspectAction";
+import { setInspectEnabled } from "../../actions/inspectAction";
 import agentActions from "../../actions/agentActions";
-import ModalLockDevtoolsComponent from "../../components/ModalTemplates/ModalLockDevtoolsComponent";
-import ModalInputsComponent from "../../components/ModalTemplates/ModalInputsComponent";
-import ModalTextComponent from "../../components/ModalTemplates/ModalTextComponent";
-import { useControlledInputValue } from "../../hooks/useControleInputValue";
 import { TourType } from "../../util/restClient/requestTour";
-import {delToDb, saveTour} from "../../actions/selectedTourAction";
-import ModelsScript from "../../components/ScriptList/ModalsScript";
+import { setModal } from "../../actions/modalAction";
 
 export interface TourEditorComponentProps {
     blocklyReloadEnabled: boolean;
-    isInspectEnabled: boolean;
     selector: string;
     tour: TourType;
 }
 const EditorContainer = () => {
     const dispatch = useDispatch();
-    const { blocklyReloadEnabled, isInspectEnabled, selector, tour } = useSelector<StoreType, TourEditorComponentProps>(
+    const { blocklyReloadEnabled, selector, tour } = useSelector<StoreType, TourEditorComponentProps>(
         ({ SelectedTourState, InspectState }) => ({
             blocklyReloadEnabled: SelectedTourState.blocklyReloadEnabled,
             tour: SelectedTourState.tourDB,
-            isInspectEnabled: InspectState.isInspectEnabled,
             selector: InspectState.selector
         })
     );
     const onInspectClickHandler = () => {
-        if (isInspectEnabled) {
-            dispatch(setInspectDisabled()); //Отправка экшена
-            agentActions.disableSelectMode(); //отправляем сообщение 'disableSelectMode'
-            // chrome.devtools.inspectedWindow;
-        } else {
-            dispatch(setInspectEnabled());
-            agentActions.enableSelectMode();
-        }
-        //console.log("inspectEnabled > ", isInspectEnabled)
+        dispatch(setInspectEnabled());
+        dispatch(setModal(tour, "inspect"));
+        agentActions.enableSelectMode();
     };
     return (
         <div className="editor-container">
@@ -55,11 +42,6 @@ const EditorContainer = () => {
                     </div>
                 </>
             )}
-            <ModalLockDevtoolsComponent
-                show={isInspectEnabled}
-                text="Выберите элемент на основной странице или нажмите"
-                handelCancel={onInspectClickHandler}
-            />
         </div>
     );
 };

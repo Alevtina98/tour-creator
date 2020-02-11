@@ -17,8 +17,6 @@ export const setLoadBocklyDisabled = createStandardAction("SET_RELOAD_BLOCKLY_DI
 export const setListTour = createStandardAction("SET_LIST_TOUR")<TourType[]>();
 export const setTourDB = createStandardAction("SET_TOUR")<TourType>();
 export const editTourDB = createStandardAction("EDIT_TOUR")<Partial<TourType>>();
-export const setTourXML = createStandardAction("SET_TOUR_XML")<string>();
-export const setTourJS = createStandardAction("SET_TOUR_JS")<string>();
 export const setErrorsRunTour = createStandardAction("SET_ERRORS")<string[]>();
 export const addErrorRunTour = createStandardAction("ADD_ERROR")<string>();
 
@@ -28,8 +26,14 @@ export const loadListTour = () => async (dispatch: Dispatch) => {
     dispatch(setListTour(result));
 };
 
-export const delToDb = (key: number) => async (dispatch: Dispatch, getState: () => StoreType) => {
+export const delToDb = () => async (dispatch: Dispatch, getState: () => StoreType) => {
     const store = getState();
+    const tour: TourType | null = store.ModalState.tour;
+    if (!tour) {
+        console.log("ERROR MODAL CREATED");
+        return;
+    }
+    const key: number = tour.id;
     //(await IDB()).delete("script", key);
     await deleteTourById(key);
     try {
@@ -45,13 +49,9 @@ export const delToDb = (key: number) => async (dispatch: Dispatch, getState: () 
 export const saveTour = () => async (dispatch: Dispatch, getState: () => StoreType) => {
     const store = getState();
     const tour: TourType | null = store.ModalState.tour;
-    if (!tour) {
-        console.log("ERROR MODAL EDIT");
-    }
     const selectedTour = store.SelectedTourState.tourDB;
-    console.log(tour);
     try {
-        const savedTour: TourType = await updateTour(tour);
+        const savedTour: TourType = await updateTour(tour || store.SelectedTourState.tourDB);
         if (savedTour.id === selectedTour.id) {
             dispatch(setTourDB(savedTour));
         }

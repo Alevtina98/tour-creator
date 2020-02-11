@@ -12,7 +12,7 @@ export interface ModelsScriptProps {
 }
 interface ModalInputsComponentProps {
     modalName: string;
-    onApply: () => void;
+    onApply?: () => void;
     onClose?: () => void;
     applyName?: string;
     closeName?: string;
@@ -20,7 +20,7 @@ interface ModalInputsComponentProps {
 
 const ModalInputsComponent: FC<ModalInputsComponentProps> = ({
     modalName,
-    onApply,
+    onApply = () => {},
     onClose = () => {},
     applyName,
     closeName
@@ -31,29 +31,15 @@ const ModalInputsComponent: FC<ModalInputsComponentProps> = ({
     }));
     const { setValue: setNameValue, ...name } = useControlledInputValue(tour ? tour.name : "");
     const { setValue: setDescValue, ...desc } = useControlledInputValue(tour ? tour.desc : "");
-    /* useEffect(() => {
-        setNameValue("");
-
-q
-
-
-        setDescValue("");
-    }, [setDescValue, setNameValue, status]);*/
-    const onCloseModalInputs = () => {
-        dispatch(clearModal());
-        onClose();
-    };
     const onApplyModalInputs = () => {
         if (tour) {
             dispatch(setModalTour({ ...tour, name: name.value, desc: desc.value }));
-            //debugger
             onApply();
         }
-        onCloseModalInputs();
     };
     return (
         <ModalContainer
-            onClose={onCloseModalInputs}
+            onClose={onClose}
             onApply={onApplyModalInputs}
             modalName={modalName}
             applyName={applyName}

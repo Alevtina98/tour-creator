@@ -127,10 +127,9 @@ export default class TourHelper {
         TourHelper.steps[TourHelper.currentStep].condition.forEach(fn => fn());
     };
     private static showElements = () => {
-        if (TourHelper.blackElement[0])
-            TourHelper.blackElement[0].scrollIntoView({ block: "center", behavior: "smooth" });
-        if (TourHelper.descrElement[0].element)
-            TourHelper.descrElement[0].element.scrollIntoView({ block: "center", behavior: "smooth" });
+        debugger
+        TourHelper.blackElement[0]?.scrollIntoView({ block: "center", behavior: "smooth" });
+        TourHelper.descrElement[0]?.element?.scrollIntoView({ block: "center", behavior: "smooth" });
         // window.addEventListener("resize", TourHelper.drawFourRect);
         TourHelper.blackoutWindow();
         TourHelper.rectElementParam.forEach(el => TourHelper.newRect(el.top, el.left, el.width, el.height));

@@ -1,29 +1,26 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../../reducers";
 import { closeSelectedTour, saveTour, setErrorsRunTour } from "../../actions/selectedTourAction";
 import { Button, ButtonToolbar } from "react-bootstrap";
 import BurgerMenuContainer from "../../containers/BurgerMenuContainer/BurgerMenuContainer";
 import agentActions from "../../actions/agentActions";
-import ModalLockDevtoolsComponent from "../ModalTemplates/ModalLockDevtoolsComponent";
 import { getInitData, TourType } from "../../util/restClient/requestTour";
-import {setModal, setModalStatus, setModalTour} from "../../actions/modalAction";
+import { setModal } from "../../actions/modalAction";
 
 export interface ScriptButtons {
     tourDB: TourType;
     blocklyReloadEnabled: boolean;
     tourJS: string;
-    errorsRunTour: string[];
 }
 
 const ScriptButtons = () => {
     const dispatch = useDispatch();
     //маппинг значений из store
-    const { tourDB, blocklyReloadEnabled, tourJS, errorsRunTour } = useSelector<StoreType, ScriptButtons>(
+    const { tourDB, blocklyReloadEnabled } = useSelector<StoreType, ScriptButtons>(
         ({ SelectedTourState }) => SelectedTourState
     );
-    //модальное окно на воспроизведение тура
-    const [showRun, setShowRun] = useState(false);
+
     /*
      c запуском модальных окон
    */
@@ -36,24 +33,16 @@ const ScriptButtons = () => {
         const newName = tourDB.name + " - копия";
         dispatch(setModal({ ...tourDB, name: newName }, "copy"));
     };
-    // локально
     const onShowRun = () => {
-        setShowRun(true);
-    };
-    const onCloseRun = () => {
-        setShowRun(false);
-        agentActions.disableRunScript();
-    };
-    const runTour = () => {
-        agentActions.runScript(tourJS);
+        agentActions.runScript(tourDB.codeJS);
         dispatch(setErrorsRunTour([]));
-        onShowRun();
+        dispatch(setModal(tourDB, "show"));
     };
     /*
       без запуска модальных окон
     */
     const saveCode = () => {
-        dispatch(saveTour(tour));
+        dispatch(saveTour());
     };
     const closeTour = () => {
         dispatch(closeSelectedTour());
@@ -88,7 +77,7 @@ const ScriptButtons = () => {
                 <Button
                     size="sm"
                     variant="light"
-                    onClick={runTour}
+                    onClick={onShowRun}
                     disabled={!blocklyReloadEnabled}
                     data-testid="runTourButton"
                 >
@@ -104,14 +93,6 @@ const ScriptButtons = () => {
                     Закрыть
                 </Button>
             </ButtonToolbar>
-
-            <ModalLockDevtoolsComponent
-                show={showRun}
-                text="Для завершения просмотра тура нажмите"
-                handelCancel={onCloseRun}
-                buttonName="Завершить"
-                errors={errorsRunTour}
-            />
         </div>
     );
 };

@@ -5,7 +5,7 @@ import parseWorkspaceXml from "./blockly/BlocklyHelper";
 import { connect } from "react-redux";
 import { StoreType } from "../reducers";
 import { bindActionCreators, Dispatch } from "redux";
-import { periodicallySave, setTourXML, setTourJS, editTourDB } from "../actions/selectedTourAction";
+import { periodicallySave, editTourDB } from "../actions/selectedTourAction";
 import { setCurrentSelector } from "../actions/inspectAction";
 import { getInitData, TourType } from "../util/restClient/requestTour";
 
@@ -133,7 +133,6 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
 export interface BlocklyComponentConnectedDispatch {
     dispatch: Dispatch;
     actions: {
-        setTourXML: typeof setTourXML;
         periodicallySave: typeof periodicallySave;
     };
 }
@@ -153,8 +152,7 @@ export default connect<
         dispatch,
         actions: bindActionCreators(
             {
-                periodicallySave,
-                setTourXML
+                periodicallySave
             },
             dispatch
         )

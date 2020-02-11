@@ -27,7 +27,7 @@ class AgentHandler {
             console.log("Selector", data);
         },
 
-        enabledSelectMode: () => this.dispatch(setInspectEnabled()),
+        //enabledSelectMode: () => this.dispatch(setInspectEnabled()),
         disabledSelectMode: () => {
             this.dispatch(setInspectDisabled());
             //this.dispatch(setCurrentSelector(""));
@@ -35,7 +35,6 @@ class AgentHandler {
         newError: (error: string) => {
             this.dispatch(addErrorRunTour(error));
             console.log("new error >> ", error);
-
         }
     };
 
