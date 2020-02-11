@@ -127,7 +127,6 @@ export default class TourHelper {
         TourHelper.steps[TourHelper.currentStep].condition.forEach(fn => fn());
     };
     private static showElements = () => {
-        debugger
         TourHelper.blackElement[0]?.scrollIntoView({ block: "center", behavior: "smooth" });
         TourHelper.descrElement[0]?.element?.scrollIntoView({ block: "center", behavior: "smooth" });
         // window.addEventListener("resize", TourHelper.drawFourRect);

@@ -6,6 +6,7 @@ import { setInspectEnabled } from "../../actions/inspectAction";
 import agentActions from "../../actions/agentActions";
 import { TourType } from "../../util/restClient/requestTour";
 import { setModal } from "../../actions/modalAction";
+import CodeJSComponent from "../../components/CodeJSComponent";
 
 export interface TourEditorComponentProps {
     blocklyReloadEnabled: boolean;
@@ -31,15 +32,7 @@ const EditorContainer = () => {
             {blocklyReloadEnabled && (
                 <>
                     <BlocklyComponent selector={selector} inspect={onInspectClickHandler} />
-                    <div className="code-block">
-                        {tour.codeJS.split(/(\/\/!.*)|(\/\*\*\n \*.*\n \*\/)|(\/\/.*)/g).map((el, index) => {
-                            if (!el) return null;
-                            let name = "comment";
-                            if (!(index % 4)) name = "text";
-                            else if (!((index - 1) % 4)) name = "error";
-                            return el.split(/[\n]/g).map(str => <div className={name + "Style"}>{str}</div>);
-                        })}
-                    </div>
+                    <CodeJSComponent />
                 </>
             )}
         </div>

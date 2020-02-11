@@ -1,7 +1,7 @@
 import { TourType } from "./restClient/requestTour";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../reducers";
-import React, { memo, useEffect } from "react";
+import React, {memo, ReactElement} from "react";
 import { createCopyTour, createNewTour, delToDb, saveTour } from "../actions/selectedTourAction";
 import ModalInputsComponent from "../components/ModalTemplates/ModalInputsComponent";
 import ModalMain from "../components/ModalTemplates/ModalMain";
@@ -9,7 +9,6 @@ import agentActions from "../actions/agentActions";
 import ErrorsRunScript from "../components/ModalTemplates/ErrorsRunScript";
 import { setInspectDisabled } from "../actions/inspectAction";
 import { StatusType } from "../reducers/ModalReducer";
-import { clearModal } from "../actions/modalAction";
 
 export interface ModelsScriptProps {
     tour: TourType | null;
@@ -22,7 +21,6 @@ const ModalsScript = () => {
         status: ModalState.status
     }));
     const errorsRunTour = useSelector<StoreType, string[]>(({ SelectedTourState }) => SelectedTourState.errorsRunTour);
-    const isInspect = useSelector<StoreType, boolean>(({ InspectState }) => InspectState.isInspectEnabled);
     const createdNewTour = () => {
         dispatch(createNewTour());
     };
@@ -42,42 +40,34 @@ const ModalsScript = () => {
     const closeRun = () => {
         agentActions.disableRunScript();
     };
-    /*const components = {
+    const components = {
         create: <ModalInputsComponent modalName="Создание тура" onApply={createdNewTour} applyName="Создать" />,
-    };*/
+        copy: <ModalInputsComponent modalName="Создание копии тура" onApply={copyTour} applyName="Создать копию" />,
+        edit: (
+            <ModalInputsComponent
+                modalName="Редактирование шаблона"
+                onApply={editTour}
+                applyName="Сохранить изменения"
+            />
+        ),
+        delete: (
+            <ModalMain modalName="Подтверждение удаления тура" onApply={deleteTour} applyName="Удалить">
+                Вы действительно хотите удалить {tour ? tour.name : "тур"}?
+            </ModalMain>
+        ),
+        show: (
+            <ModalMain modalName="Воспроизведение тура" onClose={closeRun} closeName="Завершить">
+                <ErrorsRunScript errors={errorsRunTour} />
+            </ModalMain>
+        ),
+        inspect: (
+            <ModalMain modalName="Определение селектора" onClose={closeInspect} closeName="Отмена">
+                Выберите элемент на основной странице
+            </ModalMain>
+        )
+    };
 
-    return (
-        <div>
-            {status === "create" && (
-                <ModalInputsComponent modalName="Создание тура" onApply={createdNewTour} applyName="Создать" />
-            )}
-            {status === "copy" && (
-                <ModalInputsComponent modalName="Создание копии тура" onApply={copyTour} applyName="Создать копию" />
-            )}
-            {status === "edit" && (
-                <ModalInputsComponent
-                    modalName="Редактирование шаблона"
-                    onApply={editTour}
-                    applyName="Сохранить изменения"
-                />
-            )}
-            {status === "delete" && (
-                <ModalMain modalName="Подтверждение удаления тура" onApply={deleteTour} applyName="Удалить">
-                    Вы действительно хотите удалить {tour ? tour.name : "тур"}?
-                </ModalMain>
-            )}
-            {status === "show" && (
-                <ModalMain modalName="Воспроизведение тура" onClose={closeRun} closeName="Завершить">
-                    <ErrorsRunScript errors={errorsRunTour} />
-                </ModalMain>
-            )}
-            {status === "inspect" && (
-                <ModalMain modalName="Определение селектора" onClose={closeInspect} closeName="Отмена">
-                    Выберите элемент на основной странице
-                </ModalMain>
-            )}
-        </div>
-    );
+    return <div>{components[status]}</div>;
 };
 
 export default memo(ModalsScript);
