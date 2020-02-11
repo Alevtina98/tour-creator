@@ -1,7 +1,7 @@
 import { TourType } from "./restClient/requestTour";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../reducers";
-import React, {memo, ReactElement} from "react";
+import React, { memo, ReactElement } from "react";
 import { createCopyTour, createNewTour, delToDb, saveTour } from "../actions/selectedTourAction";
 import ModalInputsComponent from "../components/ModalTemplates/ModalInputsComponent";
 import ModalMain from "../components/ModalTemplates/ModalMain";

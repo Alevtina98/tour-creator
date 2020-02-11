@@ -12,33 +12,23 @@ import { FixedSizeList as List, ListChildComponentProps } from "react-window";
 import { useMeasure } from "react-use";
 
 export interface MenuProps {
-    onClickScript: any;
     onClickEsc: any;
     isOpen: boolean;
 }
-const ScriptList: FC<MenuProps> = ({ onClickScript, onClickEsc, isOpen }) => {
+const ScriptList: FC<MenuProps> = ({ onClickEsc, isOpen }) => {
     const dispatch = useDispatch();
     const listTour = useSelector<StoreType, TourType[]>(({ SelectedTourState }) => SelectedTourState.listTour);
-    //const [list, setList] = useState<TourType[]>([]);
     const [filterList, setFilterList] = useState<TourType[]>([]);
     const [filterTour, setFilterTour] = useState<string>("");
     useEffect(() => {
         setFilterList(listTour);
     }, [listTour]);
-    /*const SelectedTour = (key: string) => {
-        dispatch(setKey(key));
-        // setColor("#808080 !important")
-        // eslint-disable-next-line no-console
-        console.log("key >> ", key);
-    };*/
     useEffect(() => {
         dispatch(loadListTour());
     }, [dispatch]);
     const searchUpdated = (event: React.ChangeEvent<any>) => {
         setFilterTour(event.target.value);
         setFilterList(listTour.filter(myFilter(event.target.value)));
-        //window.scrollTo(0, scriptListElement.current.offsetTop);
-        //.scrollIntoView({ block: "center", behavior: "smooth" })
     };
     const myFilter = (searchTour: string) => ({ name, desc }: TourType): boolean => {
         return (

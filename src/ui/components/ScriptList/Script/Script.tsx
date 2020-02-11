@@ -1,5 +1,5 @@
 import React, { FC, memo, useEffect, useState } from "react";
-import { loadToDb, saveTour} from "../../../actions/selectedTourAction";
+import { loadToDb, saveTour } from "../../../actions/selectedTourAction";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, ButtonGroup, ButtonToolbar, OverlayTrigger, Popover } from "react-bootstrap";
 import { StoreType } from "../../../reducers";
@@ -7,11 +7,8 @@ import cn from "classnames";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getDateClientFormat, TourType } from "../../../util/restClient/requestTour";
-import {
-    setModal,
-    setModalStatus,
-    setModalTour,
-} from "../../../actions/modalAction";
+import { setModal } from "../../../actions/modalAction";
+import { burgerClose } from "../../../actions/mainAction";
 
 export interface ScriptProps {
     tour: TourType;
@@ -25,6 +22,7 @@ const Script: FC<ScriptProps> = ({ tour, style }) => {
     const loadTour = () => {
         if (selectedTourKey != tour.id) {
             dispatch(loadToDb(tour.id));
+            dispatch(burgerClose());
         }
     };
     const putSavedTour = (e: any) => {

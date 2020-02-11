@@ -7,7 +7,7 @@ const CodeJSComponent = () => {
     const tour: TourType = useSelector<StoreType, TourType>(({ SelectedTourState }) => SelectedTourState.tourDB);
     return (
         <div className="code-block">
-            {tour.codeJS.split(/(\/\/!.*)|(\/\*\*\n \*.*\n \*\/)|(\/\/.*)/g).map((el, index) => {
+            {tour.codeJS?.split(/(\/\/!.*)|(\/\*\*\n \*.*\n \*\/)|(\/\/.*)/g).map((el, index) => {
                 if (!el) return null;
                 let name = "comment";
                 if (!(index % 4)) name = "text";

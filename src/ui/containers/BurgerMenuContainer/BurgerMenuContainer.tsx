@@ -2,6 +2,9 @@ import {useCallback, useState} from "react";
 import React from "react";
 import ScriptList from "../../components/ScriptList/ScriptList/ScriptList";
 import { Button } from "react-bootstrap";
+import {useDispatch, useSelector} from "react-redux";
+import {StoreType} from "../../reducers";
+import {burgerClose, burgerOpen} from "../../actions/mainAction";
 /*
 Крестики
 https://instaga.ru/images/close.png
@@ -10,13 +13,13 @@ http://teatrnur.ru/wp-content/themes/twentyfifteen/img/cross.png
 https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Hamburger_icon.svg/1200px-Hamburger_icon.svg.png
 */
 const BurgerMenuContainer = () => {
-    const [menuIsOpen, setMenuIsOpen] = useState(false);
-    // const dispatch = useDispatch();
+    const burgerIsOpen = useSelector<StoreType, boolean>(({ MainState }) => MainState.burgerIsOpen);
+    const dispatch = useDispatch();
     const closeAllMenus = useCallback(() => {
-        setMenuIsOpen(false);
+        dispatch(burgerClose());
     }, []);
     const openBurgerMenu = () => {
-        setMenuIsOpen(true);
+        dispatch(burgerOpen());
     };
     return (
         <div>
@@ -24,8 +27,8 @@ const BurgerMenuContainer = () => {
                 <img src="http://pribory-spb.ru/templates/skin1/images/icon-menu.png" style={{ width: 22 }} />
             </Button>
             <div>
-                {(menuIsOpen && <div className="back-drop" />) || null}
-                <ScriptList onClickScript={closeAllMenus} onClickEsc={closeAllMenus} isOpen={menuIsOpen} />
+                {(burgerIsOpen && <div className="back-drop" />) || null}
+                <ScriptList onClickEsc={closeAllMenus} isOpen={burgerIsOpen} />
             </div>
         </div>
     );
