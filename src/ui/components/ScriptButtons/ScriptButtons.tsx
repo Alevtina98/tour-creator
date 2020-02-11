@@ -11,7 +11,6 @@ import { setModal } from "../../actions/modalAction";
 export interface ScriptButtons {
     tourDB: TourType;
     blocklyReloadEnabled: boolean;
-    tourJS: string;
 }
 
 const ScriptButtons = () => {
@@ -27,16 +26,16 @@ const ScriptButtons = () => {
     // из ModalsScript.tsx
     const onShowCreated = () => {
         const newTour: TourType = getInitData();
-        dispatch(setModal(newTour, "create"));
+        dispatch(setModal({ tour: newTour, status: "create" }));
     };
     const onShowCopy = () => {
         const newName = tourDB.name + " - копия";
-        dispatch(setModal({ ...tourDB, name: newName }, "copy"));
+        dispatch(setModal({ tour: { ...tourDB, name: newName }, status: "copy" }));
     };
     const onShowRun = () => {
         agentActions.runScript(tourDB.codeJS);
         dispatch(setErrorsRunTour([]));
-        dispatch(setModal(tourDB, "show"));
+        dispatch(setModal({ tour: tourDB, status: "show" }));
     };
     /*
       без запуска модальных окон

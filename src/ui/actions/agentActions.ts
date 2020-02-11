@@ -8,7 +8,7 @@ const agentActions = {
     disableSelectMode: function() {
         sendMessage("disableSelectMode");
     },
-    runScript: function(codeJS: string) {
+    runScript: function(codeJS: string | null) {
         sendMessage("runScript", codeJS);
     },
     disableRunScript: function() {

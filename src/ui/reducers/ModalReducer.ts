@@ -1,29 +1,22 @@
 import { createReducer } from "typesafe-actions";
-import { combineReducers } from "redux";
 import { TourType } from "../util/restClient/requestTour";
-import { setModalStatus, setModalTour } from "../actions/modalAction";
+import { clearModal, setModal } from "../actions/modalAction";
 import { setInspectDisabled } from "../actions/inspectAction";
 
-export type StatusType = "delete" | "show" | "create" | "copy" | "edit" | "inspect" | null;
+export type StatusType = "delete" | "show" | "create" | "copy" | "edit" | "inspect";
 
-export interface ModalReducerState {
+export interface ModalState {
     tour: TourType | null;
-    status: StatusType;
+    status: StatusType | null;
 }
+export const initModal: ModalState = {
+    tour: null,
+    status: null
+};
+type Actions = ReturnType<typeof setInspectDisabled | typeof setModal | typeof clearModal>;
 
-type Actions = ReturnType<typeof setInspectDisabled | typeof setModalTour | typeof setModalStatus>;
-
-const tourModalReducer = createReducer<TourType | null, Actions>(null)
-    .handleAction(setModalTour, (state, action) => action.payload)
-    .handleAction(setInspectDisabled, () => null);
-
-const statusModalReducer = createReducer<StatusType, Actions>(null)
-    .handleAction(setModalStatus, (state, action) => action.payload)
-    .handleAction(setInspectDisabled, () => null);
-
-const ModalReducer = combineReducers<ModalReducerState>({
-    tour: tourModalReducer,
-    status: statusModalReducer
-});
+const ModalReducer = createReducer<ModalState, Actions>(initModal)
+    .handleAction(setModal, (state, action) => action.payload)
+    .handleAction(clearModal || setInspectDisabled, () => initModal);
 
 export default ModalReducer;

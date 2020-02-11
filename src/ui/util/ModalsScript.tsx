@@ -1,22 +1,17 @@
-import { TourType } from "./restClient/requestTour";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../reducers";
-import React, { memo, ReactElement } from "react";
+import React, { memo } from "react";
 import { createCopyTour, createNewTour, delToDb, saveTour } from "../actions/selectedTourAction";
 import ModalInputsComponent from "../components/ModalTemplates/ModalInputsComponent";
 import ModalMain from "../components/ModalTemplates/ModalMain";
 import agentActions from "../actions/agentActions";
 import ErrorsRunScript from "../components/ModalTemplates/ErrorsRunScript";
 import { setInspectDisabled } from "../actions/inspectAction";
-import { StatusType } from "../reducers/ModalReducer";
+import { ModalState } from "../reducers/ModalReducer";
 
-export interface ModelsScriptProps {
-    tour: TourType | null;
-    status: StatusType;
-}
 const ModalsScript = () => {
     const dispatch = useDispatch();
-    const { tour, status } = useSelector<StoreType, ModelsScriptProps>(({ ModalState }) => ({
+    const { tour, status } = useSelector<StoreType, ModalState>(({ ModalState }) => ({
         tour: ModalState.tour,
         status: ModalState.status
     }));

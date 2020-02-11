@@ -24,7 +24,7 @@ const EditorContainer = () => {
     );
     const onInspectClickHandler = () => {
         dispatch(setInspectEnabled());
-        dispatch(setModal(tour, "inspect"));
+        dispatch(setModal({ tour: tour, status: "inspect" }));
         agentActions.enableSelectMode();
     };
     return (

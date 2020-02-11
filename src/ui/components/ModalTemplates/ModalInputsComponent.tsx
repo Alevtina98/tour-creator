@@ -1,15 +1,13 @@
-import React, { FC, memo, useEffect } from "react";
+import React, { FC, memo } from "react";
 import { FormControl, InputGroup } from "react-bootstrap";
 import { useControlledInputValue } from "../../hooks/useControleInputValue";
-import { TourType } from "../../util/restClient/requestTour";
 import ModalContainer from "./ModalMain";
 import { useDispatch, useSelector } from "react-redux";
-import { clearModal, setModalTour } from "../../actions/modalAction";
 import { StoreType } from "../../reducers";
+import { ModalState } from "../../reducers/ModalReducer";
+import { setModal } from "../../actions/modalAction";
+import { TourType } from "../../util/restClient/requestTour";
 
-export interface ModelsScriptProps {
-    tour: TourType | null;
-}
 interface ModalInputsComponentProps {
     modalName: string;
     onApply?: () => void;
@@ -26,14 +24,16 @@ const ModalInputsComponent: FC<ModalInputsComponentProps> = ({
     closeName
 }) => {
     const dispatch = useDispatch();
-    const { tour } = useSelector<StoreType, ModelsScriptProps>(({ ModalState }) => ({
-        tour: ModalState.tour
+    const { tour, status } = useSelector<StoreType, ModalState>(({ ModalState }) => ({
+        tour: ModalState.tour,
+        status: ModalState.status
     }));
     const { setValue: setNameValue, ...name } = useControlledInputValue(tour ? tour.name : "");
     const { setValue: setDescValue, ...desc } = useControlledInputValue(tour ? tour.desc : "");
     const onApplyModalInputs = () => {
         if (tour) {
-            dispatch(setModalTour({ ...tour, name: name.value, desc: desc.value }));
+            const editTour: TourType = { ...tour, name: name.value, desc: desc.value };
+            dispatch(setModal({ tour: editTour, status: status }));
             onApply();
         }
     };

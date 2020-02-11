@@ -1,5 +1,5 @@
-import React, { FC, memo, useEffect, useState } from "react";
-import { loadToDb, saveTour } from "../../../actions/selectedTourAction";
+import React, { FC, memo } from "react";
+import { loadToDb } from "../../../actions/selectedTourAction";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, ButtonGroup, ButtonToolbar, OverlayTrigger, Popover } from "react-bootstrap";
 import { StoreType } from "../../../reducers";
@@ -28,12 +28,12 @@ const Script: FC<ScriptProps> = ({ tour, style }) => {
     const putSavedTour = (e: any) => {
         e.stopPropagation();
         e.preventDefault();
-        dispatch(setModal(tour, "edit"));
+        dispatch(setModal({ tour: tour, status: "edit" }));
     };
     const putDeletedTourId = (e: any) => {
         e.stopPropagation();
         e.preventDefault();
-        dispatch(setModal(tour, "delete"));
+        dispatch(setModal({ tour: tour, status: "delete" }));
     };
     return (
         <div style={style}>
