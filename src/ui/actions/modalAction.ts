@@ -1,5 +1,5 @@
 import { createStandardAction } from "typesafe-actions";
-import { ModalReducerState } from "../reducers/ModalReducer";
+import { ModalState } from "../reducers/ModalReducer";
 
-export const setModal = createStandardAction("SET_MODAL")<ModalReducerState>();
+export const setModal = createStandardAction("SET_MODAL")<ModalState>();
 export const clearModal = createStandardAction("CLEAR_MODAL")();

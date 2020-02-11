@@ -2,7 +2,7 @@ import { combineReducers } from "redux";
 import MainState, { MainReducerState } from "./MainReducer";
 import InspectState, { InspectReducerState } from "./InspectReducer";
 import SelectedTourState, { SelectedTourReducerState } from "./SelectedTourReducer";
-import ModalState, { ModalReducerState } from "./ModalReducer";
+import ModalState, { ModalState as ModalReducerState} from "./ModalReducer";
 import { reducer as notifications, NotificationsState } from "react-notification-system-redux";
 
 export interface StoreType {

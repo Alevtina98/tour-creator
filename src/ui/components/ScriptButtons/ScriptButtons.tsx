@@ -21,15 +21,14 @@ const ScriptButtons = () => {
     );
 
     /*
-     c запуском модальных окон
+     c запуском модальных окон из ModalsScript.tsx
    */
-    // из ModalsScript.tsx
     const onShowCreated = () => {
         const newTour: TourType = getInitData();
         dispatch(setModal({ tour: newTour, status: "create" }));
     };
     const onShowCopy = () => {
-        const newName = tourDB.name + " - копия";
+        const newName = tourDB.name + "-копия";
         dispatch(setModal({ tour: { ...tourDB, name: newName }, status: "copy" }));
     };
     const onShowRun = () => {
