@@ -17,6 +17,7 @@ type Actions = ReturnType<typeof setInspectDisabled | typeof setModal | typeof c
 
 const ModalReducer = createReducer<ModalState, Actions>(initModal)
     .handleAction(setModal, (state, action) => action.payload)
-    .handleAction(clearModal || setInspectDisabled, () => initModal);
+    .handleAction(clearModal, () => initModal)
+    .handleAction(setInspectDisabled, () => initModal);
 
 export default ModalReducer;

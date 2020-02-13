@@ -2,10 +2,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../reducers";
 import React, { memo } from "react";
 import { createCopyTour, createNewTour, delToDb, saveTour } from "../actions/selectedTourAction";
-import ModalInputsComponent from "../components/ModalTemplates/ModalInputsComponent";
-import ModalMain from "../components/ModalTemplates/ModalMain";
+import ModalInputsComponent from "./ModalTemplates/ModalInputsComponent";
+import ModalMain from "./ModalTemplates/ModalMain";
 import agentActions from "../actions/agentActions";
-import ErrorsRunScript from "../components/ModalTemplates/ErrorsRunScript";
+import ErrorsRunScript from "./ModalTemplates/ErrorsRunScript";
 import { setInspectDisabled } from "../actions/inspectAction";
 import { ModalState } from "../reducers/ModalReducer";
 
@@ -32,7 +32,7 @@ const ModalsScript = () => {
         dispatch(setInspectDisabled());
         agentActions.disableSelectMode();
     };
-    const closeRun = () => {
+    const endRun = () => {
         agentActions.disableRunScript();
     };
     const components = {
@@ -51,12 +51,12 @@ const ModalsScript = () => {
             </ModalMain>
         ),
         show: (
-            <ModalMain modalName="Воспроизведение тура" onClose={closeRun} closeName="Завершить">
+            <ModalMain modalName="Воспроизведение тура" onApply={endRun} applyName="Завершить" hideClose={false}>
                 <ErrorsRunScript errors={errorsRunTour} />
             </ModalMain>
         ),
         inspect: (
-            <ModalMain modalName="Определение селектора" onClose={closeInspect} closeName="Отмена">
+            <ModalMain modalName="Определение селектора" onClose={closeInspect} hideApply={false}>
                 Выберите элемент на основной странице
             </ModalMain>
         )

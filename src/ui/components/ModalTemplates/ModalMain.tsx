@@ -8,6 +8,7 @@ export interface ModalProps {
     modalName: string;
     children: any;
     hideApply?: boolean;
+    hideClose?: boolean;
     onClose?: () => void;
     onApply?: () => void;
     showCancel?: boolean;
@@ -19,6 +20,7 @@ const ModalMain: FC<ModalProps> = ({
     show = true,
     children,
     hideApply = true,
+    hideClose = true,
     modalName,
     onApply = () => {},
     onClose = () => {},
@@ -39,10 +41,11 @@ const ModalMain: FC<ModalProps> = ({
             <Modal.Header closeButton>{modalName}</Modal.Header>
             <Modal.Body>{children}</Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" data-testid="cancelTestId" onClick={onCloseModel}>
-                    {closeName}
-                </Button>
-
+                {hideClose && (
+                    <Button variant="secondary" data-testid="cancelTestId" onClick={onCloseModel}>
+                        {closeName}
+                    </Button>
+                )}
                 {hideApply && (
                     <Button variant="primary" data-testid="okTestId" onClick={onApplyModel}>
                         {applyName}

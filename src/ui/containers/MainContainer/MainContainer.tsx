@@ -4,7 +4,7 @@ import AgentHandler from "../../AgentHandler";
 import PanelContainer from "../PanelContainer/PanelContainer";
 import TourEditorContainer from "../EditorContainer/EditorContainer";
 import "../../blocklyDefinitions";
-import ModelsScript from "../../util/ModalsScript";
+import ModelsScript from "../../components/ModalsScript";
 import { StoreType } from "../../reducers";
 import { TourType } from "../../util/restClient/requestTour";
 import Notifications from "react-notification-system-redux";
