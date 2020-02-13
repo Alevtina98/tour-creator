@@ -1,7 +1,6 @@
 import DescriptionComponent from "../../ui/components/DescriptionComponent";
 import * as React from "react";
 import ReactDOM from "react-dom";
-import { enablePageScroll } from "scroll-lock";
 import sendMessage from "../util/sendMessage";
 
 export interface StepType {
@@ -59,11 +58,8 @@ export default class TourHelper {
         TourHelper.startStep();
     };
     public static endTour = () => {
-        enablePageScroll();
-        window.removeEventListener("click", TourHelper.clickHandler);
-        window.removeEventListener("click", TourHelper.clickOnHandler);
-        TourHelper.initState();
         console.log("end tour");
+        TourHelper.initState();
     };
     public static blackout = (element: string) => {
         TourHelper.steps[TourHelper.stepCount].blackout.push(() => {
@@ -107,9 +103,15 @@ export default class TourHelper {
     };
 
     private static startStep = () => {
+        TourHelper.setBlackoutAndDescriptionElements();
+        TourHelper.showElements();
+        TourHelper.setActionWaiting();
+    };
+    private static setBlackoutAndDescriptionElements = () => {
         TourHelper.steps[TourHelper.currentStep].blackout.forEach(fn => fn());
         TourHelper.steps[TourHelper.currentStep].description.forEach(fn => fn());
-        TourHelper.showElements();
+    };
+    private static setActionWaiting = () => {
         TourHelper.steps[TourHelper.currentStep].condition.forEach(fn => fn());
     };
     private static showElements = () => {
@@ -117,10 +119,9 @@ export default class TourHelper {
         TourHelper.descrElement[0]?.element?.scrollIntoView({ block: "center", behavior: "smooth" });
         TourHelper.blackoutWindow();
         TourHelper.descrElement.forEach(el => TourHelper.describeElement(el));
-        window.addEventListener("resize", TourHelper.blackoutWindow);
-        console.log("descrElement", TourHelper.descrElement);
     };
     private static blackoutWindow = () => {
+        window.addEventListener("resize", TourHelper.blackoutWindow);
         TourHelper.clearRectElement();
         TourHelper.setParamWindow();
         TourHelper.blackElement.forEach(el => el.coordinates = TourHelper.getCoordinateElement(el.element));
@@ -381,6 +382,8 @@ export default class TourHelper {
         return coordinates;
     };
     private static initState = () => {
+        window.removeEventListener("click", TourHelper.clickHandler);
+        window.removeEventListener("click", TourHelper.clickOnHandler);
         TourHelper.clearCreatedElement();
         TourHelper.blackElement = [];
         TourHelper.descrElement = [];
