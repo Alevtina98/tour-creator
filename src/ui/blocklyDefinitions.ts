@@ -1,6 +1,4 @@
 import TourHelper from "../agent/TourHelper/utils";
-import { argumentPlaceholder } from "@babel/types";
-
 const helperClass = TourHelper.name;
 
 Blockly.Blocks["dark"] = {
@@ -124,7 +122,7 @@ Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT = "";
 Blockly.JavaScript["comment"] = function(block: any) {
     const arg: string = Blockly.JavaScript.valueToCode(block, "text", Blockly.JavaScript.ORDER_NONE);
     const code: string =
-        "/**\n" + Blockly.JavaScript.prefixLines(arg.substring(1, arg.length - 1) + "\n", " * ") + " */\n";
+        "/**\n" + Blockly.JavaScript.prefixLines(arg.substring(1, arg.length - 1) + "\n", "*") + "*/\n";
     return code;
 };
 Blockly.JavaScript["long_comment"] = function(block: any) {
