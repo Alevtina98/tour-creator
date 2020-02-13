@@ -15,13 +15,19 @@ export interface DescrElementType {
 }
 export interface BlackElementType {
     element: Element | null;
-    coordinates: ParamType;
+    coordinates: ElementParamType;
 }
-export interface ParamType {
+export interface ElementParamType {
     top: number;
     left: number;
     width: number;
     height: number;
+}
+export interface HighlightAreaType {
+    minX: number;
+    minY: number;
+    maxX: number;
+    maxY: number;
 }
 export default class TourHelper {
     /**
@@ -43,67 +49,43 @@ export default class TourHelper {
     static descrElement: DescrElementType[] = [];
     static conditionElement: Element | null = null;
     static rectElement: Element[] = [];
-    static rectElementParam: ParamType[] = [];
+    static rectElementParam: ElementParamType[] = [];
     static popperElement: Element[] = [];
     static windowWidth: number = 0;
     static windowHeight: number = 0;
 
     public static startTour = () => {
         console.log("startTour");
-        // disablePageScroll();
         TourHelper.startStep();
     };
     public static endTour = () => {
         enablePageScroll();
         window.removeEventListener("click", TourHelper.clickHandler);
         window.removeEventListener("click", TourHelper.clickOnHandler);
-        TourHelper.clearAllElement();
-        TourHelper.blackElement = [];
-        TourHelper.descrElement = [];
-        TourHelper.conditionElement = null;
-        TourHelper.currentStep = 0;
-        TourHelper.stepCount = 0;
-        TourHelper.steps = [
-            {
-                blackout: [],
-                description: [],
-                condition: []
-            }
-        ];
+        TourHelper.initState();
         console.log("end tour");
     };
     public static blackout = (element: string) => {
-        //console.log("blackout", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
         TourHelper.steps[TourHelper.stepCount].blackout.push(() => {
             TourHelper.setBlackElement(element);
             const el = TourHelper.blackElement[TourHelper.blackElement.length - 1].element;
             if (!el) {
                 return;
             }
-            //console.log("blackout ", el);
-            //TourHelper.drawFourRect();
         });
-
-        // console.log(TourHelper.steps)
     };
     public static description = (element: string, desc: string) => {
-        //console.log("description", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
         TourHelper.steps[TourHelper.stepCount].description.push(() => {
             TourHelper.setDescrElement(element, desc);
             const el = TourHelper.descrElement[TourHelper.descrElement.length - 1].element;
             if (!el) {
                 return;
             }
-            //console.log("description ", el, desc);
         });
     };
     public static blocklyStep = (condition: Function) => {
-        /*if (condition === Function) condition();
-        else console.log(`ERROR condition type. It must be function "click" or "clickOn"`);*/
         condition();
-        // console.log("STEP", TourHelper.stepCount, TourHelper.steps[TourHelper.stepCount]);
         TourHelper.stepCount += 1;
-        console.log("blocklyStep");
         if (!TourHelper.steps[TourHelper.stepCount]) {
             TourHelper.steps[TourHelper.stepCount] = {
                 blackout: [],
@@ -125,8 +107,6 @@ export default class TourHelper {
     };
 
     private static startStep = () => {
-        //console.log("startStep >> ", TourHelper.currentStep, TourHelper.steps[TourHelper.currentStep]);
-        TourHelper.clearAllElement();
         TourHelper.steps[TourHelper.currentStep].blackout.forEach(fn => fn());
         TourHelper.steps[TourHelper.currentStep].description.forEach(fn => fn());
         TourHelper.showElements();
@@ -135,37 +115,52 @@ export default class TourHelper {
     private static showElements = () => {
         TourHelper.blackElement[0]?.element?.scrollIntoView({ block: "center", behavior: "smooth" });
         TourHelper.descrElement[0]?.element?.scrollIntoView({ block: "center", behavior: "smooth" });
-        window.addEventListener("resize", TourHelper.blackoutWindow);
         TourHelper.blackoutWindow();
         TourHelper.descrElement.forEach(el => TourHelper.describeElement(el));
+        window.addEventListener("resize", TourHelper.blackoutWindow);
         console.log("descrElement", TourHelper.descrElement);
     };
     private static blackoutWindow = () => {
         TourHelper.clearRectElement();
         TourHelper.setParamWindow();
         TourHelper.blackElement.forEach(el => el.coordinates = TourHelper.getCoordinateElement(el.element));
-        let minX: number = TourHelper.windowHeight,
-            minY: number = TourHelper.windowWidth,
-            maxX = 0,
-            maxY = 0;
+        const area: HighlightAreaType = TourHelper.getArea();
+        TourHelper.addRectsIn(area);
+        TourHelper.addRectAround(area);
+        TourHelper.rectElementParam.forEach(el => TourHelper.newRect(el.top, el.left, el.width, el.height));
+    };
+    private static getArea = () => {
+        const area: HighlightAreaType = {
+            minX: TourHelper.windowHeight,
+            minY: TourHelper.windowWidth,
+            maxX: 0,
+            maxY: 0
+        };
         TourHelper.blackElement.forEach(el => {
             const minXElement: number = el.coordinates?.top,
                 minYElement: number = el.coordinates?.left,
                 maxXElement: number = minXElement + el.coordinates?.height,
                 maxYElement: number = minYElement + el.coordinates?.width;
-            if (minXElement < minX) {
-                minX = minXElement;
+            if (minXElement < area.minX) {
+                area.minX = minXElement;
             }
-            if (maxXElement > maxX) {
-                maxX = maxXElement;
+            if (maxXElement > area.maxX) {
+                area.maxX = maxXElement;
             }
-            if (minYElement < minY) {
-                minY = minYElement;
+            if (minYElement < area.minY) {
+                area.minY = minYElement;
             }
-            if (maxYElement > maxY) {
-                maxY = maxYElement;
+            if (maxYElement > area.maxY) {
+                area.maxY = maxYElement;
             }
         });
+        return area;
+    }
+    private static addRectsIn = (area: HighlightAreaType) => {
+        const minX: number = area.minX;
+        const maxX: number = area.maxX;
+        const minY: number = area.minY;
+        const maxY: number = area.maxY;
         const w: boolean[][] = Array(maxX + 1).fill(null);
         for (let i = minX; i < w.length; i++) {
             w[i] = Array(maxY).fill(true);
@@ -214,23 +209,12 @@ export default class TourHelper {
                 }
             }
         }
-        const el: BlackElementType = {
-            element: null,
-            coordinates: {
-                top: minX,
-                left: minY,
-                height: maxX - minX,
-                width: maxY - minY
-            }
-        };
-        TourHelper.addFourRect(el);
-        TourHelper.rectElementParam.forEach(el => TourHelper.newRect(el.top, el.left, el.width, el.height));
-    };
-    private static addFourRect = (el: BlackElementType) => {
-        const left: number = el.coordinates.left;
-        const top: number = el.coordinates.top;
-        const height: number = el.coordinates.height;
-        const width: number = el.coordinates.width;
+    }
+    private static addRectAround = (area: HighlightAreaType) => {
+        const left: number = area.minY;
+        const top: number = area.minX;
+        const height: number = area.maxX - area.minX;
+        const width: number = area.maxY - area.minY;
         TourHelper.rectElementParam.push({
             top: 0,
             left: 0,
@@ -299,12 +283,12 @@ export default class TourHelper {
         TourHelper.popperElement.push(descrNode);
     };
     private static step = () => {
-        TourHelper.clearAllElement();
         TourHelper.blackElement = [];
-        TourHelper.tElementIndex = -1;
+        TourHelper.descrElement = [];
         TourHelper.conditionElement = null;
         if (TourHelper.currentStep == TourHelper.steps.length) return;
         TourHelper.currentStep += 1;
+        TourHelper.clearCreatedElement();
         TourHelper.startStep();
     };
     private static clickHandler = () => {
@@ -329,13 +313,10 @@ export default class TourHelper {
         TourHelper.popperElement.map(el => el.parentNode!.removeChild(el));
         TourHelper.popperElement = [];
     };
-    private static clearAllElement = () => {
+    private static clearCreatedElement = () => {
         window.removeEventListener("resize", TourHelper.blackoutWindow);
         TourHelper.clearRectElement();
         TourHelper.clearPopperElement();
-
-        TourHelper.blackElement = [];
-        TourHelper.descrElement = [];
     };
     private static setBlackElement = (element: string) => {
         const el = document.querySelector(element);
@@ -391,7 +372,7 @@ export default class TourHelper {
     private static getCoordinateElement = (element: Element) => {
         const el = element;
         const bounds = el.getBoundingClientRect();
-        const coordinates: ParamType = {
+        const coordinates: ElementParamType = {
             left: parseInt(String(bounds.x + (window.pageXOffset || document.documentElement.scrollLeft)), 10),
             top: parseInt(String(bounds.y + (window.pageYOffset || document.documentElement.scrollTop)), 10),
             height: parseInt(String(bounds.height), 10),
@@ -399,6 +380,23 @@ export default class TourHelper {
         };
         return coordinates;
     };
+    private static initState = () => {
+        TourHelper.clearCreatedElement();
+        TourHelper.blackElement = [];
+        TourHelper.descrElement = [];
+        TourHelper.conditionElement = null;
+        TourHelper.currentStep = 0;
+        TourHelper.stepCount = 0;
+        TourHelper.steps = [
+            {
+                blackout: [],
+                description: [],
+                condition: []
+            }
+        ];
+        TourHelper.windowWidth = 0;
+        TourHelper.windowHeight = 0;
+    }
 }
 
 (window as any).TourHelper = TourHelper;
