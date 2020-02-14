@@ -24,7 +24,25 @@ const ViewerInterface: FC<ViewerInterfaceState> = ({ setStep, currentStep, total
     });
     console.log(paginationModel);
     return (
-        <div style={{ display: "flex", position: "fixed", top: 100, left: 0, zIndex: 11000001, color: "white" }}>
+        <div style={{ display: "flex", position: "fixed", bottom: 20, left: 0, zIndex: 11000001, color: "white" }}>
+            <Button
+                onClick={event => {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    currentStep > 0 ? setStep(0) : null;
+                }}
+            >
+                Начало
+            </Button>
+            <Button
+                onClick={event => {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    currentStep > 0 ? setStep(currentStep - 1) : null;
+                }}
+            >
+                Назад
+            </Button>
             {paginationModel.map(page => {
                 if (page.type === ITEM_TYPES.PAGE) {
                     return (
@@ -41,6 +59,24 @@ const ViewerInterface: FC<ViewerInterfaceState> = ({ setStep, currentStep, total
                 }
                 return null;
             })}
+            <Button
+                onClick={event => {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    currentStep < totalSteps - 1 ? setStep(currentStep + 1) : null;
+                }}
+            >
+                Вперед
+            </Button>
+            <Button
+                onClick={event => {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    currentStep < totalSteps - 1 ? setStep(totalSteps - 1) : null;
+                }}
+            >
+                Конец
+            </Button>
         </div>
     );
 };

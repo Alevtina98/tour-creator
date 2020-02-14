@@ -3,7 +3,7 @@ import { setCurrentSelector, setInspectDisabled, setInspectEnabled } from "./act
 import injectDebugger from "./injectDebugger";
 import port from "./port";
 import { Dispatch } from "redux";
-import {addErrorRunTour} from "./actions/selectedTourAction";
+import {addErrorRunTour, setErrorsRunTour} from "./actions/selectedTourAction";
 
 /*
  * agent -> content-script.js -> background.js -> **dev tools**
@@ -35,6 +35,10 @@ class AgentHandler {
         newError: (error: string) => {
             this.dispatch(addErrorRunTour(error));
             console.log("new error >> ", error);
+        },
+        clearError: () => {
+            console.log("clear error ");
+            this.dispatch(setErrorsRunTour([]));
         }
     };
 

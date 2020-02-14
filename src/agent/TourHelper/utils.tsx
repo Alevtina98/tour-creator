@@ -101,7 +101,7 @@ export default class TourHelper {
     public static clickOn = (element: string) => {
         TourHelper.steps[TourHelper.stepCount].condition.push(() => {
             TourHelper.setConditionElement(element);
-            window.addEventListener("click", TourHelper.clickOnHandler);
+            window.addEventListener("click", TourHelper.clickOnHandler, true);
         });
     };
 
@@ -333,15 +333,17 @@ export default class TourHelper {
         TourHelper.startStep();
     };
     private static clickHandler = () => {
-        window.removeEventListener("click", TourHelper.clickHandler);
+        window.removeEventListener("click", TourHelper.clickHandler, true);
         TourHelper.currentStep += 1;
         TourHelper.step();
     };
     private static clickOnHandler = (e: { target: any }) => {
         const target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
         const element = TourHelper.conditionElement;
+        console.log("clickOnHandler >> ", element);
+        debugger
         if (element === target) {
-            window.removeEventListener("click", TourHelper.clickOnHandler);
+            window.removeEventListener("click", TourHelper.clickOnHandler, true);
             TourHelper.currentStep += 1;
             TourHelper.step();
             TourHelper.conditionElement = null;
@@ -371,9 +373,11 @@ export default class TourHelper {
         const el = document.querySelector(element);
         if (!el) {
             console.log("ERROR: selector not found", TourHelper.blackElement);
+            const numberStep: number = TourHelper.currentStep + 1;
             const error: string =
-                "blackouting selector " + element + " is not found on step " + TourHelper.currentStep + 1;
+                "blackouting selector " + element + " is not found on step " + numberStep;
             sendMessage("newError", error);
+            TourHelper.endTour();
             return;
         }
         const blackEl: BlackElementType = {
@@ -390,6 +394,7 @@ export default class TourHelper {
             const error: string =
                 "descriptoning selector " + element + " is not found on step " + TourHelper.currentStep + 1;
             sendMessage("newError", error);
+            TourHelper.endTour();
             return;
         }
         TourHelper.descrElement.push({ element: el, description: description });
@@ -402,6 +407,7 @@ export default class TourHelper {
             const error: string =
                 "selector " + element + " condition element is not found on step " + TourHelper.currentStep + 1;
             sendMessage("newError", error);
+            TourHelper.endTour();
             return;
         }
         TourHelper.conditionElement = el;
@@ -426,8 +432,8 @@ export default class TourHelper {
         return coordinates;
     };
     private static initState = () => {
-        window.removeEventListener("click", TourHelper.clickHandler);
-        window.removeEventListener("click", TourHelper.clickOnHandler);
+        window.removeEventListener("click", TourHelper.clickHandler, true);
+        window.removeEventListener("click", TourHelper.clickOnHandler, true);
         TourHelper.clearCreatedElement();
         TourHelper.blackElement = [];
         TourHelper.descrElement = [];
