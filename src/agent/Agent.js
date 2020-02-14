@@ -8,7 +8,6 @@ const _ = require("lodash");
 const GAME_OBJECT_ID = "game_object";
 
 export const getCodeEval = function(code) {
-
     const script = `${code.replace(`"`, "")};`;
     return `eval("${script.split(/\/\/.*\n/g).join("\n")}")`;
 };
@@ -36,7 +35,7 @@ class Agent {
             },
 
             disableSelectMode: () => {
-                this.removeSelectClickHandler();
+                this.clearAfterSelectMode();
             },
             runScript: code => {
                 console.log("begin tour");
@@ -82,66 +81,85 @@ class Agent {
     }
     //включен режим инспектора
     attachSelectClickHandler() {
+        let savedCallback;
+        let target;
         if (this._findTargetCb) {
             // already enabled
             return;
         }
-
-        //обрабатываем КЛИК
+        this._highlightTargetCb = e => {
+            target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
+            target.style.outlineStyle = "solid";
+            if (target.onclick) {
+                console.warn("123");
+                savedCallback = target.onclick;
+                target.onclick = () => {};
+            }
+        }; //обрабатываем НАВЕДЕНИЕ
+        this._outTargetCb = e => {
+            target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
+            target.style.outlineStyle = "none";
+            if (target.onclick) {
+                console.warn("вернули");
+                target.onclick = savedCallback;
+            }
+            target = null;
+        }; //обрабатываем вывод курсора из элемента
+        this._closeOnEsc = event => {
+            if (event.key == "Escape") {
+                event.stopPropagation();
+                event.preventDefault();
+                this.clearAfterSelectMode();
+                sendMessage("disabledSelectMode");
+            }
+        };
         this._findTargetCb = e => {
-            //event
             e.stopPropagation(); //Прекращает дальнейшую передачу текущего события
             e.preventDefault(); //запрещает исполнение метода по умолчанию, предназначенного для данного события
-            const target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
+            target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
             const str = Selector(target);
-            //console.log("str >> ", str);
-            target.style.outlineStyle = "none";
             this.subscribedEntityId = str; //matching.__inspect_uuid__;
-
-            this.removeSelectClickHandler();
+            this.clearAfterSelectMode();
+            sendMessage("disabledSelectMode");
             this.reportEntities();
         };
-        //обрабатываем НАВЕДЕНИЕ
-        this._highlightTargetCb = e => {
-            //event
-            const target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
-            // target.style.backgroundColor = "#ffffff";
-            target.style.outlineStyle = "solid";
+        this.clearAfterSelectMode = () => {
+            if (target) {
+                target.style.outlineStyle = "none";
+                if (target.onclick) {
+                    console.warn("вернули обработчик");
+                    target.onclick = savedCallback;
+                }
+                target = null;
+            }
+            savedCallback = null;
+            this.removeSelectClickHandler();
         };
-        //обрабатываем вывод курсора из элемента
-        this._outTargetCb = e => {
-            //event
-            const target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
-            // target.style.backgroundColor = "#ffffff";
-            target.style.outlineStyle = "none";
-        };
-        this.window.addEventListener("click", this._findTargetCb);
+        //sendMessage("enabledSelectMode");
+        this.addSelectClickHandler();
+    }
+
+    addSelectClickHandler() {
         this.window.addEventListener("mouseover", this._highlightTargetCb);
         this.window.addEventListener("mouseout", this._outTargetCb);
+        this.window.addEventListener("keypress", this._closeOnEsc, true);
+        this.window.addEventListener("click", this._findTargetCb, true);
         this.getClickElements().forEach(el => {
             el.addEventListener("click", this._findTargetCb);
         });
-        // this.canvas.style.cursor = 'pointer';
-        //Window.setCursor("wait");
         this.window.document.body.classList.add("__wait-for-select");
-
-        // window.applicationCache;
-
-        sendMessage("enabledSelectMode");
     }
-
     removeSelectClickHandler() {
-        this.window.removeEventListener("click", this._findTargetCb);
         this.window.removeEventListener("mouseover", this._highlightTargetCb);
         this.window.removeEventListener("mouseout", this._outTargetCb);
+        this.window.removeEventListener("keydown", this._closeOnEsc, true);
+        this.window.removeEventListener("click", this._findTargetCb, true);
         this.getClickElements().forEach(el => {
             el.removeEventListener("click", this._findTargetCb);
         });
         delete this._findTargetCb;
         delete this._highlightTargetCb;
         this.window.document.body.classList.remove("__wait-for-select");
-
-        sendMessage("disabledSelectMode");
     }
 
     handleMessage(message) {
