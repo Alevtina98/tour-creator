@@ -37,7 +37,7 @@ const ModalMain: FC<ModalProps> = ({
         onCloseModel();
     };
     return (
-        <Modal show={show} onHide={onCloseModel}>
+        <Modal show={show} onHide={onCloseModel} backdrop="static">
             <Modal.Header closeButton>{modalName}</Modal.Header>
             <Modal.Body>{children}</Modal.Body>
             <Modal.Footer>

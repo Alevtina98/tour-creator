@@ -51,7 +51,7 @@ const ModalsScript = () => {
             </ModalMain>
         ),
         show: (
-            <ModalMain modalName="Воспроизведение тура" onApply={endRun} applyName="Завершить" hideClose={false}>
+            <ModalMain modalName="Воспроизведение тура" onClose={endRun} closeName="Завершить" hideApply={false}>
                 <ErrorsRunScript errors={errorsRunTour} />
             </ModalMain>
         ),

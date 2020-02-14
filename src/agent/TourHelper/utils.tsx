@@ -2,6 +2,7 @@ import DescriptionComponent from "../../ui/components/DescriptionComponent";
 import * as React from "react";
 import ReactDOM from "react-dom";
 import sendMessage from "../util/sendMessage";
+import ViewerInterface from "./__tests__/ViewerInterface";
 
 export interface StepType {
     blackout: Function[];
@@ -52,6 +53,7 @@ export default class TourHelper {
     static popperElement: Element[] = [];
     static windowWidth: number = 0;
     static windowHeight: number = 0;
+    static viewerInterfaceElement: Element | null = null;
 
     public static startTour = () => {
         console.log("startTour");
@@ -95,6 +97,7 @@ export default class TourHelper {
             window.addEventListener("click", TourHelper.clickHandler);
         });
     };
+
     public static clickOn = (element: string) => {
         TourHelper.steps[TourHelper.stepCount].condition.push(() => {
             TourHelper.setConditionElement(element);
@@ -107,29 +110,49 @@ export default class TourHelper {
         TourHelper.showElements();
         TourHelper.setActionWaiting();
     };
+
     private static setBlackoutAndDescriptionElements = () => {
         TourHelper.steps[TourHelper.currentStep].blackout.forEach(fn => fn());
         TourHelper.steps[TourHelper.currentStep].description.forEach(fn => fn());
     };
+
     private static setActionWaiting = () => {
         TourHelper.steps[TourHelper.currentStep].condition.forEach(fn => fn());
     };
+
     private static showElements = () => {
         TourHelper.blackElement[0]?.element?.scrollIntoView({ block: "center", behavior: "smooth" });
         TourHelper.descrElement[0]?.element?.scrollIntoView({ block: "center", behavior: "smooth" });
         TourHelper.blackoutWindow();
         TourHelper.descrElement.forEach(el => TourHelper.describeElement(el));
     };
+
     private static blackoutWindow = () => {
         window.addEventListener("resize", TourHelper.blackoutWindow);
         TourHelper.clearRectElement();
         TourHelper.setParamWindow();
-        TourHelper.blackElement.forEach(el => el.coordinates = TourHelper.getCoordinateElement(el.element));
-        const area: HighlightAreaType = TourHelper.getArea();
-        TourHelper.addRectsIn(area);
+        TourHelper.blackElement.forEach(el => (el.coordinates = TourHelper.getCoordinateElement(el.element)));
+
+        if (!TourHelper.blackElement.length) {
+            TourHelper.showViewerInterface();
+            return;
+        }
+        const coordinates = TourHelper.blackElement[0].coordinates;
+        let area = {
+            minX: coordinates.top,
+            minY: coordinates.left,
+            maxX: coordinates.top + coordinates.height,
+            maxY: coordinates.left + coordinates.width
+        };
+        if (TourHelper.blackElement.length > 1) {
+            area = TourHelper.getArea();
+            TourHelper.addRectsIn(area);
+        }
         TourHelper.addRectAround(area);
         TourHelper.rectElementParam.forEach(el => TourHelper.newRect(el.top, el.left, el.width, el.height));
+        TourHelper.showViewerInterface();
     };
+
     private static getArea = () => {
         const area: HighlightAreaType = {
             minX: TourHelper.windowHeight,
@@ -156,12 +179,8 @@ export default class TourHelper {
             }
         });
         return area;
-    }
-    private static addRectsIn = (area: HighlightAreaType) => {
-        const minX: number = area.minX;
-        const maxX: number = area.maxX;
-        const minY: number = area.minY;
-        const maxY: number = area.maxY;
+    };
+    private static addRectsIn = ({ minX, maxX, maxY, minY }: HighlightAreaType) => {
         const w: boolean[][] = Array(maxX + 1).fill(null);
         for (let i = minX; i < w.length; i++) {
             w[i] = Array(maxY).fill(true);
@@ -210,7 +229,7 @@ export default class TourHelper {
                 }
             }
         }
-    }
+    };
     private static addRectAround = (area: HighlightAreaType) => {
         const left: number = area.minY;
         const top: number = area.minX;
@@ -240,6 +259,8 @@ export default class TourHelper {
             width: width,
             height: TourHelper.windowHeight - height - top
         });
+        console.log(TourHelper.rectElementParam);
+
         /*TourHelper.newRect(0, 0, left, TourHelper.windowHeight);
         TourHelper.newRect(0, left + width, TourHelper.windowWidth - width - left, TourHelper.windowHeight);
         TourHelper.newRect(0, left, width, top);
@@ -283,17 +304,37 @@ export default class TourHelper {
         );
         TourHelper.popperElement.push(descrNode);
     };
+    private static showViewerInterface = () => {
+        const node: Element = window.document.createElement("div");
+        const nodeId = "viewer-interface";
+        node.id = nodeId;
+        node.setAttribute("data-testid", "viewer-interface");
+        window.document.body.appendChild(node);
+        ReactDOM.render(
+            <ViewerInterface
+                setStep={TourHelper.setStep}
+                currentStep={TourHelper.currentStep}
+                totalSteps={TourHelper.steps.length}
+            />,
+            document.getElementById(nodeId)
+        );
+        TourHelper.viewerInterfaceElement = node;
+    };
+    private static setStep = (index: number) => {
+        TourHelper.currentStep = index;
+        TourHelper.step();
+    };
     private static step = () => {
         TourHelper.blackElement = [];
         TourHelper.descrElement = [];
         TourHelper.conditionElement = null;
         if (TourHelper.currentStep == TourHelper.steps.length) return;
-        TourHelper.currentStep += 1;
         TourHelper.clearCreatedElement();
         TourHelper.startStep();
     };
     private static clickHandler = () => {
         window.removeEventListener("click", TourHelper.clickHandler);
+        TourHelper.currentStep += 1;
         TourHelper.step();
     };
     private static clickOnHandler = (e: { target: any }) => {
@@ -301,6 +342,7 @@ export default class TourHelper {
         const element = TourHelper.conditionElement;
         if (element === target) {
             window.removeEventListener("click", TourHelper.clickOnHandler);
+            TourHelper.currentStep += 1;
             TourHelper.step();
             TourHelper.conditionElement = null;
         }
@@ -314,10 +356,16 @@ export default class TourHelper {
         TourHelper.popperElement.map(el => el.parentNode!.removeChild(el));
         TourHelper.popperElement = [];
     };
+    private static clearViewerInterfaceElement = () => {
+        const el: Element | null = TourHelper.viewerInterfaceElement;
+        el?.parentNode!.removeChild(el);
+        TourHelper.viewerInterfaceElement = null;
+    };
     private static clearCreatedElement = () => {
         window.removeEventListener("resize", TourHelper.blackoutWindow);
         TourHelper.clearRectElement();
         TourHelper.clearPopperElement();
+        TourHelper.clearViewerInterfaceElement();
     };
     private static setBlackElement = (element: string) => {
         const el = document.querySelector(element);
@@ -359,11 +407,7 @@ export default class TourHelper {
         TourHelper.conditionElement = el;
     };
     private static setParamWindow = () => {
-        TourHelper.windowWidth = Math.max(
-            document.body.scrollWidth,
-            document.body.clientWidth,
-            document.defaultView!.innerWidth
-        );
+        TourHelper.windowWidth = Math.max(document.body.scrollWidth, document.body.clientWidth);
         TourHelper.windowHeight = Math.max(
             document.body.scrollHeight,
             document.body.clientHeight,
@@ -399,7 +443,7 @@ export default class TourHelper {
         ];
         TourHelper.windowWidth = 0;
         TourHelper.windowHeight = 0;
-    }
+    };
 }
 
 (window as any).TourHelper = TourHelper;
