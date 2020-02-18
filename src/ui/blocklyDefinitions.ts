@@ -1,5 +1,5 @@
-import TourHelper from "../agent/TourHelper/utils";
-const helperClass = TourHelper.name;
+// import TourHelper from "../agent/TourHelper/utils";
+const helperClass = "TourHelper";
 
 Blockly.Blocks["dark"] = {
     init: function() {

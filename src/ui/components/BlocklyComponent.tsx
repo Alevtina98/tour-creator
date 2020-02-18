@@ -48,7 +48,10 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
         this.props.actions.periodicallySave();
     }
     workspaceDidChange = (workspace: any) => {
-        const newJS: string = Blockly.JavaScript.workspaceToCode(workspace);
+        const nameAssignment: string | null = "TourHelper.setNameTour(\'" + this.props.selectedTour.name + "\');\n";
+        const descAssignment: string | null = "TourHelper.setDescTour(\'" + this.props.selectedTour.desc + "\');\n\n";
+        const newJS: string =
+            (nameAssignment || "") + (descAssignment || "") + Blockly.JavaScript.workspaceToCode(workspace);
         const newXml = new XMLSerializer();
         const newXmlStr = newXml.serializeToString(Blockly.Xml.workspaceToDom(workspace));
         this.props.dispatch(editTourDB({ code: newXmlStr, codeJS: newJS, dateChange: "" }));

@@ -15,7 +15,7 @@ module.exports = {
         agent: "./src/agent/index.js"
     },
     resolve: {
-        extensions: [".ts", ".tsx", ".js", ".jsx", ".less", ".cur"]
+        extensions: [".ts", ".tsx", ".js", ".jsx", ".css", ".less", ".cur"]
     },
 
     devtool: "source-map",
@@ -53,7 +53,7 @@ module.exports = {
 
             {
                 test: /\.less$/,
-                loaders: [
+                use: [
                     {
                         loader: "style-loader"
                     },
@@ -65,6 +65,20 @@ module.exports = {
                     },
                     {
                         loader: "less-loader"
+                    }
+                ]
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    {
+                        loader: "style-loader"
+                    },
+                    {
+                        loader: "css-loader",
+                        options: {
+                            url: false
+                        }
                     }
                 ]
             },

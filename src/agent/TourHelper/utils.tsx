@@ -30,6 +30,8 @@ export interface HighlightAreaType {
     maxY: number;
 }
 export default class TourHelper {
+    static nameTour: string = "";
+    static descTour: string = "";
     /**
      * для записи тура
      */
@@ -62,6 +64,12 @@ export default class TourHelper {
     public static endTour = () => {
         console.log("end tour");
         TourHelper.initState();
+    };
+    public static setNameTour = (name: string) => {
+        TourHelper.nameTour = name;
+    };
+    public static setDescTour = (desc: string) => {
+        TourHelper.descTour = desc;
     };
     public static blackout = (element: string) => {
         TourHelper.steps[TourHelper.stepCount].blackout.push(() => {
@@ -101,7 +109,7 @@ export default class TourHelper {
     public static clickOn = (element: string) => {
         TourHelper.steps[TourHelper.stepCount].condition.push(() => {
             TourHelper.setConditionElement(element);
-            window.addEventListener("click", TourHelper.clickOnHandler, true);
+            window.addEventListener("click", TourHelper.clickOnHandler);
         });
     };
 
@@ -315,6 +323,8 @@ export default class TourHelper {
                 setStep={TourHelper.setStep}
                 currentStep={TourHelper.currentStep}
                 totalSteps={TourHelper.steps.length}
+                name={TourHelper.nameTour}
+                desc={TourHelper.descTour}
             />,
             document.getElementById(nodeId)
         );
@@ -333,7 +343,7 @@ export default class TourHelper {
         TourHelper.startStep();
     };
     private static clickHandler = () => {
-        window.removeEventListener("click", TourHelper.clickHandler, true);
+        window.removeEventListener("click", TourHelper.clickHandler);
         TourHelper.currentStep += 1;
         TourHelper.step();
     };
@@ -341,9 +351,8 @@ export default class TourHelper {
         const target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
         const element = TourHelper.conditionElement;
         console.log("clickOnHandler >> ", element);
-        debugger
         if (element === target) {
-            window.removeEventListener("click", TourHelper.clickOnHandler, true);
+            window.removeEventListener("click", TourHelper.clickOnHandler);
             TourHelper.currentStep += 1;
             TourHelper.step();
             TourHelper.conditionElement = null;
@@ -432,6 +441,8 @@ export default class TourHelper {
         return coordinates;
     };
     private static initState = () => {
+        TourHelper.nameTour = "";
+        TourHelper.descTour = "";
         window.removeEventListener("click", TourHelper.clickHandler, true);
         window.removeEventListener("click", TourHelper.clickOnHandler, true);
         TourHelper.clearCreatedElement();

@@ -9,7 +9,7 @@ const GAME_OBJECT_ID = "game_object";
 
 export const getCodeEval = function(code) {
     const script = `${code.replace(`"`, "")};`;
-    return `eval("${script.split(/\/\/.*\n/g).join("\n")}")`;
+    return `eval("${script.split(/\/\/ .*\n/g).join("\n")}")`;
 };
 class Agent {
     /**
