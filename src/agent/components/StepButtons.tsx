@@ -10,9 +10,18 @@ export interface PageButtonsState {
     totalSteps: number;
     paginationModel: any;
     setStep: (index: number) => void;
+    minPreviousOpen?: number;
+    maxNextOpen?: number;
 }
 
-const StepButtons: FC<PageButtonsState> = ({ currentStep, totalSteps, paginationModel, setStep }) => {
+const StepButtons: FC<PageButtonsState> = ({
+    currentStep,
+    totalSteps,
+    paginationModel,
+    setStep,
+    minPreviousOpen = 0,
+    maxNextOpen = totalSteps - 1
+}) => {
     return (
         <ButtonToolbar>
             <Button
@@ -52,16 +61,16 @@ const StepButtons: FC<PageButtonsState> = ({ currentStep, totalSteps, pagination
                 return null;
             })}
 
-                <Button
-                    disabled={currentStep === totalSteps - 1}
-                    onClick={event => {
-                        event.stopPropagation();
-                        event.preventDefault();
-                        currentStep < totalSteps - 1 ? setStep(currentStep + 1) : null;
-                    }}
-                >
-                    Вперед
-                </Button>
+            <Button
+                disabled={currentStep === totalSteps - 1}
+                onClick={event => {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    currentStep < totalSteps - 1 ? setStep(currentStep + 1) : null;
+                }}
+            >
+                Вперед
+            </Button>
 
             <Button
                 disabled={currentStep === totalSteps - 1}

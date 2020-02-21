@@ -44,6 +44,7 @@ export default class TourHelper {
             condition: []
         }
     ];
+    static conditionStepNumbers: number[] = [];
     /**
      * для воспроизведения тура
      */
@@ -104,11 +105,12 @@ export default class TourHelper {
     };
     public static click = () => {
         TourHelper.steps[TourHelper.stepCount].condition.push(() => {
-            window.addEventListener("click", TourHelper.clickHandler);
+            window.addEventListener("click", TourHelper.clickHandler, true);
         });
     };
 
     public static clickOn = (element: string) => {
+        TourHelper.conditionStepNumbers.push(TourHelper.stepCount);
         TourHelper.steps[TourHelper.stepCount].condition.push(() => {
             TourHelper.setConditionElement(element);
             window.addEventListener("click", TourHelper.clickOnHandler);
@@ -315,6 +317,10 @@ export default class TourHelper {
         node.id = nodeId;
         node.setAttribute("data-testid", "viewer-interface");
         window.document.body.appendChild(node);
+        const isConditionPreviouslySteps = () =>
+        {
+
+        }
         ReactDOM.render(
             <ViewerInterface
                 setStep={TourHelper.setStep}
@@ -324,6 +330,8 @@ export default class TourHelper {
                 desc={TourHelper.descTour}
                 onStart={TourHelper.startTour}
                 start={TourHelper.start}
+                /*minPrevious={!!TourHelper.conditionElement}
+                disableNext={!!TourHelper.conditionElement}*/
             />,
             document.getElementById(nodeId)
         );
@@ -341,8 +349,10 @@ export default class TourHelper {
         TourHelper.clearCreatedElement();
         TourHelper.startStep();
     };
-    private static clickHandler = () => {
-        window.removeEventListener("click", TourHelper.clickHandler);
+    private static clickHandler = e => {
+        e.stopPropagation();
+        e.preventDefault();
+        window.removeEventListener("click", TourHelper.clickHandler, true);
         TourHelper.currentStep += 1;
         TourHelper.step();
     };
@@ -460,6 +470,7 @@ export default class TourHelper {
         TourHelper.windowWidth = 0;
         TourHelper.windowHeight = 0;
         TourHelper.start = false;
+        TourHelper.conditionStepNumbers = [];
     };
 }
 

@@ -14,9 +14,21 @@ export interface ViewerInterfaceState {
     desc: string;
     onStart: () => void;
     start: boolean;
+    minPreviousOpen?: number; //disable next step-buttons
+    maxNextOpen?: number; //disable pred step-buttons
 }
 
-const ViewerInterface: FC<ViewerInterfaceState> = ({ setStep, currentStep, totalSteps, name, desc, onStart, start }) => {
+const ViewerInterface: FC<ViewerInterfaceState> = ({
+    setStep,
+    currentStep,
+    totalSteps,
+    name,
+    desc,
+    onStart,
+    start,
+    minPreviousOpen = 0,
+    maxNextOpen = totalSteps - 1
+}) => {
     const paginationModel = ultimatePagination.getPaginationModel({
         // Required
         currentPage: currentStep + 1,
@@ -29,7 +41,6 @@ const ViewerInterface: FC<ViewerInterfaceState> = ({ setStep, currentStep, total
         hidePreviousAndNextPageLinks: false,
         hideFirstAndLastPageLinks: false
     });
-
     console.log(paginationModel);
     return (
         <div
@@ -43,7 +54,6 @@ const ViewerInterface: FC<ViewerInterfaceState> = ({ setStep, currentStep, total
                 background: "rgba(0, 0, 0, 0.6)"
             }}
         >
-
             <div style={{ color: "rgb(142,197,255)" }}>{name}</div>
             <div style={{ color: "rgb(255,255,255)" }}>{desc}</div>
             {(start && (
@@ -52,6 +62,8 @@ const ViewerInterface: FC<ViewerInterfaceState> = ({ setStep, currentStep, total
                     totalSteps={totalSteps}
                     paginationModel={paginationModel}
                     setStep={setStep}
+                    minPreviousOpen={minPreviousOpen}
+                    maxNextOpen={maxNextOpen}
                 />
             )) || (
                 <Button
