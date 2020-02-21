@@ -13,7 +13,7 @@ const ErrorsRunScript: FC<ErrorsRunScript> = ({ text, errors }) => {
             <Alert variant="danger" className="text-left error-list">
                 <ul>
                     {errors.map(er => (
-                        <li className="errorString">{er}</li>
+                        <li className="error-string">{er}</li>
                     ))}
                 </ul>
             </Alert>

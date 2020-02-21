@@ -13,14 +13,18 @@ const CodeJSComponent = () => {
                     return;
                 }
                 let name = "comment";
+                const firstBlock = index === 0;
                 if (!(index % 4)) {
                     name = "text";
                 } else if (!((index - 1) % 4)) {
                     name = "error";
                 }
-                return el.split(/[\n]/g).map((str, index, array) => {
-                    if (str) return <div className={name + "Style"}>{str}</div>;
-                    if (index !== 0 && index !== array.length - 1) return <br />;
+                return el.split(/[\n]/g).map((str, indexStr, arrayStr) => {
+                    if (str)
+                        return (
+                            <div className={name + (firstBlock && indexStr < 2 ? "-setter" : "") + "-style"}>{str}</div>
+                        );
+                    if (indexStr !== 0 && indexStr !== arrayStr.length - 1) return <br />;
                     return null;
                 });
             }) || null}
