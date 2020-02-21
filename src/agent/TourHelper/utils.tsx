@@ -2,7 +2,7 @@ import DescriptionComponent from "../../ui/components/DescriptionComponent";
 import * as React from "react";
 import ReactDOM from "react-dom";
 import sendMessage from "../util/sendMessage";
-import ViewerInterface from "./__tests__/ViewerInterface";
+import ViewerInterface from "../components/ViewerInterface";
 
 export interface StepType {
     blackout: Function[];
@@ -32,6 +32,7 @@ export interface HighlightAreaType {
 export default class TourHelper {
     static nameTour: string = "";
     static descTour: string = "";
+    static start: boolean = false;
     /**
      * для записи тура
      */
@@ -58,6 +59,7 @@ export default class TourHelper {
     static viewerInterfaceElement: Element | null = null;
 
     public static startTour = () => {
+        TourHelper.start = true;
         console.log("startTour");
         TourHelper.startStep();
     };
@@ -114,8 +116,10 @@ export default class TourHelper {
     };
 
     private static startStep = () => {
+        TourHelper.clearCreatedElement();
         TourHelper.setBlackoutAndDescriptionElements();
         TourHelper.showElements();
+        TourHelper.showViewerInterface();
         TourHelper.setActionWaiting();
     };
 
@@ -137,14 +141,8 @@ export default class TourHelper {
 
     private static blackoutWindow = () => {
         window.addEventListener("resize", TourHelper.blackoutWindow);
-        TourHelper.clearRectElement();
         TourHelper.setParamWindow();
         TourHelper.blackElement.forEach(el => (el.coordinates = TourHelper.getCoordinateElement(el.element)));
-
-        if (!TourHelper.blackElement.length) {
-            TourHelper.showViewerInterface();
-            return;
-        }
         const coordinates = TourHelper.blackElement[0].coordinates;
         let area = {
             minX: coordinates.top,
@@ -158,7 +156,6 @@ export default class TourHelper {
         }
         TourHelper.addRectAround(area);
         TourHelper.rectElementParam.forEach(el => TourHelper.newRect(el.top, el.left, el.width, el.height));
-        TourHelper.showViewerInterface();
     };
 
     private static getArea = () => {
@@ -325,6 +322,8 @@ export default class TourHelper {
                 totalSteps={TourHelper.steps.length}
                 name={TourHelper.nameTour}
                 desc={TourHelper.descTour}
+                onStart={TourHelper.startTour}
+                start={TourHelper.start}
             />,
             document.getElementById(nodeId)
         );
@@ -369,7 +368,7 @@ export default class TourHelper {
     };
     private static clearViewerInterfaceElement = () => {
         const el: Element | null = TourHelper.viewerInterfaceElement;
-        el?.parentNode!.removeChild(el);
+        el?.parentNode?.removeChild(el);
         TourHelper.viewerInterfaceElement = null;
     };
     private static clearCreatedElement = () => {
@@ -460,6 +459,7 @@ export default class TourHelper {
         ];
         TourHelper.windowWidth = 0;
         TourHelper.windowHeight = 0;
+        TourHelper.start = false;
     };
 }
 

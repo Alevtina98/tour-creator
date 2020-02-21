@@ -2,6 +2,7 @@ import { FC, memo } from "react";
 import * as React from "react";
 import ultimatePagination, { ITEM_TYPES } from "ultimate-pagination";
 import { Button, ButtonToolbar } from "react-bootstrap";
+import PageButtons from "./StepButtons";
 
 // import "bootstrap/dist/css/bootstrap.css";
 
@@ -11,9 +12,11 @@ export interface ViewerInterfaceState {
     totalSteps: number;
     name: string;
     desc: string;
+    onStart: () => void;
+    start: boolean;
 }
 
-const ViewerInterface: FC<ViewerInterfaceState> = ({ setStep, currentStep, totalSteps, name, desc }) => {
+const ViewerInterface: FC<ViewerInterfaceState> = ({ setStep, currentStep, totalSteps, name, desc, onStart, start }) => {
     const paginationModel = ultimatePagination.getPaginationModel({
         // Required
         currentPage: currentStep + 1,
@@ -26,6 +29,7 @@ const ViewerInterface: FC<ViewerInterfaceState> = ({ setStep, currentStep, total
         hidePreviousAndNextPageLinks: false,
         hideFirstAndLastPageLinks: false
     });
+
     console.log(paginationModel);
     return (
         <div
@@ -33,60 +37,36 @@ const ViewerInterface: FC<ViewerInterfaceState> = ({ setStep, currentStep, total
             style={{
                 position: "fixed",
                 top: 0,
-                left: 0,
+                right: 0,
                 zIndex: 11000001,
                 padding: 3,
-                background: "rgba(0, 0, 0, 0.5)"
+                background: "rgba(0, 0, 0, 0.6)"
             }}
         >
+
             <div style={{ color: "rgb(142,197,255)" }}>{name}</div>
             <div style={{ color: "rgb(255,255,255)" }}>{desc}</div>
-
-            <ButtonToolbar>
+            {(start && (
+                <PageButtons
+                    currentStep={currentStep}
+                    totalSteps={totalSteps}
+                    paginationModel={paginationModel}
+                    setStep={setStep}
+                />
+            )) || (
                 <Button
                     onClick={event => {
                         event.stopPropagation();
                         event.preventDefault();
-                        currentStep > 0 ? setStep(0) : null;
+                        onStart();
+                        console.log("start >>", start);
+                        /*currentStep > 0 ? setStep(0) : null;*/
                     }}
                 >
-                    Начало
+                    Старт
                 </Button>
-                <Button
-                    onClick={event => {
-                        event.stopPropagation();
-                        event.preventDefault();
-                        currentStep > 0 ? setStep(currentStep - 1) : null;
-                    }}
-                >
-                    Назад
-                </Button>
-                {paginationModel.map(page => {
-                    if (page.type === ITEM_TYPES.PAGE) {
-                        return (
-                            <Button
-                                onClick={event => {
-                                    event.stopPropagation();
-                                    event.preventDefault();
-                                    setStep(page.value - 1);
-                                }}
-                            >
-                                {page.value}
-                            </Button>
-                        );
-                    }
-                    return null;
-                })}
-                <Button
-                    onClick={event => {
-                        event.stopPropagation();
-                        event.preventDefault();
-                        currentStep < totalSteps - 1 ? setStep(currentStep + 1) : null;
-                    }}
-                >
-                    Вперед
-                </Button>
-                <Button
+            )}
+            {/*<Button
                     onClick={event => {
                         event.stopPropagation();
                         event.preventDefault();
@@ -94,8 +74,7 @@ const ViewerInterface: FC<ViewerInterfaceState> = ({ setStep, currentStep, total
                     }}
                 >
                     Конец
-                </Button>
-            </ButtonToolbar>
+                </Button>*/}
         </div>
     );
 };

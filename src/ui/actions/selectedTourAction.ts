@@ -10,17 +10,28 @@ import {
     TourType,
     updateTour
 } from "../util/restClient/requestTour";
-import {error, success} from "react-notification-system-redux";
-import {burgerClose} from "./mainAction";
-
+import { error, success } from "react-notification-system-redux";
+import { burgerClose } from "./mainAction";
+import { Blockly } from "../components/BlocklyComponent";
 
 export const setLoadBocklyEnabled = createStandardAction("SET_RELOAD_BLOCKLY_ENABLED")();
 export const setLoadBocklyDisabled = createStandardAction("SET_RELOAD_BLOCKLY_DISABLED")();
 export const setListTour = createStandardAction("SET_LIST_TOUR")<TourType[]>();
 export const setTourDB = createStandardAction("SET_TOUR")<TourType>();
-export const editTourDB = createStandardAction("EDIT_TOUR")<Partial<TourType>>();
 export const setErrorsRunTour = createStandardAction("SET_ERRORS")<string[]>();
 export const addErrorRunTour = createStandardAction("ADD_ERROR")<string>();
+
+export const codeJSSetNameAndDesc = (name: string, desc: string) => {
+    const nameAssignment: string | null = "TourHelper.setNameTour('" + name + "');\n";
+    const descAssignment: string | null = "TourHelper.setDescTour('" + desc + "');\n\n";
+    return nameAssignment + descAssignment;
+};
+export const editTourDB = (tourProps: TourType) => (dispatch: Dispatch, getState: () => StoreType) => {
+    const storeTour = getState().SelectedTourState.tourDB;
+    const tour: TourType = { ...storeTour, ...tourProps };
+    tour.codeJS = codeJSSetNameAndDesc(tour.name || "", tour.desc || "") + tour.codeJS;
+    dispatch(setTourDB(tour));
+};
 
 export const loadListTour = () => async (dispatch: Dispatch) => {
     const result = await getAllTours();
@@ -55,16 +66,16 @@ export const delToDb = () => async (dispatch: Dispatch, getState: () => StoreTyp
 
 export const saveTour = (period?: boolean) => async (dispatch: Dispatch, getState: () => StoreType) => {
     const store = getState();
-    const tour: TourType | null = store.ModalState.tour;
     const selectedTour = store.SelectedTourState.tourDB;
+    const tourForSaved: TourType | null = store.ModalState.tour || selectedTour;
     try {
-        const savedTour: TourType = await updateTour(tour || store.SelectedTourState.tourDB);
-        if (savedTour.id === selectedTour.id) {
+        const savedTour: TourType = await updateTour(tourForSaved);
+        if (tourForSaved.id === selectedTour.id) {
             dispatch(setTourDB(savedTour));
         }
         loadListTour()(dispatch);
         if (!period) {
-            dispatch(success({ title: tour?.name + " сохранен" }));
+            dispatch(success({ title: savedTour?.name + " сохранен" }));
         }
     } catch (e) {
         console.error("ERROR", e.getMessage());
@@ -95,16 +106,20 @@ export const loadToDb = (key: number) => async (dispatch: Dispatch) => {
         dispatch(error({ message: e.getMessage() }));
     }
 };
-export const createNewTour = () => async (dispatch: Dispatch, getState: () => StoreType) => {
+export const createNewTour = (initTour?: TourType) => async (dispatch: Dispatch, getState: () => StoreType) => {
     const store = getState();
     const tour: TourType | null = store.ModalState.tour;
     if (!tour) {
-        console.log("ERROR MODAL CREATED");
+        return console.log("ERROR MODAL CREATED");
     }
+    tour.codeJS = codeJSSetNameAndDesc(tour.name || "", tour.desc || "") + tour.codeJS;
+    dispatch(setTourDB(tour));
     const createdTour: TourType = await createTour(tour);
     try {
+        if (store.ModalState.status === "copy") {
+            dispatch(success({ title: createdTour?.name + " сохранен как копия " }));
+        }
         closeSelectedTour()(dispatch);
-        //console.log("createdTour >> ", createdTour);
         dispatch(setTourDB(createdTour));
         loadListTour()(dispatch);
         return window.setTimeout(() => {
@@ -118,20 +133,11 @@ export const createNewTour = () => async (dispatch: Dispatch, getState: () => St
 export const createCopyTour = () => async (dispatch: Dispatch, getState: () => StoreType) => {
     closeSelectedTour()(dispatch);
     const store = getState();
-    const tour: TourType | null = store.ModalState.tour;
+    const tour: TourType = store.ModalState.tour;
     if (!tour) {
-        console.log("ERROR MODAL CREATED COPY");
+        return console.log("ERROR MODAL CREATED COPY");
     }
-    //key: uuid.v4()
-    const createdTour: TourType = await createTour(tour);
-    if (createdTour) {
-        dispatch(success({ title: createdTour?.name + " сохранен как копия " }));
-        dispatch(setTourDB(createdTour));
-        loadListTour()(dispatch);
-        return window.setTimeout(() => {
-            dispatch(setLoadBocklyEnabled());
-        }, 5);
-    } else console.log("Ошибка при создании копии тура");
+    createNewTour(tour)(dispatch, getState);
 };
 export const closeSelectedTour = () => (dispatch: Dispatch) => {
     dispatch(setLoadBocklyDisabled());

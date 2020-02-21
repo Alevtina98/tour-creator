@@ -7,8 +7,7 @@ import {
     setLoadBocklyDisabled,
     setListTour,
     setErrorsRunTour,
-    addErrorRunTour,
-    editTourDB
+    addErrorRunTour
 } from "../actions/selectedTourAction";
 import { getInitData, TourType } from "../util/restClient/requestTour";
 
@@ -20,11 +19,11 @@ export interface SelectedTourReducerState {
 }
 const initTourType = getInitData();
 const tourDBReducer = createReducer<TourType, SelectedTourAction>(initTourType)
-    .handleAction(setTourDB, (state, action) => action.payload)
-    .handleAction(editTourDB, (state, action) => ({
+    .handleAction(setTourDB, (state, action) => action.payload);
+    /*.handleAction(editTourDB, (state, action) => ({
         ...state,
         ...action.payload
-    }));
+    }));*/
 
 const errorsRunTourReducer = createReducer<string[]>([])
     .handleAction(setErrorsRunTour, (state, action) => action.payload)

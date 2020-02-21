@@ -43,7 +43,7 @@ class Agent {
                 el.innerText = getCodeEval(code);
                 this.window.document.body.appendChild(el);
                 console.log("скрипт тура добавлен");
-                TourHelper.startTour();
+                TourHelper.showViewerInterface();
             },
             disableRunScript: () => {
                 TourHelper.endTour();
