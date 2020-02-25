@@ -42,6 +42,7 @@ const StepButtons: FC<PageButtonsState> = ({
                 ) {
                     return (
                         <Button
+                            disabled={page.value === currentStep + 1}
                             onClick={event => {
                                 disposeEvent(event);
                                 setStep(page.value - 1);
@@ -50,6 +51,32 @@ const StepButtons: FC<PageButtonsState> = ({
                             {page.value}
                         </Button>
                     );
+                    /*if (page.value !== currentStep + 1) {
+                        return (
+                            <Button
+                                onClick={event => {
+                                    disposeEvent(event);
+                                    setStep(page.value - 1);
+                                }}
+                            >
+                                {page.value}
+                            </Button>
+                        );
+                    }
+                    return (
+                        <Button
+                            onClick={event => {
+                                disposeEvent(event);
+                                setStep(page.value - 1);
+                            }}
+                            style={{
+                                /!*outlineColor: "rgba(13,13,13)",*!/
+                                color: "rgb(248,231,75)"
+                            }}
+                        >
+                            {page.value}
+                        </Button>
+                    );*/
                 }
                 return null;
             })}
