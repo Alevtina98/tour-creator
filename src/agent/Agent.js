@@ -2,6 +2,7 @@ import sendMessage from "./util/sendMessage";
 import Selector from "./Selector";
 import "./style/agentStyle.less";
 import TourHelper from "./TourHelper/utils";
+import {disposeEvent} from "./util/utils";
 
 const _ = require("lodash");
 
@@ -107,15 +108,13 @@ class Agent {
         }; //обрабатываем вывод курсора из элемента
         this._closeOnEsc = event => {
             if (event.key == "Escape") {
-                event.stopPropagation();
-                event.preventDefault();
+                disposeEvent(event);
                 this.clearAfterSelectMode();
                 sendMessage("disabledSelectMode");
             }
         };
         this._findTargetCb = e => {
-            e.stopPropagation(); //Прекращает дальнейшую передачу текущего события
-            e.preventDefault(); //запрещает исполнение метода по умолчанию, предназначенного для данного события
+            disposeEvent(event);
             target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
             const str = Selector(target);
             this.subscribedEntityId = str; //matching.__inspect_uuid__;

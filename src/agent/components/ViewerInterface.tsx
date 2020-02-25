@@ -3,6 +3,7 @@ import * as React from "react";
 import ultimatePagination, { ITEM_TYPES } from "ultimate-pagination";
 import { Button, ButtonToolbar } from "react-bootstrap";
 import PageButtons from "./StepButtons";
+import {disposeEvent} from "../util/utils";
 
 // import "bootstrap/dist/css/bootstrap.css";
 
@@ -68,8 +69,7 @@ const ViewerInterface: FC<ViewerInterfaceState> = ({
             )) || (
                 <Button
                     onClick={event => {
-                        event.stopPropagation();
-                        event.preventDefault();
+                        disposeEvent(event);
                         onStart();
                         console.log("start >>", start);
                         /*currentStep > 0 ? setStep(0) : null;*/
@@ -78,15 +78,6 @@ const ViewerInterface: FC<ViewerInterfaceState> = ({
                     Старт
                 </Button>
             )}
-            {/*<Button
-                    onClick={event => {
-                        event.stopPropagation();
-                        event.preventDefault();
-                        currentStep < totalSteps - 1 ? setStep(totalSteps - 1) : null;
-                    }}
-                >
-                    Конец
-                </Button>*/}
         </div>
     );
 };

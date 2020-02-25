@@ -3,6 +3,7 @@ import * as React from "react";
 import ReactDOM from "react-dom";
 import sendMessage from "../util/sendMessage";
 import ViewerInterface from "../components/ViewerInterface";
+import { disposeEvent } from "../util/utils";
 
 export interface StepType {
     blackout: Function[];
@@ -48,7 +49,7 @@ export default class TourHelper {
     /**
      * для воспроизведения тура
      */
-    static currentStep: number = 0;
+    static currentStep: number = -1;
     static blackElement: BlackElementType[] = [];
     static descrElement: DescrElementType[] = [];
     static conditionElement: Element | null = null;
@@ -62,10 +63,12 @@ export default class TourHelper {
     public static startTour = () => {
         TourHelper.start = true;
         console.log("startTour");
-        TourHelper.startStep();
+        window.addEventListener("resize", TourHelper.startStep);
+        TourHelper.step();
     };
     public static endTour = () => {
         console.log("end tour");
+        window.removeEventListener("resize", TourHelper.startStep);
         TourHelper.initState();
     };
     public static setNameTour = (name: string) => {
@@ -113,7 +116,7 @@ export default class TourHelper {
         TourHelper.conditionStepNumbers.push(TourHelper.stepCount);
         TourHelper.steps[TourHelper.stepCount].condition.push(() => {
             TourHelper.setConditionElement(element);
-            window.addEventListener("click", TourHelper.clickOnHandler);
+            TourHelper.conditionElement?.addEventListener("click", TourHelper.clickOnHandler);
         });
     };
 
@@ -142,7 +145,6 @@ export default class TourHelper {
     };
 
     private static blackoutWindow = () => {
-        window.addEventListener("resize", TourHelper.blackoutWindow);
         TourHelper.setParamWindow();
         TourHelper.blackElement.forEach(el => (el.coordinates = TourHelper.getCoordinateElement(el.element)));
         const coordinates = TourHelper.blackElement[0].coordinates;
@@ -317,52 +319,78 @@ export default class TourHelper {
         node.id = nodeId;
         node.setAttribute("data-testid", "viewer-interface");
         window.document.body.appendChild(node);
-        const isConditionPreviouslySteps = () =>
-        {
-
+        const getMaxNextOpen = () => {
+            const maxIndex: number = TourHelper.conditionStepNumbers.findIndex(step => {
+                return step >= TourHelper.currentStep;
+            });
+            if (maxIndex === -1) {
+                return TourHelper.steps.length - 1;
+            }
+            return TourHelper.conditionStepNumbers[maxIndex];
+        };
+        const getMinPreviousOpen = () => {
+            //debugger;
+            let minStep = -1;
+            TourHelper.conditionStepNumbers.forEach(step => {
+                if (step < TourHelper.currentStep) {
+                    minStep = step;
+                };
+            });
+            return minStep + 1;
+        };
+        let minPreviousOpen: number | undefined = undefined;
+        let maxNextOpen: number | undefined = undefined;
+        if (TourHelper.currentStep > -1 && TourHelper.conditionStepNumbers.length !== 0) {
+            if (TourHelper.currentStep !== 0) {
+                minPreviousOpen = getMinPreviousOpen();
+            }
+            if (TourHelper.currentStep < TourHelper.steps.length - 1) {
+                maxNextOpen = getMaxNextOpen();
+            }
         }
         ReactDOM.render(
             <ViewerInterface
-                setStep={TourHelper.setStep}
+                setStep={TourHelper.step}
                 currentStep={TourHelper.currentStep}
                 totalSteps={TourHelper.steps.length}
                 name={TourHelper.nameTour}
                 desc={TourHelper.descTour}
                 onStart={TourHelper.startTour}
                 start={TourHelper.start}
-                /*minPrevious={!!TourHelper.conditionElement}
-                disableNext={!!TourHelper.conditionElement}*/
+                minPreviousOpen={minPreviousOpen}
+                maxNextOpen={maxNextOpen}
             />,
             document.getElementById(nodeId)
         );
         TourHelper.viewerInterfaceElement = node;
     };
-    private static setStep = (index: number) => {
-        TourHelper.currentStep = index;
-        TourHelper.step();
-    };
-    private static step = () => {
+    public static step = (index?: number) => {
         TourHelper.blackElement = [];
         TourHelper.descrElement = [];
         TourHelper.conditionElement = null;
-        if (TourHelper.currentStep == TourHelper.steps.length) return;
-        TourHelper.clearCreatedElement();
+        if (typeof index !== "number") {
+            TourHelper.currentStep += 1;
+        } else {
+            TourHelper.currentStep = index;
+        }
+        if (TourHelper.currentStep === TourHelper.steps.length) return;
         TourHelper.startStep();
     };
-    private static clickHandler = e => {
-        e.stopPropagation();
-        e.preventDefault();
+    private static clickHandler = (e: MouseEvent) => {
+        if (TourHelper.viewerInterfaceElement?.contains(e.target)) {
+            return;
+        }
+        disposeEvent(e);
+        console.log(TourHelper.currentStep);
         window.removeEventListener("click", TourHelper.clickHandler, true);
-        TourHelper.currentStep += 1;
         TourHelper.step();
     };
     private static clickOnHandler = (e: { target: any }) => {
         const target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
-        const element = TourHelper.conditionElement;
+        const element: Element | null = TourHelper.conditionElement;
         console.log("clickOnHandler >> ", element);
-        if (element === target) {
-            window.removeEventListener("click", TourHelper.clickOnHandler);
-            TourHelper.currentStep += 1;
+        if (element === target && element) {
+            element.removeEventListener("click", TourHelper.clickOnHandler);
             TourHelper.step();
             TourHelper.conditionElement = null;
         }
@@ -382,7 +410,6 @@ export default class TourHelper {
         TourHelper.viewerInterfaceElement = null;
     };
     private static clearCreatedElement = () => {
-        window.removeEventListener("resize", TourHelper.blackoutWindow);
         TourHelper.clearRectElement();
         TourHelper.clearPopperElement();
         TourHelper.clearViewerInterfaceElement();
@@ -392,8 +419,7 @@ export default class TourHelper {
         if (!el) {
             console.log("ERROR: selector not found", TourHelper.blackElement);
             const numberStep: number = TourHelper.currentStep + 1;
-            const error: string =
-                "blackouting selector " + element + " is not found on step " + numberStep;
+            const error: string = "blackouting selector " + element + " is not found on step " + numberStep;
             sendMessage("newError", error);
             TourHelper.endTour();
             return;
@@ -452,13 +478,14 @@ export default class TourHelper {
     private static initState = () => {
         TourHelper.nameTour = "";
         TourHelper.descTour = "";
+        TourHelper.descTour = "";
         window.removeEventListener("click", TourHelper.clickHandler, true);
-        window.removeEventListener("click", TourHelper.clickOnHandler, true);
+        TourHelper.conditionElement?.removeEventListener("click", TourHelper.clickOnHandler, true);
+        TourHelper.conditionElement = null;
         TourHelper.clearCreatedElement();
         TourHelper.blackElement = [];
         TourHelper.descrElement = [];
-        TourHelper.conditionElement = null;
-        TourHelper.currentStep = 0;
+        TourHelper.currentStep = -1;
         TourHelper.stepCount = 0;
         TourHelper.steps = [
             {

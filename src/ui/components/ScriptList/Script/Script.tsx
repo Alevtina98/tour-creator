@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getDateClientFormat, TourType } from "../../../util/restClient/requestTour";
 import { setModal } from "../../../actions/modalAction";
 import { burgerClose } from "../../../actions/mainAction";
+import {disposeEvent} from "../../../../agent/util/utils";
 
 export interface ScriptProps {
     tour: TourType;
@@ -26,13 +27,11 @@ const Script: FC<ScriptProps> = ({ tour, style }) => {
         }
     };
     const putSavedTour = (e: any) => {
-        e.stopPropagation();
-        e.preventDefault();
+        disposeEvent(e);
         dispatch(setModal({ tour: tour, status: "edit" }));
     };
     const putDeletedTourId = (e: any) => {
-        e.stopPropagation();
-        e.preventDefault();
+        disposeEvent(e);
         dispatch(setModal({ tour: tour, status: "delete" }));
     };
     return (

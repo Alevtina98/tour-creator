@@ -1,9 +1,9 @@
-import { FC, memo } from "react";
 import * as React from "react";
-
+import { FC, memo } from "react";
 // import "bootstrap/dist/css/bootstrap.css";
 import { Button, ButtonToolbar } from "react-bootstrap";
-import { ITEM_TYPES, PaginationModelOptions } from "ultimate-pagination";
+import { ITEM_TYPES } from "ultimate-pagination";
+import { disposeEvent } from "../util/utils";
 
 export interface PageButtonsState {
     currentStep: number;
@@ -25,32 +25,25 @@ const StepButtons: FC<PageButtonsState> = ({
     return (
         <ButtonToolbar>
             <Button
-                disabled={currentStep === 0}
+                disabled={currentStep === minPreviousOpen}
                 onClick={event => {
-                    event.stopPropagation();
-                    event.preventDefault();
-                    currentStep > totalSteps - 1 ? setStep(totalSteps - 1) : null;
-                }}
-            >
-                Начало
-            </Button>
-            <Button
-                disabled={currentStep === 0}
-                onClick={event => {
-                    event.stopPropagation();
-                    event.preventDefault();
-                    currentStep > 0 ? setStep(currentStep - 1) : null;
+                    disposeEvent(event);
+                    setStep(currentStep - 1);
                 }}
             >
                 Назад
             </Button>
             {paginationModel.map(page => {
-                if (page.type === ITEM_TYPES.PAGE) {
+                if (
+                    page.type === ITEM_TYPES.PAGE &&
+                    page.value >= minPreviousOpen + 1 &&
+                    page.value <= maxNextOpen + 1
+                    // +1 т.к. в PaginationModel нумерация шагов с 1, а в AgentHandler с 0
+                ) {
                     return (
                         <Button
                             onClick={event => {
-                                event.stopPropagation();
-                                event.preventDefault();
+                                disposeEvent(event);
                                 setStep(page.value - 1);
                             }}
                         >
@@ -62,25 +55,13 @@ const StepButtons: FC<PageButtonsState> = ({
             })}
 
             <Button
-                disabled={currentStep === totalSteps - 1}
+                disabled={currentStep === maxNextOpen}
                 onClick={event => {
-                    event.stopPropagation();
-                    event.preventDefault();
-                    currentStep < totalSteps - 1 ? setStep(currentStep + 1) : null;
+                    disposeEvent(event);
+                    setStep(currentStep + 1);
                 }}
             >
                 Вперед
-            </Button>
-
-            <Button
-                disabled={currentStep === totalSteps - 1}
-                onClick={event => {
-                    event.stopPropagation();
-                    event.preventDefault();
-                    currentStep < totalSteps - 1 ? setStep(totalSteps - 1) : null;
-                }}
-            >
-                Конец
             </Button>
         </ButtonToolbar>
     );
