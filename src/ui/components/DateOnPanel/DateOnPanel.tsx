@@ -1,12 +1,11 @@
 import React, { FC } from "react";
 import { useSelector } from "react-redux";
 import { StoreType } from "../../reducers";
-import { format } from "date-fns";
-import {getDate, getDateClientFormat, TourType} from "../../util/restClient/requestTour";
+import { getDateClientFormat, TourType } from "../../util/restClient/requestTour";
+import { Navbar } from "react-bootstrap";
 
 export interface ScriptButtons {
     tourDB: TourType;
-    tourXML: string;
     blocklyReloadEnabled: boolean;
 }
 
@@ -14,11 +13,10 @@ interface DateListSaveProps {
     showDate?: boolean;
 }
 const DateOnPanel: FC<DateListSaveProps> = ({ showDate }) => {
-    const { blocklyReloadEnabled, tourDB, tourXML } = useSelector<StoreType, ScriptButtons>(
+    const { blocklyReloadEnabled, tourDB } = useSelector<StoreType, ScriptButtons>(
         ({ SelectedTourState, MainState }) => ({
             blocklyReloadEnabled: SelectedTourState.blocklyReloadEnabled,
-            tourDB: SelectedTourState.tourDB,
-            tourXML: SelectedTourState.tourXML
+            tourDB: SelectedTourState.tourDB
         })
     );
     if (!blocklyReloadEnabled) {
@@ -28,7 +26,9 @@ const DateOnPanel: FC<DateListSaveProps> = ({ showDate }) => {
     if (showDate && tourDB.dateChange) {
         return (
             <div className="date-save-on-panel" data-testid="panel-date">
-                Последнее сохранение {getDateClientFormat(tourDB.dateChange)}
+                <Navbar.Collapse className="justify-content-end">
+                    <Navbar.Text>Последнее сохранение {getDateClientFormat(tourDB.dateChange)}</Navbar.Text>
+                </Navbar.Collapse>
             </div>
         );
     }

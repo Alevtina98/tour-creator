@@ -2,11 +2,17 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../../reducers";
 import { closeSelectedTour, saveTour, setErrorsRunTour } from "../../actions/selectedTourAction";
-import { Button, ButtonToolbar } from "react-bootstrap";
+import {
+    Nav,
+    Navbar,
+    NavDropdown
+} from "react-bootstrap";
 import BurgerMenuContainer from "../../containers/BurgerMenuContainer/BurgerMenuContainer";
 import agentActions from "../../actions/agentActions";
 import { getInitData, TourType } from "../../util/restClient/requestTour";
 import { setModal } from "../../actions/modalAction";
+import ConnectionStatus from "../ConnectionStatus/ConnectionStatus";
+import DateOnPanel from "../DateOnPanel/DateOnPanel";
 
 export interface ScriptButtons {
     tourDB: TourType;
@@ -46,51 +52,29 @@ const ScriptButtons = () => {
         dispatch(closeSelectedTour());
     };
     return (
-        <div className="relative">
-            <div id="outer-container">
-                <BurgerMenuContainer />
-            </div>
-            <ButtonToolbar>
-                <Button variant="light" onClick={onShowCreated} data-testid="createTourButton">
-                    Создать
-                </Button>
-                <Button
-                    size="sm"
-                    variant="light"
-                    onClick={onShowCopy}
-                    disabled={!blocklyReloadEnabled}
-                    data-testid="copyTourButton"
-                >
-                    Сохранить как
-                </Button>
-                <Button
-                    size="sm"
-                    variant="light"
-                    onClick={saveCode}
-                    disabled={!blocklyReloadEnabled}
-                    data-testid="saveTourButton"
-                >
-                    Сохранить
-                </Button>
-                <Button
-                    size="sm"
-                    variant="light"
-                    onClick={onShowRun}
-                    disabled={!blocklyReloadEnabled}
-                    data-testid="runTourButton"
-                >
-                    Запустить
-                </Button>
-                <Button
-                    size="sm"
-                    variant="light"
-                    onClick={closeTour}
-                    disabled={!blocklyReloadEnabled}
-                    data-testid="closeTourButton"
-                >
-                    Закрыть
-                </Button>
-            </ButtonToolbar>
+        <div className="relative flex-center">
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+                <Nav className="mr-auto">
+                    <Nav.Link onClick={onShowCreated} data-testid="createTourButton">
+                        Создать
+                    </Nav.Link>
+                    <NavDropdown title="Сохранить" id="basic-nav-dropdown" disabled={!blocklyReloadEnabled}>
+                        <NavDropdown.Item onClick={saveCode} data-testid="saveTourButton">
+                            Сохранить
+                        </NavDropdown.Item>
+                        <NavDropdown.Item onClick={onShowCopy} data-testid="copyTourButton">
+                            Сохранить как
+                        </NavDropdown.Item>
+                    </NavDropdown>
+                    <Nav.Link onClick={onShowRun} data-testid="runTourButton" disabled={!blocklyReloadEnabled}>
+                        Запустить
+                    </Nav.Link>
+                    <Nav.Link onClick={closeTour} data-testid="closeTourButton" disabled={!blocklyReloadEnabled}>
+                        Закрыть
+                    </Nav.Link>
+                </Nav>
+            </Navbar.Collapse>
         </div>
     );
 };

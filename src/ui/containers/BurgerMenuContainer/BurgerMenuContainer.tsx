@@ -1,7 +1,7 @@
 import {useCallback, useState} from "react";
 import React from "react";
 import ScriptList from "../../components/ScriptList/ScriptList/ScriptList";
-import { Button } from "react-bootstrap";
+import {Button, Nav} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {StoreType} from "../../reducers";
 import {burgerClose, burgerOpen} from "../../actions/mainAction";
@@ -23,9 +23,9 @@ const BurgerMenuContainer = () => {
     };
     return (
         <div>
-            <Button variant="light" onClick={openBurgerMenu} className="burger-menu-button-open">
+            <Nav.Link onClick={openBurgerMenu} className="burger-menu-button-open" >
                 <img src="http://pribory-spb.ru/templates/skin1/images/icon-menu.png" style={{ width: 22 }} />
-            </Button>
+            </Nav.Link>
             <div>
                 {(burgerIsOpen && <div className="back-drop" />) || null}
                 <ScriptList onClickEsc={closeAllMenus} isOpen={burgerIsOpen} />
