@@ -7,7 +7,7 @@ const CodeJSComponent = () => {
     const tour: TourType = useSelector<StoreType, TourType>(({ SelectedTourState }) => SelectedTourState.tourDB);
     return (
         <div className="code-block">
-            {tour.codeJS?.split(/(\/\/!.*)|(.*\/\*\*\n.*\*.*\n.*\*\/)|(\/\/ .*)/g).map((el, index) => {
+            {tour.codeJS?.split(/(\/\/!.*)|(.*\/\*\*\n.*\*.*\n.*\*\/)|(\n\/\/.*)/g).map((el, index) => {
                 console.log("codeJS el ", index, el);
                 if (!el) {
                     return;
@@ -27,7 +27,7 @@ const CodeJSComponent = () => {
                     if (indexStr !== 0 && indexStr !== arrayStr.length - 1) return <br />;
                     return null;
                 });
-            }) || null}
+            })}
         </div>
     );
 };

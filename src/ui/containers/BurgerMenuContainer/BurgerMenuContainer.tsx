@@ -1,10 +1,10 @@
-import {useCallback, useState} from "react";
+import { useCallback, useState } from "react";
 import React from "react";
 import ScriptList from "../../components/ScriptList/ScriptList/ScriptList";
-import {Button, Nav} from "react-bootstrap";
-import {useDispatch, useSelector} from "react-redux";
-import {StoreType} from "../../reducers";
-import {burgerClose, burgerOpen} from "../../actions/mainAction";
+import { Button, Nav } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { StoreType } from "../../reducers";
+import { burgerClose, burgerOpen } from "../../actions/mainAction";
 /*
 Крестики
 https://instaga.ru/images/close.png
@@ -23,7 +23,7 @@ const BurgerMenuContainer = () => {
     };
     return (
         <div>
-            <Nav.Link onClick={openBurgerMenu} className="burger-menu-button-open" >
+            <Nav.Link onClick={openBurgerMenu} className="burger-button">
                 <img src="http://pribory-spb.ru/templates/skin1/images/icon-menu.png" style={{ width: 22 }} />
             </Nav.Link>
             <div>

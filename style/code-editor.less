@@ -1,14 +1,32 @@
 .editor-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr; //repeat(2, 1fr);
+    display: grid;
+    grid-template-columns: 1fr 1fr; //repeat(2, 1fr);
+    transition: 0.2s;
+    overflow: hidden;
 }
 
 #root {
-  height: 100vh;
-  max-height: 100vh;
-  min-height: 100vh;
+    height: 100vh;
+    max-height: 100vh;
+    min-height: 100vh;
 }
+
 .injectionDiv {
-  flex: 1;
-  height: unset !important;
+    flex: 1;
+    height: unset !important;
+}
+
+.button-show-code {
+    position: absolute;
+    right: 15px;
+    background: #dbdcdc;
+    border: none !important;
+    //font-size: smaller;
+    margin: 1em;
+    flex-direction: row;
+    justify-content: space-between;
+    font-weight: bold;
+    color: #565656;
+    opacity: 0.8;
+    overflow: hidden;
 }

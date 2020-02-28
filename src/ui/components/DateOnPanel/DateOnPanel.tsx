@@ -26,9 +26,7 @@ const DateOnPanel: FC<DateListSaveProps> = ({ showDate }) => {
     if (showDate && tourDB.dateChange) {
         return (
             <div className="date-save-on-panel" data-testid="panel-date">
-                <Navbar.Collapse className="justify-content-end">
-                    <Navbar.Text>Последнее сохранение {getDateClientFormat(tourDB.dateChange)}</Navbar.Text>
-                </Navbar.Collapse>
+                <Navbar.Text>Последнее сохранение {getDateClientFormat(tourDB.dateChange)}</Navbar.Text>
             </div>
         );
     }
@@ -36,13 +34,13 @@ const DateOnPanel: FC<DateListSaveProps> = ({ showDate }) => {
     if (tourDB.dateChange) {
         return (
             <div className="date-save-on-panel" data-testid="panel-not-date">
-                Все изменения сохранены
+                <Navbar.Text>Тур сохранен</Navbar.Text>
             </div>
         );
     }
     return (
         <div className="date-save-on-panel" data-testid="panel-not-save">
-            ...
+            <Navbar.Text> ... </Navbar.Text>
         </div>
     );
 };
