@@ -364,7 +364,7 @@ export default class TourHelper {
         );
         TourHelper.viewerInterfaceElement = node;
     };
-    public static step = (e?: Event, index?: number) => {
+    public static step = (index?: number, e?: Event) => {
         TourHelper.blackElement = [];
         TourHelper.descrElement = [];
         TourHelper.conditionElement = null;
@@ -395,7 +395,7 @@ export default class TourHelper {
             TourHelper.clearCreatedElement();
 
             // window.addEventListener("DOMContentLoaded", TourHelper.step, { once: true });
-            window.setTimeout(TourHelper.step, 500);
+            window.setTimeout(TourHelper.step, 200);
         }
     };
     private static clearRectElement = () => {

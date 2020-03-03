@@ -9,7 +9,7 @@ export interface PageButtonsState {
     currentStep: number;
     totalSteps: number;
     paginationModel: any;
-    setStep: (index: number) => void;
+    setStep: (index?: number, e?: Event) => void;
     minPreviousOpen?: number;
     maxNextOpen?: number;
 }
@@ -51,32 +51,6 @@ const StepButtons: FC<PageButtonsState> = ({
                             {page.value}
                         </Button>
                     );
-                    /*if (page.value !== currentStep + 1) {
-                        return (
-                            <Button
-                                onClick={event => {
-                                    disposeEvent(event);
-                                    setStep(page.value - 1);
-                                }}
-                            >
-                                {page.value}
-                            </Button>
-                        );
-                    }
-                    return (
-                        <Button
-                            onClick={event => {
-                                disposeEvent(event);
-                                setStep(page.value - 1);
-                            }}
-                            style={{
-                                /!*outlineColor: "rgba(13,13,13)",*!/
-                                color: "rgb(248,231,75)"
-                            }}
-                        >
-                            {page.value}
-                        </Button>
-                    );*/
                 }
                 return null;
             })}
@@ -90,6 +64,9 @@ const StepButtons: FC<PageButtonsState> = ({
             >
                 Вперед
             </Button>
+            <div className="krista-bootstrap-wrapper " style={{ position: "absolute", right: "5px", bottom: "3px" }}>
+                {currentStep + 1} из {totalSteps + 1}
+            </div>
         </ButtonToolbar>
     );
 };
