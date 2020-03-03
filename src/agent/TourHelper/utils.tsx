@@ -334,7 +334,7 @@ export default class TourHelper {
             TourHelper.conditionStepNumbers.forEach(step => {
                 if (step < TourHelper.currentStep) {
                     minStep = step;
-                };
+                }
             });
             return minStep + 1;
         };
@@ -389,7 +389,8 @@ export default class TourHelper {
         const target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
         const element: Element | null = TourHelper.conditionElement;
         console.log("clickOnHandler >> ", element);
-        if (element === target && element) {
+        //debugger;
+        if (element?.contains(target) && element) {
             element.removeEventListener("click", TourHelper.clickOnHandler);
             TourHelper.step();
             TourHelper.conditionElement = null;
