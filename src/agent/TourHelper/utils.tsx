@@ -4,6 +4,7 @@ import ReactDOM from "react-dom";
 import sendMessage from "../util/sendMessage";
 import ViewerInterface from "../components/ViewerInterface";
 import { disposeEvent } from "../util/utils";
+import { once } from "events";
 
 export interface StepType {
     blackout: Function[];
@@ -116,7 +117,7 @@ export default class TourHelper {
         TourHelper.conditionStepNumbers.push(TourHelper.stepCount);
         TourHelper.steps[TourHelper.stepCount].condition.push(() => {
             TourHelper.setConditionElement(element);
-            TourHelper.conditionElement?.addEventListener("click", TourHelper.clickOnHandler);
+            TourHelper.conditionElement?.addEventListener("click", TourHelper.clickOnHandler, { once: true });
         });
     };
 
@@ -329,7 +330,6 @@ export default class TourHelper {
             return TourHelper.conditionStepNumbers[maxIndex];
         };
         const getMinPreviousOpen = () => {
-            //debugger;
             let minStep = -1;
             TourHelper.conditionStepNumbers.forEach(step => {
                 if (step < TourHelper.currentStep) {
@@ -364,7 +364,7 @@ export default class TourHelper {
         );
         TourHelper.viewerInterfaceElement = node;
     };
-    public static step = (index?: number) => {
+    public static step = (e?: Event, index?: number) => {
         TourHelper.blackElement = [];
         TourHelper.descrElement = [];
         TourHelper.conditionElement = null;
@@ -389,11 +389,13 @@ export default class TourHelper {
         const target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
         const element: Element | null = TourHelper.conditionElement;
         console.log("clickOnHandler >> ", element);
-        //debugger;
         if (element?.contains(target) && element) {
             element.removeEventListener("click", TourHelper.clickOnHandler);
-            TourHelper.step();
             TourHelper.conditionElement = null;
+            TourHelper.clearCreatedElement();
+
+            // window.addEventListener("DOMContentLoaded", TourHelper.step, { once: true });
+            window.setTimeout(TourHelper.step, 500);
         }
     };
     private static clearRectElement = () => {
