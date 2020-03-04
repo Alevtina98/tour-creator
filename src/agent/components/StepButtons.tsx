@@ -9,7 +9,7 @@ export interface PageButtonsState {
     currentStep: number;
     totalSteps: number;
     paginationModel: any;
-    setStep: (index?: number, e?: Event) => void;
+    setStep: (index?: number) => void;
     minPreviousOpen?: number;
     maxNextOpen?: number;
 }

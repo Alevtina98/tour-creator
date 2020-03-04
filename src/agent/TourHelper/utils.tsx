@@ -364,7 +364,7 @@ export default class TourHelper {
         );
         TourHelper.viewerInterfaceElement = node;
     };
-    public static step = (index?: number, e?: Event) => {
+    public static step = (index?: number) => {
         TourHelper.blackElement = [];
         TourHelper.descrElement = [];
         TourHelper.conditionElement = null;
@@ -393,9 +393,9 @@ export default class TourHelper {
             element.removeEventListener("click", TourHelper.clickOnHandler);
             TourHelper.conditionElement = null;
             TourHelper.clearCreatedElement();
-
+            TourHelper.step();
             // window.addEventListener("DOMContentLoaded", TourHelper.step, { once: true });
-            window.setTimeout(TourHelper.step, 200);
+            //window.setTimeout(TourHelper.step, 200);
         }
     };
     private static clearRectElement = () => {
@@ -417,14 +417,20 @@ export default class TourHelper {
         TourHelper.clearPopperElement();
         TourHelper.clearViewerInterfaceElement();
     };
-    private static setBlackElement = (element: string) => {
-        const el = document.querySelector(element);
+    private static findeElementInWindow = (selector: string, typeSelector?: string) => {
+        const el: Element | null = document.querySelector(selector);
         if (!el) {
             console.log("ERROR: selector not found", TourHelper.blackElement);
             const numberStep: number = TourHelper.currentStep + 1;
-            const error: string = "blackouting selector " + element + " is not found on step " + numberStep;
+            const error: string = typeSelector + " selector " + selector + " is not found on step " + numberStep;
             sendMessage("newError", error);
             TourHelper.endTour();
+        }
+        return el;
+    };
+    private static setBlackElement = (selector: string) => {
+        const el = TourHelper.findeElementInWindow(selector);
+        if (!el) {
             return;
         }
         const blackEl: BlackElementType = {

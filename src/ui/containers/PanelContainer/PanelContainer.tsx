@@ -19,7 +19,14 @@ const PanelContainer = () => {
             <div className="relative panel">
                 <div id="outer-container" className="relative">
                     <BurgerMenuContainer />
-                    <ConnectionStatus connection={connected} />
+                    <Navbar.Brand
+                        style={{
+                            color: "white"
+                        }}
+                    >
+                        TourCreator
+                        <ConnectionStatus connection={connected} />
+                    </Navbar.Brand>
                 </div>
                 <ScriptButtons />
                 <DateOnPanel data-testid="panel-date" />
