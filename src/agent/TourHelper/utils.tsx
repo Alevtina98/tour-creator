@@ -5,6 +5,8 @@ import sendMessage from "../util/sendMessage";
 import ViewerInterface from "../components/ViewerInterface";
 import { disposeEvent } from "../util/utils";
 import { once } from "events";
+import { TourType } from "../../ui/util/restClient/requestTour";
+import { saveTour } from "../../ui/actions/selectedTourAction";
 
 export interface StepType {
     blackout: Function[];
@@ -81,19 +83,11 @@ export default class TourHelper {
     public static blackout = (element: string) => {
         TourHelper.steps[TourHelper.stepCount].blackout.push(() => {
             TourHelper.setBlackElement(element);
-            const el = TourHelper.blackElement[TourHelper.blackElement.length - 1].element;
-            if (!el) {
-                return;
-            }
         });
     };
     public static description = (element: string, desc: string) => {
         TourHelper.steps[TourHelper.stepCount].description.push(() => {
             TourHelper.setDescrElement(element, desc);
-            const el = TourHelper.descrElement[TourHelper.descrElement.length - 1].element;
-            if (!el) {
-                return;
-            }
         });
     };
     public static blocklyStep = (condition: Function) => {
@@ -112,39 +106,36 @@ export default class TourHelper {
             window.addEventListener("click", TourHelper.clickHandler, true);
         });
     };
-
     public static clickOn = (element: string) => {
         TourHelper.conditionStepNumbers.push(TourHelper.stepCount);
         TourHelper.steps[TourHelper.stepCount].condition.push(() => {
             TourHelper.setConditionElement(element);
-            TourHelper.conditionElement?.addEventListener("click", TourHelper.clickOnHandler, { once: true });
         });
+    };
+    public static step = (index?: number) => {
+        TourHelper.blackElement = [];
+        TourHelper.descrElement = [];
+        TourHelper.conditionElement = null;
+        if (typeof index !== "number") {
+            TourHelper.currentStep += 1;
+        } else {
+            TourHelper.currentStep = index;
+        }
+        if (TourHelper.currentStep === TourHelper.steps.length) return;
+        TourHelper.startStep();
     };
 
     private static startStep = () => {
         TourHelper.clearCreatedElement();
-        TourHelper.setBlackoutAndDescriptionElements();
-        TourHelper.showElements();
-        TourHelper.showViewerInterface();
-        TourHelper.setActionWaiting();
-    };
-
-    private static setBlackoutAndDescriptionElements = () => {
-        TourHelper.steps[TourHelper.currentStep].blackout.forEach(fn => fn());
-        TourHelper.steps[TourHelper.currentStep].description.forEach(fn => fn());
-    };
-
-    private static setActionWaiting = () => {
-        TourHelper.steps[TourHelper.currentStep].condition.forEach(fn => fn());
+        TourHelper.setElements();
     };
 
     private static showElements = () => {
-        TourHelper.blackElement[0]?.element?.scrollIntoView({ block: "center", behavior: "smooth" });
-        TourHelper.descrElement[0]?.element?.scrollIntoView({ block: "center", behavior: "smooth" });
+        TourHelper.blackElement[0]?.element?.scrollIntoView({ block: "start", behavior: "smooth" });
+        TourHelper.descrElement[0]?.element?.scrollIntoView({ block: "start", behavior: "smooth" });
         TourHelper.blackoutWindow();
         TourHelper.descrElement.forEach(el => TourHelper.describeElement(el));
     };
-
     private static blackoutWindow = () => {
         TourHelper.setParamWindow();
         TourHelper.blackElement.forEach(el => (el.coordinates = TourHelper.getCoordinateElement(el.element)));
@@ -162,7 +153,6 @@ export default class TourHelper {
         TourHelper.addRectAround(area);
         TourHelper.rectElementParam.forEach(el => TourHelper.newRect(el.top, el.left, el.width, el.height));
     };
-
     private static getArea = () => {
         const area: HighlightAreaType = {
             minX: TourHelper.windowHeight,
@@ -314,6 +304,7 @@ export default class TourHelper {
         );
         TourHelper.popperElement.push(descrNode);
     };
+
     private static showViewerInterface = () => {
         const node: Element = window.document.createElement("div");
         const nodeId = "viewer-interface";
@@ -364,17 +355,9 @@ export default class TourHelper {
         );
         TourHelper.viewerInterfaceElement = node;
     };
-    public static step = (index?: number) => {
-        TourHelper.blackElement = [];
-        TourHelper.descrElement = [];
-        TourHelper.conditionElement = null;
-        if (typeof index !== "number") {
-            TourHelper.currentStep += 1;
-        } else {
-            TourHelper.currentStep = index;
-        }
-        if (TourHelper.currentStep === TourHelper.steps.length) return;
-        TourHelper.startStep();
+
+    private static setActionWaiting = () => {
+        TourHelper.steps[TourHelper.currentStep].condition.forEach(fn => fn());
     };
     private static clickHandler = (e: MouseEvent) => {
         if (TourHelper.viewerInterfaceElement?.contains(e.target)) {
@@ -398,6 +381,7 @@ export default class TourHelper {
             //window.setTimeout(TourHelper.step, 200);
         }
     };
+
     private static clearRectElement = () => {
         TourHelper.rectElement.map(el => el.remove());
         TourHelper.rectElement = [];
@@ -417,53 +401,92 @@ export default class TourHelper {
         TourHelper.clearPopperElement();
         TourHelper.clearViewerInterfaceElement();
     };
-    private static findeElementInWindow = (selector: string, typeSelector?: string) => {
-        const el: Element | null = document.querySelector(selector);
-        if (!el) {
-            console.log("ERROR: selector not found", TourHelper.blackElement);
-            const numberStep: number = TourHelper.currentStep + 1;
-            const error: string = typeSelector + " selector " + selector + " is not found on step " + numberStep;
-            sendMessage("newError", error);
-            TourHelper.endTour();
+
+    private static allElementsIsFound = () => {
+        const resultOfChecking: boolean =
+            TourHelper.steps[TourHelper.currentStep].blackout.length === TourHelper.blackElement.length &&
+            TourHelper.steps[TourHelper.currentStep].description.length === TourHelper.descrElement.length;
+        return resultOfChecking;
+    };
+    private static onElementIsNotFound = (selector: string, nameSelector?: string) => {
+        sendMessage("newError", "Время ожидания элемента истекло");
+        console.log("Селектор не найден");
+        const error: string =
+            (nameSelector || "элемент") +
+            " с селектором " +
+            selector +
+            " не найден на " +
+            (TourHelper.currentStep + 1) +
+            "-м шаге";
+        sendMessage("newError", error);
+        TourHelper.endTour();
+    };
+    private static tryGetElement = (callback: (el: Element) => void, selector: string, nameSelector?: string) => {
+        let el: Element | null = document.querySelector(selector);
+        let idRequest = 0;
+        const stopRequest = () => {
+            clearInterval(idRequest);
+            if (!el) {
+                TourHelper.onElementIsNotFound(selector, nameSelector);
+            } else {
+                callback(el);
+                // debugger;
+                if (TourHelper.allElementsIsFound() && !TourHelper.conditionElement) {
+                    TourHelper.afterSettingElements();
+                }
+            }
+        };
+        if (el) {
+            stopRequest();
+        } else {
+            const maxTimeRequest = 5000000;
+            const timeout = 1000;
+            let timeRequest = 0;
+            idRequest = window.setInterval(() => {
+                if (el || timeRequest > maxTimeRequest) {
+                    stopRequest();
+                    return;
+                }
+                el = document.querySelector(selector);
+                console.log("idRequest", idRequest, el);
+                timeRequest += timeout;
+            }, timeout);
         }
-        return el;
     };
     private static setBlackElement = (selector: string) => {
-        const el = TourHelper.findeElementInWindow(selector);
-        if (!el) {
-            return;
-        }
-        const blackEl: BlackElementType = {
-            element: el,
-            coordinates: TourHelper.getCoordinateElement(el)
+        const onOk = (el: Element) => {
+            const blackEl: BlackElementType = {
+                element: el,
+                coordinates: TourHelper.getCoordinateElement(el)
+            };
+            TourHelper.blackElement.push(blackEl);
         };
-        TourHelper.blackElement.push(blackEl);
+        TourHelper.tryGetElement(onOk, selector, "выделяемый элемент");
+
         //console.log("show on the this element >> ", el);
     };
-    private static setDescrElement = (element: string, description: string) => {
-        const el = document.querySelector(element);
-        if (!el) {
-            console.log("ERROR: selector not found");
-            const error: string =
-                "descriptoning selector " + element + " is not found on step " + TourHelper.currentStep + 1;
-            sendMessage("newError", error);
-            TourHelper.endTour();
-            return;
-        }
-        TourHelper.descrElement.push({ element: el, description: description });
-        //console.log("show on the this element >> ", el);
+    private static setDescrElement = (selector: string, description: string) => {
+        const onOk = (el: Element) => {
+            TourHelper.descrElement.push({ element: el, description: description });
+        };
+        TourHelper.tryGetElement(onOk, selector, "элемент, к которому добавляется описание, ");
     };
-    private static setConditionElement = (element: string) => {
-        const el = document.querySelector(element);
-        if (!el) {
-            console.log("ERROR: selector condition element not found");
-            const error: string =
-                "selector " + element + " condition element is not found on step " + TourHelper.currentStep + 1;
-            sendMessage("newError", error);
-            TourHelper.endTour();
-            return;
-        }
-        TourHelper.conditionElement = el;
+    private static setConditionElement = (selector: string) => {
+        const onOk = (el: Element) => {
+            TourHelper.conditionElement = el;
+            TourHelper.conditionElement?.addEventListener("click", TourHelper.clickOnHandler, { once: true });
+        };
+        TourHelper.tryGetElement(onOk, selector, "элемент, по которому ожидается клик, ");
+    };
+    private static setElements = () => {
+        TourHelper.steps[TourHelper.currentStep].blackout.forEach(fn => fn());
+        TourHelper.steps[TourHelper.currentStep].description.forEach(fn => fn());
+    };
+    private static afterSettingElements = () => {
+        console.log(TourHelper.blackElement);
+        TourHelper.showElements();
+        TourHelper.showViewerInterface();
+        TourHelper.setActionWaiting();
     };
     private static setParamWindow = () => {
         TourHelper.windowWidth = Math.max(document.body.scrollWidth, document.body.clientWidth);
