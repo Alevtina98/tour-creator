@@ -382,26 +382,6 @@ export default class TourHelper {
         }
     };
 
-    private static clearRectElement = () => {
-        TourHelper.rectElement.map(el => el.remove());
-        TourHelper.rectElement = [];
-        TourHelper.rectElementParam = [];
-    };
-    private static clearPopperElement = () => {
-        TourHelper.popperElement.map(el => el.parentNode!.removeChild(el));
-        TourHelper.popperElement = [];
-    };
-    private static clearViewerInterfaceElement = () => {
-        const el: Element | null = TourHelper.viewerInterfaceElement;
-        el?.parentNode?.removeChild(el);
-        TourHelper.viewerInterfaceElement = null;
-    };
-    private static clearCreatedElement = () => {
-        TourHelper.clearRectElement();
-        TourHelper.clearPopperElement();
-        TourHelper.clearViewerInterfaceElement();
-    };
-
     private static allElementsIsFound = () => {
         const resultOfChecking: boolean =
             TourHelper.steps[TourHelper.currentStep].blackout.length === TourHelper.blackElement.length &&
@@ -419,8 +399,9 @@ export default class TourHelper {
             (TourHelper.currentStep + 1) +
             "-м шаге";
         sendMessage("newError", error);
-        TourHelper.endTour();
+        //TourHelper.endTour();
     };
+
     private static tryGetElement = (callback: (el: Element) => void, selector: string, nameSelector?: string) => {
         let el: Element | null = document.querySelector(selector);
         let idRequest = 0;
@@ -430,29 +411,47 @@ export default class TourHelper {
                 TourHelper.onElementIsNotFound(selector, nameSelector);
             } else {
                 callback(el);
-                // debugger;
                 if (TourHelper.allElementsIsFound() && !TourHelper.conditionElement) {
                     TourHelper.afterSettingElements();
                 }
             }
         };
+
         if (el) {
-            stopRequest();
-        } else {
-            const maxTimeRequest = 5000000;
-            const timeout = 1000;
-            let timeRequest = 0;
-            idRequest = window.setInterval(() => {
-                if (el || timeRequest > maxTimeRequest) {
-                    stopRequest();
-                    return;
-                }
-                el = document.querySelector(selector);
-                console.log("idRequest", idRequest, el);
-                timeRequest += timeout;
-            }, timeout);
+            return stopRequest();
         }
+        const maxTimeRequest = 5000;
+        const timeout = 10;
+        let timeRequest = 0;
+        idRequest = window.setInterval(() => {
+            el = document.querySelector(selector);
+            console.log("idRequest", idRequest, el);
+            timeRequest += timeout;
+            if (timeRequest > maxTimeRequest || (el && !TourHelper.findParentWithDisplayNone(el))) {
+                stopRequest();
+            }
+        }, timeout);
     };
+    private static findParentWithDisplayNone = (element: Element | null) => {
+        //there is a parent with display: none
+        let el: Node | null = element;
+        if (!el) return true;
+        while (el) {
+            if (el.style.display === "none") {
+                console.log("родитель с  display=none", el);
+                return true;
+            }
+            el = el.parentNode;
+            for (let i = 0; i < el.childNodes.length; i++) {
+                if (el.childNodes[i].className === "dark_overlay") {
+                    console.log("элемент перекрывающий найденный (с классом dark_overlay)", el);
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+
     private static setBlackElement = (selector: string) => {
         const onOk = (el: Element) => {
             const blackEl: BlackElementType = {
@@ -483,11 +482,16 @@ export default class TourHelper {
         TourHelper.steps[TourHelper.currentStep].description.forEach(fn => fn());
     };
     private static afterSettingElements = () => {
-        console.log(TourHelper.blackElement);
-        TourHelper.showElements();
-        TourHelper.showViewerInterface();
-        TourHelper.setActionWaiting();
+        //console.log(TourHelper.blackElement);
+        if (!TourHelper.allElementsIsFound()) {
+            TourHelper.endTour();
+        } else {
+            TourHelper.showElements();
+            TourHelper.showViewerInterface();
+            TourHelper.setActionWaiting();
+        }
     };
+
     private static setParamWindow = () => {
         TourHelper.windowWidth = Math.max(document.body.scrollWidth, document.body.clientWidth);
         TourHelper.windowHeight = Math.max(
@@ -506,6 +510,25 @@ export default class TourHelper {
             width: parseInt(String(bounds.width), 10)
         };
         return coordinates;
+    };
+    private static clearRectElement = () => {
+        TourHelper.rectElement.map(el => el.remove());
+        TourHelper.rectElement = [];
+        TourHelper.rectElementParam = [];
+    };
+    private static clearPopperElement = () => {
+        TourHelper.popperElement.map(el => el.parentNode!.removeChild(el));
+        TourHelper.popperElement = [];
+    };
+    private static clearViewerInterfaceElement = () => {
+        const el: Element | null = TourHelper.viewerInterfaceElement;
+        el?.parentNode?.removeChild(el);
+        TourHelper.viewerInterfaceElement = null;
+    };
+    private static clearCreatedElement = () => {
+        TourHelper.clearRectElement();
+        TourHelper.clearPopperElement();
+        TourHelper.clearViewerInterfaceElement();
     };
     private static initState = () => {
         TourHelper.nameTour = "";

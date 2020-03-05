@@ -3,7 +3,7 @@ import * as React from "react";
 import ultimatePagination, { ITEM_TYPES } from "ultimate-pagination";
 import { Button, ButtonToolbar } from "react-bootstrap";
 import PageButtons from "./StepButtons";
-import {disposeEvent} from "../util/utils";
+import { disposeEvent } from "../util/utils";
 
 // import "bootstrap/dist/css/bootstrap.css";
 
@@ -45,7 +45,7 @@ const ViewerInterface: FC<ViewerInterfaceState> = ({
     console.log(paginationModel);
     return (
         <div
-            className="krista-bootstrap-wrapper "
+            className="basic-viewer-style krista-bootstrap-wrapper "
             style={{
                 position: "fixed",
                 top: 0,
