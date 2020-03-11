@@ -4,6 +4,7 @@ import { FC, memo } from "react";
 import { Button, ButtonToolbar } from "react-bootstrap";
 import { ITEM_TYPES } from "ultimate-pagination";
 import { disposeEvent } from "../util/utils";
+import { ButtonViewerInterface } from "./ViewerInterface";
 
 export interface PageButtonsState {
     currentStep: number;
@@ -12,6 +13,7 @@ export interface PageButtonsState {
     setStep: (index?: number) => void;
     minPreviousOpen?: number;
     maxNextOpen?: number;
+    buttonStyle?: ButtonViewerInterface;
 }
 
 const StepButtons: FC<PageButtonsState> = ({
@@ -20,11 +22,13 @@ const StepButtons: FC<PageButtonsState> = ({
     paginationModel,
     setStep,
     minPreviousOpen = 0,
-    maxNextOpen = totalSteps - 1
+    maxNextOpen = totalSteps - 1,
+    buttonStyle
 }) => {
     return (
         <ButtonToolbar>
             <Button
+                style={buttonStyle}
                 disabled={currentStep === minPreviousOpen}
                 onClick={event => {
                     disposeEvent(event);
@@ -42,6 +46,7 @@ const StepButtons: FC<PageButtonsState> = ({
                 ) {
                     return (
                         <Button
+                            style={buttonStyle}
                             disabled={page.value === currentStep + 1}
                             onClick={event => {
                                 disposeEvent(event);
@@ -56,6 +61,7 @@ const StepButtons: FC<PageButtonsState> = ({
             })}
 
             <Button
+                style={buttonStyle}
                 disabled={currentStep === maxNextOpen}
                 onClick={event => {
                     disposeEvent(event);
@@ -64,7 +70,10 @@ const StepButtons: FC<PageButtonsState> = ({
             >
                 Вперед
             </Button>
-            <div className="krista-bootstrap-wrapper " style={{ position: "absolute", right: "5px", bottom: "3px" }}>
+            <div
+                className="krista-bootstrap-wrapper "
+                style={{ position: "absolute", right: "5px", bottom: "3px", padding: "3px" }}
+            >
                 {currentStep + 1} из {totalSteps + 1}
             </div>
         </ButtonToolbar>

@@ -402,7 +402,7 @@ export default class TourHelper {
         //TourHelper.endTour();
     };
 
-    private static tryGetElement = (callback: (el: Element) => void, selector: string, nameSelector?: string) => {
+    private static tryGetElement = (selector: string, callback: (el: Element) => void, nameSelector?: string) => {
         let el: Element | null = document.querySelector(selector);
         let idRequest = 0;
         const stopRequest = () => {
@@ -427,7 +427,11 @@ export default class TourHelper {
             el = document.querySelector(selector);
             console.log("idRequest", idRequest, el);
             timeRequest += timeout;
-            if (timeRequest > maxTimeRequest || (el && !TourHelper.findParentWithDisplayNone(el))) {
+            if (
+                timeRequest > maxTimeRequest ||
+                (el && !TourHelper.findParentWithDisplayNone(el)) ||
+                TourHelper.currentStep === -1
+            ) {
                 stopRequest();
             }
         }, timeout);
@@ -460,7 +464,7 @@ export default class TourHelper {
             };
             TourHelper.blackElement.push(blackEl);
         };
-        TourHelper.tryGetElement(onOk, selector, "выделяемый элемент");
+        TourHelper.tryGetElement(selector, onOk, "выделяемый элемент");
 
         //console.log("show on the this element >> ", el);
     };
@@ -468,14 +472,14 @@ export default class TourHelper {
         const onOk = (el: Element) => {
             TourHelper.descrElement.push({ element: el, description: description });
         };
-        TourHelper.tryGetElement(onOk, selector, "элемент, к которому добавляется описание, ");
+        TourHelper.tryGetElement(selector, onOk, "элемент, к которому добавляется описание, ");
     };
     private static setConditionElement = (selector: string) => {
         const onOk = (el: Element) => {
             TourHelper.conditionElement = el;
             TourHelper.conditionElement?.addEventListener("click", TourHelper.clickOnHandler, { once: true });
         };
-        TourHelper.tryGetElement(onOk, selector, "элемент, по которому ожидается клик, ");
+        TourHelper.tryGetElement(selector, onOk, "элемент, по которому ожидается клик, ");
     };
     private static setElements = () => {
         TourHelper.steps[TourHelper.currentStep].blackout.forEach(fn => fn());

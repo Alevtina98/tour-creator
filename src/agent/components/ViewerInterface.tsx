@@ -18,7 +18,16 @@ export interface ViewerInterfaceState {
     minPreviousOpen?: number; //disable next step-buttons
     maxNextOpen?: number; //disable pred step-buttons
 }
-
+export interface ButtonViewerInterface {
+    padding?: string;
+    color?: string;
+    background?: string;
+    border?: string;
+    borderWidth?: string;
+    borderColor?: string;
+    marginTop?: string;
+    marginBottom?: string;
+}
 const ViewerInterface: FC<ViewerInterfaceState> = ({
     setStep,
     currentStep,
@@ -42,10 +51,20 @@ const ViewerInterface: FC<ViewerInterfaceState> = ({
         hidePreviousAndNextPageLinks: false,
         hideFirstAndLastPageLinks: false
     });
+    const buttonStyle: ButtonViewerInterface = {
+        padding: "4px 8px",
+        color: "black",
+        background: "rgb(217, 217, 217)",
+        //border: "none",
+        borderColor: "white",
+        borderWidth: "2px",
+        marginTop: "5px",
+        marginBottom: "0"
+    };
     console.log(paginationModel);
     return (
         <div
-            className="basic-viewer-style krista-bootstrap-wrapper "
+            className=" krista-bootstrap-wrapper "
             style={{
                 position: "fixed",
                 top: 0,
@@ -65,9 +84,11 @@ const ViewerInterface: FC<ViewerInterfaceState> = ({
                     setStep={setStep}
                     minPreviousOpen={minPreviousOpen}
                     maxNextOpen={maxNextOpen}
+                    buttonStyle={buttonStyle}
                 />
             )) || (
                 <Button
+                    style={buttonStyle}
                     onClick={event => {
                         disposeEvent(event);
                         onStart();
