@@ -423,7 +423,7 @@ export default class TourHelper {
             return stopRequest();
         }
         const maxTimeRequest = 5000;
-        const timeout = 10;
+        const timeout = 20;
         let timeRequest = 0;
         idRequest = window.setInterval(() => {
             el = document.querySelector(selector);
@@ -431,14 +431,15 @@ export default class TourHelper {
             timeRequest += timeout;
             if (
                 timeRequest > maxTimeRequest ||
-                (el && !TourHelper.findParentWithDisplayNone(el)) ||
+                el ||
+                //&& !TourHelper.elementIsVisible(el)
                 TourHelper.currentStep === -1
             ) {
                 stopRequest();
             }
         }, timeout);
     };
-    private static findParentWithDisplayNone = (element: Element | null) => {
+    private static elementIsVisible = (element: Element | null) => {
         //there is a parent with display: none
         let el: Node | null = element;
         if (!el) return true;
