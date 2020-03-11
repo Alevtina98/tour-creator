@@ -113,6 +113,8 @@ export default class TourHelper {
         });
     };
     public static step = (index?: number) => {
+        window.removeEventListener("click", TourHelper.clickHandler, true);
+        TourHelper.conditionElement?.removeEventListener("click", TourHelper.clickOnHandler, true);
         TourHelper.blackElement = [];
         TourHelper.descrElement = [];
         TourHelper.conditionElement = null;
