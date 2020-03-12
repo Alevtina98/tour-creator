@@ -349,6 +349,7 @@ export default class TourHelper {
                 name={TourHelper.nameTour}
                 desc={TourHelper.descTour}
                 onStart={TourHelper.startTour}
+                onCancel={TourHelper.endTour}
                 start={TourHelper.start}
                 minPreviousOpen={minPreviousOpen}
                 maxNextOpen={maxNextOpen}

@@ -4,7 +4,7 @@ import { FC, memo } from "react";
 import { Button, ButtonToolbar } from "react-bootstrap";
 import { ITEM_TYPES } from "ultimate-pagination";
 import { disposeEvent } from "../util/utils";
-import { ButtonViewerInterface } from "./ViewerInterface";
+import { ButtonViewerInterface, PageNumberViewerInterface } from "./ViewerInterface";
 
 export interface PageButtonsState {
     currentStep: number;
@@ -15,7 +15,16 @@ export interface PageButtonsState {
     maxNextOpen?: number;
     buttonStyle?: ButtonViewerInterface;
 }
-
+export interface PageNumberViewerInterface {
+    padding?: string;
+    color?: string;
+    background?: string;
+    border?: string;
+    borderWidth?: string;
+    borderColor?: string;
+    marginTop?: string;
+    marginBottom?: string;
+}
 const StepButtons: FC<PageButtonsState> = ({
     currentStep,
     totalSteps,
@@ -25,10 +34,20 @@ const StepButtons: FC<PageButtonsState> = ({
     maxNextOpen = totalSteps - 1,
     buttonStyle
 }) => {
+    const pageNumberStyle: PageNumberViewerInterface = {
+        position: "absolute",
+        right: "2px",
+        color: "black",
+        background: "rgb(217, 217, 217)"
+    };
     return (
-        <ButtonToolbar>
+        <ButtonToolbar style={{ marginLeft: "0px" }}>
             <Button
-                style={buttonStyle}
+                style={{
+                    ...buttonStyle,
+                    borderRadius: "5px 0 0 5px"
+                }}
+                className=" krista-bootstrap-wrapper "
                 disabled={currentStep === minPreviousOpen}
                 onClick={event => {
                     disposeEvent(event);
@@ -46,7 +65,11 @@ const StepButtons: FC<PageButtonsState> = ({
                 ) {
                     return (
                         <Button
-                            style={buttonStyle}
+                            style={{
+                                ...buttonStyle,
+                                borderRadius: "0"
+                            }}
+                            className=" krista-bootstrap-wrapper "
                             disabled={page.value === currentStep + 1}
                             onClick={event => {
                                 disposeEvent(event);
@@ -61,7 +84,10 @@ const StepButtons: FC<PageButtonsState> = ({
             })}
 
             <Button
-                style={buttonStyle}
+                style={{
+                    ...buttonStyle,
+                    borderRadius: "0 5px 5px 0"
+                }}
                 disabled={currentStep === maxNextOpen}
                 onClick={event => {
                     disposeEvent(event);
@@ -71,8 +97,12 @@ const StepButtons: FC<PageButtonsState> = ({
                 Вперед
             </Button>
             <div
+                style={{
+                    ...pageNumberStyle,
+                    display: "inline-block",
+                    bottom: "0px"
+                }}
                 className="krista-bootstrap-wrapper "
-                style={{ position: "absolute", right: "5px", bottom: "3px", padding: "3px" }}
             >
                 {currentStep + 1} из {totalSteps + 1}
             </div>
