@@ -18,13 +18,10 @@ export interface SelectedTourReducerState {
     errorsRunTour: string[];
 }
 const initTourType = getInitData();
-const tourDBReducer = createReducer<TourType, SelectedTourAction>(initTourType)
-    .handleAction(setTourDB, (state, action) => action.payload);
-    /*.handleAction(editTourDB, (state, action) => ({
-        ...state,
-        ...action.payload
-    }));*/
-
+const tourDBReducer = createReducer<TourType, SelectedTourAction>(initTourType).handleAction(
+    setTourDB,
+    (state, action) => action.payload
+);
 const errorsRunTourReducer = createReducer<string[]>([])
     .handleAction(setErrorsRunTour, (state, action) => action.payload)
     .handleAction(addErrorRunTour, (state, action) => [...state, action.payload]);

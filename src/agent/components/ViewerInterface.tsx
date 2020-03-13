@@ -21,7 +21,15 @@ export interface ViewerInterfaceState {
     maxNextOpen?: number; //disable pred step-buttons
     onCancel: () => void;
 }
-export interface ButtonViewerInterface {
+export interface ViewerStyleInterface {
+    position?: string;
+    top?: string;
+    right?: string;
+    zIndex?: string;
+    padding?: string;
+    background?: string;
+}
+export interface ButtonViewerStyleInterface {
     padding?: string;
     color?: string;
     backgroundColor?: string;
@@ -33,7 +41,22 @@ export interface ButtonViewerInterface {
     marginBottom?: string;
     borderRadius?: string;
 }
-
+export interface CancelButtonViewerStyleInterface {
+    position?: string;
+    top?: string;
+    right?: string;
+    height?: string;
+    width?: string;
+    background?: string;
+    border?: string;
+}
+export interface IconCancelButtonViewerStyleInterface {
+    position?: string;
+    right?: string;
+    top?: string;
+    maxHeight?: string;
+    maxWidth?: string;
+}
 const ViewerInterface: FC<ViewerInterfaceState> = ({
     setStep,
     currentStep,
@@ -57,61 +80,50 @@ const ViewerInterface: FC<ViewerInterfaceState> = ({
         hidePreviousAndNextPageLinks: false,
         hideFirstAndLastPageLinks: false
     });
-    let textButtonColor = "#dbdcdc";
-    let buttonColor = "rgba(248,248,248,0)";
-    const buttonStyle: ButtonViewerInterface = {
+    const style: ViewerStyleInterface = {
+        position: "fixed",
+        top: "0",
+        right: "0",
+        zIndex: "11000001",
+        padding: "3px",
+        background: "rgba(0, 0, 0, 0.6)"
+    };
+    const buttonStyle: ButtonViewerStyleInterface = {
         padding: "4px 8px",
-        //color: textButtonColor,
-        // backgroundColor: buttonColor,
-        // border: "solid",
         borderRadius: "5px",
-        // borderWidth: "2px",
         marginLeft: "0",
-        borderColor: buttonColor,
-        //marginTop: "5px",
+        borderColor: "rgba(248,248,248,0)",
         marginBottom: "0"
     };
-
-    console.log(paginationModel);
+    const cancelButtonStyle: CancelButtonViewerStyleInterface = {
+        position: "absolute",
+        top: "0px",
+        right: "0px",
+        height: "20px",
+        width: "20px",
+        background: "rgba(219,220,220,0)",
+        border: "none"
+    };
+    const iconCancelButtonStyle: IconCancelButtonViewerStyleInterface = {
+        position: "absolute",
+        right: "10%",
+        top: "10%",
+        maxHeight: "80%",
+        maxWidth: "80%"
+    };
     return (
-        <div
-            style={{
-                position: "fixed",
-                top: 0,
-                right: 0,
-                zIndex: 11000001,
-                padding: "3px",
-                background: "rgba(0, 0, 0, 0.6)"
-                //minWidth: "80px"
-            }}
-            className=" krista-bootstrap-wrapper "
-        >
-            <Button
-                style={{
-                    position: "absolute",
-                    right: "0px",
-                    height: "20px",
-                    width: "20px",
-                    background: "rgba(219,220,220,0)",
-                    border: "none"
-                }}
-            >
+        <div style={style} className=" krista-bootstrap-wrapper ">
+            <div style={{ color: "rgb(142,197,255)", fontWeight: "bold", padding: "0 20px 0 0" }}>{name}</div>
+            <Button style={cancelButtonStyle}>
                 <FontAwesomeIcon
                     onClick={onCancel}
                     className="i-close"
                     size="2x"
                     color="#ff4747"
-                    style={{
-                        position: "absolute",
-                        right: "10%",
-                        top: "10%",
-                        maxHeight: "80%",
-                        maxWidth: "80%"
-                    }}
+                    style={iconCancelButtonStyle}
                     icon={faTimes}
                 />
             </Button>
-            <div style={{ color: "rgb(142,197,255)", fontWeight: "bold" }}>{name}</div>
             <div style={{ color: "rgb(255,255,255)" }}>{desc}</div>
             {(start && (
                 <PageButtons

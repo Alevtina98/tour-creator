@@ -53,7 +53,6 @@ class BlocklyWorkspace extends React.Component<BlocklyWorkspaceProps, BlocklyWor
     dummyToolbox = React.createRef();
 
     componentDidMount = () => {
-        debugger;
         // TODO figure out how to use setState here without breaking the toolbox when switching tabs
         this.state.workspace = Blockly.inject(this.editorDiv.current, {
             ...this.props.workspaceConfiguration,

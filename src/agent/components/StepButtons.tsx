@@ -4,7 +4,7 @@ import { FC, memo } from "react";
 import { Button, ButtonToolbar } from "react-bootstrap";
 import { ITEM_TYPES } from "ultimate-pagination";
 import { disposeEvent } from "../util/utils";
-import { ButtonViewerInterface, PageNumberViewerInterface } from "./ViewerInterface";
+import { ButtonViewerStyleInterface } from "./ViewerInterface";
 
 export interface PageButtonsState {
     currentStep: number;
@@ -13,7 +13,7 @@ export interface PageButtonsState {
     setStep: (index?: number) => void;
     minPreviousOpen?: number;
     maxNextOpen?: number;
-    buttonStyle?: ButtonViewerInterface;
+    buttonStyle?: ButtonViewerStyleInterface;
 }
 export interface PageNumberViewerInterface {
     padding?: string;

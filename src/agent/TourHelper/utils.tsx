@@ -123,7 +123,10 @@ export default class TourHelper {
         } else {
             TourHelper.currentStep = index;
         }
-        if (TourHelper.currentStep === TourHelper.steps.length) return;
+        if (TourHelper.currentStep === TourHelper.steps.length) {
+            TourHelper.endTour();
+            return;
+        }
         TourHelper.startStep();
     };
 
@@ -133,10 +136,14 @@ export default class TourHelper {
     };
 
     private static showElements = () => {
-        TourHelper.blackElement[0]?.element?.scrollIntoView({ block: "start", behavior: "smooth" });
-        TourHelper.descrElement[0]?.element?.scrollIntoView({ block: "start", behavior: "smooth" });
-        TourHelper.blackoutWindow();
-        TourHelper.descrElement.forEach(el => TourHelper.describeElement(el));
+        if (TourHelper.blackElement[0]) {
+            TourHelper.blackElement[0].element?.scrollIntoView({ block: "start", behavior: "smooth" });
+            TourHelper.blackoutWindow();
+        }
+        if (TourHelper.descrElement[0]) {
+            TourHelper.descrElement[0].element?.scrollIntoView({ block: "start", behavior: "smooth" });
+            TourHelper.descrElement.forEach(el => TourHelper.describeElement(el));
+        }
     };
     private static blackoutWindow = () => {
         TourHelper.setParamWindow();

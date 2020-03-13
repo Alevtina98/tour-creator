@@ -12,7 +12,6 @@ import {
 } from "../util/restClient/requestTour";
 import { error, success } from "react-notification-system-redux";
 import { burgerClose } from "./mainAction";
-import { Blockly } from "../components/BlocklyComponent";
 
 export const setLoadBocklyEnabled = createStandardAction("SET_RELOAD_BLOCKLY_ENABLED")();
 export const setLoadBocklyDisabled = createStandardAction("SET_RELOAD_BLOCKLY_DISABLED")();
@@ -20,6 +19,7 @@ export const setListTour = createStandardAction("SET_LIST_TOUR")<TourType[]>();
 export const setTourDB = createStandardAction("SET_TOUR")<TourType>();
 export const setErrorsRunTour = createStandardAction("SET_ERRORS")<string[]>();
 export const addErrorRunTour = createStandardAction("ADD_ERROR")<string>();
+export const setBlocklyRef = createStandardAction("SET_BLOCKLY_REF")<any | null>();
 
 export const codeJSSetNameAndDesc = (name: string, desc: string) => {
     const nameAssignment: string | null = "TourHelper.setNameTour('" + name + "');\n";
@@ -67,7 +67,17 @@ export const delToDb = () => async (dispatch: Dispatch, getState: () => StoreTyp
 export const saveTour = (period?: boolean) => async (dispatch: Dispatch, getState: () => StoreType) => {
     const store = getState();
     const selectedTour = store.SelectedTourState.tourDB;
-    const tourForSaved: TourType | null = store.ModalState.tour || selectedTour;
+    const tourForSaved: TourType = store.ModalState.tour || selectedTour;
+
+    if (store.ModalState.status === "edit") {
+        const xml = tourForSaved.code;
+        const xmlDom = Blockly.Xml.textToDom(xml);
+        const workspace = new Blockly.Workspace();
+        Blockly.Xml.domToWorkspace(xmlDom, workspace);
+        const jsFromXml: string = Blockly.JavaScript.workspaceToCode(workspace);
+        tourForSaved.codeJS = codeJSSetNameAndDesc(tourForSaved.name || "", tourForSaved.desc || "") + jsFromXml;
+    }
+    //tourForSaved.codeJS = codeJSSetNameAndDesc(tourForSaved.name || "", tourForSaved.desc || "") + tourForSaved.codeJS;
     try {
         const savedTour: TourType = await updateTour(tourForSaved);
         if (tourForSaved.id === selectedTour.id) {
@@ -82,7 +92,6 @@ export const saveTour = (period?: boolean) => async (dispatch: Dispatch, getStat
         dispatch(error({ message: e.getMessage() }));
     }
 };
-
 let periodicallySaveTimer = 0;
 export const periodicallySave = () => (dispatch: Dispatch, getState: () => StoreType) => {
     clearInterval(periodicallySaveTimer);
