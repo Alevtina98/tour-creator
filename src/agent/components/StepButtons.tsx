@@ -15,8 +15,10 @@ export interface PageButtonsState {
     maxNextOpen?: number;
     buttonStyle?: ButtonViewerStyleInterface;
 }
-export interface PageNumberViewerInterface {
+export interface PageNumberStyleInterface {
+    position?: string;
     padding?: string;
+    display?: string;
     color?: string;
     background?: string;
     border?: string;
@@ -24,6 +26,13 @@ export interface PageNumberViewerInterface {
     borderColor?: string;
     marginTop?: string;
     marginBottom?: string;
+    maxHeight?: string;
+    maxWidth?: string;
+    height?: string;
+    right?: string;
+    top?: string;
+    textAlign?: string;
+    lineHeight?: string;
 }
 const StepButtons: FC<PageButtonsState> = ({
     currentStep,
@@ -34,11 +43,17 @@ const StepButtons: FC<PageButtonsState> = ({
     maxNextOpen = totalSteps - 1,
     buttonStyle
 }) => {
-    const pageNumberStyle: PageNumberViewerInterface = {
+    const pageNumberStyle: PageNumberStyleInterface = {
         position: "absolute",
-        right: "2px",
+        textAlign: "center",
         color: "black",
-        background: "rgb(217, 217, 217)"
+        background: "rgb(217, 217, 217)",
+        display: "inline-block",
+        padding: "0px 5px",
+        height: "28px",
+        lineHeight: "28px",
+        right: "3px",
+        marginTop: "5px"
     };
     return (
         <ButtonToolbar style={{ marginLeft: "0px" }}>
@@ -86,7 +101,8 @@ const StepButtons: FC<PageButtonsState> = ({
             <Button
                 style={{
                     ...buttonStyle,
-                    borderRadius: "0 5px 5px 0"
+                    borderRadius: "0 5px 5px 0",
+                    marginRight: "100px"
                 }}
                 disabled={currentStep === maxNextOpen}
                 onClick={event => {
@@ -96,14 +112,7 @@ const StepButtons: FC<PageButtonsState> = ({
             >
                 Вперед
             </Button>
-            <div
-                style={{
-                    ...pageNumberStyle,
-                    display: "inline-block",
-                    bottom: "0px"
-                }}
-                className="krista-bootstrap-wrapper "
-            >
+            <div style={pageNumberStyle} className="krista-bootstrap-wrapper ">
                 {currentStep + 1} из {totalSteps + 1}
             </div>
         </ButtonToolbar>

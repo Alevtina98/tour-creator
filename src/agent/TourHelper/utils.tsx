@@ -4,9 +4,6 @@ import ReactDOM from "react-dom";
 import sendMessage from "../util/sendMessage";
 import ViewerInterface from "../components/ViewerInterface";
 import { disposeEvent } from "../util/utils";
-import { once } from "events";
-import { TourType } from "../../ui/util/restClient/requestTour";
-import { saveTour } from "../../ui/actions/selectedTourAction";
 
 export interface StepType {
     blackout: Function[];

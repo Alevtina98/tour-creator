@@ -89,11 +89,11 @@ const ViewerInterface: FC<ViewerInterfaceState> = ({
         background: "rgba(0, 0, 0, 0.6)"
     };
     const buttonStyle: ButtonViewerStyleInterface = {
-        padding: "4px 8px",
+        padding: "3px 5px",
         borderRadius: "5px",
+        marginTop: "5px",
         marginLeft: "0",
-        borderColor: "rgba(248,248,248,0)",
-        marginBottom: "0"
+        borderColor: "rgba(248,248,248,0)"
     };
     const cancelButtonStyle: CancelButtonViewerStyleInterface = {
         position: "absolute",
