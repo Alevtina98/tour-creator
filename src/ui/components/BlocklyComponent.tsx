@@ -45,14 +45,13 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
     };
 
     componentDidMount(): void {
-        this.props.actions.periodicallySave();
+        //this.props.actions.periodicallySave();
     }
     workspaceDidChange = (workspace: any) => {
         const newJS: string = Blockly.JavaScript.workspaceToCode(workspace);
         const newXml = new XMLSerializer();
         const newXmlStr = newXml.serializeToString(Blockly.Xml.workspaceToDom(workspace));
         this.props.dispatch(editTourDB({ code: newXmlStr, codeJS: newJS, dateChange: "" }));
-
     };
     componentDidUpdate({ selector }: BlocklyProps): void {
         if (this.props.selector !== selector && this.state.blockId) {
@@ -90,8 +89,9 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
             const workspaceSVG = this.blocklyRef.workspace.state.workspace;
             const onFirstComment = (event: WorkspaceEventType) => {
                 if (event.type === Blockly.Events.UI) {
-                    //console.log("event", event);
+                    console.log("event", event);
                     if (event.element !== "click") return;
+                    debugger;
                     const blockId = event.blockId || event.newValue || "";
                     this.setState({
                         blockId

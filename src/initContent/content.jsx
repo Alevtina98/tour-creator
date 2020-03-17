@@ -1,5 +1,5 @@
 
-const INITIAL_XML = '<xml xmlns="http://www.w3.org/1999/xhtml"><block type="procedures_defreturn" id="MPY-T.{j(Q(-#k%qoo/:" x="110" y="90"><field name="NAME">do something</field><comment pinned="false" h="80" w="160">Describe this function...</comment><value name="RETURN"><block type="text" id="*Prro;q=s1W%FCu/flKK"><field name="TEXT">!!!!!!!!!!!!!!!!!!!</field></block></value></block></xml>';;
+const INITIAL_XML = '<xml xmlns="http://www.w3.org/1999/xhtml"><block type="procedures_defreturn" id="MPY-T.{j(Q(-#k%qoo/:" x="110" y="90">></xml>';;
 
 const INITIAL_TOOLBOX_XML = '<xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">\n' +
     '<category name="Тур" colour="#585b64">\n' +

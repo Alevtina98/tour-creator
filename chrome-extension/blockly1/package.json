@@ -11,7 +11,8 @@
     "javascript-compressed.js",
     "msg-en.js",
     "underscore.js",
-    "names.js"
+    "names.js",
+    "xml.js"
   ],
   "author": "alevtina",
   "license": "MIT"

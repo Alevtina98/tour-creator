@@ -5,12 +5,12 @@ const path = require("path");
 module.exports = {
     mode: "development",
     entry: {
-        blockly: [
+        /* blockly: [
             "expose-loader?Blockly!exports-loader?Blockly,goog!google-blockly/blockly_compressed",
             "google-blockly/blocks_compressed",
-            "google-blockly/javascript_compressed",
+            "expose-loader?google-blockly/javascript_compressed",
             "google-blockly/msg/js/ru"
-        ],
+        ],*/
         ui: "./src/ui/index.tsx",
         agent: "./src/agent/index.js"
     },

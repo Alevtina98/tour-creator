@@ -71,8 +71,14 @@ export const saveTour = (period?: boolean) => async (dispatch: Dispatch, getStat
 
     if (store.ModalState.status === "edit") {
         const xml = tourForSaved.code;
+        /*  Blockly.setTheme({
+            blockStyles_: {},
+            categoryStyles_: {}
+        });*/
+        debugger;
         const xmlDom = Blockly.Xml.textToDom(xml);
         const workspace = new Blockly.Workspace();
+        Blockly.setTheme(Blockly.Themes.Classic);
         Blockly.Xml.domToWorkspace(xmlDom, workspace);
         const jsFromXml: string = Blockly.JavaScript.workspaceToCode(workspace);
         tourForSaved.codeJS = codeJSSetNameAndDesc(tourForSaved.name || "", tourForSaved.desc || "") + jsFromXml;

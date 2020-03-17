@@ -89,7 +89,7 @@ const ViewerInterface: FC<ViewerInterfaceState> = ({
         background: "rgba(0, 0, 0, 0.6)"
     };
     const buttonStyle: ButtonViewerStyleInterface = {
-        padding: "3px 5px",
+        padding: "3px 10px",
         borderRadius: "5px",
         marginTop: "5px",
         marginLeft: "0",
