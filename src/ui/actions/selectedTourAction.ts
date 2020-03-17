@@ -19,18 +19,56 @@ export const setListTour = createStandardAction("SET_LIST_TOUR")<TourType[]>();
 export const setTourDB = createStandardAction("SET_TOUR")<TourType>();
 export const setErrorsRunTour = createStandardAction("SET_ERRORS")<string[]>();
 export const addErrorRunTour = createStandardAction("ADD_ERROR")<string>();
-export const setBlocklyRef = createStandardAction("SET_BLOCKLY_REF")<any | null>();
 
-export const codeJSSetNameAndDesc = (name: string, desc: string) => {
+export const getJsSettersNameAndDesc = (name: string, desc: string) => {
     const nameAssignment: string | null = "TourHelper.setNameTour('" + name + "');\n";
     const descAssignment: string | null = "TourHelper.setDescTour('" + desc + "');\n\n";
     return nameAssignment + descAssignment;
 };
-export const editTourDB = (tourProps: TourType) => (dispatch: Dispatch, getState: () => StoreType) => {
-    const storeTour = getState().SelectedTourState.tourDB;
-    const tour: TourType = { ...storeTour, ...tourProps };
-    tour.codeJS = codeJSSetNameAndDesc(tour.name || "", tour.desc || "") + tour.codeJS;
-    dispatch(setTourDB(tour));
+export const xmlToJs = (xmlCode: string | null) => {
+    if (!xmlCode) return "";
+    const xml: string = xmlCode;
+    const xmlDom = Blockly.Xml.textToDom(xml);
+    const workspace = new Blockly.Workspace();
+    Blockly.setTheme(Blockly.Themes.Classic);
+    Blockly.Xml.domToWorkspace(xmlDom, workspace);
+    const jsFromXml: string = Blockly.JavaScript.workspaceToCode(workspace);
+    return jsFromXml;
+};
+export const getCurrentJs = (
+    currentName: string | null,
+    currentDesc: string | null,
+    currentXml: string | null,
+    jsFromXml?: string | null
+) => {
+    const name: string = currentName || "";
+    const desc: string = currentDesc || "";
+    const xml: string = currentXml || "";
+    const currentJs: string = getJsSettersNameAndDesc(name, desc) + (jsFromXml || xmlToJs(xml));
+    return currentJs;
+};
+export const setCurrentTour = (
+    newName: string | null,
+    newDesc: string | null,
+    newXml?: string | null,
+    newJs?: string | null
+) => (dispatch: Dispatch, getState: () => StoreType) => {
+    const tourDB: TourType = getState().SelectedTourState.tourDB;
+    const currentName: string | null = newName || tourDB.name;
+    const currentDesc: string | null = newDesc || tourDB.desc;
+    const currentXml: string | null = newXml || tourDB.code;
+    const currentJs: string | null = getCurrentJs(currentName, currentDesc, currentXml, newJs);
+    const currentDateChange: string = currentXml !== tourDB.code ? "" : tourDB.dateChange;
+    const currentTour: TourType = {
+        ...tourDB,
+        name: currentName,
+        desc: currentDesc,
+        code: currentXml,
+        codeJS: currentJs,
+        dateChange: currentDateChange
+    };
+    debugger;
+    dispatch(setTourDB(currentTour));
 };
 
 export const loadListTour = () => async (dispatch: Dispatch) => {
@@ -68,28 +106,16 @@ export const saveTour = (period?: boolean) => async (dispatch: Dispatch, getStat
     const store = getState();
     const selectedTour = store.SelectedTourState.tourDB;
     const tourForSaved: TourType = store.ModalState.tour || selectedTour;
-
     if (store.ModalState.status === "edit") {
-        const xml = tourForSaved.code;
-        /*  Blockly.setTheme({
-            blockStyles_: {},
-            categoryStyles_: {}
-        });*/
-        debugger;
-        const xmlDom = Blockly.Xml.textToDom(xml);
-        const workspace = new Blockly.Workspace();
-        Blockly.setTheme(Blockly.Themes.Classic);
-        Blockly.Xml.domToWorkspace(xmlDom, workspace);
-        const jsFromXml: string = Blockly.JavaScript.workspaceToCode(workspace);
-        tourForSaved.codeJS = codeJSSetNameAndDesc(tourForSaved.name || "", tourForSaved.desc || "") + jsFromXml;
+        tourForSaved.codeJS = getCurrentJs(tourForSaved.name, tourForSaved.desc, tourForSaved.code);
     }
-    //tourForSaved.codeJS = codeJSSetNameAndDesc(tourForSaved.name || "", tourForSaved.desc || "") + tourForSaved.codeJS;
     try {
         const savedTour: TourType = await updateTour(tourForSaved);
-        if (tourForSaved.id === selectedTour.id) {
-            dispatch(setTourDB(savedTour));
-        }
         loadListTour()(dispatch);
+        if (store.ModalState.status === "edit" && savedTour.id !== selectedTour.id) {
+            return;
+        }
+        setCurrentTour(savedTour.name, savedTour.desc, null, null)(dispatch, getState);
         if (!period) {
             dispatch(success({ title: savedTour?.name + " сохранен" }));
         }
@@ -127,8 +153,8 @@ export const createNewTour = (initTour?: TourType) => async (dispatch: Dispatch,
     if (!tour) {
         return console.log("ERROR MODAL CREATED");
     }
-    tour.codeJS = codeJSSetNameAndDesc(tour.name || "", tour.desc || "") + tour.codeJS;
-    dispatch(setTourDB(tour));
+    //setCurrentTour(tour.name, tour.desc, tour.code, tour.codeJS)(dispatch, getState);
+    tour.codeJS = getJsSettersNameAndDesc(tour.name || "", tour.desc || "") + tour.codeJS;
     const createdTour: TourType = await createTour(tour);
     try {
         if (store.ModalState.status === "copy") {

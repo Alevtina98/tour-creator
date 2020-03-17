@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getDateClientFormat, TourType } from "../../../util/restClient/requestTour";
 import { setModal } from "../../../actions/modalAction";
 import { burgerClose } from "../../../actions/mainAction";
-import {disposeEvent} from "../../../../agent/util/utils";
+import { disposeEvent } from "../../../../agent/util/utils";
 
 export interface ScriptProps {
     tour: TourType;
@@ -22,6 +22,8 @@ const Script: FC<ScriptProps> = ({ tour, style }) => {
     //загрузка
     const loadTour = () => {
         if (selectedTourKey != tour.id) {
+            debugger;
+
             dispatch(loadToDb(tour.id));
             dispatch(burgerClose());
         }
