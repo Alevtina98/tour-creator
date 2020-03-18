@@ -20,16 +20,12 @@ const CodeJSComponent = () => {
                 } else if (!((index - 1) % 4)) {
                     name = "error";
                 }
-                debugger;
-
                 return el.split(/[\n]/g).map((str, indexStr, arrayStr) => {
                     if (str)
                         return (
                             <div className={name + (firstBlock && indexStr < 2 ? "-setter" : "") + "-style"}>{str}</div>
                         );
-                    debugger;
-
-                    if (name === "text" && indexStr !== 0) return <br />;
+                    if (name === "text" && indexStr !== 0 && indexStr !== arrayStr.length - 1) return <br />;
 
                     //const arrStrforBr = str.split(/[\n]/g) || null;
                     return null;
