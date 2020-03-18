@@ -52,9 +52,12 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
         const xmlSerialize = new XMLSerializer();
         const xml: string = xmlSerialize.serializeToString(Blockly.Xml.workspaceToDom(workspace));
         if (xml !== this.props.selectedTour.code) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+            // @ts-ignore
             this.props.dispatch(setCurrentTour(null, null, xml, js, null));
         }
     };
+
     componentDidUpdate({ selector }: BlocklyProps): void {
         if (this.props.selector !== selector && this.state.blockId) {
             const workspaceSvg = this.blocklyRef.workspace.state.workspace;

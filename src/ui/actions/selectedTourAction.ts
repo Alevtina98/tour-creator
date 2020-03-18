@@ -21,8 +21,8 @@ export const setErrorsRunTour = createStandardAction("SET_ERRORS")<string[]>();
 export const addErrorRunTour = createStandardAction("ADD_ERROR")<string>();
 
 export const getJsSettersNameAndDesc = (name: string, desc: string) => {
-    const nameAssignment: string | null = "TourHelper.setNameTour('" + name + "');\n";
-    const descAssignment: string | null = "TourHelper.setDescTour('" + desc + "');\n\n";
+    const nameAssignment: string | null = `TourHelper.setNameTour('${name}');\n`;
+    const descAssignment: string | null = `TourHelper.setDescTour('${desc}');\n\n`;
     return nameAssignment + descAssignment;
 };
 export const xmlToJs = (xmlCode: string | null) => {
@@ -60,7 +60,6 @@ export const setCurrentTour = (
     const currentXml: string | null = newXml || tourDB.code;
     const currentJs: string | null = getCurrentJs(currentName, currentDesc, currentXml, newJs);
     const currentDateChange: string = dateSaveCurrentTour || (currentXml !== tourDB.code ? "" : tourDB.dateChange);
-    debugger;
     const currentTour: TourType = {
         ...tourDB,
         name: currentName,
@@ -86,7 +85,6 @@ export const delToDb = () => async (dispatch: Dispatch, getState: () => StoreTyp
         return;
     }
     const key: number = tour.id;
-    //(await IDB()).delete("script", key);
     await deleteTourById(key);
     try {
         if (key == store.SelectedTourState.tourDB.id) {
@@ -139,7 +137,6 @@ export const loadToDb = (key: number) => async (dispatch: Dispatch) => {
     //загрузка нового тура с пререзагрузкой блокли
     dispatch(setLoadBocklyDisabled());
     const tour: TourType | undefined = await getTourById(key);
-    //(await IDB()).get("script", key);
     try {
         dispatch(setTourDB(tour));
         dispatch(setLoadBocklyEnabled());
@@ -179,4 +176,4 @@ export const closeSelectedTour = () => (dispatch: Dispatch) => {
     clearInterval(periodicallySaveTimer);
 };
 
-export type SelectedTourAction = ActionType<typeof setTourDB | typeof editTourDB>;
+export type SelectedTourAction = ActionType<typeof setTourDB>;
