@@ -51,8 +51,9 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
         const js: string = Blockly.JavaScript.workspaceToCode(workspace);
         const xmlSerialize = new XMLSerializer();
         const xml: string = xmlSerialize.serializeToString(Blockly.Xml.workspaceToDom(workspace));
-        debugger;
-        this.props.dispatch(setCurrentTour(null, null, xml, js));
+        if (xml !== this.props.selectedTour.code) {
+            this.props.dispatch(setCurrentTour(null, null, xml, js, null));
+        }
     };
     componentDidUpdate({ selector }: BlocklyProps): void {
         if (this.props.selector !== selector && this.state.blockId) {
@@ -92,7 +93,6 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
                 if (event.type === Blockly.Events.UI) {
                     console.log("event", event);
                     if (event.element !== "click") return;
-                    debugger;
                     const blockId = event.blockId || event.newValue || "";
                     this.setState({
                         blockId

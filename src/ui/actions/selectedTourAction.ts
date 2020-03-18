@@ -39,26 +39,28 @@ export const getCurrentJs = (
     currentName: string | null,
     currentDesc: string | null,
     currentXml: string | null,
-    jsFromXml?: string | null
+    jsFromCurrentXml: string | null
 ) => {
     const name: string = currentName || "";
     const desc: string = currentDesc || "";
     const xml: string = currentXml || "";
-    const currentJs: string = getJsSettersNameAndDesc(name, desc) + (jsFromXml || xmlToJs(xml));
+    const currentJs: string = getJsSettersNameAndDesc(name, desc) + (jsFromCurrentXml || xmlToJs(xml));
     return currentJs;
 };
 export const setCurrentTour = (
     newName: string | null,
     newDesc: string | null,
-    newXml?: string | null,
-    newJs?: string | null
+    newXml: string | null,
+    newJs: string | null,
+    dateSaveCurrentTour: string | null
 ) => (dispatch: Dispatch, getState: () => StoreType) => {
     const tourDB: TourType = getState().SelectedTourState.tourDB;
     const currentName: string | null = newName || tourDB.name;
     const currentDesc: string | null = newDesc || tourDB.desc;
     const currentXml: string | null = newXml || tourDB.code;
     const currentJs: string | null = getCurrentJs(currentName, currentDesc, currentXml, newJs);
-    const currentDateChange: string = currentXml !== tourDB.code ? "" : tourDB.dateChange;
+    const currentDateChange: string = dateSaveCurrentTour || (currentXml !== tourDB.code ? "" : tourDB.dateChange);
+    debugger;
     const currentTour: TourType = {
         ...tourDB,
         name: currentName,
@@ -67,7 +69,6 @@ export const setCurrentTour = (
         codeJS: currentJs,
         dateChange: currentDateChange
     };
-    debugger;
     dispatch(setTourDB(currentTour));
 };
 
@@ -115,7 +116,7 @@ export const saveTour = (period?: boolean) => async (dispatch: Dispatch, getStat
         if (store.ModalState.status === "edit" && savedTour.id !== selectedTour.id) {
             return;
         }
-        setCurrentTour(savedTour.name, savedTour.desc, null, null)(dispatch, getState);
+        setCurrentTour(savedTour.name, savedTour.desc, null, null, savedTour.dateChange)(dispatch, getState);
         if (!period) {
             dispatch(success({ title: savedTour?.name + " сохранен" }));
         }
@@ -149,6 +150,7 @@ export const loadToDb = (key: number) => async (dispatch: Dispatch) => {
 };
 export const createNewTour = (initTour?: TourType) => async (dispatch: Dispatch, getState: () => StoreType) => {
     const store = getState();
+    const selectedTourName = store.SelectedTourState.tourDB.name;
     const tour: TourType | null = store.ModalState.tour;
     if (!tour) {
         return console.log("ERROR MODAL CREATED");
@@ -158,7 +160,7 @@ export const createNewTour = (initTour?: TourType) => async (dispatch: Dispatch,
     const createdTour: TourType = await createTour(tour);
     try {
         if (store.ModalState.status === "copy") {
-            dispatch(success({ title: createdTour?.name + " сохранен как копия " }));
+            dispatch(success({ title: createdTour?.name + " сохранен как копия " + selectedTourName }));
         }
         closeSelectedTour()(dispatch);
         dispatch(setTourDB(createdTour));
@@ -170,15 +172,6 @@ export const createNewTour = (initTour?: TourType) => async (dispatch: Dispatch,
         console.error("ERROR", e.getMessage());
         dispatch(error({ message: e.getMessage() }));
     }
-};
-export const createCopyTour = () => async (dispatch: Dispatch, getState: () => StoreType) => {
-    closeSelectedTour()(dispatch);
-    const store = getState();
-    const tour: TourType = store.ModalState.tour;
-    if (!tour) {
-        return console.log("ERROR MODAL CREATED COPY");
-    }
-    createNewTour(tour)(dispatch, getState);
 };
 export const closeSelectedTour = () => (dispatch: Dispatch) => {
     dispatch(setLoadBocklyDisabled());

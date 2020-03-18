@@ -19,9 +19,6 @@ const ModalsScript = () => {
     const createdNewTour = () => {
         dispatch(createNewTour());
     };
-    const copyTour = () => {
-        dispatch(createCopyTour());
-    };
     const editTour = () => {
         dispatch(saveTour());
     };
@@ -37,7 +34,9 @@ const ModalsScript = () => {
     };
     const components = {
         create: <ModalInputsComponent modalName="Создание тура" onApply={createdNewTour} applyName="Создать" />,
-        copy: <ModalInputsComponent modalName="Создание копии тура" onApply={copyTour} applyName="Создать копию" />,
+        copy: (
+            <ModalInputsComponent modalName="Создание копии тура" onApply={createdNewTour} applyName="Создать копию" />
+        ),
         edit: (
             <ModalInputsComponent
                 modalName="Редактирование шаблона"

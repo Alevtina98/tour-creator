@@ -22,8 +22,6 @@ const Script: FC<ScriptProps> = ({ tour, style }) => {
     //загрузка
     const loadTour = () => {
         if (selectedTourKey != tour.id) {
-            debugger;
-
             dispatch(loadToDb(tour.id));
             dispatch(burgerClose());
         }
