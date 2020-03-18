@@ -108,7 +108,7 @@ export const saveTour = (period?: boolean) => async (dispatch: Dispatch, getStat
     const selectedTour = store.SelectedTourState.tourDB;
     const tourForSaved: TourType = store.ModalState.tour || selectedTour;
     if (store.ModalState.status === "edit") {
-        tourForSaved.codeJS = getCurrentJs(tourForSaved.name, tourForSaved.desc, tourForSaved.code);
+        tourForSaved.codeJS = getCurrentJs(tourForSaved.name, tourForSaved.desc, tourForSaved.code, null);
     }
     try {
         const savedTour: TourType = await updateTour(tourForSaved);
@@ -148,9 +148,8 @@ export const loadToDb = (key: number) => async (dispatch: Dispatch) => {
         dispatch(error({ message: e.getMessage() }));
     }
 };
-export const createNewTour = (initTour?: TourType) => async (dispatch: Dispatch, getState: () => StoreType) => {
+export const createNewTour = () => async (dispatch: Dispatch, getState: () => StoreType) => {
     const store = getState();
-    const selectedTourName = store.SelectedTourState.tourDB.name;
     const tour: TourType | null = store.ModalState.tour;
     if (!tour) {
         return console.log("ERROR MODAL CREATED");
@@ -160,7 +159,7 @@ export const createNewTour = (initTour?: TourType) => async (dispatch: Dispatch,
     const createdTour: TourType = await createTour(tour);
     try {
         if (store.ModalState.status === "copy") {
-            dispatch(success({ title: createdTour?.name + " сохранен как копия " + selectedTourName }));
+            dispatch(success({ title: createdTour?.name + " сохранен как копия " }));
         }
         closeSelectedTour()(dispatch);
         dispatch(setTourDB(createdTour));

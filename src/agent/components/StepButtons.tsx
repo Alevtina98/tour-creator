@@ -113,7 +113,7 @@ const StepButtons: FC<PageButtonsState> = ({
                 Вперед
             </Button>
             <div style={pageNumberStyle} className="krista-bootstrap-wrapper ">
-                {currentStep + 1} из {totalSteps + 1}
+                {currentStep + 1} из {totalSteps}
             </div>
         </ButtonToolbar>
     );
