@@ -1,10 +1,8 @@
 import * as React from "react";
 import { FC, memo } from "react";
-// import "bootstrap/dist/css/bootstrap.css";
 import { Button, ButtonToolbar } from "react-bootstrap";
 import { ITEM_TYPES } from "ultimate-pagination";
 import { disposeEvent } from "../util/utils";
-import { ButtonViewerStyleInterface } from "./ViewerInterface";
 
 export interface PageButtonsState {
     currentStep: number;
@@ -13,27 +11,9 @@ export interface PageButtonsState {
     setStep: (index?: number) => void;
     minPreviousOpen?: number;
     maxNextOpen?: number;
-    buttonStyle?: ButtonViewerStyleInterface;
+    buttonStyle?: React.CSSProperties;
 }
-export interface PageNumberStyleInterface {
-    position?: string;
-    padding?: string;
-    display?: string;
-    color?: string;
-    background?: string;
-    border?: string;
-    borderWidth?: string;
-    borderColor?: string;
-    marginTop?: string;
-    marginBottom?: string;
-    maxHeight?: string;
-    maxWidth?: string;
-    height?: string;
-    right?: string;
-    top?: string;
-    textAlign?: string;
-    lineHeight?: string;
-}
+
 const StepButtons: FC<PageButtonsState> = ({
     currentStep,
     totalSteps,
@@ -43,7 +23,7 @@ const StepButtons: FC<PageButtonsState> = ({
     maxNextOpen = totalSteps - 1,
     buttonStyle
 }) => {
-    const pageNumberStyle: PageNumberStyleInterface = {
+    const pageNumberStyle: React.CSSProperties = {
         position: "absolute",
         textAlign: "center",
         color: "black",

@@ -2,15 +2,18 @@ import sendMessage from "./util/sendMessage";
 import Selector from "./Selector";
 import "./style/agentStyle.less";
 import TourHelper from "./TourHelper/utils";
-import {disposeEvent} from "./util/utils";
+import { disposeEvent } from "./util/utils";
 
 const _ = require("lodash");
 
 const GAME_OBJECT_ID = "game_object";
 
 export const getCodeEval = function(code) {
-    const script = `${code.replace(`"`, "")};`;
-    return `eval("${script.split(/\/\/ .*\n/g).join("\n")}")`;
+    const script = `${code.replace(`"`, "")}`;
+    const scriptWithoutComments = script.split(/\/\/.*\n|\/\*\*\n.*\*.*\n.*\*\//g).join("");
+    console.log("scriptWithoutEnter", scriptWithoutComments);
+    const scriptWithoutCommentsAndEnter = scriptWithoutComments.split(/\n/g).join("");
+    return `eval("${scriptWithoutCommentsAndEnter}")`;
 };
 class Agent {
     /**
@@ -39,10 +42,11 @@ class Agent {
                 this.clearAfterSelectMode();
             },
             runScript: code => {
-                console.log("begin tour");
+                console.log(code);
                 const el = this.window.document.createElement("script");
                 el.innerText = getCodeEval(code);
                 this.window.document.body.appendChild(el);
+                console.log(el);
                 console.log("скрипт тура добавлен");
                 TourHelper.showViewerInterface();
             },

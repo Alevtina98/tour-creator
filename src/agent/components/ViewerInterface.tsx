@@ -1,13 +1,11 @@
 import { FC, memo } from "react";
 import * as React from "react";
-import ultimatePagination, { ITEM_TYPES } from "ultimate-pagination";
-import { Button, ButtonToolbar } from "react-bootstrap";
+import ultimatePagination from "ultimate-pagination";
+import { Button } from "react-bootstrap";
 import PageButtons from "./StepButtons";
-import { disposeEvent } from "../util/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-
-// import "bootstrap/dist/css/bootstrap.css";
+import ControlButtons from "./ControlButtons";
 
 export interface ViewerInterfaceState {
     setStep: (index: number) => void;
@@ -15,47 +13,10 @@ export interface ViewerInterfaceState {
     totalSteps: number;
     name: string;
     desc: string;
-    onStart: () => void;
-    start: boolean;
+    onStartTour: () => void;
     minPreviousOpen?: number; //disable next step-buttons
     maxNextOpen?: number; //disable pred step-buttons
     onCancel: () => void;
-}
-export interface ViewerStyleInterface {
-    position?: string;
-    top?: string;
-    right?: string;
-    zIndex?: string;
-    padding?: string;
-    background?: string;
-}
-export interface ButtonViewerStyleInterface {
-    padding?: string;
-    color?: string;
-    backgroundColor?: string;
-    border?: string;
-    borderWidth?: string;
-    borderColor?: string;
-    marginLeft?: string;
-    marginTop?: string;
-    marginBottom?: string;
-    borderRadius?: string;
-}
-export interface CancelButtonViewerStyleInterface {
-    position?: string;
-    top?: string;
-    right?: string;
-    height?: string;
-    width?: string;
-    background?: string;
-    border?: string;
-}
-export interface IconCancelButtonViewerStyleInterface {
-    position?: string;
-    right?: string;
-    top?: string;
-    maxHeight?: string;
-    maxWidth?: string;
 }
 const ViewerInterface: FC<ViewerInterfaceState> = ({
     setStep,
@@ -63,9 +24,8 @@ const ViewerInterface: FC<ViewerInterfaceState> = ({
     totalSteps,
     name,
     desc,
-    onStart,
+    onStartTour,
     onCancel,
-    start,
     minPreviousOpen = 0,
     maxNextOpen = totalSteps - 1
 }) => {
@@ -80,22 +40,22 @@ const ViewerInterface: FC<ViewerInterfaceState> = ({
         hidePreviousAndNextPageLinks: false,
         hideFirstAndLastPageLinks: false
     });
-    const style: ViewerStyleInterface = {
+    const style: React.CSSProperties = {
         position: "fixed",
         top: "0",
         right: "0",
-        zIndex: "11000001",
-        padding: "3px",
-        background: "rgba(0, 0, 0, 0.6)"
+        zIndex: 11000001,
+        background: "rgba(0, 0, 0, 0.6)",
+        padding: "3px 23px 3px 3px"
     };
-    const buttonStyle: ButtonViewerStyleInterface = {
+    const buttonStyle: React.CSSProperties = {
         padding: "3px 10px",
         borderRadius: "5px",
         marginTop: "5px",
         marginLeft: "0",
         borderColor: "rgba(248,248,248,0)"
     };
-    const cancelButtonStyle: CancelButtonViewerStyleInterface = {
+    const cancelButtonStyle: React.CSSProperties = {
         position: "absolute",
         top: "0px",
         right: "0px",
@@ -104,12 +64,21 @@ const ViewerInterface: FC<ViewerInterfaceState> = ({
         background: "rgba(219,220,220,0)",
         border: "none"
     };
-    const iconCancelButtonStyle: IconCancelButtonViewerStyleInterface = {
+    const iconCancelButtonStyle: React.CSSProperties = {
         position: "absolute",
         right: "10%",
         top: "10%",
         maxHeight: "80%",
         maxWidth: "80%"
+    };
+    let postpone = false;
+    let start = false;
+    const onStart = () => {
+        start = true;
+        onStartTour();
+    };
+    const onPostpone = () => {
+        postpone = true;
     };
     return (
         <div style={style} className=" krista-bootstrap-wrapper ">
@@ -135,20 +104,7 @@ const ViewerInterface: FC<ViewerInterfaceState> = ({
                     maxNextOpen={maxNextOpen}
                     buttonStyle={buttonStyle}
                 />
-            )) || (
-                <Button
-                    style={buttonStyle}
-                    className=" krista-bootstrap-wrapper "
-                    onClick={event => {
-                        disposeEvent(event);
-                        onStart();
-                        console.log("start >>", start);
-                        /*currentStep > 0 ? setStep(0) : null;*/
-                    }}
-                >
-                    Старт
-                </Button>
-            )}
+            )) || <ControlButtons onStart={onStart} onPostpone={onPostpone} buttonStyle={buttonStyle} />}
         </div>
     );
 };

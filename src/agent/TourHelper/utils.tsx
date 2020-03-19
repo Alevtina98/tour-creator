@@ -33,7 +33,7 @@ export interface HighlightAreaType {
 export default class TourHelper {
     static nameTour: string = "";
     static descTour: string = "";
-    static start: boolean = false;
+    //static start: boolean = false;
     /**
      * для записи тура
      */
@@ -61,7 +61,7 @@ export default class TourHelper {
     static viewerInterfaceElement: Element | null = null;
 
     public static startTour = () => {
-        TourHelper.start = true;
+        // TourHelper.start = true;
         console.log("startTour");
         window.addEventListener("resize", TourHelper.startStep);
         TourHelper.step();
@@ -352,9 +352,9 @@ export default class TourHelper {
                 totalSteps={TourHelper.steps.length}
                 name={TourHelper.nameTour}
                 desc={TourHelper.descTour}
-                onStart={TourHelper.startTour}
+                onStartTour={TourHelper.startTour}
                 onCancel={TourHelper.endTour}
-                start={TourHelper.start}
+                //start={TourHelper.start}
                 minPreviousOpen={minPreviousOpen}
                 maxNextOpen={maxNextOpen}
             />,
@@ -563,7 +563,7 @@ export default class TourHelper {
         ];
         TourHelper.windowWidth = 0;
         TourHelper.windowHeight = 0;
-        TourHelper.start = false;
+        //TourHelper.start = false;
         TourHelper.conditionStepNumbers = [];
     };
 }
