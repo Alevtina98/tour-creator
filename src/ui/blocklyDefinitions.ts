@@ -3,7 +3,7 @@ const helperClass = "TourHelper";
 
 Blockly.Blocks["dark"] = {
     init: function() {
-        this.appendDummyInput("TOPROW").appendField("blackout", "NAME");
+        this.appendDummyInput("TOPROW").appendField("Затемнить вокруг элемента", "NAME");
         this.appendValueInput("selector").setCheck("selector");
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
@@ -16,13 +16,13 @@ Blockly.Blocks["dark"] = {
 };
 Blockly.Blocks["desc"] = {
     init: function() {
-        this.appendDummyInput("TOPROW").appendField("description", "NAME");
-        this.appendValueInput("selector")
-            //.appendField("селектор", "NAME")
-            .setCheck("selector");
+        this.appendDummyInput("TOPROW").appendField("Показать", "NAME");
         this.appendValueInput("text")
-            //.appendField("описание", "NAME")
+            .appendField("подсказку", "NAME")
             .setCheck("String");
+        this.appendValueInput("selector")
+            .appendField("рядом с элементом", "NAME")
+            .setCheck("selector");
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
@@ -34,10 +34,8 @@ Blockly.Blocks["desc"] = {
 };
 Blockly.Blocks["step"] = {
     init: function() {
-        this.appendDummyInput("TOPROW").appendField("next step", "NAME");
-        this.appendValueInput("condition")
-            .appendField("after", "NAME")
-            .setCheck("Boolean");
+        this.appendDummyInput("TOPROW").appendField("Ожидать ", "NAME");
+        this.appendValueInput("condition").setCheck("Boolean");
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
@@ -62,7 +60,7 @@ Blockly.Blocks["selector"] = {
 };
 Blockly.Blocks["click"] = {
     init: function() {
-        this.appendDummyInput("TOPROW").appendField("click", "NAME");
+        this.appendDummyInput("TOPROW").appendField("клик", "NAME");
         this.setInputsInline(true);
         this.setOutput(true);
         this.setStyle("logic_blocks");
@@ -72,7 +70,7 @@ Blockly.Blocks["click"] = {
 };
 Blockly.Blocks["clickOn"] = {
     init: function() {
-        this.appendDummyInput("TOPROW").appendField("click on", "NAME");
+        this.appendDummyInput("TOPROW").appendField("клик по элементу", "NAME");
         this.appendValueInput("selector").setCheck("String");
         //this.appendDummyInput("TOPROW").appendField("click", "NAME");
         this.setInputsInline(true);
@@ -84,7 +82,7 @@ Blockly.Blocks["clickOn"] = {
 };
 Blockly.Blocks["comment"] = {
     init: function() {
-        this.appendDummyInput("TOPROW").appendField("comment", "NAME");
+        this.appendDummyInput("TOPROW").appendField("", "NAME");
         this.appendValueInput("text").setCheck("String");
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
@@ -98,7 +96,7 @@ Blockly.Blocks["comment"] = {
 };
 Blockly.Blocks["long_comment"] = {
     init: function() {
-        this.appendDummyInput("TOPROW").appendField("comment lines", "NAME");
+        this.appendDummyInput("TOPROW").appendField("Комментарий", "NAME");
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);

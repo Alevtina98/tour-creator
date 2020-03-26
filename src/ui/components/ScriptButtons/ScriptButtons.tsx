@@ -53,7 +53,7 @@ const ScriptButtons = () => {
                     <Nav.Link onClick={onShowCreated} data-testid="createTourButton">
                         Создать
                     </Nav.Link>
-                    <NavDropdown title="Сохранить" id="basic-nav-dropdown" disabled={!blocklyReloadEnabled}>
+                    <NavDropdown title="Сохранить" id="basic-nav-dropdown" disabled={!blocklyReloadEnabled} bg="dark">
                         <NavDropdown.Item onClick={saveCode} data-testid="saveTourButton">
                             Сохранить
                         </NavDropdown.Item>

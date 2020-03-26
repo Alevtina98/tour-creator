@@ -2,7 +2,6 @@ import { FC, memo } from "react";
 import { Button, ButtonToolbar, Dropdown, DropdownButton } from "react-bootstrap";
 import { disposeEvent } from "../util/utils";
 import * as React from "react";
-import Postpone from "./Postpone";
 
 export interface ControlButtonsState {
     onStart: () => void;

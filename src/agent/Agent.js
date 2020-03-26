@@ -89,22 +89,44 @@ class Agent {
     attachSelectClickHandler() {
         let savedCallback;
         let target;
+        let outlineStyle;
+        let borderStyle;
         if (this._findTargetCb) {
             // already enabled
             return;
         }
         this._highlightTargetCb = e => {
-            target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
-            target.style.outlineStyle = "solid";
-            if (target.onclick) {
+            //target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
+            let el = e.target;
+            while (el.parentNode && !el.hasAttribute("data-contol-type")) {
+                el = el.parentNode;
+            }
+            if (!el.parentNode) {
+                return;
+            }
+            target = el;
+            if (target.style.outlineStyle || (target.style.outlineStyle = "none")) {
+                borderStyle = target.style.border;
+                target.style.border = "solid";
+            } else {
+                outlineStyle = target.style.outlineStyle;
+                target.style.outlineStyle = "solid";
+            }
+
+            /*if (target.onclick) {
                 console.warn("123");
                 savedCallback = target.onclick;
                 target.onclick = () => {};
-            }
+            }*/
         }; //обрабатываем НАВЕДЕНИЕ
         this._outTargetCb = e => {
-            target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
-            target.style.outlineStyle = "none";
+            // target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
+            if (!target) {
+                return;
+            }
+            target.style.outlineStyle = outlineStyle;
+            target.style.border = borderStyle;
+
             if (target.onclick) {
                 console.warn("вернули");
                 target.onclick = savedCallback;
@@ -119,9 +141,20 @@ class Agent {
             }
         };
         this._findTargetCb = e => {
+            if (!target) {
+                return;
+            }
             disposeEvent(event);
-            target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
+            // target = e.target; //ссылка на конкретный элемент внутри формы, самый вложенный, на котором произошёл клик
+            //свойство data-control-type
             const str = Selector(target);
+            const element = document.querySelector(str);
+            const contol = element.classList.contains("data-contol-type");
+            const layout = element.classList.contains("data-layout-type");
+            /* if (!element.hasAttribute("data-contol-type") && !element.hasAttribute("data-layout-type")) {
+                return;
+                //data - layout - type;
+            }*/
             this.subscribedEntityId = str; //matching.__inspect_uuid__;
             this.clearAfterSelectMode();
             sendMessage("disabledSelectMode");
