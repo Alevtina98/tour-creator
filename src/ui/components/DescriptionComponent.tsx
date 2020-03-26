@@ -124,7 +124,7 @@ const DescriptionComponent: FC<DescrComponentProps> = ({ selector, text }) => {
     //selector.style.zIndex = "1002";
     return (
         <Popper
-            placement="bottom-start"
+            placement="bottom"
             referenceElement={selector}
             modifiers={{
                 offset: {
