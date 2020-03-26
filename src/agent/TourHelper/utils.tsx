@@ -33,7 +33,7 @@ export interface HighlightAreaType {
 export default class TourHelper {
     static nameTour: string = "";
     static descTour: string = "";
-    //static start: boolean = false;
+    static start: boolean = false;
     /**
      * для записи тура
      */
@@ -61,7 +61,7 @@ export default class TourHelper {
     static viewerInterfaceElement: Element | null = null;
 
     public static startTour = () => {
-        // TourHelper.start = true;
+        TourHelper.start = true;
         console.log("startTour");
         window.addEventListener("resize", TourHelper.startStep);
         TourHelper.step();
@@ -143,8 +143,10 @@ export default class TourHelper {
         }
     };
     private static blackoutWindow = () => {
+        // debugger;
+
         TourHelper.setParamWindow();
-        TourHelper.blackElement.forEach(el => (el.coordinates = TourHelper.getCoordinateElement(el.element)));
+        //TourHelper.blackElement.forEach(el => (el.coordinates = TourHelper.getCoordinateElement(el.element)));
         const coordinates = TourHelper.blackElement[0].coordinates;
         let area = {
             minX: coordinates.top,
@@ -186,11 +188,13 @@ export default class TourHelper {
         });
         return area;
     };
+
     private static addRectsIn = ({ minX, maxX, maxY, minY }: HighlightAreaType) => {
         const w: boolean[][] = Array(maxX + 1).fill(null);
         for (let i = minX; i < w.length; i++) {
             w[i] = Array(maxY).fill(true);
         }
+
         TourHelper.blackElement.forEach(el => {
             const minXElement: number = el.coordinates?.top,
                 minYElement: number = el.coordinates?.left,
@@ -352,9 +356,9 @@ export default class TourHelper {
                 totalSteps={TourHelper.steps.length}
                 name={TourHelper.nameTour}
                 desc={TourHelper.descTour}
-                onStartTour={TourHelper.startTour}
+                onStart={TourHelper.startTour}
                 onCancel={TourHelper.endTour}
-                //start={TourHelper.start}
+                start={TourHelper.start}
                 minPreviousOpen={minPreviousOpen}
                 maxNextOpen={maxNextOpen}
             />,
@@ -436,8 +440,7 @@ export default class TourHelper {
             timeRequest += timeout;
             if (
                 timeRequest > maxTimeRequest ||
-                el ||
-                //&& !TourHelper.elementIsVisible(el)
+                (el && !TourHelper.elementIsVisible(el)) ||
                 TourHelper.currentStep === -1
             ) {
                 stopRequest();
@@ -449,17 +452,19 @@ export default class TourHelper {
         let el: Node | null = element;
         if (!el) return true;
         while (el) {
-            if (el.style.display === "none") {
-                console.log("родитель с  display=none", el);
+            if (el.style && el.style.display === "none") {
+                console.log("display=none", el);
                 return true;
             }
-            el = el.parentNode;
-            for (let i = 0; i < el.childNodes.length; i++) {
-                if (el.childNodes[i].className === "dark_overlay") {
-                    console.log("элемент перекрывающий найденный (с классом dark_overlay)", el);
-                    return true;
+            if (el.childNodes) {
+                for (let i = 0; i < el.childNodes.length; i++) {
+                    if (el.childNodes[i].className === "dark_overlay") {
+                        console.log("элемент перекрывающий найденный (с классом dark_overlay)", el);
+                        return true;
+                    }
                 }
             }
+            el = el.parentNode;
         }
         return false;
     };
@@ -563,7 +568,7 @@ export default class TourHelper {
         ];
         TourHelper.windowWidth = 0;
         TourHelper.windowHeight = 0;
-        //TourHelper.start = false;
+        TourHelper.start = false;
         TourHelper.conditionStepNumbers = [];
     };
 }

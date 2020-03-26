@@ -1,4 +1,7 @@
 declare module "react-blockly-component";
+declare module "react-bootstrap-datetimepicker";
+declare module "react-bootstrap-datepicker";
+declare module "react-bootstrap-date-time-picker";
 declare let Blockly: any;
 declare module "react-overlay";
 declare module "scroll-lock";

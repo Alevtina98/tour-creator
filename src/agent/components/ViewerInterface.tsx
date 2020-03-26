@@ -13,10 +13,11 @@ export interface ViewerInterfaceState {
     totalSteps: number;
     name: string;
     desc: string;
-    onStartTour: () => void;
+    onStart: () => void;
     minPreviousOpen?: number; //disable next step-buttons
     maxNextOpen?: number; //disable pred step-buttons
     onCancel: () => void;
+    start: boolean;
 }
 const ViewerInterface: FC<ViewerInterfaceState> = ({
     setStep,
@@ -24,10 +25,11 @@ const ViewerInterface: FC<ViewerInterfaceState> = ({
     totalSteps,
     name,
     desc,
-    onStartTour,
+    onStart,
     onCancel,
     minPreviousOpen = 0,
-    maxNextOpen = totalSteps - 1
+    maxNextOpen = totalSteps - 1,
+    start
 }) => {
     const paginationModel = ultimatePagination.getPaginationModel({
         // Required
@@ -71,14 +73,9 @@ const ViewerInterface: FC<ViewerInterfaceState> = ({
         maxHeight: "80%",
         maxWidth: "80%"
     };
-    let postpone = false;
-    let start = false;
-    const onStart = () => {
-        start = true;
-        onStartTour();
-    };
-    const onPostpone = () => {
-        postpone = true;
+    const onPostpone = (date: string) => {
+        console.log(date);
+        onCancel();
     };
     return (
         <div style={style} className=" krista-bootstrap-wrapper ">
@@ -93,8 +90,9 @@ const ViewerInterface: FC<ViewerInterfaceState> = ({
                     icon={faTimes}
                 />
             </Button>
-            <div style={{ color: "rgb(255,255,255)" }}>{desc}</div>
-            {(start && (
+            <div style={{ color: "rgb(255,255,255)", fontSize: "10pt" }}>{desc}</div>
+            {!start && <ControlButtons onStart={onStart} onPostpone={onPostpone} buttonStyle={buttonStyle} />}
+            {start && (
                 <PageButtons
                     currentStep={currentStep}
                     totalSteps={totalSteps}
@@ -104,7 +102,7 @@ const ViewerInterface: FC<ViewerInterfaceState> = ({
                     maxNextOpen={maxNextOpen}
                     buttonStyle={buttonStyle}
                 />
-            )) || <ControlButtons onStart={onStart} onPostpone={onPostpone} buttonStyle={buttonStyle} />}
+            )}
         </div>
     );
 };
