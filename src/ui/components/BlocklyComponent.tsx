@@ -43,9 +43,27 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
         //tourXML: "",
         reload: false
     };
-
+    clickOnSelectorBlockListener = (event: WorkspaceEventType) => {
+        const workspaceSVG = this.blocklyRef.workspace.state.workspace;
+        if (event.type === Blockly.Events.UI) {
+            //console.log("event", event);
+            if (event.element !== "click") return;
+            const blockId = event.blockId || event.newValue || "";
+            this.setState({
+                blockId
+            });
+            if (blockId) {
+                const block = workspaceSVG.getBlockById(blockId);
+                if (block.type === "selector") {
+                    this.onClickOnBlock();
+                }
+            }
+        }
+    };
     componentDidMount(): void {
         //this.props.actions.periodicallySave();
+        const workspaceSVG = this.blocklyRef.workspace.state.workspace;
+        workspaceSVG.addChangeListener(this.clickOnSelectorBlockListener);
     }
     workspaceDidChange = (workspace: any) => {
         const js: string = Blockly.JavaScript.workspaceToCode(workspace);
@@ -87,27 +105,6 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
         }
     };
     render = () => {
-        if (this.blocklyRef && this.blocklyRef.workspace && !this.isCreated) {
-            const workspaceSVG = this.blocklyRef.workspace.state.workspace;
-            const onFirstComment = (event: WorkspaceEventType) => {
-                if (event.type === Blockly.Events.UI) {
-                    console.log("event", event);
-                    if (event.element !== "click") return;
-                    const blockId = event.blockId || event.newValue || "";
-                    this.setState({
-                        blockId
-                    });
-                    if (blockId) {
-                        const block = workspaceSVG.getBlockById(blockId);
-                        if (block.type === "selector") {
-                            this.onClickOnBlock();
-                        }
-                    }
-                }
-            };
-            this.isCreated = true;
-            workspaceSVG.addChangeListener(onFirstComment);
-        }
         return (
             <ReactBlocklyComponent.BlocklyEditor
                 toolboxCategories={this.state.toolboxCategories}
