@@ -63,7 +63,6 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
             const workspaceSvg = this.blocklyRef.workspace.state.workspace;
             const block = workspaceSvg.getBlockById(this.state.blockId);
             const field = block.getField("NAME");
-            //console.log("field >> ", field);
             if (field != "") {
                 field.setText(this.props.selector);
                 this.setState({
@@ -71,7 +70,6 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
                 });
                 this.props.dispatch(setCurrentSelector(""));
             }
-            //console.log("selector >> ", this.props.selector);
         }
     }
 
@@ -84,7 +82,6 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
     onClickOnBlock = () => {
         const workspaceSvg = this.blocklyRef.workspace.state.workspace;
         const block = workspaceSvg.getBlockById(this.state.blockId);
-        //console.log("Block >> ", block);
         if (block) {
             this.props.inspect();
         }
@@ -102,8 +99,6 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
                     });
                     if (blockId) {
                         const block = workspaceSVG.getBlockById(blockId);
-                        //console.log("block", block);
-                        //console.log("IN EVENT CONDITION", workspaceSVG, self);
                         if (block.type === "selector") {
                             this.onClickOnBlock();
                         }
@@ -112,7 +107,6 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
             };
             this.isCreated = true;
             workspaceSVG.addChangeListener(onFirstComment);
-            //console.log(" initialXml >> ", this.props.tourXML);
         }
         return (
             <ReactBlocklyComponent.BlocklyEditor

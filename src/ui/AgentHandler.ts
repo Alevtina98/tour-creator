@@ -18,7 +18,7 @@ class AgentHandler {
 
         reloaded: () => injectDebugger(),
 
-        tick: (data: { id: string }) => {
+        selected: (data: { id: string }) => {
             const { id } = data;
             //if (this.currentSelected !== id) {
             this.dispatch(setCurrentSelector(id));

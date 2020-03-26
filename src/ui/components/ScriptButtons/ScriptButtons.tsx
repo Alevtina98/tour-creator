@@ -2,17 +2,11 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../../reducers";
 import { closeSelectedTour, saveTour, setErrorsRunTour } from "../../actions/selectedTourAction";
-import {
-    Nav,
-    Navbar,
-    NavDropdown
-} from "react-bootstrap";
-import BurgerMenuContainer from "../../containers/BurgerMenuContainer/BurgerMenuContainer";
+import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 import agentActions from "../../actions/agentActions";
 import { getInitData, TourType } from "../../util/restClient/requestTour";
 import { setModal } from "../../actions/modalAction";
-import ConnectionStatus from "../ConnectionStatus/ConnectionStatus";
-import DateOnPanel from "../DateOnPanel/DateOnPanel";
+import * as Datetime from "react-datetime";
 
 export interface ScriptButtons {
     tourDB: TourType;

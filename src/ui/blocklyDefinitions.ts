@@ -51,14 +51,7 @@ Blockly.Blocks["step"] = {
 Blockly.Blocks["selector"] = {
     init: function() {
         this.appendDummyInput("selector")
-            .appendField(
-                new Blockly.FieldImage(
-                    "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Magnifying_glass_icon.svg/735px-Magnifying_glass_icon.svg.png",
-                    15,
-                    15,
-                    "*"
-                )
-            )
+            .appendField(new Blockly.FieldImage("../media/Magnifying_glass_icon.svg.png", 15, 15, "*"))
             .appendField(new Blockly.FieldTextInput(""), "NAME");
         this.setInputsInline(true);
         this.setOutput(true);
@@ -92,8 +85,7 @@ Blockly.Blocks["clickOn"] = {
 Blockly.Blocks["comment"] = {
     init: function() {
         this.appendDummyInput("TOPROW").appendField("comment", "NAME");
-        this.appendValueInput("text")
-            .setCheck("String");
+        this.appendValueInput("text").setCheck("String");
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
@@ -129,9 +121,6 @@ Blockly.JavaScript["long_comment"] = function(block: any) {
     return "";
 };
 Blockly.JavaScript["selector"] = function(block: any) {
-    /*// Generate JavaScript for setting the width.
-    var width = Blockly.JavaScript.valueToCode(block, 'WIDTH',
-        Blockly.JavaScript.ORDER_NONE) || '1';*/
     const code = Blockly.JavaScript.quote_(block.getFieldValue("NAME"));
     return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
@@ -163,7 +152,7 @@ Blockly.JavaScript["step"] = function(block: any) {
     const args1: string = Blockly.JavaScript.valueToCode(block, "condition", Blockly.JavaScript.ORDER_NONE);
     const error: string = args1 ? "" : "//! нет аргумента (условие исполнения следующего шага тура)\n";
     const code: string = error + errorClickOn + funcName + "(" + args1 + ");\n";
-    console.log("errorClickOn >>", errorClickOn);
+
     // Add % so as not to collide with helper functions in definitions list.
     //Blockly.JavaScript.definitions_['%' + funcName] = code;
     return code;
@@ -171,7 +160,6 @@ Blockly.JavaScript["step"] = function(block: any) {
 
 Blockly.JavaScript["click"] = function(block: any) {
     const funcName = helperClass + ".click";
-    console.log("click.to");
     const code: string = "function(){ return " + funcName + "()}";
     // Add % so as not to collide with helper functions in definitions list.
     //Blockly.JavaScript.definitions_['%' + funcName] = code;
@@ -180,9 +168,7 @@ Blockly.JavaScript["click"] = function(block: any) {
 };
 Blockly.JavaScript["clickOn"] = function(block: any) {
     const funcName = helperClass + ".clickOn";
-    console.log(funcName);
     const args1: string = Blockly.JavaScript.valueToCode(block, "selector", Blockly.JavaScript.ORDER_NONE);
-    console.log(args1);
     errorClickOn = args1 ? "" : "//! нет аргумента (выделяемый элемент)\n";
     const code: string = "(function(){ return " + funcName + "(" + args1 + ")})";
     // Add % so as not to collide with helper functions in definitions list.

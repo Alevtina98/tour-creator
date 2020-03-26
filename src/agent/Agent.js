@@ -35,6 +35,7 @@ class Agent {
                 sendMessage("connected");
             },
             enableSelectMode: () => {
+                console.log("режим инспекции включен");
                 this.attachSelectClickHandler();
             },
 
@@ -42,7 +43,7 @@ class Agent {
                 this.clearAfterSelectMode();
             },
             runScript: code => {
-                console.log(code);
+                console.log("Код тура", code);
                 const el = this.window.document.createElement("script");
                 el.innerText = getCodeEval(code);
                 this.window.document.body.appendChild(el);
@@ -77,7 +78,7 @@ class Agent {
 
     reportEntities() {
         const id = this.subscribedEntityId;
-        sendMessage("tick", {
+        sendMessage("selected", {
             id
         });
     }
