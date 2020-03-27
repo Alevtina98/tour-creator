@@ -102,9 +102,10 @@ class Agent {
                 el = el.parentNode;
             }
             if (!el.parentNode) {
-                return;
+                target = e.target;
+            } else {
+                target = el;
             }
-            target = el;
             if (target.style.outlineStyle || (target.style.outlineStyle = "none")) {
                 borderStyle = target.style.border;
                 target.style.border = "solid";
