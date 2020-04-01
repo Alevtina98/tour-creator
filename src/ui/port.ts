@@ -1,6 +1,14 @@
+export interface postMessageParams {
+    name: string,
+    data?: {}
+    tabId?: number,
+}
 // Сделано для отключения обрбаотки extension
-let isDisabled = false;
 const notTest = process.env.NODE_ENV !== "test";
+export const testPort = {
+    postMessage: (obj: postMessageParams) => null
+};
+let isDisabled = false;
 
 if (notTest && !chrome.runtime && !isDisabled) {
     isDisabled = true;
@@ -40,4 +48,4 @@ if (notTest && !isDisabled) {
     });
 }
 
-export default isDisabled ? chrome.runtime.connect() : backgroundPageConnection;
+export default notTest ? ( isDisabled ? chrome.runtime.connect() : backgroundPageConnection) : testPort;
