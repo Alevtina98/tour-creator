@@ -2,12 +2,12 @@ import { format } from "date-fns";
 
 export interface TourType {
     id: number;
+    name: string;
     desc: string | null;
     code: string | null;
+    codeJS: string | null;
     dateCreate: string;
     dateChange: string;
-    codeJS: string | null;
-    name: string | null;
 }
 export const getInitData = (data?: Partial<TourType>): TourType => ({
     id: -1,
