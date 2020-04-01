@@ -163,7 +163,8 @@ class Agent {
         };
         this.clearAfterSelectMode = () => {
             if (target) {
-                target.style.outlineStyle = "none";
+                target.style.outlineStyle = outlineStyle;
+                target.style.border = borderStyle;
                 if (target.onclick) {
                     console.warn("вернули обработчик");
                     target.onclick = savedCallback;

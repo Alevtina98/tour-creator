@@ -3,9 +3,6 @@ module.exports =  {
         "project": "./tsconfig.json",
         "tsconfigRootDir": "."
     },
-    "extends": [
-        "@krista/eslint-config"
-    ],
     "settings": {
         "import/resolver": {
             "node": {
