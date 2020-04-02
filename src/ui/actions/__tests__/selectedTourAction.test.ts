@@ -33,6 +33,8 @@ const testListTourNew: TourType[] = [
         name: "custom name5"
     })
 ];
+const errorList: string[] = ["error1", "error2", "error3"];
+const newError: string = "error4";
 
 describe("selectedTourAction", function() {
     beforeEach(cleanup);
@@ -47,6 +49,7 @@ describe("selectedTourAction", function() {
     const middlewares: any[] = [thunk];
     const mockStore = createMockStore(middlewares);
     let periodicallySaveTimer = 0;
+
     it("should return correct type", () => {
         expect(selectedTourAction.setLoadBocklyEnabled()).toEqual({
             type: "SET_RELOAD_BLOCKLY_ENABLED"
@@ -62,33 +65,16 @@ describe("selectedTourAction", function() {
             payload: testListTour[0],
             type: "SET_TOUR"
         });
-    });
-    it("should change state (for standard action)", () => {
-        expect(selectedTourState(initialState, selectedTourAction.setLoadBocklyEnabled())).toEqual({
-            ...initialState,
-            blocklyReloadEnabled: true
+        expect(selectedTourAction.setErrorsRunTour(errorList)).toEqual({
+            payload: errorList,
+            type: "SET_ERRORS"
         });
-        expect(selectedTourState(initialState, selectedTourAction.setLoadBocklyDisabled())).toEqual({
-            ...initialState,
-            blocklyReloadEnabled: false
-        });
-        expect(selectedTourState(initialState, selectedTourAction.setListTour(testListTourNew))).toEqual({
-            ...initialState,
-            listTour: testListTourNew
-        });
-        expect(selectedTourState(initialState, selectedTourAction.setTourDB(testListTour[2]))).toEqual({
-            ...initialState,
-            tourDB: testListTour[2]
-        });
-        expect(selectedTourState(initialState, selectedTourAction.setTourXML("NEW<xml/>"))).toEqual({
-            ...initialState,
-            tourXML: "NEW<xml/>"
-        });
-        expect(selectedTourState(initialState, selectedTourAction.setTourJS("NEW"))).toEqual({
-            ...initialState,
-            tourJS: "NEW"
+        expect(selectedTourAction.addErrorRunTour(newError)).toEqual({
+            payload: newError,
+            type: "ADD_ERROR"
         });
     });
+
     it("should dispatch actions (for action loadListTour)", async () => {
         const testStore = mockStore({ SelectedTourState: initialState });
         const promiseAdd = testListTourNew.map(async el => await (await IDB()).add("script", el, el.id));
