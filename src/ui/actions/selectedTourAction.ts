@@ -52,6 +52,7 @@ export const closeSelectedTour = () => (dispatch: Dispatch) => {
 export const openSelectedTour = (tour: TourType) => (dispatch: Dispatch, getState: () => StoreType) => {
     const store = getState();
     if (store.SelectedTourState.blocklyReloadEnabled) {
+        if (store.SelectedTourState.selectedTour.id === tour.id) {return;}
         closeSelectedTour()(dispatch);
     }
     dispatch(setSelectedTour(tour));
@@ -59,17 +60,12 @@ export const openSelectedTour = (tour: TourType) => (dispatch: Dispatch, getStat
 };
 
 export const loadListTour =  () => async  (dispatch: Dispatch) => {
-try{
-    const tourList: TourType | null = await getAllTours();
-    if (tourList) {
-        return dispatch(setListTour(tourList));
-    }else dispatch(error({ message: "Не удалось загрузить список туров" }));
-}catch (e) {
-    dispatch(error({ message: "Не удалось загрузить список туров " +
-            "77777" + e.getMessage() }));
-}
-
-
+    const tourList: TourType[] | null = await getAllTours();
+   if (tourList) {
+      dispatch(setListTour(tourList));
+    } else {
+       dispatch(error({ message: "Не удалось загрузить список туров" }));
+   }
 };
 export const loadTour = (id: number) => async (dispatch: Dispatch, getState: () => StoreType) => {
     const tour: TourType | null = await getTourById(id);
@@ -86,16 +82,13 @@ export const createNewTour = () => async (dispatch: Dispatch, getState: () => St
         return console.log("ERROR MODAL CREATED");
     }
     tour.codeJS = getJsSettersNameAndDesc(tour.name || "", tour.desc || "") + tour.codeJS;
-    const createdTour: TourType = await createTour(tour);
+    const createdTour: TourType | null = await createTour(tour);
     if (createdTour) {
         if (store.ModalState.status === "copy") {
             dispatch(success({ title: `"` + createdTour.name `" сохранен как копия ` }));
         }
         loadListTour()(dispatch);
         openSelectedTour(createdTour)(dispatch, getState);
-       /* return window.setTimeout(() => {
-            dispatch(setLoadBocklyEnabled());
-        }, 5);*/
     } else {
         dispatch(error({ message: `Не удалось создать тур "` + tour.name + `"`}));
     }
@@ -110,7 +103,7 @@ export const delToDb = () => async (dispatch: Dispatch, getState: () => StoreTyp
     const id: number = tour.id;
     const ok: boolean | null = await deleteTourById(id);
     if (ok){
-        dispatch(success({ title: tour.name + " удален" }));
+        dispatch(success({ title: `"` + tour.name + `" удален` }));
         loadListTour()(dispatch);
         if (id == store.SelectedTourState.selectedTour.id) {
             closeSelectedTour()(dispatch);
@@ -127,7 +120,7 @@ export const saveTour = (period?: boolean) => async (dispatch: Dispatch, getStat
     if (store.ModalState.status === "edit") {
         tourForSaved.codeJS = getCurrentJs(tourForSaved.name, tourForSaved.desc, tourForSaved.code, null);
     }
-    const savedTour: TourType = await updateTour(tourForSaved);
+    const savedTour: TourType | null = await updateTour(tourForSaved);
     if (savedTour){
         if (period) return;
         dispatch(success({ title: `"` + savedTour?.name + `" сохранен` }));

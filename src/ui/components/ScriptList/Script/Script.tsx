@@ -19,8 +19,7 @@ export interface ScriptProps {
 const Script: FC<ScriptProps> = ({ tour, style }) => {
     const dispatch = useDispatch();
     const selectedTourKey = useSelector<StoreType, number>(({ SelectedTourState }) => SelectedTourState.selectedTour.id);
-    //загрузка
-    const loadTour = () => {
+    const load = () => {
         if (selectedTourKey != tour.id) {
             dispatch(loadTour(tour.id));
             dispatch(burgerClose());
@@ -45,7 +44,7 @@ const Script: FC<ScriptProps> = ({ tour, style }) => {
                     className={cn("tour", {
                         "tour--active": selectedTourKey === tour.id
                     })}
-                    onClick={loadTour}
+                    onClick={load}
                 >
                     <div className="tour-name" data-testid="tour-name">
                         <small>{tour.name}</small>

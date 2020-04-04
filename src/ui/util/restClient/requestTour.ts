@@ -1,6 +1,4 @@
 import {format} from "date-fns";
-import {Interface} from "readline";
-import {Func} from "idb/build/esm/util";
 
 export interface TourType {
     id: number;
@@ -38,9 +36,7 @@ export const getDate = (str?: string) => {
 };
 export const getTourList = async (response: Response) => {
     try {
-        const object: TourType[] =  (await response.json()) as TourType[];
-        debugger;
-        return object;
+        return (await response.json()) as TourType[];
     } catch (error) {
         console.log("ОШИБКА: Не удалось получить json как TourType[] из ответа сервера ", response, error);
         return null;
@@ -48,10 +44,7 @@ export const getTourList = async (response: Response) => {
 };
 export const getTour = async (response: Response) => {
     try {
-
-        const object: TourType =  (await response.json()) as TourType;
-
-        return object;
+        return (await response.json()) as TourType;
     } catch (error) {
         console.log("ОШИБКА: Не удалось получить json как TourType из ответа сервера ", response, error);
         return null;
@@ -59,24 +52,24 @@ export const getTour = async (response: Response) => {
 };
 export type ResponseDataType = "TourType" | "TourType[]";
 export const getResult = async (request: RequestInterface, responseDataType?: ResponseDataType) => {
-    const requestInit: RequestInit | undefined = request.data ? {
-        method: request.method,
-        headers: {
-            "Content-Type": "application/json"
-        },
+    let requestInit: RequestInit | undefined = undefined;
+    request.method ? requestInit = { method: request.method } : null;
+    request.data ? requestInit = {
+        ...requestInit,
+        headers:{ "Content-Type": "application/json" },
         body: JSON.stringify(request.data)
-    } : undefined;
+    } : null;
+
+    console.log(requestInit);
     try {
         const response = await fetch(request.url, requestInit);
-       try {
+        try {
             switch (responseDataType) {
                 case "TourType": {
                     return await getTour(response);
                 }
                 case "TourType[]": {
-                    const s =  await getTourList(response);
-                    debugger;
-                    return s;
+                    return await getTourList(response);
                 }
                 default: {
                     return true;
@@ -84,50 +77,72 @@ export const getResult = async (request: RequestInterface, responseDataType?: Re
             }
         }  catch( error){
             console.log( "ОШИБКА: Ответ сервера содержит ошибку", error);
-            return null;
+           return null;
         }
     } catch( error) {
             console.log("ОШИБКА: Не удалось сделать запрос на сервер", error);
-            return null;
+           return null;
         }
 };
 export const getAllTours = async ()  => {
     const request: RequestInterface = {
         url: "http://localhost:8080/api/tour"
     };
-    try {
-        const result = await getResult(request, "TourType[]");
-        debugger;
-        return result;
-    } catch(error) {return null}
+    try{
+        return await getResult(request, "TourType[]");
+    }catch( error) {
+        console.log("ОШИБКА: Не удалось получить список туров", error);
+        return null;
+    }
+
 };
 
 export const getTourById = async (id: number) => {
     const request: RequestInterface = {
         url: "http://localhost:8080/api/tour/" + id.toString()
     };
-    return await getResult(request, "TourType");
+    try{
+        return await getResult(request, "TourType");
+    }catch( error) {
+        console.log("ОШИБКА: Не удалось получить тур", error);
+        return null;
+    }
 };
 export const deleteTourById = async (id: number) => {
     const request: RequestInterface = {
         url: "http://localhost:8080/api/tour/" + id.toString(),
         method: "DELETE"
     };
-    return await getResult(request);
+    try{
+        return await getResult(request);
+    }catch( error) {
+        console.log("ОШИБКА: Не удалось удалить тур", error);
+        return null;
+    }
 };
-export const createTour = async (tour: TourType | null) => {
+export const createTour = async (tour: TourType) => {
     const request: RequestInterface = {
         url: "http://localhost:8080/api/tour",
         method: "POST",
-        data: JSON.stringify(tour)
+        data: tour
     };
-    return await getResult(request, "TourType");
+    try{
+        return await getResult(request, "TourType");
+    }catch( error) {
+        console.log("ОШИБКА: Не удалось создать тур", error);
+        return null;
+    }
 };
 export const updateTour = async (tour: TourType) => {
     const request: RequestInterface = {
         url: "http://localhost:8080/api/tour",
         method: "PUT",
-        data: JSON.stringify(tour)
+        data: tour
     };
-    return await getResult(request, "TourType");
+    try{
+        return await getResult(request, "TourType");
+    }catch( error) {
+        console.log("ОШИБКА: Не удалось сохранить измененный тур", error);
+        return null;
+    }
 };
