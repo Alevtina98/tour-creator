@@ -18,7 +18,7 @@ export const scriptListComponent = () => (
             () => <ScriptList onClickScript={onClickScript()} onClickEsc={onClickEsc()} isOpen={true} />,
             {
                 SelectedTourState: {
-                    tourDB: storeTour
+                    selectedTour: storeTour
                 }
             } as any
         )()}

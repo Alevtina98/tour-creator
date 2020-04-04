@@ -5,7 +5,7 @@ import parseWorkspaceXml from "./blockly/BlocklyHelper";
 import { connect } from "react-redux";
 import { StoreType } from "../reducers";
 import { bindActionCreators, Dispatch } from "redux";
-import { periodicallySave, setCurrentTour } from "../actions/selectedTourAction";
+import { periodicallySave, setCurrentSelectedTour } from "../actions/selectedTourAction";
 import { setCurrentSelector } from "../actions/inspectAction";
 import { getInitData, TourType } from "../util/restClient/requestTour";
 
@@ -72,7 +72,7 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
         if (xml !== this.props.selectedTour.code) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
             // @ts-ignore
-            this.props.dispatch(setCurrentTour(null, null, xml, js, null));
+            this.props.dispatch(setCurrentSelectedTour(null, null, xml, js, null));
         }
     };
 
@@ -142,7 +142,7 @@ export default connect<
     StoreType
 >(
     ({ SelectedTourState }) => ({
-        selectedTour: SelectedTourState.tourDB
+        selectedTour: SelectedTourState.selectedTour
     }),
     dispatch => ({
         dispatch,

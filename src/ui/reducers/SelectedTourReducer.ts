@@ -1,7 +1,7 @@
 import { createReducer } from "typesafe-actions";
 import { combineReducers } from "redux";
 import {
-    setTourDB,
+    setSelectedTour,
     SelectedTourAction,
     setLoadBocklyEnabled,
     setLoadBocklyDisabled,
@@ -12,14 +12,14 @@ import {
 import { getInitData, TourType } from "../util/restClient/requestTour";
 
 export interface SelectedTourReducerState {
-    tourDB: TourType;
+    selectedTour: TourType;
     blocklyReloadEnabled: boolean;
     listTour: TourType[];
     errorsRunTour: string[];
 }
 const initTourType = getInitData();
-const tourDBReducer = createReducer<TourType, SelectedTourAction>(initTourType).handleAction(
-    setTourDB,
+const selectedTourReducer = createReducer<TourType, SelectedTourAction>(initTourType).handleAction(
+    setSelectedTour,
     (state, action) => action.payload
 );
 const errorsRunTourReducer = createReducer<string[]>([])
@@ -32,7 +32,7 @@ const blocklyLoadReducer = createReducer<boolean>(false)
 const listTourReducer = createReducer<TourType[]>([]).handleAction(setListTour, (state, action) => action.payload);
 
 const SelectedTourReducer = combineReducers<SelectedTourReducerState>({
-    tourDB: tourDBReducer,
+    selectedTour: selectedTourReducer,
     blocklyReloadEnabled: blocklyLoadReducer,
     listTour: listTourReducer,
     errorsRunTour: errorsRunTourReducer

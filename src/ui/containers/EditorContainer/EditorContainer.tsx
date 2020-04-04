@@ -21,7 +21,7 @@ const EditorContainer = () => {
     const { blocklyReloadEnabled, selector, tour } = useSelector<StoreType, TourEditorComponentProps>(
         ({ SelectedTourState, InspectState, MainState }) => ({
             blocklyReloadEnabled: SelectedTourState.blocklyReloadEnabled,
-            tour: SelectedTourState.tourDB,
+            tour: SelectedTourState.selectedTour,
             selector: InspectState.selector
         })
     );

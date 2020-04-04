@@ -4,7 +4,7 @@ import { TourType } from "../util/restClient/requestTour";
 import { StoreType } from "../reducers";
 
 const CodeJSComponent = () => {
-    const tour: TourType = useSelector<StoreType, TourType>(({ SelectedTourState }) => SelectedTourState.tourDB);
+    const tour: TourType = useSelector<StoreType, TourType>(({ SelectedTourState }) => SelectedTourState.selectedTour);
     return (
         <div className="code-block">
             {tour.codeJS?.split(/(\/\/!.*)|(.*\/\*\*\n.*\*.*\n.*\*\/)|(\n\/\/\s.*)/g).map((el, index) => {

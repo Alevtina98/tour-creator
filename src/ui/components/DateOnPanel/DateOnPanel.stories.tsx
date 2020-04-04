@@ -14,7 +14,7 @@ const showDate = storiesOf("MainContainer/PanelContainer/InfoOnPanel", module)
             <div />
             {ProviderWithComponent(() => <DateOnPanel showDate={boolean("showDate", false)} />, {
                 SelectedTourState: {
-                    tourDB: storeTour,
+                    selectedTour: storeTour,
                     blocklyReloadEnabled: boolean("blocklyReloadEnabled", true),
                     tourXML: text("tourXML", storeTour.code || "")
                 }

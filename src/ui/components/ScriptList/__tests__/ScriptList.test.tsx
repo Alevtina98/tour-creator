@@ -31,7 +31,7 @@ describe("ScriptList", () => {
         const { queryByTestId } = render(
             ProviderWithComponent(() => <ScriptList onClickScript={onClick()} onClickEsc={onClick()} isOpen={true} />, {
                 SelectedTourState: {
-                    tourDB: testTour,
+                    selectedTour: testTour,
                     tourXML: testTour[0].code,
                     blocklyReloadEnabled: true
                 }

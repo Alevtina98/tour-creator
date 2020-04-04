@@ -1,5 +1,4 @@
 import * as selectedTourAction from "../selectedTourAction";
-import selectedTourState from "../../reducers/selectedTourReducer";
 import createMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import IDB from "../../util/indexedDB";
@@ -39,11 +38,9 @@ const newError: string = "error4";
 describe("selectedTourAction", function() {
     beforeEach(cleanup);
     const initialState = {
-        tourDB: testListTour[0],
-        tourXML: "<xml/>",
+        selectedTour: testListTour[0],
         blocklyReloadEnabled: false,
         listTour: testListTour,
-        tourJS: "",
         errorsRunTour: []
     };
     const middlewares: any[] = [thunk];
@@ -61,7 +58,7 @@ describe("selectedTourAction", function() {
             payload: testListTour,
             type: "SET_LIST_TOUR"
         });
-        expect(selectedTourAction.setTourDB(testListTour[0])).toEqual({
+        expect(selectedTourAction.setSelectedTour(testListTour[0])).toEqual({
             payload: testListTour[0],
             type: "SET_TOUR"
         });
@@ -165,7 +162,7 @@ describe("selectedTourAction", function() {
         expect(store.getActions()).toEqual([
             {
                 payload: {
-                    ...initialState.tourDB,
+                    ...initialState.selectedTour,
                     code: initialState.tourXML,
                     dateChange: newdateChange
                 },
@@ -183,7 +180,7 @@ describe("selectedTourAction", function() {
         expect(store.getActions()).toEqual([
             {
                 payload: {
-                    ...initialState.tourDB,
+                    ...initialState.selectedTour,
                     code: initialState.tourXML,
                     dateChange: newdateChange
                 },
@@ -195,7 +192,7 @@ describe("selectedTourAction", function() {
             },
             {
                 payload: {
-                    ...initialState.tourDB,
+                    ...initialState.selectedTour,
                     code: initialState.tourXML,
                     dateChange: newdateChange2
                 },
@@ -213,7 +210,7 @@ describe("selectedTourAction", function() {
         expect(store.getActions()).toEqual([
             {
                 payload: {
-                    ...initialState.tourDB,
+                    ...initialState.selectedTour,
                     code: initialState.tourXML,
                     dateChange: newdateChange
                 },
@@ -225,7 +222,7 @@ describe("selectedTourAction", function() {
             },
             {
                 payload: {
-                    ...initialState.tourDB,
+                    ...initialState.selectedTour,
                     code: initialState.tourXML,
                     dateChange: newdateChange2
                 },
@@ -237,7 +234,7 @@ describe("selectedTourAction", function() {
             },
             {
                 payload: {
-                    ...initialState.tourDB,
+                    ...initialState.selectedTour,
                     code: initialState.tourXML,
                     dateChange: newdateChange3
                 },
@@ -250,11 +247,11 @@ describe("selectedTourAction", function() {
         ]);
         jest.clearAllTimers();
     });
-    it("should dispatch actions (for action loadToDb)", async () => {
+    it("should dispatch actions (for action loadTour)", async () => {
         const store = mockStore({ SelectedTourState: initialState });
         const promiseAdd = testListTour.map(async el => await (await IDB()).add("script", el, el.id));
         await Promise.all(promiseAdd);
-        await selectedTourAction.loadToDb(testListTour[2].id)(store.dispatch);
+        await selectedTourAction.loadTour(testListTour[2].id)(store.dispatch);
         expect(store.getActions()).toEqual([
             {
                 type: "SET_RELOAD_BLOCKLY_DISABLED"
@@ -341,7 +338,7 @@ describe("selectedTourAction", function() {
         expect(store.getActions()).toEqual([
             {
                 payload: {
-                    ...initialState.tourDB,
+                    ...initialState.selectedTour,
                     code: initialState.tourXML,
                     dateChange: newdateChange
                 },

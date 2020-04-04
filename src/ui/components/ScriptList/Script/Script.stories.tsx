@@ -19,7 +19,7 @@ const script = storiesOf("MainContainer/PanelContainer/BurgerMenuContainer/Scrip
         <div className="relative list-tour-group">
             {ProviderWithComponent(() => <Script tour={checkTour()} onClick={onClick()} />, {
                 SelectedTourState: {
-                    tourDB: storeTour
+                    selectedTour: storeTour
                 }
             } as any)()}
         </div>

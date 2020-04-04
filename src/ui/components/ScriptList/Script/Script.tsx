@@ -1,5 +1,5 @@
 import React, { FC, memo } from "react";
-import { loadToDb } from "../../../actions/selectedTourAction";
+import { loadTour } from "../../../actions/selectedTourAction";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, ButtonGroup, ButtonToolbar, OverlayTrigger, Popover } from "react-bootstrap";
 import { StoreType } from "../../../reducers";
@@ -18,11 +18,11 @@ export interface ScriptProps {
 
 const Script: FC<ScriptProps> = ({ tour, style }) => {
     const dispatch = useDispatch();
-    const selectedTourKey = useSelector<StoreType, number>(({ SelectedTourState }) => SelectedTourState.tourDB.id);
+    const selectedTourKey = useSelector<StoreType, number>(({ SelectedTourState }) => SelectedTourState.selectedTour.id);
     //загрузка
     const loadTour = () => {
         if (selectedTourKey != tour.id) {
-            dispatch(loadToDb(tour.id));
+            dispatch(loadTour(tour.id));
             dispatch(burgerClose());
         }
     };

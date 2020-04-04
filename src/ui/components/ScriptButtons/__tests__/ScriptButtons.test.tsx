@@ -17,7 +17,7 @@ describe("ScriptButtons", () => {
         const { queryByTestId, debug } = render(
             ProviderWithComponent(() => <ScriptButtons />, {
                 SelectedTourState: {
-                    tourDB: testTour,
+                    selectedTour: testTour,
                     tourJS: "",
                     blocklyReloadEnabled: true
                 },

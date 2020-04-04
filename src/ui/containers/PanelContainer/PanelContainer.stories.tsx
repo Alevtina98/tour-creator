@@ -10,7 +10,7 @@ export const panel = () => (
     <div>
         {ProviderWithComponent(PanelContainer, {
             SelectedTourState: {
-                tourDB: storeTour
+                selectedTour: storeTour
             }
         } as any)()}
     </div>

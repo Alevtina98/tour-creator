@@ -13,7 +13,7 @@ describe("Script", () => {
         const { getByTestId, queryByTestId, debug } = render(
             ProviderWithComponent(() => <DateOnPanel showDate={true}/>, {
                 SelectedTourState: {
-                    tourDB: testTour,
+                    selectedTour: testTour,
                     tourXML: testTour.code,
                     blocklyReloadEnabled: true
                 }
@@ -30,7 +30,7 @@ describe("Script", () => {
         const { getByTestId, queryByTestId } = render(
             ProviderWithComponent(DateOnPanel, {
                 SelectedTourState: {
-                    tourDB: testTour,
+                    selectedTour: testTour,
                     tourXML: testTour.code,
                     blocklyReloadEnabled: true
                 }
@@ -44,7 +44,7 @@ describe("Script", () => {
         const { getByTestId, queryByTestId, debug } = render(
             ProviderWithComponent(DateOnPanel, {
                 SelectedTourState: {
-                    tourDB: testTour,
+                    selectedTour: testTour,
                     tourXML: "new code",
                     blocklyReloadEnabled: true
                 }

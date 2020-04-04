@@ -34,7 +34,7 @@ const newError: string = "error4";
 describe("selectedTourAction", function() {
     beforeEach(cleanup);
     const initialState = {
-        tourDB: testListTour[0],
+        selectedTour: testListTour[0],
         blocklyReloadEnabled: false,
         listTour: testListTour,
         errorsRunTour: []
@@ -53,9 +53,9 @@ describe("selectedTourAction", function() {
             ...initialState,
             listTour: newTestListTour
         });
-        expect(selectedTourState(initialState, selectedTourAction.setTourDB(testListTour[2]))).toEqual({
+        expect(selectedTourState(initialState, selectedTourAction.setSelectedTour(testListTour[2]))).toEqual({
             ...initialState,
-            tourDB: testListTour[2]
+            selectedTour: testListTour[2]
         });
         expect(selectedTourState(initialState, selectedTourAction.setErrorsRunTour(errorList))).toEqual({
             ...initialState,

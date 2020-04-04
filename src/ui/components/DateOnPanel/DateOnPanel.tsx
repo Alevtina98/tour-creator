@@ -5,7 +5,7 @@ import { getDateClientFormat, TourType } from "../../util/restClient/requestTour
 import { Navbar } from "react-bootstrap";
 
 export interface ScriptButtons {
-    tourDB: TourType;
+    selectedTour: TourType;
     blocklyReloadEnabled: boolean;
 }
 
@@ -13,25 +13,25 @@ interface DateListSaveProps {
     showDate?: boolean;
 }
 const DateOnPanel: FC<DateListSaveProps> = ({ showDate }) => {
-    const { blocklyReloadEnabled, tourDB } = useSelector<StoreType, ScriptButtons>(
+    const { blocklyReloadEnabled, selectedTour } = useSelector<StoreType, ScriptButtons>(
         ({ SelectedTourState, MainState }) => ({
             blocklyReloadEnabled: SelectedTourState.blocklyReloadEnabled,
-            tourDB: SelectedTourState.tourDB
+            selectedTour: SelectedTourState.selectedTour
         })
     );
     if (!blocklyReloadEnabled) {
         return null;
     }
 
-    if (showDate && tourDB.dateChange) {
+    if (showDate && selectedTour.dateChange) {
         return (
             <div className="date-save-on-panel" data-testid="panel-date">
-                <Navbar.Text>Последнее сохранение {getDateClientFormat(tourDB.dateChange)}</Navbar.Text>
+                <Navbar.Text>Последнее сохранение {getDateClientFormat(selectedTour.dateChange)}</Navbar.Text>
             </div>
         );
     }
 
-    if (tourDB.dateChange) {
+    if (selectedTour.dateChange) {
         return (
             <div className="date-save-on-panel" data-testid="panel-not-date">
                 <Navbar.Text>Все изменения сохранены</Navbar.Text>

@@ -9,14 +9,14 @@ import { setModal } from "../../actions/modalAction";
 import * as Datetime from "react-datetime";
 
 export interface ScriptButtons {
-    tourDB: TourType;
+    selectedTour: TourType;
     blocklyReloadEnabled: boolean;
 }
 
 const ScriptButtons = () => {
     const dispatch = useDispatch();
     //маппинг значений из store
-    const { tourDB, blocklyReloadEnabled } = useSelector<StoreType, ScriptButtons>(
+    const { selectedTour, blocklyReloadEnabled } = useSelector<StoreType, ScriptButtons>(
         ({ SelectedTourState }) => SelectedTourState
     );
 
@@ -28,13 +28,13 @@ const ScriptButtons = () => {
         dispatch(setModal({ tour: newTour, status: "create" }));
     };
     const onShowCopy = () => {
-        const newName = tourDB.name + "-копия";
-        dispatch(setModal({ tour: { ...tourDB, name: newName }, status: "copy" }));
+        const newName = selectedTour.name + "-копия";
+        dispatch(setModal({ tour: { ...selectedTour, name: newName }, status: "copy" }));
     };
     const onShowRun = () => {
-        agentActions.runScript(tourDB.codeJS);
+        agentActions.runScript(selectedTour.codeJS);
         dispatch(setErrorsRunTour([]));
-        dispatch(setModal({ tour: tourDB, status: "show" }));
+        dispatch(setModal({ tour: selectedTour, status: "show" }));
     };
     /*
       без запуска модальных окон
