@@ -1,22 +1,27 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../../reducers";
-import { closeSelectedTour, saveTour, setErrorsRunTour } from "../../actions/selectedTourAction";
+import {
+    changePeriodicSaveState,
+    closeSelectedTour,
+    saveTour,
+    setErrorsRunTour
+} from "../../actions/selectedTourAction";
 import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 import agentActions from "../../actions/agentActions";
 import { setModal } from "../../actions/modalAction";
-import * as Datetime from "react-datetime";
 import { getInitData, TourType } from "../../util/tour";
 
 export interface ScriptButtons {
     selectedTour: TourType;
+    periodicSaveEnabled: boolean;
     blocklyReloadEnabled: boolean;
 }
 
 const ScriptButtons = () => {
     const dispatch = useDispatch();
     //маппинг значений из store
-    const { selectedTour, blocklyReloadEnabled } = useSelector<StoreType, ScriptButtons>(
+    const { selectedTour, periodicSaveEnabled, blocklyReloadEnabled } = useSelector<StoreType, ScriptButtons>(
         ({ SelectedTourState }) => SelectedTourState
     );
 
@@ -45,6 +50,10 @@ const ScriptButtons = () => {
     const closeTour = () => {
         dispatch(closeSelectedTour());
     };
+    const onCheck = () => {
+        const newState: boolean = !periodicSaveEnabled;
+        dispatch(changePeriodicSaveState(newState));
+    };
     return (
         <div className="relative flex-center">
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -60,6 +69,16 @@ const ScriptButtons = () => {
                         <NavDropdown.Item onClick={onShowCopy} data-testid="copyTourButton">
                             Сохранить как
                         </NavDropdown.Item>
+                        <NavDropdown.Divider />
+                        <NavDropdown.Header>
+                            Периодическое сохранение
+                            <input
+                                type="checkbox"
+                                onClick={onCheck}
+                                style={{ marginLeft: "15px", transform: "scale(1.5)" }}
+                                checked={periodicSaveEnabled}
+                            />
+                        </NavDropdown.Header>
                     </NavDropdown>
                     <Nav.Link onClick={onShowRun} data-testid="runTourButton" disabled={!blocklyReloadEnabled}>
                         Запустить

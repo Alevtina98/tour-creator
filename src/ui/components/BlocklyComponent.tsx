@@ -61,7 +61,6 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
         }
     };
     componentDidMount(): void {
-        this.props.actions.periodicallySave();
         const workspaceSVG = this.blocklyRef.workspace.state.workspace;
         workspaceSVG.addChangeListener(this.clickOnSelectorBlockListener);
     }

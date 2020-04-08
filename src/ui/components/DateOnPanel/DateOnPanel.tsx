@@ -14,10 +14,7 @@ interface DateListSaveProps {
 }
 const DateOnPanel: FC<DateListSaveProps> = ({ showDate }) => {
     const { blocklyReloadEnabled, selectedTour } = useSelector<StoreType, ScriptButtons>(
-        ({ SelectedTourState, MainState }) => ({
-            blocklyReloadEnabled: SelectedTourState.blocklyReloadEnabled,
-            selectedTour: SelectedTourState.selectedTour
-        })
+        ({ SelectedTourState, MainState }) => SelectedTourState
     );
     if (!blocklyReloadEnabled) {
         return null;
