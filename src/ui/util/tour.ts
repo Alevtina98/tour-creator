@@ -13,7 +13,7 @@ export interface TourType {
 export const getInitData = (data?: Partial<TourType>): TourType => ({
     id: -1,
     name: "Unnamed",
-    code: "<xml/>",
+    code: '<xml xmlns="http://www.w3.org/1999/xhtml"></xml>',
     codeJS: "",
     desc: "",
     dateCreate: "",

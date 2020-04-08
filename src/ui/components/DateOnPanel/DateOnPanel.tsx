@@ -27,7 +27,6 @@ const DateOnPanel: FC<DateListSaveProps> = ({ showDate }) => {
             </div>
         );
     }
-
     if (selectedTour.dateChange) {
         return (
             <div className="date-save-on-panel" data-testid="panel-not-date">

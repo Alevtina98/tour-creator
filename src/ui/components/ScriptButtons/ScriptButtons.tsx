@@ -24,7 +24,7 @@ const ScriptButtons = () => {
      c запуском модальных окон из ModalsScript.tsx
    */
     const onShowCreated = () => {
-        if (blocklyReloadEnabled) {
+        if (blocklyReloadEnabled && !selectedTour.dateChange) {
             dispatch(setModal({ tour: selectedTour, status: "save_before_create" }));
         } else {
             const newTour: TourType = getInitData();
@@ -41,7 +41,11 @@ const ScriptButtons = () => {
         dispatch(setModal({ tour: selectedTour, status: "show" }));
     };
     const closeTour = () => {
-        dispatch(setModal({ tour: selectedTour, status: "save_before_close" }));
+        if (!selectedTour.dateChange) {
+            dispatch(setModal({ tour: selectedTour, status: "save_before_close" }));
+        } else {
+            dispatch(closeSelectedTour());
+        }
     };
     /*
       без запуска модальных окон
