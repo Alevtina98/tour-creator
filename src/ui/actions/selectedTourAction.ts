@@ -4,6 +4,7 @@ import { StoreType } from "../reducers";
 import { createTour, deleteTourById, getAllTours, getTourById, updateTour } from "../util/restClient/requestTour";
 import { error, info, success, warning } from "react-notification-system-redux";
 import { getCurrentJs, getInitData, getJsSettersNameAndDesc, TourType } from "../util/tour";
+import { StatusType } from "../reducers/ModalReducer";
 
 export const setPeriodicSaveEnabled = createStandardAction("SET_PERIODIC_SAVE_ENABLED")();
 export const setPeriodicSaveDisabled = createStandardAction("SET_PERIODIC_SAVE_DISABLED")();
@@ -139,7 +140,8 @@ export const saveTour = (period?: boolean) => async (dispatch: Dispatch, getStat
     const store = getState();
     const selectedTour = store.SelectedTourState.selectedTour;
     const tourForSaved: TourType = store.ModalState.tour || selectedTour;
-    if (store.ModalState.status === "edit") {
+    const status: StatusType | null = store.ModalState.status;
+    if (status === "edit") {
         tourForSaved.codeJS = getCurrentJs(tourForSaved.name, tourForSaved.desc, tourForSaved.code, null);
     }
     const savedTour: TourType | null = (await updateTour(tourForSaved)) as TourType;
@@ -151,7 +153,7 @@ export const saveTour = (period?: boolean) => async (dispatch: Dispatch, getStat
             return;
         }
         dispatch(success({ title: `"` + savedTour?.name + `" сохранен` }));
-        if (savedTour.id !== selectedTour.id) return;
+        if (savedTour.id !== selectedTour.id || status === "save_before_load") return;
         setCurrentSelectedTour(savedTour.name, savedTour.desc, null, null, savedTour.dateChange)(dispatch, getState);
     } else {
         dispatch(error({ message: `Не удалось сохранить тур "` + tourForSaved.name + `"` }));

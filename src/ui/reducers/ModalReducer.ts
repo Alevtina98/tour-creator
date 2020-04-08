@@ -11,6 +11,7 @@ export type StatusType =
     | "edit"
     | "inspect"
     | "save_before_close"
+    | "save_before_load"
     | "save_before_create";
 
 export interface ModalState {
