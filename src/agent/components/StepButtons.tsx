@@ -8,7 +8,7 @@ export interface PageButtonsState {
     currentStep: number;
     totalSteps: number;
     paginationModel: any;
-    setStep: (index?: number) => void;
+    setStep: (index?: number) => {};
     minPreviousOpen?: number;
     maxNextOpen?: number;
     buttonStyle?: React.CSSProperties;
@@ -44,15 +44,16 @@ const StepButtons: FC<PageButtonsState> = ({
                 }}
                 className=" krista-bootstrap-wrapper "
                 disabled={currentStep === minPreviousOpen}
-                onClick={event => {
+                onClick={(event: any) => {
                     disposeEvent(event);
                     setStep(currentStep - 1);
                 }}
             >
                 Назад
             </Button>
-            {paginationModel.map(page => {
+            {paginationModel.map((page: { type: string; value: {} | null | undefined }) => {
                 if (
+                    page.value &&
                     page.type === ITEM_TYPES.PAGE &&
                     page.value >= minPreviousOpen + 1 &&
                     page.value <= maxNextOpen + 1
@@ -66,9 +67,9 @@ const StepButtons: FC<PageButtonsState> = ({
                             }}
                             className=" krista-bootstrap-wrapper "
                             disabled={page.value === currentStep + 1}
-                            onClick={event => {
+                            onClick={(event: any) => {
                                 disposeEvent(event);
-                                setStep(page.value - 1);
+                                setStep(page.value as number);
                             }}
                         >
                             {page.value}
@@ -85,7 +86,7 @@ const StepButtons: FC<PageButtonsState> = ({
                     marginRight: "100px"
                 }}
                 disabled={currentStep === maxNextOpen}
-                onClick={event => {
+                onClick={(event: any) => {
                     disposeEvent(event);
                     setStep(currentStep + 1);
                 }}

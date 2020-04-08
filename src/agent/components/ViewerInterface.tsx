@@ -6,9 +6,10 @@ import PageButtons from "./StepButtons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import ControlButtons from "./ControlButtons";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
 export interface ViewerInterfaceState {
-    setStep: (index: number) => void;
+    setStep: (index?: number) => {};
     currentStep: number;
     totalSteps: number;
     name: string;
@@ -87,7 +88,7 @@ const ViewerInterface: FC<ViewerInterfaceState> = ({
                     size="2x"
                     color="#ff4747"
                     style={iconCancelButtonStyle}
-                    icon={faTimes}
+                    icon={faTimes as IconProp}
                 />
             </Button>
             <div style={{ color: "rgb(255,255,255)", fontSize: "10pt" }}>{desc}</div>

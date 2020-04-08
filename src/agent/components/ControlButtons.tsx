@@ -32,7 +32,7 @@ const ControlButtons: FC<ControlButtonsState> = ({ onStart, onPostpone, buttonSt
         <ButtonToolbar style={{ marginLeft: "0", display: "flex" }}>
             <Button
                 style={controlButtonStyle}
-                onClick={event => {
+                onClick={(event: any) => {
                     disposeEvent(event);
                     onStart();
                     console.log("start");
