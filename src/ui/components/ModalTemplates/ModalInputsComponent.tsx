@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../../reducers";
 import { ModalState } from "../../reducers/ModalReducer";
 import { setModal } from "../../actions/modalAction";
-import { TourType } from "../../util/restClient/requestTour";
+import { TourType } from "../../util/tour";
 
 interface ModalInputsComponentProps {
     modalName: string;

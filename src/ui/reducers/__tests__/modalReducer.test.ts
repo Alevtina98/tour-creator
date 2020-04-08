@@ -1,7 +1,7 @@
-import {initModal, ModalState} from "../ModalReducer";
-import {getInitData} from "../../util/restClient/requestTour";
+import { initModal, ModalState } from "../ModalReducer";
 import * as modalAction from "../../actions/modalAction";
 import modalReducer from "../ModalReducer";
+import { getInitData } from "../../util/tour";
 
 describe("modalReducer", function() {
     const testModal: ModalState = {

@@ -1,7 +1,6 @@
 import * as modalAction from "../modalAction";
-import {ModalState} from "../../reducers/ModalReducer";
-import {getInitData} from "../../util/restClient/requestTour";
-
+import { ModalState } from "../../reducers/ModalReducer";
+import { getInitData } from "../../util/tour";
 
 describe("modalAction", function() {
     const testModal: ModalState = {
@@ -17,6 +16,5 @@ describe("modalAction", function() {
         expect(modalAction.clearModal()).toEqual({
             type: "CLEAR_MODAL"
         });
-
     });
 });

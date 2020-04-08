@@ -1,6 +1,6 @@
 import { openDB, DBSchema } from "idb";
 import { IDBPDatabase } from "idb/lib/entry";
-import {TourType} from "./restClient/requestTour";
+import { TourType } from "./tour";
 
 interface MyDB extends DBSchema {
     script: {

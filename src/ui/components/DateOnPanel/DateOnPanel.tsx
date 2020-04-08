@@ -1,8 +1,8 @@
 import React, { FC } from "react";
 import { useSelector } from "react-redux";
 import { StoreType } from "../../reducers";
-import { getDateClientFormat, TourType } from "../../util/restClient/requestTour";
 import { Navbar } from "react-bootstrap";
+import { getDateClientFormat, TourType } from "../../util/tour";
 
 export interface ScriptButtons {
     selectedTour: TourType;

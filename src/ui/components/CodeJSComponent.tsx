@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import { useSelector } from "react-redux";
-import { TourType } from "../util/restClient/requestTour";
 import { StoreType } from "../reducers";
+import { TourType } from "../util/tour";
 
 const CodeJSComponent = () => {
     const tour: TourType = useSelector<StoreType, TourType>(({ SelectedTourState }) => SelectedTourState.selectedTour);

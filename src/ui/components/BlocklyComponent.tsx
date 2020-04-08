@@ -7,7 +7,7 @@ import { StoreType } from "../reducers";
 import { bindActionCreators, Dispatch } from "redux";
 import { periodicallySave, setCurrentSelectedTour } from "../actions/selectedTourAction";
 import { setCurrentSelector } from "../actions/inspectAction";
-import { getInitData, TourType } from "../util/restClient/requestTour";
+import { getInitData, TourType } from "../util/tour";
 
 export interface Blockly {
     toolboxCategories: any[];
@@ -61,7 +61,7 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
         }
     };
     componentDidMount(): void {
-        //this.props.actions.periodicallySave();
+        this.props.actions.periodicallySave();
         const workspaceSVG = this.blocklyRef.workspace.state.workspace;
         workspaceSVG.addChangeListener(this.clickOnSelectorBlockListener);
     }

@@ -3,7 +3,7 @@ import { render, cleanup, fireEvent, waitForElement, waitForElementToBeRemoved }
 import ProviderWithComponent from "../../../../store/ProviderWithComponent";
 import Script from "../Script";
 import IDB from "../../../../util/indexedDB";
-import { getInitData, TourType } from "../../../../util/restClient/requestTour";
+import { getInitData, TourType } from "../../../../util/tour";
 
 describe("Script", () => {
     beforeEach(cleanup);

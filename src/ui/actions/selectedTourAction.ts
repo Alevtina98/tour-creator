@@ -1,17 +1,9 @@
 import { ActionType, createStandardAction } from "typesafe-actions";
 import { Dispatch } from "redux";
 import { StoreType } from "../reducers";
-import {
-    createTour,
-    deleteTourById,
-    getAllTours,
-    getInitData,
-    getTourById,
-    TourType,
-    updateTour
-} from "../util/restClient/requestTour";
+import { createTour, deleteTourById, getAllTours, getTourById, updateTour } from "../util/restClient/requestTour";
 import { error, success } from "react-notification-system-redux";
-import { getCurrentJs, getJsSettersNameAndDesc } from "../util/jsCodeTour";
+import { getCurrentJs, getInitData, getJsSettersNameAndDesc, TourType } from "../util/tour";
 
 export const setLoadBocklyEnabled = createStandardAction("SET_RELOAD_BLOCKLY_ENABLED")();
 export const setLoadBocklyDisabled = createStandardAction("SET_RELOAD_BLOCKLY_DISABLED")();
@@ -32,7 +24,8 @@ export const setCurrentSelectedTour = (
     const currentDesc: string | null = newDesc || selectedTour.desc;
     const currentXml: string | null = newXml || selectedTour.code;
     const currentJs: string | null = getCurrentJs(currentName, currentDesc, currentXml, newJs);
-    const currentDateChange: string = dateSaveCurrentTour || (currentXml !== selectedTour.code ? "" : selectedTour.dateChange);
+    const currentDateChange: string =
+        dateSaveCurrentTour || (currentXml !== selectedTour.code ? "" : selectedTour.dateChange);
     const currentTour: TourType = {
         ...selectedTour,
         name: currentName,
@@ -52,25 +45,27 @@ export const closeSelectedTour = () => (dispatch: Dispatch) => {
 export const openSelectedTour = (tour: TourType) => (dispatch: Dispatch, getState: () => StoreType) => {
     const store = getState();
     if (store.SelectedTourState.blocklyReloadEnabled) {
-        if (store.SelectedTourState.selectedTour.id === tour.id) {return;}
+        if (store.SelectedTourState.selectedTour.id === tour.id) {
+            return;
+        }
         closeSelectedTour()(dispatch);
     }
     dispatch(setSelectedTour(tour));
     dispatch(setLoadBocklyEnabled());
 };
 
-export const loadListTour =  () => async  (dispatch: Dispatch) => {
+export const loadListTour = () => async (dispatch: Dispatch) => {
     const tourList: TourType[] | null = await getAllTours();
-   if (tourList) {
-      dispatch(setListTour(tourList));
+    if (tourList) {
+        dispatch(setListTour(tourList));
     } else {
-       dispatch(error({ message: "Не удалось загрузить список туров" }));
-   }
+        dispatch(error({ message: "Не удалось загрузить список туров" }));
+    }
 };
 export const loadTour = (id: number) => async (dispatch: Dispatch, getState: () => StoreType) => {
     const tour: TourType | null = await getTourById(id);
     if (tour) {
-        openSelectedTour(tour)(dispatch, getState)
+        openSelectedTour(tour)(dispatch, getState);
     } else {
         dispatch(error({ message: "Не удалось загрузить тур" }));
     }
@@ -85,12 +80,12 @@ export const createNewTour = () => async (dispatch: Dispatch, getState: () => St
     const createdTour: TourType | null = await createTour(tour);
     if (createdTour) {
         if (store.ModalState.status === "copy") {
-            dispatch(success({ title: `"` + createdTour.name `" сохранен как копия ` }));
+            dispatch(success({ title: `"` + createdTour.name`" сохранен как копия ` }));
         }
         loadListTour()(dispatch);
         openSelectedTour(createdTour)(dispatch, getState);
     } else {
-        dispatch(error({ message: `Не удалось создать тур "` + tour.name + `"`}));
+        dispatch(error({ message: `Не удалось создать тур "` + tour.name + `"` }));
     }
 };
 export const delToDb = () => async (dispatch: Dispatch, getState: () => StoreType) => {
@@ -102,15 +97,14 @@ export const delToDb = () => async (dispatch: Dispatch, getState: () => StoreTyp
     }
     const id: number = tour.id;
     const ok: boolean | null = await deleteTourById(id);
-    if (ok){
+    if (ok) {
         dispatch(success({ title: `"` + tour.name + `" удален` }));
         loadListTour()(dispatch);
         if (id == store.SelectedTourState.selectedTour.id) {
             closeSelectedTour()(dispatch);
         }
     } else {
-        dispatch(error({ message: `Не удалось удалить тур "` + tour.name + `"`}));
-
+        dispatch(error({ message: `Не удалось удалить тур "` + tour.name + `"` }));
     }
 };
 export const saveTour = (period?: boolean) => async (dispatch: Dispatch, getState: () => StoreType) => {
@@ -121,14 +115,14 @@ export const saveTour = (period?: boolean) => async (dispatch: Dispatch, getStat
         tourForSaved.codeJS = getCurrentJs(tourForSaved.name, tourForSaved.desc, tourForSaved.code, null);
     }
     const savedTour: TourType | null = await updateTour(tourForSaved);
-    if (savedTour){
+    if (savedTour) {
         if (period) return;
         dispatch(success({ title: `"` + savedTour?.name + `" сохранен` }));
         loadListTour()(dispatch);
         if (savedTour.id !== selectedTour.id) return;
         setCurrentSelectedTour(savedTour.name, savedTour.desc, null, null, savedTour.dateChange)(dispatch, getState);
     } else {
-        dispatch(error({ message: `Не удалось сохранить тур "` + tourForSaved.name + `"`}));
+        dispatch(error({ message: `Не удалось сохранить тур "` + tourForSaved.name + `"` }));
     }
 };
 
@@ -142,6 +136,5 @@ export const periodicallySave = () => (dispatch: Dispatch, getState: () => Store
         saveTour(true)(dispatch, getState);
     }, 10000);
 };
-
 
 export type SelectedTourAction = ActionType<typeof setSelectedTour>;

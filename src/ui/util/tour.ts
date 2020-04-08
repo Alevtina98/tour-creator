@@ -1,3 +1,26 @@
+import { format } from "date-fns";
+
+export interface TourType {
+    id: number;
+    name: string;
+    desc: string | null;
+    code: string | null;
+    codeJS: string | null;
+    dateCreate: string;
+    dateChange: string;
+}
+
+export const getInitData = (data?: Partial<TourType>): TourType => ({
+    id: -1,
+    name: "Unnamed",
+    code: "<xml/>",
+    codeJS: "",
+    desc: "",
+    dateCreate: "",
+    dateChange: "",
+    ...data
+});
+
 export const getJsSettersNameAndDesc = (name: string, desc: string) => {
     const nameAssignment: string | null = `TourHelper.setNameTour('${name}');\n`;
     const descAssignment: string | null = `TourHelper.setDescTour('${desc}');\n\n`;
@@ -24,4 +47,15 @@ export const getCurrentJs = (
     const xml: string = currentXml || "";
     const currentJs: string = getJsSettersNameAndDesc(name, desc) + (jsFromCurrentXml || xmlToJs(xml));
     return currentJs;
+};
+
+export const getDateClientFormat = (str: string) => {
+    return format(getDate(str), "dd-MM-yyyy в HH:mm:ss");
+};
+export const getDate = (str?: string) => {
+    //const dateServer = new Date.UTC(str)
+    if (!str) {
+        return new Date();
+    }
+    return new Date(str);
 };

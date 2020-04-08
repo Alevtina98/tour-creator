@@ -6,10 +6,10 @@ import { StoreType } from "../../../reducers";
 import cn from "classnames";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getDateClientFormat, TourType } from "../../../util/restClient/requestTour";
 import { setModal } from "../../../actions/modalAction";
 import { burgerClose } from "../../../actions/mainAction";
 import { disposeEvent } from "../../../../agent/util/utils";
+import { getDateClientFormat, TourType } from "../../../util/tour";
 
 export interface ScriptProps {
     tour: TourType;
@@ -18,7 +18,9 @@ export interface ScriptProps {
 
 const Script: FC<ScriptProps> = ({ tour, style }) => {
     const dispatch = useDispatch();
-    const selectedTourKey = useSelector<StoreType, number>(({ SelectedTourState }) => SelectedTourState.selectedTour.id);
+    const selectedTourKey = useSelector<StoreType, number>(
+        ({ SelectedTourState }) => SelectedTourState.selectedTour.id
+    );
     const load = () => {
         if (selectedTourKey != tour.id) {
             dispatch(loadTour(tour.id));

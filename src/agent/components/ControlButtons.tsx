@@ -1,5 +1,5 @@
 import { FC, memo } from "react";
-import { Button, ButtonToolbar, Dropdown, DropdownButton } from "react-bootstrap";
+import { Button, ButtonGroup, ButtonToolbar, Dropdown, DropdownButton } from "react-bootstrap";
 import { disposeEvent } from "../util/utils";
 import * as React from "react";
 
@@ -11,7 +11,7 @@ export interface ControlButtonsState {
 const ControlButtons: FC<ControlButtonsState> = ({ onStart, onPostpone, buttonStyle }) => {
     const controlButtonStyle: React.CSSProperties = {
         ...buttonStyle,
-        marginRight: "5px"
+        marginRight: "3%"
     };
     const yesterday = () => {
         const date = new Date();
@@ -29,10 +29,9 @@ const ControlButtons: FC<ControlButtonsState> = ({ onStart, onPostpone, buttonSt
         onPostpone(date.toDateString());
     };
     return (
-        <ButtonToolbar style={{ marginLeft: "0px" }}>
+        <ButtonToolbar style={{ marginLeft: "0", display: "flex" }}>
             <Button
                 style={controlButtonStyle}
-                className=" krista-bootstrap-wrapper "
                 onClick={event => {
                     disposeEvent(event);
                     onStart();
@@ -42,14 +41,10 @@ const ControlButtons: FC<ControlButtonsState> = ({ onStart, onPostpone, buttonSt
                 Начать
             </Button>
             <Dropdown>
-                <Dropdown.Toggle
-                    style={controlButtonStyle}
-                    className=" krista-bootstrap-wrapper "
-                    id="dropdown-custom-components"
-                >
+                <Dropdown.Toggle style={controlButtonStyle} id="dropdown-custom-components">
                     Отложить
                 </Dropdown.Toggle>
-                <Dropdown.Menu>
+                <Dropdown.Menu style={{ marginLeft: "0" }}>
                     <Dropdown.Item onClick={yesterday}>на день</Dropdown.Item>
                     <Dropdown.Item onClick={weekLater}>на неделю</Dropdown.Item>
                     <Dropdown.Item onClick={monthLater}>на месяц</Dropdown.Item>

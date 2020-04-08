@@ -4,14 +4,14 @@ import Script from "../../ScriptList/Script/Script";
 import React from "react";
 import DateOnPanel from "../DateOnPanel";
 import { format } from "date-fns";
-import {getDateClientFormat, getInitData, TourType} from "../../../util/restClient/requestTour";
+import { getDateClientFormat, getInitData, TourType } from "../../../util/tour";
 
 describe("Script", () => {
     beforeEach(cleanup);
     const testTour: TourType = getInitData();
     it("date show", () => {
         const { getByTestId, queryByTestId, debug } = render(
-            ProviderWithComponent(() => <DateOnPanel showDate={true}/>, {
+            ProviderWithComponent(() => <DateOnPanel showDate={true} />, {
                 SelectedTourState: {
                     selectedTour: testTour,
                     tourXML: testTour.code,

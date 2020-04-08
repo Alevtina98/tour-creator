@@ -4,7 +4,7 @@ import ProviderWithComponent from "../../../store/ProviderWithComponent";
 import React from "react";
 import ScriptList from "../../ScriptList/ScriptList/ScriptList";
 import "fake-indexeddb/auto";
-import { getInitData, TourType } from "../../../util/restClient/requestTour";
+import { getInitData, TourType } from "../../../util/tour";
 
 describe("ScriptList", () => {
     beforeEach(cleanup);

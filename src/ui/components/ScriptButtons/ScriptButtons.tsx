@@ -4,9 +4,9 @@ import { StoreType } from "../../reducers";
 import { closeSelectedTour, saveTour, setErrorsRunTour } from "../../actions/selectedTourAction";
 import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 import agentActions from "../../actions/agentActions";
-import { getInitData, TourType } from "../../util/restClient/requestTour";
 import { setModal } from "../../actions/modalAction";
 import * as Datetime from "react-datetime";
+import { getInitData, TourType } from "../../util/tour";
 
 export interface ScriptButtons {
     selectedTour: TourType;

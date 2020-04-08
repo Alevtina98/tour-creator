@@ -1,7 +1,7 @@
 import { createReducer } from "typesafe-actions";
-import { TourType } from "../util/restClient/requestTour";
 import { clearModal, setModal } from "../actions/modalAction";
 import { setInspectDisabled } from "../actions/inspectAction";
+import { TourType } from "../util/tour";
 
 export type StatusType = "delete" | "show" | "create" | "copy" | "edit" | "inspect";
 

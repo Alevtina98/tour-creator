@@ -3,7 +3,7 @@ import { cleanup, render } from "@testing-library/react";
 import ProviderWithComponent from "../../../store/ProviderWithComponent";
 import * as React from "react";
 import sinonChrome from "sinon-chrome";
-import { getInitData, TourType } from "../../../util/restClient/requestTour";
+import { getInitData, TourType } from "../../../util/tour";
 
 const testTour: TourType = getInitData();
 describe("ScriptButtons", () => {

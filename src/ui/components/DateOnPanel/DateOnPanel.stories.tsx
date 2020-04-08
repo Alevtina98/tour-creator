@@ -3,7 +3,7 @@ import ProviderWithComponent from "../../store/ProviderWithComponent";
 import DateOnPanel from "./DateOnPanel";
 import { storiesOf } from "@storybook/react";
 import { boolean, withKnobs, text } from "@storybook/addon-knobs";
-import { getInitData, TourType } from "../../util/restClient/requestTour";
+import { getInitData, TourType } from "../../util/tour";
 
 const storeTour: TourType = getInitData();
 const showDate = storiesOf("MainContainer/PanelContainer/InfoOnPanel", module)

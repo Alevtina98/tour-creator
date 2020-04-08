@@ -1,4 +1,4 @@
-import React, { ComponentType, FC, useEffect,useState } from "react";
+import React, { ComponentType, FC, useEffect, useState } from "react";
 import Script from "../Script/Script";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, FormControl } from "react-bootstrap";
@@ -7,9 +7,9 @@ import { loadListTour } from "../../../actions/selectedTourAction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import cn from "classnames";
-import { TourType } from "../../../util/restClient/requestTour";
 import { FixedSizeList as List, ListChildComponentProps } from "react-window";
 import { useMeasure } from "react-use";
+import { TourType } from "../../../util/tour";
 
 export interface MenuProps {
     onClickEsc: any;

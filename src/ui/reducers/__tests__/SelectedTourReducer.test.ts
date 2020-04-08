@@ -1,7 +1,7 @@
-import {cleanup} from "@testing-library/react";
+import { cleanup } from "@testing-library/react";
 import selectedTourState from "../SelectedTourReducer";
 import * as selectedTourAction from "../../actions/selectedTourAction";
-import {getInitData, TourType} from "../../util/restClient/requestTour";
+import { getInitData, TourType } from "../../util/tour";
 
 const testListTour: TourType[] = [
     getInitData({
@@ -65,7 +65,12 @@ describe("selectedTourAction", function() {
             ...initialState,
             errorsRunTour: [newError]
         });
-        expect(selectedTourState({...initialState, errorsRunTour: errorList}, selectedTourAction.addErrorRunTour(newError))).toEqual({
+        expect(
+            selectedTourState(
+                { ...initialState, errorsRunTour: errorList },
+                selectedTourAction.addErrorRunTour(newError)
+            )
+        ).toEqual({
             ...initialState,
             errorsRunTour: [...errorList, newError]
         });

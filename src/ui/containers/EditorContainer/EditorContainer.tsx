@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../../reducers";
 import { setInspectEnabled } from "../../actions/inspectAction";
 import agentActions from "../../actions/agentActions";
-import { TourType } from "../../util/restClient/requestTour";
 import { setModal } from "../../actions/modalAction";
 import { Button } from "react-bootstrap";
 import CodeJSComponent from "../../components/CodeJSComponent";
+import { TourType } from "../../util/tour";
 
 export interface TourEditorComponentProps {
     blocklyReloadEnabled: boolean;

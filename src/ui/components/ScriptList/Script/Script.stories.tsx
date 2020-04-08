@@ -3,7 +3,7 @@ import Script from "./Script";
 import ProviderWithComponent from "../../../store/ProviderWithComponent";
 import { storiesOf } from "@storybook/react";
 import { boolean, withKnobs } from "@storybook/addon-knobs";
-import { getInitData, TourType } from "../../../util/restClient/requestTour";
+import { getInitData, TourType } from "../../../util/tour";
 
 const storeTour: TourType = getInitData();
 const tour: TourType = getInitData({ key: "custom-key2" });

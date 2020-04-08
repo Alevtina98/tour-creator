@@ -9,7 +9,7 @@ import {
     setErrorsRunTour,
     addErrorRunTour
 } from "../actions/selectedTourAction";
-import { getInitData, TourType } from "../util/restClient/requestTour";
+import { getInitData, TourType } from "../util/tour";
 
 export interface SelectedTourReducerState {
     selectedTour: TourType;

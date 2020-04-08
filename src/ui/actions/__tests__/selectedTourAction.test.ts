@@ -4,7 +4,7 @@ import thunk from "redux-thunk";
 import IDB from "../../util/indexedDB";
 import { cleanup } from "@testing-library/react";
 import "fake-indexeddb/auto";
-import { getInitData, TourType } from "../../util/restClient/requestTour";
+import { getInitData, TourType } from "../../util/tour";
 
 const initTour: TourType = getInitData();
 const testListTour: TourType[] = [
