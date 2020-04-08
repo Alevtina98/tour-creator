@@ -40,7 +40,7 @@ const ControlButtons: FC<ControlButtonsState> = ({ onStart, onPostpone, buttonSt
             >
                 Начать
             </Button>
-            <Dropdown>
+            {/* <Dropdown>
                 <Dropdown.Toggle style={controlButtonStyle} id="dropdown-custom-components">
                     Отложить
                 </Dropdown.Toggle>
@@ -49,7 +49,7 @@ const ControlButtons: FC<ControlButtonsState> = ({ onStart, onPostpone, buttonSt
                     <Dropdown.Item onClick={weekLater}>на неделю</Dropdown.Item>
                     <Dropdown.Item onClick={monthLater}>на месяц</Dropdown.Item>
                 </Dropdown.Menu>
-            </Dropdown>
+            </Dropdown>*/}
             {/* <Postpone buttonStyle={controlButtonStyle} onPostpone={onPostpone} />*/}
         </ButtonToolbar>
     );
