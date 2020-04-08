@@ -9,8 +9,7 @@ import {
     setErrorsRunTour,
     addErrorRunTour,
     setPeriodicSaveEnabled,
-    setPeriodicSaveDisabled,
-    setCurrentDate
+    setPeriodicSaveDisabled
 } from "../actions/selectedTourAction";
 import { getInitData, TourType } from "../util/tour";
 
@@ -26,9 +25,10 @@ const selectedTourReducer = createReducer<TourType, SelectedTourAction>(initTour
     setSelectedTour,
     (state, action) => action.payload
 );
-const periodicSaveReducer = createReducer<boolean>(true)
+const periodicSaveReducer = createReducer<boolean>(false)
     .handleAction(setPeriodicSaveEnabled, () => true)
     .handleAction(setPeriodicSaveDisabled, () => false);
+
 const blocklyLoadReducer = createReducer<boolean>(false)
     .handleAction(setLoadBocklyEnabled, () => true)
     .handleAction(setLoadBocklyDisabled, () => false);

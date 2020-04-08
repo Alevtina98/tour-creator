@@ -49,12 +49,7 @@ export const periodicallySave = () => (dispatch: Dispatch, getState: () => Store
         saveTour(true)(dispatch, getState);
     }, 10000);
 };
-export const changePeriodicSaveState = (newState: boolean) => (dispatch: Dispatch, getState: () => StoreType) => {
-    const store = getState();
-    const state = store.SelectedTourState.periodicSaveEnabled;
-    if (newState === state) {
-        console.log(`ОШИБКА: периодическое сохранение уже находится в состоянии` + newState);
-    }
+export const setPeriodicSaveState = (newState: boolean) => (dispatch: Dispatch, getState: () => StoreType) => {
     if (newState) {
         periodicallySave()(dispatch, getState);
         dispatch(setPeriodicSaveEnabled());
@@ -77,7 +72,6 @@ export const closeSelectedTour = () => (dispatch: Dispatch, getState: () => Stor
 };
 export const openSelectedTour = (tour: TourType) => (dispatch: Dispatch, getState: () => StoreType) => {
     const store = getState();
-    const periodicSaveEnabled = store.SelectedTourState.periodicSaveEnabled;
     if (store.SelectedTourState.blocklyReloadEnabled) {
         if (store.SelectedTourState.selectedTour.id === tour.id) {
             return;
@@ -86,9 +80,6 @@ export const openSelectedTour = (tour: TourType) => (dispatch: Dispatch, getStat
     }
     dispatch(setSelectedTour(tour));
     dispatch(setLoadBocklyEnabled());
-    if (periodicSaveEnabled) {
-        periodicallySave()(dispatch, getState);
-    }
 };
 
 export const loadListTour = () => async (dispatch: Dispatch) => {

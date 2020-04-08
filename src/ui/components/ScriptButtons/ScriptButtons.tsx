@@ -1,12 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../../reducers";
-import {
-    changePeriodicSaveState,
-    closeSelectedTour,
-    saveTour,
-    setErrorsRunTour
-} from "../../actions/selectedTourAction";
+import { setPeriodicSaveState, closeSelectedTour, saveTour, setErrorsRunTour } from "../../actions/selectedTourAction";
 import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 import agentActions from "../../actions/agentActions";
 import { setModal } from "../../actions/modalAction";
@@ -56,7 +51,7 @@ const ScriptButtons = () => {
     };
     const onCheck = () => {
         const newState: boolean = !periodicSaveEnabled;
-        dispatch(changePeriodicSaveState(newState));
+        dispatch(setPeriodicSaveState(newState));
     };
     return (
         <div className="relative flex-center">
