@@ -3,7 +3,15 @@ import { clearModal, setModal } from "../actions/modalAction";
 import { setInspectDisabled } from "../actions/inspectAction";
 import { TourType } from "../util/tour";
 
-export type StatusType = "delete" | "show" | "create" | "copy" | "edit" | "inspect";
+export type StatusType =
+    | "delete"
+    | "show"
+    | "create"
+    | "copy"
+    | "edit"
+    | "inspect"
+    | "save_before_close"
+    | "save_before_create";
 
 export interface ModalState {
     tour: TourType | null;

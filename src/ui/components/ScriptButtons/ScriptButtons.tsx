@@ -29,8 +29,12 @@ const ScriptButtons = () => {
      c запуском модальных окон из ModalsScript.tsx
    */
     const onShowCreated = () => {
-        const newTour: TourType = getInitData();
-        dispatch(setModal({ tour: newTour, status: "create" }));
+        if (blocklyReloadEnabled) {
+            dispatch(setModal({ tour: selectedTour, status: "save_before_create" }));
+        } else {
+            const newTour: TourType = getInitData();
+            dispatch(setModal({ tour: newTour, status: "create" }));
+        }
     };
     const onShowCopy = () => {
         const newName = selectedTour.name + "-копия";
@@ -41,14 +45,14 @@ const ScriptButtons = () => {
         dispatch(setErrorsRunTour([]));
         dispatch(setModal({ tour: selectedTour, status: "show" }));
     };
+    const closeTour = () => {
+        dispatch(setModal({ tour: selectedTour, status: "save_before_close" }));
+    };
     /*
       без запуска модальных окон
     */
     const saveCode = () => {
         dispatch(saveTour());
-    };
-    const closeTour = () => {
-        dispatch(closeSelectedTour());
     };
     const onCheck = () => {
         const newState: boolean = !periodicSaveEnabled;
