@@ -153,7 +153,13 @@ export const saveTour = (period?: boolean) => async (dispatch: Dispatch, getStat
             return;
         }
         dispatch(success({ title: `"` + savedTour?.name + `" сохранен` }));
-        if (savedTour.id !== selectedTour.id || status === "save_before_load") return;
+        if (
+            savedTour.id !== selectedTour.id ||
+            status === "save_before_load" ||
+            status === "save_before_close" ||
+            status === "save_before_create"
+        )
+            return;
         setCurrentSelectedTour(savedTour.name, savedTour.desc, null, null, savedTour.dateChange)(dispatch, getState);
     } else {
         dispatch(error({ message: `Не удалось сохранить тур "` + tourForSaved.name + `"` }));
