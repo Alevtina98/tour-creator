@@ -35,7 +35,7 @@ Blockly.Blocks["desc"] = {
 Blockly.Blocks["step"] = {
     init: function() {
         this.appendDummyInput("TOPROW").appendField("Ожидать ", "NAME");
-        this.appendValueInput("condition").setCheck(["click", "clickOn"]);
+        this.appendValueInput("condition").setCheck("event");
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
@@ -52,7 +52,7 @@ Blockly.Blocks["selector"] = {
             .appendField(new Blockly.FieldImage("../media/Magnifying_glass_icon.svg.png", 15, 15, "*"))
             .appendField(new Blockly.FieldTextInput(""), "NAME");
         this.setInputsInline(true);
-        this.setOutput(true);
+        this.setOutput(true, "selector");
         this.setStyle("text_blocks");
         this.setTooltip("Селектор выбранного элемента. Нажатие на блок включает режим инспекции");
         this.setHelpUrl("");
@@ -62,7 +62,7 @@ Blockly.Blocks["click"] = {
     init: function() {
         this.appendDummyInput("TOPROW").appendField("клик", "NAME");
         this.setInputsInline(true);
-        this.setOutput(true);
+        this.setOutput(true, "event");
         this.setStyle("logic_blocks");
         this.setTooltip("Блок ожидания совершения любого клика");
         this.setHelpUrl("");
@@ -74,7 +74,7 @@ Blockly.Blocks["clickOn"] = {
         this.appendValueInput("selector").setCheck("selector");
         //this.appendDummyInput("TOPROW").appendField("click", "NAME");
         this.setInputsInline(true);
-        this.setOutput(true);
+        this.setOutput(true, "event");
         this.setStyle("logic_blocks");
         this.setTooltip("Блок ожидания совершения клика по указанному элементу");
         this.setHelpUrl("");
