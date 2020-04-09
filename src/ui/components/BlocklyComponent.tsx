@@ -12,7 +12,6 @@ import { getInitData, TourType } from "../util/tour";
 export interface Blockly {
     toolboxCategories: any[];
     blockId: string;
-    reload: boolean;
 }
 
 export interface WorkspaceEventType {
@@ -39,9 +38,7 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
     state: BlocklyState = {
         toolboxCategories: parseWorkspaceXml(ConfigFiles.INITIAL_TOOLBOX_XML),
         blockId: "",
-        selectedTour: getInitData(),
-        //tourXML: "",
-        reload: false
+        selectedTour: getInitData()
     };
     clickOnSelectorBlockListener = (event: WorkspaceEventType) => {
         const workspaceSVG = this.blocklyRef.workspace.state.workspace;
@@ -62,9 +59,12 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
     };
     componentDidMount(): void {
         // @ts-ignore
-        this.props.dispatch(setPeriodicSaveState(true));
         const workspaceSVG = this.blocklyRef.workspace.state.workspace;
         workspaceSVG.addChangeListener(this.clickOnSelectorBlockListener);
+    }
+    componentWillUnmount(): void {
+        const workspaceSVG = this.blocklyRef.workspace.state.workspace;
+        workspaceSVG.removeChangeListener(this.clickOnSelectorBlockListener);
     }
     workspaceDidChange = (workspace: any) => {
         const js: string = Blockly.JavaScript.workspaceToCode(workspace);

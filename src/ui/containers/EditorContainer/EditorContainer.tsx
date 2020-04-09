@@ -8,6 +8,7 @@ import { setModal } from "../../actions/modalAction";
 import { Button } from "react-bootstrap";
 import CodeJSComponent from "../../components/CodeJSComponent";
 import { TourType } from "../../util/tour";
+import { setPeriodicSaveDisabled, setPeriodicSaveState } from "../../actions/selectedTourAction";
 
 export interface TourEditorComponentProps {
     blocklyReloadEnabled: boolean;
@@ -28,6 +29,13 @@ const EditorContainer = () => {
     useEffect(() => {
         setCounter(c => c + 1);
     }, [open]);
+    useEffect(() => {
+        if (blocklyReloadEnabled) {
+            dispatch(setPeriodicSaveState(true));
+        } else {
+            setCounter(0);
+        }
+    }, [blocklyReloadEnabled]);
     const onInspectClickHandler = () => {
         dispatch(setInspectEnabled());
         dispatch(setModal({ tour: tour, status: "inspect" }));
