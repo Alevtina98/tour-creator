@@ -28,7 +28,7 @@ Blockly.Blocks["desc"] = {
         this.setNextStatement(true, null);
         // this.setColour(230);
         this.setStyle("procedure_blocks");
-        this.setTooltip("Блок, добавляющий комментарий около элемента");
+        this.setTooltip("Блок, добавляющий подсказку к элементу");
         this.setHelpUrl("");
     }
 };
@@ -42,7 +42,7 @@ Blockly.Blocks["step"] = {
         //this.appendField("step");
         // this.setColour(230);
         this.setStyle("procedure_blocks");
-        this.setTooltip("Блок, добавляющий условие совершения следующего шага тура");
+        this.setTooltip("Блок, добавляющий условие окончания шага тура");
         this.setHelpUrl("");
     }
 };
@@ -146,12 +146,11 @@ Blockly.JavaScript["dark"] = function(block: any) {
     //Blockly.JavaScript.definitions_['%' + funcName] = code;
     return code;
 };
-let errorClickOn: string;
 Blockly.JavaScript["step"] = function(block: any) {
     const funcName = helperClass + ".blocklyStep";
     const args1: string = Blockly.JavaScript.valueToCode(block, "condition", Blockly.JavaScript.ORDER_NONE);
     const error: string = args1 ? "" : "//! нет аргумента (условие исполнения следующего шага тура)\n";
-    const code: string = error + errorClickOn + funcName + "(" + args1 + ");\n";
+    const code: string = error + funcName + "(" + args1 + ");\n";
 
     // Add % so as not to collide with helper functions in definitions list.
     //Blockly.JavaScript.definitions_['%' + funcName] = code;
@@ -160,17 +159,16 @@ Blockly.JavaScript["step"] = function(block: any) {
 
 Blockly.JavaScript["click"] = function(block: any) {
     const funcName = helperClass + ".click";
-    const code: string = "function(){ return " + funcName + "()}";
+    const code: string = "function(){\n " + "   return " + funcName + "()\n" + "}";
     // Add % so as not to collide with helper functions in definitions list.
     //Blockly.JavaScript.definitions_['%' + funcName] = code;
-    errorClickOn = "";
     return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 Blockly.JavaScript["clickOn"] = function(block: any) {
     const funcName = helperClass + ".clickOn";
     const args1: string = Blockly.JavaScript.valueToCode(block, "selector", Blockly.JavaScript.ORDER_NONE);
-    errorClickOn = args1 ? "" : "//! нет аргумента (выделяемый элемент)\n";
-    const code: string = "(function(){ return " + funcName + "(" + args1 + ")})";
+    const errorClickOn = args1 ? "" : "//! нет аргумента (выделяемый элемент)\n";
+    const code: string = "function(){ \n " + errorClickOn + "   return " + funcName + "(" + args1 + ")\n " + "}";
     // Add % so as not to collide with helper functions in definitions list.
     //Blockly.JavaScript.definitions_['%' + funcName] = code;
     return [code, Blockly.JavaScript.ORDER_ATOMIC];
