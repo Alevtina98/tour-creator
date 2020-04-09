@@ -30,11 +30,7 @@ const EditorContainer = () => {
         setCounter(c => c + 1);
     }, [open]);
     useEffect(() => {
-        if (blocklyReloadEnabled) {
-            dispatch(setPeriodicSaveState(true));
-        } else {
-            setCounter(0);
-        }
+        setCounter(0);
     }, [blocklyReloadEnabled]);
     const onInspectClickHandler = () => {
         dispatch(setInspectEnabled());

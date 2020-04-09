@@ -81,6 +81,7 @@ export const openSelectedTour = (tour: TourType) => (dispatch: Dispatch, getStat
     }
     dispatch(setSelectedTour(tour));
     dispatch(setLoadBocklyEnabled());
+    setPeriodicSaveState(true)(dispatch, getState);
 };
 
 export const loadListTour = () => async (dispatch: Dispatch) => {
