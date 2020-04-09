@@ -9,14 +9,14 @@ import { getInitData, TourType } from "../../util/tour";
 
 export interface ScriptButtons {
     selectedTour: TourType;
-    periodicSaveEnabled: boolean;
-    blocklyReloadEnabled: boolean;
+    periodicSave: boolean;
+    tourOpen: boolean;
 }
 
 const ScriptButtons = () => {
     const dispatch = useDispatch();
     //маппинг значений из store
-    const { selectedTour, periodicSaveEnabled, blocklyReloadEnabled } = useSelector<StoreType, ScriptButtons>(
+    const { selectedTour, periodicSave, tourOpen } = useSelector<StoreType, ScriptButtons>(
         ({ SelectedTourState }) => SelectedTourState
     );
 
@@ -24,7 +24,7 @@ const ScriptButtons = () => {
      c запуском модальных окон из ModalsScript.tsx
    */
     const onShowCreated = () => {
-        if (blocklyReloadEnabled && !selectedTour.dateChange) {
+        if (tourOpen && !selectedTour.dateChange) {
             dispatch(setModal({ tour: selectedTour, status: "save_before_create" }));
         } else {
             const newTour: TourType = getInitData();
@@ -54,7 +54,7 @@ const ScriptButtons = () => {
         dispatch(saveTour());
     };
     const onCheck = () => {
-        const newState: boolean = !periodicSaveEnabled;
+        const newState: boolean = !periodicSave;
         dispatch(setPeriodicSaveState(newState));
     };
     return (
@@ -65,7 +65,7 @@ const ScriptButtons = () => {
                     <Nav.Link onClick={onShowCreated} data-testid="createTourButton">
                         Создать
                     </Nav.Link>
-                    <NavDropdown title="Сохранить" id="basic-nav-dropdown" disabled={!blocklyReloadEnabled} bg="dark">
+                    <NavDropdown title="Сохранить" id="basic-nav-dropdown" disabled={!tourOpen} bg="dark">
                         <NavDropdown.Item onClick={saveCode} data-testid="saveTourButton">
                             Сохранить
                         </NavDropdown.Item>
@@ -79,14 +79,14 @@ const ScriptButtons = () => {
                                 type="checkbox"
                                 onClick={onCheck}
                                 style={{ marginLeft: "15px", transform: "scale(1.5)" }}
-                                checked={periodicSaveEnabled}
+                                checked={periodicSave}
                             />
                         </NavDropdown.Header>
                     </NavDropdown>
-                    <Nav.Link onClick={onShowRun} data-testid="runTourButton" disabled={!blocklyReloadEnabled}>
+                    <Nav.Link onClick={onShowRun} data-testid="runTourButton" disabled={!tourOpen}>
                         Запустить
                     </Nav.Link>
-                    <Nav.Link onClick={closeTour} data-testid="closeTourButton" disabled={!blocklyReloadEnabled}>
+                    <Nav.Link onClick={closeTour} data-testid="closeTourButton" disabled={!tourOpen}>
                         Закрыть
                     </Nav.Link>
                 </Nav>

@@ -9,7 +9,7 @@ const ProviderWithComponent = (
         SelectedTourState: {
             selectedTour: TourType;
             tourXML: { "new xml"; text(storeTour) };
-            blocklyReloadEnabled: boolean;
+            tourOpen: boolean;
         };
     }
 ) => (): any => (

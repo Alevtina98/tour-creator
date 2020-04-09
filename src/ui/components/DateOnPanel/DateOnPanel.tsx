@@ -6,17 +6,17 @@ import { getDateClientFormat, TourType } from "../../util/tour";
 
 export interface ScriptButtons {
     selectedTour: TourType;
-    blocklyReloadEnabled: boolean;
+    tourOpen: boolean;
 }
 
 interface DateListSaveProps {
     showDate?: boolean;
 }
 const DateOnPanel: FC<DateListSaveProps> = ({ showDate }) => {
-    const { blocklyReloadEnabled, selectedTour } = useSelector<StoreType, ScriptButtons>(
+    const { tourOpen, selectedTour } = useSelector<StoreType, ScriptButtons>(
         ({ SelectedTourState, MainState }) => SelectedTourState
     );
-    if (!blocklyReloadEnabled) {
+    if (!tourOpen) {
         return null;
     }
 

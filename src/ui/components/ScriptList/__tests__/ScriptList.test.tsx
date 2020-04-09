@@ -33,7 +33,7 @@ describe("ScriptList", () => {
                 SelectedTourState: {
                     selectedTour: testTour,
                     tourXML: testTour[0].code,
-                    blocklyReloadEnabled: true
+                    tourOpen: true
                 }
             } as any)()
         );

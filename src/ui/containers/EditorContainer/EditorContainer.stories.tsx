@@ -13,7 +13,7 @@ const editor = storiesOf("MainContainer/EditorContainer", module)
             <div />
             {ProviderWithComponent(TourEditorContainer, {
                 SelectedTourState: {
-                    blocklyReloadEnabled: boolean("blocklyReloadEnabled", true)
+                    tourOpen: boolean("tourOpen", true)
                 },
                 InspectState: {
                     isInspectEnabled: boolean("isInspectEnabled", false)

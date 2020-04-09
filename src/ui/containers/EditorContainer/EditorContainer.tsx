@@ -11,7 +11,7 @@ import { TourType } from "../../util/tour";
 import { setPeriodicSaveDisabled, setPeriodicSaveState } from "../../actions/selectedTourAction";
 
 export interface TourEditorComponentProps {
-    blocklyReloadEnabled: boolean;
+    tourOpen: boolean;
     selector: string;
     tour: TourType;
 }
@@ -19,9 +19,9 @@ const EditorContainer = () => {
     const dispatch = useDispatch();
     const [open, setOpen] = useState(false);
     const [counter, setCounter] = useState(0);
-    const { blocklyReloadEnabled, selector, tour } = useSelector<StoreType, TourEditorComponentProps>(
+    const { tourOpen, selector, tour } = useSelector<StoreType, TourEditorComponentProps>(
         ({ SelectedTourState, InspectState, MainState }) => ({
-            blocklyReloadEnabled: SelectedTourState.blocklyReloadEnabled,
+            tourOpen: SelectedTourState.tourOpen,
             tour: SelectedTourState.selectedTour,
             selector: InspectState.selector
         })
@@ -31,7 +31,7 @@ const EditorContainer = () => {
     }, [open]);
     useEffect(() => {
         setCounter(0);
-    }, [blocklyReloadEnabled]);
+    }, [tourOpen]);
     const onInspectClickHandler = () => {
         dispatch(setInspectEnabled());
         dispatch(setModal({ tour: tour, status: "inspect" }));
@@ -44,7 +44,7 @@ const EditorContainer = () => {
                 gridTemplateColumns: open ? "1fr 1fr" : "1fr"
             }}
         >
-            {blocklyReloadEnabled && (
+            {tourOpen && (
                 <>
                     <BlocklyComponent key={counter} selector={selector} inspect={onInspectClickHandler} />
                     <Button

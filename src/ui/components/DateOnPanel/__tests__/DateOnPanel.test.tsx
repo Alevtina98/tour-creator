@@ -15,7 +15,7 @@ describe("Script", () => {
                 SelectedTourState: {
                     selectedTour: testTour,
                     tourXML: testTour.code,
-                    blocklyReloadEnabled: true
+                    tourOpen: true
                 }
             } as any)()
         );
@@ -32,7 +32,7 @@ describe("Script", () => {
                 SelectedTourState: {
                     selectedTour: testTour,
                     tourXML: testTour.code,
-                    blocklyReloadEnabled: true
+                    tourOpen: true
                 }
             } as any)()
         );
@@ -46,7 +46,7 @@ describe("Script", () => {
                 SelectedTourState: {
                     selectedTour: testTour,
                     tourXML: "new code",
-                    blocklyReloadEnabled: true
+                    tourOpen: true
                 }
             } as any)()
         );
@@ -59,7 +59,7 @@ describe("Script", () => {
         const { queryByTestId } = render(
             ProviderWithComponent(DateOnPanel, {
                 SelectedTourState: {
-                    blocklyReloadEnabled: false
+                    tourOpen: false
                 }
             } as any)()
         );

@@ -3,8 +3,8 @@ import { combineReducers } from "redux";
 import {
     setSelectedTour,
     SelectedTourAction,
-    setLoadBocklyEnabled,
-    setLoadBocklyDisabled,
+    setTourOpen,
+    setTourClose,
     setListTour,
     setErrorsRunTour,
     addErrorRunTour,
@@ -15,8 +15,8 @@ import { getInitData, TourType } from "../util/tour";
 
 export interface SelectedTourReducerState {
     selectedTour: TourType;
-    periodicSaveEnabled: boolean;
-    blocklyReloadEnabled: boolean;
+    periodicSave: boolean;
+    tourOpen: boolean;
     listTour: TourType[];
     errorsRunTour: string[];
 }
@@ -30,8 +30,8 @@ const periodicSaveReducer = createReducer<boolean>(false)
     .handleAction(setPeriodicSaveDisabled, () => false);
 
 const blocklyLoadReducer = createReducer<boolean>(false)
-    .handleAction(setLoadBocklyEnabled, () => true)
-    .handleAction(setLoadBocklyDisabled, () => false);
+    .handleAction(setTourOpen, () => true)
+    .handleAction(setTourClose, () => false);
 const listTourReducer = createReducer<TourType[]>([]).handleAction(setListTour, (state, action) => action.payload);
 
 const errorsRunTourReducer = createReducer<string[]>([])
@@ -40,8 +40,8 @@ const errorsRunTourReducer = createReducer<string[]>([])
 
 const SelectedTourReducer = combineReducers<SelectedTourReducerState>({
     selectedTour: selectedTourReducer,
-    periodicSaveEnabled: periodicSaveReducer,
-    blocklyReloadEnabled: blocklyLoadReducer,
+    periodicSave: periodicSaveReducer,
+    tourOpen: blocklyLoadReducer,
     listTour: listTourReducer,
     errorsRunTour: errorsRunTourReducer
 });

@@ -35,19 +35,28 @@ describe("selectedTourAction", function() {
     beforeEach(cleanup);
     const initialState = {
         selectedTour: testListTour[0],
-        blocklyReloadEnabled: false,
+        periodicSave: false,
+        tourOpen: false,
         listTour: testListTour,
         errorsRunTour: []
     };
 
     it("standard action should change state", () => {
-        expect(selectedTourState(initialState, selectedTourAction.setLoadBocklyEnabled())).toEqual({
+        expect(selectedTourState(initialState, selectedTourAction.setPeriodicSaveEnabled())).toEqual({
             ...initialState,
-            blocklyReloadEnabled: true
+            periodicSave: true
         });
-        expect(selectedTourState(initialState, selectedTourAction.setLoadBocklyDisabled())).toEqual({
+        expect(selectedTourState(initialState, selectedTourAction.setPeriodicSaveDisabled())).toEqual({
             ...initialState,
-            blocklyReloadEnabled: false
+            periodicSave: false
+        });
+        expect(selectedTourState(initialState, selectedTourAction.setTourOpen())).toEqual({
+            ...initialState,
+            tourOpen: true
+        });
+        expect(selectedTourState(initialState, selectedTourAction.setTourClose())).toEqual({
+            ...initialState,
+            tourOpen: false
         });
         expect(selectedTourState(initialState, selectedTourAction.setListTour(newTestListTour))).toEqual({
             ...initialState,

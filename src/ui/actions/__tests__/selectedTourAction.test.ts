@@ -39,7 +39,7 @@ describe("selectedTourAction", function() {
     beforeEach(cleanup);
     const initialState = {
         selectedTour: testListTour[0],
-        blocklyReloadEnabled: false,
+        tourOpen: false,
         listTour: testListTour,
         errorsRunTour: []
     };
@@ -48,10 +48,10 @@ describe("selectedTourAction", function() {
     let periodicallySaveTimer = 0;
 
     it("should return correct type", () => {
-        expect(selectedTourAction.setLoadBocklyEnabled()).toEqual({
+        expect(selectedTourAction.setTourOpen()).toEqual({
             type: "SET_RELOAD_BLOCKLY_ENABLED"
         });
-        expect(selectedTourAction.setLoadBocklyDisabled()).toEqual({
+        expect(selectedTourAction.setTourClose()).toEqual({
             type: "SET_RELOAD_BLOCKLY_DISABLED"
         });
         expect(selectedTourAction.setListTour(testListTour)).toEqual({

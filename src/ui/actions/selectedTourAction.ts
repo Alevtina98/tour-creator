@@ -8,8 +8,8 @@ import { StatusType } from "../reducers/ModalReducer";
 
 export const setPeriodicSaveEnabled = createStandardAction("SET_PERIODIC_SAVE_ENABLED")();
 export const setPeriodicSaveDisabled = createStandardAction("SET_PERIODIC_SAVE_DISABLED")();
-export const setLoadBocklyEnabled = createStandardAction("SET_RELOAD_BLOCKLY_ENABLED")();
-export const setLoadBocklyDisabled = createStandardAction("SET_RELOAD_BLOCKLY_DISABLED")();
+export const setTourOpen = createStandardAction("SET_RELOAD_BLOCKLY_ENABLED")();
+export const setTourClose = createStandardAction("SET_RELOAD_BLOCKLY_DISABLED")();
 export const setListTour = createStandardAction("SET_LIST_TOUR")<TourType[]>();
 export const setSelectedTour = createStandardAction("SET_TOUR")<TourType>();
 export const setErrorsRunTour = createStandardAction("SET_ERRORS")<string[]>();
@@ -63,24 +63,24 @@ export const setPeriodicSaveState = (newState: boolean) => (dispatch: Dispatch, 
 };
 export const closeSelectedTour = () => (dispatch: Dispatch, getState: () => StoreType) => {
     const store = getState();
-    const periodicSaveEnabled = store.SelectedTourState.periodicSaveEnabled;
-    dispatch(setLoadBocklyDisabled());
+    const periodicSave = store.SelectedTourState.periodicSave;
+    dispatch(setTourClose());
     const tour: TourType = getInitData();
     dispatch(setSelectedTour(tour));
-    if (periodicSaveEnabled) {
+    if (periodicSave) {
         clearInterval(periodicallySaveTimer);
     }
 };
 export const openSelectedTour = (tour: TourType) => (dispatch: Dispatch, getState: () => StoreType) => {
     const store = getState();
-    if (store.SelectedTourState.blocklyReloadEnabled) {
+    if (store.SelectedTourState.tourOpen) {
         if (store.SelectedTourState.selectedTour.id === tour.id) {
             return;
         }
         closeSelectedTour()(dispatch, getState);
     }
     dispatch(setSelectedTour(tour));
-    dispatch(setLoadBocklyEnabled());
+    dispatch(setTourOpen());
     setPeriodicSaveState(true)(dispatch, getState);
 };
 

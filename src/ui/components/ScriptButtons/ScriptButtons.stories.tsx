@@ -13,7 +13,7 @@ const buttons = storiesOf("MainContainer/PanelContainer/ScriptButtons", module)
         <div className="relative list-tour-group">
             {ProviderWithComponent(ScriptButtons, {
                 SelectedTourState: {
-                    blocklyReloadEnabled: boolean("blocklyReloadEnabled", false)
+                    tourOpen: boolean("tourOpen", false)
                 }
             } as any)()}
         </div>

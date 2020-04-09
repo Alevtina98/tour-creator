@@ -19,7 +19,7 @@ describe("ScriptButtons", () => {
                 SelectedTourState: {
                     selectedTour: testTour,
                     tourJS: "",
-                    blocklyReloadEnabled: true
+                    tourOpen: true
                 },
                 MainState: {
                     connection: true
