@@ -27,6 +27,7 @@ const ScriptButtons = () => {
         if (tourOpen && !selectedTour.dateChange) {
             dispatch(setModal({ tour: selectedTour, status: "save_before_create" }));
         } else {
+            tourOpen ? closeTour() : null;
             const newTour: TourType = getInitData();
             dispatch(setModal({ tour: newTour, status: "create" }));
         }

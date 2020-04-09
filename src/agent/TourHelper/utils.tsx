@@ -295,7 +295,7 @@ export default class TourHelper {
             border: "none"
         };
         const rect = window.document.createElement("div");
-        Object.keys(rectStyle).forEach(key => {
+        Object.keys(rectStyle).forEach((key: string) => {
             rect.style[key] = rectStyle[key];
         });
         rect.setAttribute("data-testid", "blackoutRect" + TourHelper.rectElement.length);
@@ -308,6 +308,7 @@ export default class TourHelper {
         descrNode.id = containerName;
         descrNode.setAttribute("data-testid", "popper-" + TourHelper.popperElement.length);
         window.document.body.appendChild(descrNode);
+        if (!el.element) return;
         ReactDOM.render(
             <DescriptionComponent selector={el.element} text={el.description} />,
             document.getElementById(containerName)
@@ -371,7 +372,7 @@ export default class TourHelper {
         TourHelper.steps[TourHelper.currentStep].condition.forEach(fn => fn());
     };
     private static clickHandler = (e: MouseEvent) => {
-        if (TourHelper.viewerInterfaceElement?.contains(e.target)) {
+        if (TourHelper.viewerInterfaceElement?.contains(e.target as Node)) {
             return;
         }
         disposeEvent(e);

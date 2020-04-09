@@ -36,6 +36,7 @@ const ModalsScript = () => {
         modalCreateTour();
     };
     const modalCreateTour = () => {
+        dispatch(closeSelectedTour());
         const newTour: TourType = getInitData();
         dispatch(setModal({ tour: newTour, status: "create" }));
     };

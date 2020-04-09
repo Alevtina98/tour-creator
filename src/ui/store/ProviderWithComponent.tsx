@@ -8,8 +8,10 @@ const ProviderWithComponent = (
     initialState?: {
         SelectedTourState: {
             selectedTour: TourType;
-            tourXML: { "new xml"; text(storeTour) };
-            tourOpen: boolean;
+            periodicSave: false;
+            tourOpen: false;
+            listTour: TourType[];
+            errorsRunTour: [];
         };
     }
 ) => (): any => (
