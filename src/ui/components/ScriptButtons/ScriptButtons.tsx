@@ -33,7 +33,7 @@ const ScriptButtons = () => {
     };
     const onShowCopy = () => {
         const newName = selectedTour.name + "-копия";
-        dispatch(setModal({ tour: { ...selectedTour, name: newName }, status: "copy" }));
+        dispatch(setModal({ tour: { ...selectedTour, id: -1, name: newName }, status: "copy" }));
     };
     const onShowRun = () => {
         agentActions.runScript(selectedTour.codeJS);

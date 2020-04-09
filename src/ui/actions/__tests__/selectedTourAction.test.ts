@@ -39,6 +39,7 @@ describe("selectedTourAction", function() {
     beforeEach(cleanup);
     const initialState = {
         selectedTour: testListTour[0],
+        periodicSave: false,
         tourOpen: false,
         listTour: testListTour,
         errorsRunTour: []
@@ -48,11 +49,17 @@ describe("selectedTourAction", function() {
     let periodicallySaveTimer = 0;
 
     it("should return correct type", () => {
+        expect(selectedTourAction.setPeriodicSaveEnabled()).toEqual({
+            type: "SET_PERIODIC_SAVE_ENABLED"
+        });
+        expect(selectedTourAction.setPeriodicSaveDisabled()).toEqual({
+            type: "SET_PERIODIC_SAVE_DISABLED"
+        });
         expect(selectedTourAction.setTourOpen()).toEqual({
-            type: "SET_RELOAD_BLOCKLY_ENABLED"
+            type: "SET_TOUR_OPEN"
         });
         expect(selectedTourAction.setTourClose()).toEqual({
-            type: "SET_RELOAD_BLOCKLY_DISABLED"
+            type: "SET_TOUR_CLOSE"
         });
         expect(selectedTourAction.setListTour(testListTour)).toEqual({
             payload: testListTour,

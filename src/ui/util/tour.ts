@@ -13,9 +13,9 @@ export interface TourType {
 export const getInitData = (data?: Partial<TourType>): TourType => ({
     id: -1,
     name: "Unnamed",
+    desc: null,
     code: '<xml xmlns="http://www.w3.org/1999/xhtml"></xml>',
-    codeJS: "",
-    desc: "",
+    codeJS: null,
     dateCreate: "",
     dateChange: "",
     ...data
@@ -36,17 +36,11 @@ export const xmlToJs = (xmlCode: string | null) => {
     const jsFromXml: string = Blockly.JavaScript.workspaceToCode(workspace);
     return jsFromXml;
 };
-export const getCurrentJs = (
-    currentName: string | null,
-    currentDesc: string | null,
-    currentXml: string | null,
-    jsFromCurrentXml: string | null
-) => {
+export const getCurrentJs = (currentName: string | null, currentDesc: string | null, currentXml: string | null) => {
     const name: string = currentName || "";
     const desc: string = currentDesc || "";
     const xml: string = currentXml || "";
-    const currentJs: string = getJsSettersNameAndDesc(name, desc) + (jsFromCurrentXml || xmlToJs(xml));
-    return currentJs;
+    return getJsSettersNameAndDesc(name, desc) + xmlToJs(xml);
 };
 
 export const getDateClientFormat = (str: string) => {

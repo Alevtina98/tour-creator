@@ -5,9 +5,9 @@ import parseWorkspaceXml from "./blockly/BlocklyHelper";
 import { connect } from "react-redux";
 import { StoreType } from "../reducers";
 import { bindActionCreators, Dispatch } from "redux";
-import { periodicallySave, setCurrentSelectedTour, setPeriodicSaveState } from "../actions/selectedTourAction";
+import { periodicallySave, setSelectedTour } from "../actions/selectedTourAction";
 import { setCurrentSelector } from "../actions/inspectAction";
-import { getInitData, TourType } from "../util/tour";
+import { getInitData, getJsSettersNameAndDesc, TourType } from "../util/tour";
 
 export interface Blockly {
     toolboxCategories: any[];
@@ -71,9 +71,16 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
         const xmlSerialize = new XMLSerializer();
         const xml: string = xmlSerialize.serializeToString(Blockly.Xml.workspaceToDom(workspace));
         if (xml !== this.props.selectedTour.code) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-            // @ts-ignore
-            this.props.dispatch(setCurrentSelectedTour(null, null, xml, js, null));
+            const modifiedTour: TourType = {
+                id: this.props.selectedTour.id,
+                name: this.props.selectedTour.name,
+                desc: this.props.selectedTour.desc,
+                code: xml,
+                codeJS: getJsSettersNameAndDesc(this.props.selectedTour.name, this.props.selectedTour.desc || "") + js,
+                dateCreate: this.props.selectedTour.dateCreate,
+                dateChange: ""
+            };
+            this.props.dispatch(setSelectedTour(modifiedTour));
         }
     };
 
