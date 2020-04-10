@@ -6,7 +6,6 @@ import { TourType } from "../util/tour";
 export type StatusType =
     | "delete"
     | "show"
-    | "create"
     | "copy"
     | "edit"
     | "inspect"

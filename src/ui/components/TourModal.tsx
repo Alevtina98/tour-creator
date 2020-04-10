@@ -62,7 +62,6 @@ const TourModal = () => {
         save_before_close: modalSave(close),
         save_before_load: modalSave(load),
         save_before_create: modalSave(create),
-        create: <ModalInput modalName="Создание тура" onApply={create} applyName="Создать" />,
         copy: <ModalInput modalName="Создание копии тура" onApply={create} applyName="Создать копию" />,
         edit: <ModalInput modalName="Редактирование шаблона" onApply={edit} applyName="Сохранить изменения" />,
         delete: (

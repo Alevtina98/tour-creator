@@ -5,7 +5,7 @@ import { getInitData } from "../../util/tour";
 describe("modalAction", function() {
     const testModal: ModalState = {
         tour: getInitData(),
-        status: "create"
+        status: null
     };
     it("should return correct type", function() {
         expect(modalAction.setModal(testModal)).toEqual({
