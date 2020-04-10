@@ -17,12 +17,12 @@ Blockly.Blocks["dark"] = {
 Blockly.Blocks["desc"] = {
     init: function() {
         this.appendDummyInput("TOPROW").appendField("Показать", "NAME");
-        this.appendValueInput("text")
-            .appendField("подсказку", "NAME")
-            .setCheck("String");
         this.appendValueInput("selector")
             .appendField("рядом с элементом", "NAME")
             .setCheck("selector");
+        this.appendValueInput("text")
+            .appendField("подсказку", "NAME")
+            .setCheck("String");
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
