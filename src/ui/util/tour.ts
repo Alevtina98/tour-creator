@@ -15,7 +15,7 @@ export const getInitData = (data?: Partial<TourType>): TourType => ({
     name: "Unnamed",
     desc: null,
     code: '<xml xmlns="http://www.w3.org/1999/xhtml"></xml>',
-    codeJS: null,
+    codeJS: getJsSettersNameAndDesc("Unnamed", ""),
     dateCreate: "",
     dateChange: "",
     ...data

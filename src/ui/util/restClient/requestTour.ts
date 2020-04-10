@@ -1,5 +1,8 @@
 import { TourType } from "../tour";
 
+export const tourCreatorServiceURL = `http://localhost:8080/webapp_war/api/tour/`;
+//export const tourCreatorServiceURL = `http://ntp-tour-test.krista.ru/tour/api/tour/`;
+
 export interface RequestInterface {
     url: string;
     method?: string;
@@ -55,7 +58,7 @@ export const getResult = async (request: RequestInterface, responseDataType?: Re
 };
 export const getAllTours = async () => {
     const request: RequestInterface = {
-        url: "http://localhost:8080/webapp_war/api/tour"
+        url: tourCreatorServiceURL
     };
     try {
         return await getResult(request, "TourType[]");
@@ -67,7 +70,7 @@ export const getAllTours = async () => {
 
 export const getTourById = async (id: number) => {
     const request: RequestInterface = {
-        url: "http://localhost:8080/webapp_war/api/tour/" + id.toString()
+        url: tourCreatorServiceURL + id.toString()
     };
     try {
         return await getResult(request, "TourType");
@@ -78,7 +81,7 @@ export const getTourById = async (id: number) => {
 };
 export const deleteTourById = async (id: number) => {
     const request: RequestInterface = {
-        url: "http://localhost:8080/webapp_war/api/tour/" + id.toString(),
+        url: tourCreatorServiceURL + id.toString(),
         method: "DELETE"
     };
     try {
@@ -90,7 +93,7 @@ export const deleteTourById = async (id: number) => {
 };
 export const createTour = async (tour: TourType) => {
     const request: RequestInterface = {
-        url: "http://localhost:8080/webapp_war/api/tour",
+        url: tourCreatorServiceURL,
         method: "POST",
         data: tour
     };
@@ -103,7 +106,7 @@ export const createTour = async (tour: TourType) => {
 };
 export const updateTour = async (tour: TourType) => {
     const request: RequestInterface = {
-        url: "http://localhost:8080/webapp_war/api/tour",
+        url: tourCreatorServiceURL,
         method: "PUT",
         data: tour
     };
