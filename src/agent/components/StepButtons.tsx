@@ -8,7 +8,7 @@ export interface PageButtonsState {
     currentStep: number;
     totalSteps: number;
     paginationModel: any;
-    setStep: (index?: number) => {};
+    setStep: (index?: number) => void;
     minPreviousOpen?: number;
     maxNextOpen?: number;
     buttonStyle?: React.CSSProperties;

@@ -17,7 +17,7 @@ const ConnectionStatus: FC<ConnectionStatusProps> = ({ connection }) => {
             key="bottom"
             placement="bottom"
             overlay={
-                <Popover className="tooltip">
+                <Popover id="popover-basic" className="tooltip">
                     {connection ? "Связь со страницей установлена" : "Нет связи со страницей"}
                 </Popover>
             }

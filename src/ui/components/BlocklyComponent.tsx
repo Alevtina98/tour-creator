@@ -1,13 +1,13 @@
 import React from "react";
 import ReactBlocklyComponent from "react-blockly-component";
 import ConfigFiles from "../../initContent/content.jsx";
-import parseWorkspaceXml from "./blockly/BlocklyHelper";
 import { connect } from "react-redux";
 import { StoreType } from "../reducers";
 import { bindActionCreators, Dispatch } from "redux";
 import { periodicallySave, setSelectedTour } from "../actions/selectedTourAction";
 import { setCurrentSelector } from "../actions/inspectAction";
 import { getInitData, getJsSettersNameAndDesc, TourType } from "../util/tour";
+import parseWorkspaceXml from "../util/BlocklyHelper";
 
 export interface Blockly {
     toolboxCategories: any[];

@@ -1,4 +1,4 @@
-const sendMessage = function(name, data) {
+const sendMessage = function(name: string, data: string) {
     window.postMessage(
         {
             source: "coquette-inspect-agent",

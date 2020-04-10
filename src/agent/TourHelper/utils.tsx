@@ -458,15 +458,17 @@ export default class TourHelper {
                 console.log("display=none", el);
                 return true;
             }
-            if (el.childNodes) {
-                for (let i = 0; i < el.childNodes.length; i++) {
-                    if (el.childNodes[i].className === "dark_overlay") {
+            let childList: NodeListOf<ChildNode> = el.childNodes;
+            if (childList) {
+                for (let i = 0; i < childList.length; i++) {
+                    const child: HTMLElement = childList[i] as HTMLElement;
+                    if (child.className === "dark_overlay") {
                         console.log("элемент перекрывающий найденный (с классом dark_overlay)", el);
                         return true;
                     }
                 }
             }
-            el = el.parentNode;
+            el = el.parentNode as HTMLElement;
         }
         return false;
     };

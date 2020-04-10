@@ -9,18 +9,13 @@ export default {
 };
 
 const storeTour: TourType = getInitData();
-//const tour: TourType = getInitData({ key: "custom-key2" });
-const onClickScript = () => {};
 const onClickEsc = () => {};
 export const scriptListComponent = () => (
     <div className="relative list-tour-group">
-        {ProviderWithComponent(
-            () => <ScriptList onClickScript={onClickScript()} onClickEsc={onClickEsc()} isOpen={true} />,
-            {
-                SelectedTourState: {
-                    selectedTour: storeTour
-                }
-            } as any
-        )()}
+        {ProviderWithComponent(() => <ScriptList onClickEsc={onClickEsc()} isOpen={true} />, {
+            SelectedTourState: {
+                selectedTour: storeTour
+            }
+        } as any)()}
     </div>
 );

@@ -6,18 +6,17 @@ import { boolean, withKnobs } from "@storybook/addon-knobs";
 import { getInitData, TourType } from "../../../util/tour";
 
 const storeTour: TourType = getInitData();
-const tour: TourType = getInitData({ key: "custom-key2" });
+const tour: TourType = getInitData({ id: 1 });
 const checkTour = () => {
     if (boolean("selectedTour", true)) return storeTour;
     return tour;
 };
-const onClick = () => {};
 
 const script = storiesOf("MainContainer/PanelContainer/BurgerMenuContainer/ScriptList/Script", module)
     .addDecorator(withKnobs)
     .add("editor", () => (
         <div className="relative list-tour-group">
-            {ProviderWithComponent(() => <Script tour={checkTour()} onClick={onClick()} />, {
+            {ProviderWithComponent(() => <Script tour={checkTour()} style={{}} />, {
                 SelectedTourState: {
                     selectedTour: storeTour
                 }

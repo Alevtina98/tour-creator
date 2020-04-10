@@ -44,7 +44,13 @@ const Script: FC<ScriptProps> = ({ tour, style }) => {
             <OverlayTrigger
                 key="bottom"
                 placement="bottom"
-                overlay={(tour.desc && <Popover className="tooltip">{tour.desc}</Popover>) || <div />}
+                overlay={
+                    (tour.desc && (
+                        <Popover id="popover-basic" className="tooltip">
+                            {tour.desc}
+                        </Popover>
+                    )) || <div />
+                }
             >
                 <div
                     className={cn("tour", {

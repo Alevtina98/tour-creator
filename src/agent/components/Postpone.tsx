@@ -44,7 +44,12 @@ const Postpone: FC<PostponeState> = ({ onPostpone, buttonStyle }) => {
         console.log(date);
     };
     return (
-        <DropdownButton title="Отложить" style={controlButtonStyle} className=" krista-bootstrap-wrapper ">
+        <DropdownButton
+            id="dropdown-postpone"
+            title="Отложить"
+            style={controlButtonStyle}
+            className=" krista-bootstrap-wrapper "
+        >
             <Dropdown.Item onClick={yesterday}>на день</Dropdown.Item>
             <Dropdown.Item onClick={weekLater}>на неделю</Dropdown.Item>
             <Dropdown.Item onClick={monthLater}>на месяц</Dropdown.Item>
