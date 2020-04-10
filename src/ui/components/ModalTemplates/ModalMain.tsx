@@ -1,7 +1,10 @@
 import React, { FC, memo } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { clearModal } from "../../actions/modalAction";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { TourType } from "../../util/tour";
+import { StoreType } from "../../reducers";
+import { ModalState } from "../../reducers/ModalReducer";
 
 export interface ModalProps {
     show?: boolean;
@@ -9,8 +12,8 @@ export interface ModalProps {
     children: any;
     hideApply?: boolean;
     hideClose?: boolean;
-    onClose?: () => void;
-    onApply?: () => void;
+    onClose?: (tour: TourType | null) => void;
+    onApply?: (tour: TourType | null) => void;
     showCancel?: boolean;
     applyName?: string;
     closeName?: string;
@@ -22,19 +25,24 @@ const ModalMain: FC<ModalProps> = ({
     hideApply = true,
     hideClose = true,
     modalName,
-    onApply = () => {},
-    onClose = () => {},
+    onApply = (tour: TourType | null) => {},
+    onClose = (tour: TourType | null) => {},
     applyName = "Ок",
     closeName = "Отмена"
 }) => {
     const dispatch = useDispatch();
-    const onCloseModel = () => {
-        dispatch(clearModal());
-        onClose();
-    };
+
+    const { tour, status } = useSelector<StoreType, ModalState>(({ ModalState }) => ({
+        tour: ModalState.tour,
+        status: ModalState.status
+    }));
     const onApplyModel = () => {
-        onApply();
+        onApply(tour);
         onCloseModel();
+    };
+    const onCloseModel = () => {
+        onClose(tour);
+        dispatch(clearModal());
     };
     return (
         <Modal show={show} onHide={onCloseModel} backdrop="static">

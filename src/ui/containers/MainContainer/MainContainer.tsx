@@ -4,7 +4,7 @@ import AgentHandler from "../../AgentHandler";
 import PanelContainer from "../PanelContainer/PanelContainer";
 import TourEditorContainer from "../EditorContainer/EditorContainer";
 import "../../blocklyDefinitions";
-import ModelsScript from "../../components/ModalsScript";
+import TourModal from "../../components/TourModal";
 import { StoreType } from "../../reducers";
 import Notifications from "react-notification-system-redux";
 import { TourType } from "../../util/tour";
@@ -38,7 +38,7 @@ const MainComponent = () => {
         <div className="main-container">
             <PanelContainer />
             <TourEditorContainer />
-            {modalTour !== null && <ModelsScript />}
+            {modalTour !== null && <TourModal />}
             <Notifications notifications={notifications} style={style} />
         </div>
     );

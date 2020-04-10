@@ -3,7 +3,7 @@ import { Dispatch } from "redux";
 import { StoreType } from "../reducers";
 import { createTour, deleteTourById, getAllTours, getTourById, updateTour } from "../util/restClient/requestTour";
 import { error, info, success, warning } from "react-notification-system-redux";
-import { getCurrentJs, getInitData, getJsSettersNameAndDesc, TourType } from "../util/tour";
+import { getCurrentJs, getInitData, TourType } from "../util/tour";
 import { StatusType } from "../reducers/ModalReducer";
 
 export const setPeriodicSaveEnabled = createStandardAction("SET_PERIODIC_SAVE_ENABLED")();
@@ -16,145 +16,105 @@ export const setErrorsRunTour = createStandardAction("SET_ERRORS")<string[]>();
 export const addErrorRunTour = createStandardAction("ADD_ERROR")<string>();
 
 let periodicallySaveTimer = 0;
-export const periodicallySave = () => (dispatch: Dispatch, getState: () => StoreType) => {
-    clearInterval(periodicallySaveTimer);
-    periodicallySaveTimer = window.setInterval(() => {
-        const store = getState();
-        const tour: TourType = store.SelectedTourState.selectedTour;
-        if (tour.dateChange) return;
-        console.log("periodicallySave");
-        saveTour(true)(dispatch, getState);
-    }, 10000);
-};
-export const setPeriodicSaveState = (newState: boolean) => (dispatch: Dispatch, getState: () => StoreType) => {
-    if (newState) {
-        periodicallySave()(dispatch, getState);
-        dispatch(setPeriodicSaveEnabled());
+export const setPeriodicSaveState = (enable: boolean) => (dispatch: Dispatch, getState: () => StoreType) => {
+    if (enable) {
         dispatch(info({ title: `Включено периодическое сохранение` }));
+        dispatch(setPeriodicSaveEnabled());
+        periodicallySaveTimer = window.setInterval(async () => periodicallySave()(dispatch, getState), 10000);
     } else {
-        clearInterval(periodicallySaveTimer);
-        dispatch(setPeriodicSaveDisabled());
         dispatch(warning({ title: `Отключено периодическое сохранение` }));
-    }
-};
-export const closeSelectedTour = () => (dispatch: Dispatch, getState: () => StoreType) => {
-    const store = getState();
-    const periodicSave = store.SelectedTourState.periodicSave;
-    dispatch(setTourClose());
-    const tour: TourType = getInitData();
-    dispatch(setSelectedTour(tour));
-    if (periodicSave) {
+        dispatch(setPeriodicSaveDisabled());
         clearInterval(periodicallySaveTimer);
     }
 };
 export const openSelectedTour = (tour: TourType) => (dispatch: Dispatch, getState: () => StoreType) => {
-    const store = getState();
-    if (store.SelectedTourState.tourOpen) {
-        if (store.SelectedTourState.selectedTour.id === tour.id) {
-            return;
-        }
-        closeSelectedTour()(dispatch, getState);
-    }
+    const state = getState().SelectedTourState;
+    if (state.selectedTour.id === tour.id) return;
+    state.tourOpen && closeSelectedTour()(dispatch, getState);
+    setPeriodicSaveState(true)(dispatch, getState);
     dispatch(setSelectedTour(tour));
     dispatch(setTourOpen());
-    setPeriodicSaveState(true)(dispatch, getState);
 };
-
+export const closeSelectedTour = () => (dispatch: Dispatch, getState: () => StoreType) => {
+    const state = getState().SelectedTourState;
+    const periodicSave = state.periodicSave;
+    if (!state.tourOpen) return;
+    periodicSave && clearInterval(periodicallySaveTimer);
+    dispatch(setSelectedTour(getInitData()));
+    dispatch(setTourClose());
+};
 export const loadListTour = () => async (dispatch: Dispatch) => {
     const tourList: TourType[] | null = (await getAllTours()) as TourType[];
-    if (tourList) {
-        dispatch(setListTour(tourList));
-    } else {
-        dispatch(error({ message: "Не удалось загрузить список туров" }));
-    }
+    if (!tourList) return dispatch(error({ message: "Не удалось загрузить список туров" }));
+    dispatch(setListTour(tourList));
 };
 export const loadTour = (id: number) => async (dispatch: Dispatch, getState: () => StoreType) => {
     const tour: TourType | null = (await getTourById(id)) as TourType;
-    if (tour) {
-        openSelectedTour(tour)(dispatch, getState);
-    } else {
-        dispatch(error({ message: "Не удалось загрузить тур" }));
-    }
+    if (!tour) return dispatch(error({ message: "Не удалось загрузить тур" }));
+    openSelectedTour(tour)(dispatch, getState);
 };
-export const createNewTour = () => async (dispatch: Dispatch, getState: () => StoreType) => {
-    const store = getState();
-    const tour: TourType | null = store.ModalState.tour;
-    if (!tour) {
-        return console.log("ОШИБКА: нечего создавать");
-    }
-    //был изменен шаблон тура, влияющий на js-код => нужно обновить js
-    tour.codeJS = getCurrentJs(tour.name, tour.desc, tour.code);
-    const createdTour: TourType | null = (await createTour(tour)) as TourType;
-    if (createdTour) {
-        await loadListTour()(dispatch);
-        openSelectedTour(createdTour)(dispatch, getState);
-        dispatch(success({ title: `"` + createdTour.name + `" успешно создан` }));
-    } else {
-        dispatch(error({ message: `Не удалось создать тур "` + tour.name + `"` }));
-    }
+export const createNewTour = (tour: TourType) => async (dispatch: Dispatch, getState: () => StoreType) => {
+    const tourToCreate: TourType = tour;
+    const createdTour: TourType | null = (await createTour(tourToCreate)) as TourType;
+    if (!createdTour) return dispatch(error({ message: `Не удалось создать тур "` + tourToCreate.name + `"` }));
+    dispatch(success({ title: `"` + createdTour.name + `" успешно создан` }));
+    await loadListTour()(dispatch);
+    openSelectedTour(createdTour)(dispatch, getState);
 };
-export const saveTour = (period?: boolean) => async (dispatch: Dispatch, getState: () => StoreType) => {
-    const store = getState();
-    let selectedTour: TourType = store.SelectedTourState.selectedTour;
-    const tourForSaved: TourType = store.ModalState.tour || selectedTour;
-    const status: StatusType | null = store.ModalState.status;
-    if (status === "edit") {
-        //был изменен шаблон тура, влияющий на js-код => нужно обновить js, который сохраняем
-        tourForSaved.codeJS = getCurrentJs(tourForSaved.name, tourForSaved.desc, tourForSaved.code);
-    }
-    const savedTour: TourType | null = (await updateTour(tourForSaved)) as TourType;
-    if (savedTour) {
-        await loadListTour()(dispatch);
-        if (period) {
-            //просто периодическое сохранение - обновляем только дату последнего сохранения
-            const selectedTourNow = store.SelectedTourState.selectedTour;
-            dispatch(setSelectedTour({ ...selectedTourNow, dateChange: savedTour.dateChange }));
-            return;
-        }
-        dispatch(success({ title: `"` + savedTour?.name + `" успешно сохранен` }));
-        if (
-            savedTour.id !== selectedTour.id ||
-            status === "save_before_load" ||
-            status === "save_before_close" ||
-            status === "save_before_create"
-        ) {
-            //сейчас открыт другой тур
-            return;
-        }
-        //изменен шаблон (edit) открытого тура
-        //код открытого тура в Store мог измениться за время сохранения
-        selectedTour = store.SelectedTourState.selectedTour;
-        const modifiedTour: TourType = {
-            id: selectedTour.id,
-            name: savedTour.name,
-            desc: savedTour.desc,
-            code: selectedTour.code,
-            codeJS: getCurrentJs(savedTour.name, savedTour.desc, selectedTour.code),
-            dateCreate: selectedTour.dateCreate,
-            dateChange: savedTour.dateChange
-        };
-        dispatch(setSelectedTour(modifiedTour));
-    } else {
-        dispatch(error({ message: `Не удалось сохранить тур "` + tourForSaved.name + `"` }));
-    }
-};
-export const delToDb = () => async (dispatch: Dispatch, getState: () => StoreType) => {
-    const store = getState();
-    const tour: TourType | null = store.ModalState.tour;
-    if (!tour) {
-        console.log("ERROR MODAL CREATED");
-        return;
-    }
+export const deleteTour = (tour: TourType) => async (dispatch: Dispatch, getState: () => StoreType) => {
+    const tourToDeleted: TourType = tour;
     const id: number = tour.id;
     const ok: boolean | null = (await deleteTourById(id)) as boolean;
-    if (ok) {
-        dispatch(success({ title: `"` + tour.name + `" успешно удален` }));
-        await loadListTour()(dispatch);
-        if (id == store.SelectedTourState.selectedTour.id) {
-            closeSelectedTour()(dispatch, getState);
-        }
-    } else {
-        dispatch(error({ message: `Не удалось удалить тур "` + tour.name + `"` }));
+    if (!ok) return dispatch(error({ message: `Не удалось удалить тур "` + tourToDeleted.name + `"` }));
+    dispatch(success({ title: `"` + tourToDeleted.name + `" успешно удален` }));
+    await loadListTour()(dispatch);
+    const idOpenedTour = getState().SelectedTourState.selectedTour.id;
+    if (id == idOpenedTour) {
+        closeSelectedTour()(dispatch, getState);
     }
 };
+export const saveTour = (tour: TourType) => async (dispatch: Dispatch, getState: () => StoreType) => {
+    const tourToSaved: TourType = tour;
+    const store = getState();
+    let selectedTour: TourType = store.SelectedTourState.selectedTour;
+    const savedTour: TourType | null = (await updateTour(tourToSaved)) as TourType;
+    if (!savedTour) return dispatch(error({ message: `Не удалось сохранить тур "` + tourToSaved.name + `"` }));
+    dispatch(success({ title: `"` + savedTour?.name + `" успешно сохранен` }));
+    await loadListTour()(dispatch);
+    const status: StatusType | null = store.ModalState.status;
+    if (
+        savedTour.id !== selectedTour.id ||
+        status === "save_before_close" ||
+        status === "save_before_load" ||
+        status === "save_before_create"
+    )
+        return;
+    //обновление данных об открытом туре
+    selectedTour = store.SelectedTourState.selectedTour;
+    const currentTour: TourType = {
+        id: selectedTour.id,
+        name: savedTour.name,
+        desc: savedTour.desc,
+        code: selectedTour.code,
+        codeJS: getCurrentJs(savedTour.name, savedTour.desc, selectedTour.code),
+        dateCreate: selectedTour.dateCreate,
+        dateChange: savedTour.dateChange
+    };
+    dispatch(setSelectedTour(currentTour));
+};
+export const periodicallySave = () => async (dispatch: Dispatch, getState: () => StoreType) => {
+    const state = getState().SelectedTourState;
+    let tour: TourType = state.selectedTour;
+    if (tour.dateChange) return;
+    const savedTour: TourType | null = (await updateTour(tour)) as TourType;
+    if (!savedTour) return dispatch(error({ message: `Автосохранение: не удалось сохранить тур` }));
+    console.log("автосохранение");
+    await loadListTour()(dispatch);
+    //возможно, дата уже не актуальна
+    tour = state.selectedTour;
+    if (savedTour.code === tour.code && !tour.dateChange) {
+        dispatch(setSelectedTour({ ...tour, dateChange: savedTour.dateChange }));
+    }
+};
+
 export type SelectedTourAction = ActionType<typeof setSelectedTour>;

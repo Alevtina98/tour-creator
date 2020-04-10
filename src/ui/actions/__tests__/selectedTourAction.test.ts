@@ -126,13 +126,13 @@ describe("selectedTourAction", function() {
             }
         ]);
     });
-    it("should dispatch actions (for action delToDb)", async () => {
+    it("should dispatch actions (for action deleteTour)", async () => {
         periodicallySaveTimer = 10;
         const store = mockStore({ SelectedTourState: initialState });
         const promiseAdd = testListTour.map(async el => await (await IDB()).add("script", el, el.id));
         await Promise.all(promiseAdd);
         //текущего тура
-        await selectedTourAction.delToDb(testListTour[0].id)(store.dispatch, store.getState);
+        await selectedTourAction.deleteTour(testListTour[0].id)(store.dispatch, store.getState);
         const result = await (await IDB()).getAll("script");
         expect(store.getActions()).toEqual([
             {
@@ -145,7 +145,7 @@ describe("selectedTourAction", function() {
         ]);
         store.clearActions();
         //другого тура
-        await selectedTourAction.delToDb(testListTour[2].id)(store.dispatch, store.getState);
+        await selectedTourAction.deleteTour(testListTour[2].id)(store.dispatch, store.getState);
         const result2 = await (await IDB()).getAll("script");
         expect(store.getActions()).toEqual([
             {

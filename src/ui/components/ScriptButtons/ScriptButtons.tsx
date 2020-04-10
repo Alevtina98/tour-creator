@@ -1,7 +1,13 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../../reducers";
-import { setPeriodicSaveState, closeSelectedTour, saveTour, setErrorsRunTour } from "../../actions/selectedTourAction";
+import {
+    setPeriodicSaveState,
+    closeSelectedTour,
+    saveTour,
+    setErrorsRunTour,
+    createNewTour
+} from "../../actions/selectedTourAction";
 import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 import agentActions from "../../actions/agentActions";
 import { setModal } from "../../actions/modalAction";
@@ -15,46 +21,37 @@ export interface ScriptButtons {
 
 const ScriptButtons = () => {
     const dispatch = useDispatch();
-    //маппинг значений из store
     const { selectedTour, periodicSave, tourOpen } = useSelector<StoreType, ScriptButtons>(
         ({ SelectedTourState }) => SelectedTourState
     );
-
-    /*
-     c запуском модальных окон из ModalsScript.tsx
-   */
-    const onShowCreated = () => {
+    const onClickCreate = () => {
+        const tour: TourType = getInitData();
         if (tourOpen && !selectedTour.dateChange) {
-            dispatch(setModal({ tour: selectedTour, status: "save_before_create" }));
+            dispatch(setModal({ tour: tour, status: "save_before_create" }));
         } else {
-            tourOpen ? closeTour() : null;
-            const newTour: TourType = getInitData();
-            dispatch(setModal({ tour: newTour, status: "create" }));
+            dispatch(createNewTour(tour));
         }
     };
-    const onShowCopy = () => {
-        const newName = selectedTour.name + "-копия";
-        dispatch(setModal({ tour: { ...selectedTour, id: -1, name: newName }, status: "copy" }));
+    const onClickSaveAs = () => {
+        const tour: TourType = { ...selectedTour, id: -1, name: selectedTour.name + "-копия" };
+        dispatch(setModal({ tour: tour, status: "copy" }));
     };
-    const onShowRun = () => {
+    const onClickRun = () => {
         agentActions.runScript(selectedTour.codeJS);
         dispatch(setErrorsRunTour([]));
         dispatch(setModal({ tour: selectedTour, status: "show" }));
     };
-    const closeTour = () => {
+    const onClickClose = () => {
         if (!selectedTour.dateChange) {
             dispatch(setModal({ tour: selectedTour, status: "save_before_close" }));
         } else {
             dispatch(closeSelectedTour());
         }
     };
-    /*
-      без запуска модальных окон
-    */
-    const saveCode = () => {
-        dispatch(saveTour());
+    const onClickSave = () => {
+        dispatch(saveTour(selectedTour));
     };
-    const onCheck = () => {
+    const onClickPeriodic = () => {
         const newState: boolean = !periodicSave;
         dispatch(setPeriodicSaveState(newState));
     };
@@ -63,14 +60,14 @@ const ScriptButtons = () => {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
-                    <Nav.Link onClick={onShowCreated} data-testid="createTourButton">
+                    <Nav.Link onClick={onClickCreate} data-testid="createTourButton">
                         Создать
                     </Nav.Link>
                     <NavDropdown title="Сохранить" id="basic-nav-dropdown" disabled={!tourOpen} bg="dark">
-                        <NavDropdown.Item onClick={saveCode} data-testid="saveTourButton">
+                        <NavDropdown.Item onClick={onClickSave} data-testid="saveTourButton">
                             Сохранить
                         </NavDropdown.Item>
-                        <NavDropdown.Item onClick={onShowCopy} data-testid="copyTourButton">
+                        <NavDropdown.Item onClick={onClickSaveAs} data-testid="copyTourButton">
                             Сохранить как
                         </NavDropdown.Item>
                         <NavDropdown.Divider />
@@ -78,16 +75,16 @@ const ScriptButtons = () => {
                             Периодическое сохранение
                             <input
                                 type="checkbox"
-                                onClick={onCheck}
+                                onClick={onClickPeriodic}
                                 style={{ marginLeft: "15px", transform: "scale(1.5)" }}
                                 checked={periodicSave}
                             />
                         </NavDropdown.Header>
                     </NavDropdown>
-                    <Nav.Link onClick={onShowRun} data-testid="runTourButton" disabled={!tourOpen}>
+                    <Nav.Link onClick={onClickRun} data-testid="runTourButton" disabled={!tourOpen}>
                         Запустить
                     </Nav.Link>
-                    <Nav.Link onClick={closeTour} data-testid="closeTourButton" disabled={!tourOpen}>
+                    <Nav.Link onClick={onClickClose} data-testid="onClickCloseButton" disabled={!tourOpen}>
                         Закрыть
                     </Nav.Link>
                 </Nav>

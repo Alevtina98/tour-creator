@@ -19,12 +19,12 @@ export interface ScriptProps {
 const Script: FC<ScriptProps> = ({ tour, style }) => {
     const dispatch = useDispatch();
     const selectedTour = useSelector<StoreType, TourType>(({ SelectedTourState }) => SelectedTourState.selectedTour);
+    const tourOpen = useSelector<StoreType, boolean>(({ SelectedTourState }) => SelectedTourState.tourOpen);
     const load = () => {
-        if (selectedTour.id != tour.id) {
+        if (selectedTour.id !== tour.id) {
             dispatch(burgerClose());
-            const initTour = getInitData();
-            //не пытаемся загрузить уже открытый тур и изменения в открытом туре не сохранены
-            if (selectedTour.id != initTour.id && !selectedTour.dateChange) {
+            if (tourOpen && !selectedTour.dateChange) {
+                //открыт тур с несохраненными изменениями
                 dispatch(setModal({ tour: tour, status: "save_before_load" }));
             } else {
                 dispatch(loadTour(tour.id));

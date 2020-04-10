@@ -1,25 +1,25 @@
 import React, { FC, memo } from "react";
 import { FormControl, InputGroup } from "react-bootstrap";
 import { useControlledInputValue } from "../../hooks/useControleInputValue";
-import ModalContainer from "./ModalMain";
+import ModalMain from "./ModalMain";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreType } from "../../reducers";
 import { ModalState } from "../../reducers/ModalReducer";
 import { setModal } from "../../actions/modalAction";
-import { TourType } from "../../util/tour";
+import { getCurrentJs, TourType } from "../../util/tour";
 
-interface ModalInputsComponentProps {
+interface ModalInputProps {
     modalName: string;
-    onApply?: () => void;
-    onClose?: () => void;
+    onApply?: (tour: TourType | null) => void;
+    onClose?: (tour: TourType | null) => void;
     applyName?: string;
     closeName?: string;
 }
 
-const ModalInputsComponent: FC<ModalInputsComponentProps> = ({
+const ModalInput: FC<ModalInputProps> = ({
     modalName,
-    onApply = () => {},
-    onClose = () => {},
+    onApply = (tour: TourType | null) => {},
+    onClose = (tour: TourType | null) => {},
     applyName,
     closeName
 }) => {
@@ -31,15 +31,19 @@ const ModalInputsComponent: FC<ModalInputsComponentProps> = ({
     const { setValue: setNameValue, ...name } = useControlledInputValue(tour ? tour.name : "");
     const { setValue: setDescValue, ...desc } = useControlledInputValue(tour ? tour.desc : "");
     const onApplyModalInputs = () => {
-        if (tour) {
-            const editTour: TourType = { ...tour, name: name.value, desc: desc.value };
-            dispatch(setModal({ tour: editTour, status: status }));
-            onApply();
-        }
+        const newName: string = name.value;
+        const newDesc: string = desc.value;
+        const newCodeJS: string | null = tour ? getCurrentJs(newName, newDesc, tour.code) : null;
+        const editedTour: TourType | null = tour ? { ...tour, name: newName, desc: newDesc, codeJS: newCodeJS } : null;
+        dispatch(setModal({ tour: editedTour, status: status }));
+        onApply(editedTour);
+    };
+    const onCloseModalInputs = () => {
+        onClose(tour);
     };
     return (
-        <ModalContainer
-            onClose={onClose}
+        <ModalMain
+            onClose={onCloseModalInputs}
             onApply={onApplyModalInputs}
             modalName={modalName}
             applyName={applyName}
@@ -62,7 +66,7 @@ const ModalInputsComponent: FC<ModalInputsComponentProps> = ({
                 </InputGroup.Prepend>
                 <FormControl as="textarea" aria-label="With textarea" data-testid="descTestId" {...desc} />
             </InputGroup>
-        </ModalContainer>
+        </ModalMain>
     );
 };
-export default memo(ModalInputsComponent);
+export default memo(ModalInput);
