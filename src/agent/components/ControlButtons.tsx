@@ -40,16 +40,22 @@ const ControlButtons: FC<ControlButtonsState> = ({ onStart, onPostpone, buttonSt
             >
                 Начать
             </Button>
-            {/* <Dropdown>
+            <Dropdown>
                 <Dropdown.Toggle style={controlButtonStyle} id="dropdown-custom-components">
                     Отложить
                 </Dropdown.Toggle>
-                <Dropdown.Menu style={{ marginLeft: "0" }}>
-                    <Dropdown.Item onClick={yesterday}>на день</Dropdown.Item>
-                    <Dropdown.Item onClick={weekLater}>на неделю</Dropdown.Item>
-                    <Dropdown.Item onClick={monthLater}>на месяц</Dropdown.Item>
+                <Dropdown.Menu style={{ marginLeft: "0", padding: "5px" }}>
+                    <Dropdown.Item style={{ display: "block" }} onClick={yesterday}>
+                        на день
+                    </Dropdown.Item>
+                    <Dropdown.Item style={{ display: "block" }} onClick={weekLater}>
+                        на неделю
+                    </Dropdown.Item>
+                    <Dropdown.Item style={{ display: "block" }} onClick={monthLater}>
+                        на месяц
+                    </Dropdown.Item>
                 </Dropdown.Menu>
-            </Dropdown>*/}
+            </Dropdown>
             {/* <Postpone buttonStyle={controlButtonStyle} onPostpone={onPostpone} />*/}
         </ButtonToolbar>
     );

@@ -11,7 +11,6 @@ const GAME_OBJECT_ID = "game_object";
 export const getCodeEval = function(code) {
     const script = `${code.replace(`"`, "")}`;
     const scriptWithoutComments = script.split(/\/\/.*\n|\/\*\*\n.*\*.*\n.*\*\//g).join("");
-    console.log("scriptWithoutEnter", scriptWithoutComments);
     const scriptWithoutCommentsAndEnter = scriptWithoutComments.split(/\n/g).join("");
     return `eval("${scriptWithoutCommentsAndEnter}")`;
 };
@@ -46,10 +45,14 @@ class Agent {
                 console.log("Код тура", code);
                 const el = this.window.document.createElement("script");
                 el.innerText = getCodeEval(code);
-                this.window.document.body.appendChild(el);
-                console.log(el);
-                console.log("скрипт тура добавлен");
-                TourHelper.showViewerInterface();
+                try {
+                    this.window.document.body.appendChild(el);
+                    console.log(el);
+                    console.log("скрипт тура добавлен");
+                    TourHelper.showViewerInterface();
+                } catch (e) {
+                    console.log("ОШИБКА: не удалось добавить скрипт тура", e);
+                }
             },
             disableRunScript: () => {
                 TourHelper.endTour();

@@ -9,7 +9,7 @@ import ControlButtons from "./ControlButtons";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
 export interface ViewerInterfaceState {
-    setStep: (index?: number) => {};
+    setStep: (index?: number) => void;
     currentStep: number;
     totalSteps: number;
     name: string;
@@ -75,7 +75,7 @@ const ViewerInterface: FC<ViewerInterfaceState> = ({
         maxWidth: "80%"
     };
     const onPostpone = (date: string) => {
-        console.log(date);
+        alert("Просмотр тура перенесен на " + date);
         onCancel();
     };
     return (

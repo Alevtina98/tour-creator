@@ -295,6 +295,7 @@ export default class TourHelper {
             border: "none"
         };
         const rect = window.document.createElement("div");
+
         Object.keys(rectStyle).forEach((key: string) => {
             rect.style[key] = rectStyle[key];
         });
@@ -414,8 +415,8 @@ export default class TourHelper {
         //TourHelper.endTour();
     };
 
-    private static tryGetElement = (selector: string, callback: (el: Element) => void, nameSelector?: string) => {
-        let el: Element | null = document.querySelector(selector);
+    private static tryGetElement = (selector: string, callback: (el: HTMLElement) => void, nameSelector?: string) => {
+        let el: HTMLElement | null = document.querySelector(selector);
         let idRequest = 0;
         const stopRequest = () => {
             clearInterval(idRequest);
@@ -448,9 +449,9 @@ export default class TourHelper {
             }
         }, timeout);
     };
-    private static elementIsVisible = (element: Element | null) => {
+    private static elementIsVisible = (element: HTMLElement | null) => {
         //there is a parent with display: none
-        let el: Node | null = element;
+        let el: HTMLElement | null = element;
         if (!el) return true;
         while (el) {
             if (el.style && el.style.display === "none") {

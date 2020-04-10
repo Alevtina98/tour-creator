@@ -43,7 +43,6 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
     clickOnSelectorBlockListener = (event: WorkspaceEventType) => {
         const workspaceSVG = this.blocklyRef.workspace.state.workspace;
         if (event.type === Blockly.Events.UI) {
-            //console.log("event", event);
             if (event.element !== "click") return;
             const blockId = event.blockId || event.newValue || "";
             this.setState({
