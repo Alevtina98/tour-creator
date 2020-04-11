@@ -24,7 +24,7 @@ const BurgerMenuContainer = () => {
     return (
         <div>
             <Nav.Link onClick={openBurgerMenu} className="burger-button">
-                <img src="http://pribory-spb.ru/templates/skin1/images/icon-menu.png" style={{ width: 22 }} />
+                <img src="../media/icon-menu.png" style={{ width: 22 }} />
             </Nav.Link>
             <div>
                 {(burgerIsOpen && <div className="back-drop" />) || null}

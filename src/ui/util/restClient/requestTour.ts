@@ -1,7 +1,7 @@
 import { TourType } from "../tour";
 
-export const tourCreatorServiceURL = `http://localhost:8080/webapp_war/api/tour/`;
-//export const tourCreatorServiceURL = `http://ntp-tour-test.krista.ru/tour/api/tour/`;
+//export const tourCreatorServiceURL = `http://localhost:8080/webapp_war/api/tour/`;
+export const tourCreatorServiceURL = `http://ntp-tour-test.krista.ru/tour/api/tour/`;
 
 export interface RequestInterface {
     url: string;
