@@ -485,9 +485,9 @@ export default class TourHelper {
 
         //console.log("show on the this element >> ", el);
     };
-    private static setDescrElement = (selector: string, description: string) => {
+    private static setDescrElement = (selector: string, description: string | null) => {
         const onOk = (el: Element) => {
-            TourHelper.descrElement.push({ element: el, description: description });
+            TourHelper.descrElement.push({ element: el, description: description || "" });
         };
         TourHelper.tryGetElement(selector, onOk, "элемент, к которому добавляется описание, ");
     };

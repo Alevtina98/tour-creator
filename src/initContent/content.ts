@@ -5,7 +5,13 @@ const INITIAL_XML =
 const INITIAL_TOOLBOX_XML =
     '<xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">\n' +
     '  <category name="Логика" colour="#5C81A6">\n' +
-    '    <block type="controls_if"></block>\n' +
+    '  <block type="controls_if">' +
+    '       <value name="selector">' +
+    '       <shadow type="text">' +
+    '       <field name="selector"></field>' +
+    "       </shadow>" +
+    "       </value> " +
+    "   </block>\n" +
     '    <block type="logic_compare">\n' +
     '      <field name="OP">EQ</field>\n' +
     "    </block>\n" +

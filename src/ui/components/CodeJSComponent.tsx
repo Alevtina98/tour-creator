@@ -8,7 +8,6 @@ const CodeJSComponent = () => {
     return (
         <div className="code-block">
             {tour.codeJS?.split(/(\/\/!.*)|(.*\/\*\*\n.*\*.*\n.*\*\/)|(\n\/\/\s.*)/g).map((el, index) => {
-                console.log("codeJS el ", index, el);
                 // if (name === "text") return <br />;
                 if (!el) {
                     return;

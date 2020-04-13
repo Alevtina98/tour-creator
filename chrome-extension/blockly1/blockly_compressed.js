@@ -17531,7 +17531,7 @@ Blockly.Options = function(a) {
         : Blockly.TOOLBOX_AT_LEFT;
     var r = a.css;
     void 0 === r && (r = !0);
-    var t = "../media/";
+    var t = "https://blockly-demo.appspot.com/static/media/";
     a.media ? (t = a.media) : a.path && (t = a.path + "media/");
     var q = void 0 === a.oneBasedIndex ? !0 : !!a.oneBasedIndex,
         u = a.theme || Blockly.Themes.Classic;
