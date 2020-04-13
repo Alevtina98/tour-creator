@@ -13,12 +13,12 @@ export const testPort = {
     onMessage: testEvent,
     postMessage: (obj: Object) => null
 };
+
 let isDisabled = false;
 
 if (notTest && !chrome.runtime && !isDisabled) {
     isDisabled = true;
     chrome.runtime = {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         connect: () => {
             return {
@@ -32,7 +32,6 @@ if (notTest && !chrome.runtime && !isDisabled) {
 }
 if (notTest && !chrome.devtools) {
     chrome.devtools = {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         inspectedWindow: {
             tabId: 1

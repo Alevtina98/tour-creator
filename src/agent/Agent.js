@@ -93,7 +93,9 @@ class Agent {
         let savedCallback;
         let target;
         let outlineStyle;
+        let outlineColor;
         let borderStyle;
+        let borderColor;
         if (this._findTargetCb) {
             // already enabled
             return;
@@ -111,10 +113,14 @@ class Agent {
             }
             if (target.style.outlineStyle || (target.style.outlineStyle = "none")) {
                 borderStyle = target.style.border;
+                borderColor = target.style.borderColor;
                 target.style.border = "solid";
+                target.style.borderColor = "black";
             } else {
                 outlineStyle = target.style.outlineStyle;
+                outlineColor = target.style.borderColor;
                 target.style.outlineStyle = "solid";
+                target.style.outlineColor = "black";
             }
 
             /*if (target.onclick) {
@@ -130,6 +136,8 @@ class Agent {
             }
             target.style.outlineStyle = outlineStyle;
             target.style.border = borderStyle;
+            target.style.outlineColor = outlineColor;
+            target.style.borderColor = borderColor;
 
             if (target.onclick) {
                 console.warn("вернули");
@@ -168,6 +176,8 @@ class Agent {
             if (target) {
                 target.style.outlineStyle = outlineStyle;
                 target.style.border = borderStyle;
+                target.style.outlineColor = outlineColor;
+                target.style.borderColor = borderColor;
                 if (target.onclick) {
                     console.warn("вернули обработчик");
                     target.onclick = savedCallback;

@@ -125,14 +125,14 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
                         snap: true
                     }
                 }}
-                initialXml={this.props.selectedTour.code}
+                initialXml={this.props.selectedTour.code} //ConfigFiles.INITIAL_XML
                 wrapperDivClassName="d-flex flex"
                 workspaceDidChange={this.workspaceDidChange}
             />
         );
     };
 }
-//ConfigFiles.INITIAL_XML
+
 export interface BlocklyComponentConnectedDispatch {
     dispatch: Dispatch;
     actions: {

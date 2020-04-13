@@ -3,7 +3,7 @@ import { setCurrentSelector, setInspectDisabled, setInspectEnabled } from "./act
 import injectDebugger from "./injectDebugger";
 import port from "./port";
 import { Dispatch } from "redux";
-import {addErrorRunTour, setErrorsRunTour} from "./actions/selectedTourAction";
+import { addErrorRunTour, setErrorsRunTour } from "./actions/selectedTourAction";
 
 /*
  * agent -> content-script.js -> background.js -> **dev tools**
@@ -12,7 +12,6 @@ class AgentHandler {
     dispatch: Dispatch;
     currentSelected: string | null = null;
 
-    //варианты обработчиков в зависимости от msg
     handlers: any = {
         connected: () => this.dispatch(connectSuccess()),
 
@@ -20,17 +19,14 @@ class AgentHandler {
 
         selected: (data: { id: string }) => {
             const { id } = data;
-            //if (this.currentSelected !== id) {
             this.dispatch(setCurrentSelector(id));
             this.currentSelected = id;
-            //}
-            console.log("Selector", data);
+            console.log("Найден selector", data);
         },
 
         //enabledSelectMode: () => this.dispatch(setInspectEnabled()),
         disabledSelectMode: () => {
             this.dispatch(setInspectDisabled());
-            //this.dispatch(setCurrentSelector(""));
         },
         newError: (error: string) => {
             this.dispatch(addErrorRunTour(error));
@@ -44,16 +40,14 @@ class AgentHandler {
 
     constructor(dispatch: Dispatch) {
         this.dispatch = dispatch;
-
         port!.onMessage.addListener(msg => {
             this.handleMessage(msg);
         });
     }
     handleMessage = (message: any) => {
-        //выбираем обработчик по принятому сообщению
         const handler = this.handlers[message.name];
         if (!handler) {
-            console.warn("No handler found for event " + message.name);
+            console.warn("ОШИБКА: не найден обработчик для пришедшего сообщения " + message.name);
             return;
         }
 
