@@ -1,4 +1,11 @@
-// import TourHelper from "../agent/TourHelper/utils";
+Blockly.FieldTextInput.SPELLCHECK = true;
+Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT = "";
+
+const TOUR_BLOCK_COLOR: string = "#777785";
+const COMMENT_BLOCK_COLOR: string = "#b6b6b7";
+const SELECTOR_BLOCK_COLOR: string = "#94a5ea";
+const TARGET_BLOCK_COLOR: string = "#0f75f3";
+
 const helperClass = "TourHelper";
 
 Blockly.Blocks["dark"] = {
@@ -8,8 +15,8 @@ Blockly.Blocks["dark"] = {
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
-        // this.setColour(230);
         this.setStyle("procedure_blocks");
+        this.setColour(TOUR_BLOCK_COLOR);
         this.setTooltip("Блок, затемняющий и блокирующий не выделяемые элементы страницы");
         this.setHelpUrl("");
     }
@@ -22,6 +29,7 @@ Blockly.Blocks["desc"] = {
             .setCheck("selector");
         this.appendValueInput("text")
             .appendField("подсказку", "NAME")
+
             .setCheck("String");
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
@@ -30,6 +38,7 @@ Blockly.Blocks["desc"] = {
         this.setStyle("procedure_blocks");
         this.setTooltip("Блок, добавляющий подсказку к элементу");
         this.setHelpUrl("");
+        this.setColour(TOUR_BLOCK_COLOR);
     }
 };
 Blockly.Blocks["step"] = {
@@ -40,10 +49,11 @@ Blockly.Blocks["step"] = {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         //this.appendField("step");
-        // this.setColour(230);
+        this.setColour(230);
         this.setStyle("procedure_blocks");
         this.setTooltip("Блок, добавляющий условие окончания шага тура");
         this.setHelpUrl("");
+        this.setColour(TOUR_BLOCK_COLOR);
     }
 };
 Blockly.Blocks["selector"] = {
@@ -56,6 +66,8 @@ Blockly.Blocks["selector"] = {
         this.setStyle("text_blocks");
         this.setTooltip("Селектор выбранного элемента. Нажатие на блок включает режим инспекции");
         this.setHelpUrl("");
+        //  this.setColour(SELECTOR_BLOCK_COLOR);
+        this.setColour(TOUR_BLOCK_COLOR);
     }
 };
 Blockly.Blocks["click"] = {
@@ -64,8 +76,11 @@ Blockly.Blocks["click"] = {
         this.setInputsInline(true);
         this.setOutput(true, "event");
         this.setStyle("logic_blocks");
+        // this.setColour(TARGET_BLOCK_COLOR);
+
         this.setTooltip("Блок ожидания совершения любого клика");
         this.setHelpUrl("");
+        this.setColour(TOUR_BLOCK_COLOR);
     }
 };
 Blockly.Blocks["clickOn"] = {
@@ -76,45 +91,52 @@ Blockly.Blocks["clickOn"] = {
         this.setInputsInline(true);
         this.setOutput(true, "event");
         this.setStyle("logic_blocks");
+        // this.setColour(TARGET_BLOCK_COLOR);
+
         this.setTooltip("Блок ожидания совершения клика по указанному элементу");
         this.setHelpUrl("");
+        this.setColour(TOUR_BLOCK_COLOR);
     }
 };
 Blockly.Blocks["comment"] = {
     init: function() {
-        this.appendDummyInput("TOPROW").appendField("", "NAME");
-        this.appendValueInput("text").setCheck("String");
+        this.appendDummyInput("TOPROW")
+            .appendField("")
+            // this.appendValueInput("text").setCheck("String");*/
+            .appendField(new Blockly.FieldTextInput(""), "text");
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         //this.appendField("step");
-        // this.setColour(230);
         this.setStyle("procedure_blocks");
+        this.setColour(COMMENT_BLOCK_COLOR);
+
         this.setTooltip("Блок однострочного выделяющего комментария");
         this.setHelpUrl("");
     }
 };
 Blockly.Blocks["long_comment"] = {
     init: function() {
-        this.appendDummyInput("TOPROW").appendField("Комментарий", "NAME");
+        this.appendDummyInput("TOPROW").appendField("", "NAME");
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         //this.appendField("step");
-        // this.setColour(230);
         this.setCommentText(Blockly.Msg["PROCEDURES_DEFNORETURN_COMMENT"]);
         this.setStyle("procedure_blocks");
         this.setTooltip(
             `Блок с комментарием в одну или несколько строк. Нажатие на "?" открывает/закрывает поле ввода`
         );
         this.setHelpUrl("");
+        this.setColour(COMMENT_BLOCK_COLOR);
     }
 };
-Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT = "";
+
 Blockly.JavaScript["comment"] = function(block: any) {
-    const arg: string = Blockly.JavaScript.valueToCode(block, "text", Blockly.JavaScript.ORDER_NONE);
-    const code: string =
-        "/**\n" + Blockly.JavaScript.prefixLines(arg.substring(1, arg.length - 1) + "\n", "*") + "*/\n";
+    console.log(block);
+    const arg = block.inputList[0].fieldRow[0].text_;
+    // const arg: string = Blockly.JavaScript.valueToCode(block, "text", Blockly.JavaScript.ORDER_NONE);
+    const code: string = "/**\n" + Blockly.JavaScript.prefixLines(arg.substring(0, arg.length) + "\n", "*") + "*/\n";
     return code;
 };
 Blockly.JavaScript["long_comment"] = function(block: any) {
