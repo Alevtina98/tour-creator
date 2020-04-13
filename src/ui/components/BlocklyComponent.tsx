@@ -123,6 +123,14 @@ class BlocklyComponent extends React.PureComponent<BlocklyProps, BlocklyState> {
                         length: 3,
                         colour: "#ccc",
                         snap: true
+                    },
+                    zoom: { controls: true, startScale: 1.0, maxScale: 3, minScale: 0.5, scaleSpeed: 1.1 },
+                    trashcan: true,
+                    media: "../media/",
+                    move: {
+                        scrollbars: true,
+                        drag: true,
+                        wheel: true
                     }
                 }}
                 initialXml={this.props.selectedTour.code} //ConfigFiles.INITIAL_XML
