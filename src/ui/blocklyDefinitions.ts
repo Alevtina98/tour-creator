@@ -16,7 +16,7 @@ Blockly.Blocks["dark"] = {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setStyle("procedure_blocks");
-        this.setColour(TOUR_BLOCK_COLOR);
+        //  this.setColour(TOUR_BLOCK_COLOR);
         this.setTooltip("Блок, затемняющий и блокирующий не выделяемые элементы страницы");
         this.setHelpUrl("");
     }
@@ -38,7 +38,7 @@ Blockly.Blocks["desc"] = {
         this.setStyle("procedure_blocks");
         this.setTooltip("Блок, добавляющий подсказку к элементу");
         this.setHelpUrl("");
-        this.setColour(TOUR_BLOCK_COLOR);
+        //   this.setColour(TOUR_BLOCK_COLOR);
     }
 };
 Blockly.Blocks["step"] = {
@@ -53,7 +53,7 @@ Blockly.Blocks["step"] = {
         this.setStyle("procedure_blocks");
         this.setTooltip("Блок, добавляющий условие окончания шага тура");
         this.setHelpUrl("");
-        this.setColour(TOUR_BLOCK_COLOR);
+        //   this.setColour(TOUR_BLOCK_COLOR);
     }
 };
 Blockly.Blocks["selector"] = {
@@ -67,7 +67,7 @@ Blockly.Blocks["selector"] = {
         this.setTooltip("Селектор выбранного элемента. Нажатие на блок включает режим инспекции");
         this.setHelpUrl("");
         //  this.setColour(SELECTOR_BLOCK_COLOR);
-        this.setColour(TOUR_BLOCK_COLOR);
+        //  this.setColour(TOUR_BLOCK_COLOR);
     }
 };
 Blockly.Blocks["click"] = {
@@ -80,7 +80,7 @@ Blockly.Blocks["click"] = {
 
         this.setTooltip("Блок ожидания совершения любого клика");
         this.setHelpUrl("");
-        this.setColour(TOUR_BLOCK_COLOR);
+        //   this.setColour(TOUR_BLOCK_COLOR);
     }
 };
 Blockly.Blocks["clickOn"] = {
@@ -95,7 +95,7 @@ Blockly.Blocks["clickOn"] = {
 
         this.setTooltip("Блок ожидания совершения клика по указанному элементу");
         this.setHelpUrl("");
-        this.setColour(TOUR_BLOCK_COLOR);
+        //  this.setColour(TOUR_BLOCK_COLOR);
     }
 };
 Blockly.Blocks["comment"] = {
@@ -109,7 +109,7 @@ Blockly.Blocks["comment"] = {
         this.setNextStatement(true, null);
         //this.appendField("step");
         this.setStyle("procedure_blocks");
-        this.setColour(COMMENT_BLOCK_COLOR);
+        //  this.setColour(COMMENT_BLOCK_COLOR);
 
         this.setTooltip("Блок однострочного выделяющего комментария");
         this.setHelpUrl("");
@@ -128,7 +128,7 @@ Blockly.Blocks["long_comment"] = {
             `Блок с комментарием в одну или несколько строк. Нажатие на "?" открывает/закрывает поле ввода`
         );
         this.setHelpUrl("");
-        this.setColour(COMMENT_BLOCK_COLOR);
+        // this.setColour(COMMENT_BLOCK_COLOR);
     }
 };
 
