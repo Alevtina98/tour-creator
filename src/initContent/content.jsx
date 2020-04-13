@@ -3,12 +3,40 @@ const INITIAL_XML = '<xml xmlns="http://www.w3.org/1999/xhtml"><block type="proc
 
 const INITIAL_TOOLBOX_XML = '<xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">\n' +
     '<category name="Тур" colour="#585b64">\n' +
-    '    <block type="desc"></block>\n' +
-    '    <block type="dark"></block>\n' +
-    '    <block type="selector"></block>\n' +
-    '    <block type="step"></block>\n' +
+    '    <block type="desc">' +
+    '       <value name="selector">' +
+    '         <shadow type="selector">' +
+    '           <field name="selector"></field>' +
+    '         </shadow>' +
+    '        </value> ' +
+    '        <value name="text">' +
+    '          <shadow type="text">' +
+    '           <field name="text"></field>' +
+    '          </shadow>' +
+    '        </value> ' +
+    '     </block>\n' +
+    '    <block type="dark">' +
+    '          <value name="selector">' +
+    '        <shadow type="selector">' +
+    '         <field name="selector"></field>' +
+    '          </shadow>' +
+    '         </value> ' +
+    '     </block>\n' +
+    '    <block type="selector"  disabled="true"></block>\n' +
+    '    <block type="step">' +
+    '        <value name="condition">' +
+    '         <shadow type="click">' +
+    '         </shadow>' +
+    '        </value>' +
+    '    </block>\n' +
     '    <block type="click"></block>\n' +
-    '    <block type="clickOn"></block>\n' +
+    '    <block type="clickOn">' +
+    '       <value name="selector">' +
+    '         <shadow type="selector">' +
+    '           <field name="selector"></field>' +
+    '         </shadow>' +
+    '        </value> ' +
+    '</block>\n' +
     '    <block type="comment"></block>\n' +
     '    <block type="long_comment"></block>\n' +
     ' </category>\n' +
@@ -375,6 +403,23 @@ const INITIAL_TOOLBOX_XML = '<xml xmlns="http://www.w3.org/1999/xhtml" id="toolb
   '</xml>';
 
 const INITIAL_TOOLBOX_CATEGORIES = [
+  {
+    name: 'Тур',
+    blocks: [
+      {
+        type: 'dark',
+        values: {
+          selector: {
+            type: 'text',
+            shadow: true,
+            fields: {
+              TEXT: '',
+            },
+          },
+        },
+      },
+    ],
+  },
   {
     name: 'Controls',
     blocks: [
